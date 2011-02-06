@@ -1,0 +1,1 @@
+An objet mapper for mongodb, without any annotation or xml. We can them achieve true persistence ignorance, allowing us to practice domain-driven design freely. 
