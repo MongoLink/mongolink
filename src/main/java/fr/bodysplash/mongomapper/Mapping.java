@@ -9,16 +9,21 @@ import java.lang.reflect.Method;
 
 public class Mapping<T> {
 
-    private static final Logger LOGGER = Logger.getLogger(Mapping.class);
-    private T interceptor;
-    private boolean property;
-    private boolean collection;
-    private Mapper<T> mapper;
 
+    private enum ElementType {
+        property, collection, id;
+    }
+
+    private static final Logger LOGGER = Logger.getLogger(Mapping.class);
+
+    private T interceptor;
+    private Mapper<T> mapper;
+    private ElementType elementType;
 
     public static <T> Mapping<T> createNew(Class<T> clazz) {
         return new Mapping(clazz);
     }
+
 
     private Mapping(Class<T> clazz) {
         mapper = new Mapper(clazz);
@@ -31,14 +36,17 @@ public class Mapping<T> {
     }
 
     public T property() {
-        property = true;
-        collection = false;
+        elementType = Mapping.ElementType.property;
         return interceptor;
     }
 
     public T collection() {
-        property = false;
-        collection = true;
+        elementType = Mapping.ElementType.collection;
+        return interceptor;
+    }
+
+    public T id() {
+        elementType = Mapping.ElementType.id;
         return interceptor;
     }
 
@@ -47,17 +55,26 @@ public class Mapping<T> {
         mapper.addProperty(property);
     }
 
+    public void setId(String name, Method method) {
+        IdMapper id = new IdMapper(name, method);
+        mapper.setId(id);
+    }
+
     public void addCollection(String collectionName, Method method) {
         CollectionMapper collection = new CollectionMapper(collectionName, method);
         mapper.addCollection(collection);
     }
 
     public boolean isProperty() {
-        return property;
+        return elementType == Mapping.ElementType.property;
     }
 
     public boolean isCollection() {
-        return collection;
+        return elementType == Mapping.ElementType.collection;
+    }
+
+    public boolean isId() {
+        return elementType == Mapping.ElementType.id;
     }
 
     public Mapper<T> createMapper() {

@@ -16,6 +16,9 @@ public class PropertyInterceptor implements MethodInterceptor {
 
     @Override
     public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
+        if(mapping.isId()) {
+            mapId(method);
+        }
         if (mapping.isProperty()) {
             mapProperty(method);
         }
@@ -23,6 +26,10 @@ public class PropertyInterceptor implements MethodInterceptor {
             mapCollection(method);
         }
         return null;
+    }
+
+    private void mapId(Method method) {
+        mapping.setId(methodName(method), method);
     }
 
     private void mapProperty(Method method) {

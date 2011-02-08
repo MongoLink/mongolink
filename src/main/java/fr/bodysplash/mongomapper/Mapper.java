@@ -7,7 +7,6 @@ import com.mongodb.DBObject;
 import net.sf.cglib.core.ReflectUtils;
 import org.apache.log4j.Logger;
 
-import java.lang.reflect.Field;
 import java.util.List;
 
 public class Mapper<T> {
@@ -17,6 +16,7 @@ public class Mapper<T> {
     private List<CollectionMapper> collections = Lists.newArrayList();
     private MappingContext context;
     private static final Logger LOGGER = Logger.getLogger(Mapper.class);
+    private IdMapper idMapper;
 
     Mapper(Class<T> persistentType) {
         this.persistentType = persistentType;
@@ -40,6 +40,11 @@ public class Mapper<T> {
         properties.add(property);
     }
 
+    public void setId(IdMapper idMapper) {
+        idMapper.setMapper(this);
+        this.idMapper = idMapper;
+    }
+
     public T toInstance(DBObject from) {
         T instance = makeInstance();
         populateProperties(instance, from);
@@ -56,23 +61,16 @@ public class Mapper<T> {
             for (PropertyMapper property : properties) {
                 property.populateFrom(instance, from);
             }
-            if(hasId(instance)) {
-                PropertyMapper id = new PropertyMapper("_id", null);
-                id.setMapper(this);
-                id.populateFrom(instance, from);
+            if(hasId()) {
+                idMapper.populateFrom(instance, from);
             }
         } catch (Exception e) {
             LOGGER.error("Can't populateFrom properties", e);
         }
     }
 
-    private boolean hasId(T instance) {
-        try {
-            Field field = persistentType.getDeclaredField("_id");
-        } catch (NoSuchFieldException e) {
-            return false;
-        }
-        return true;
+    private boolean hasId() {
+        return idMapper != null;
     }
 
     private void populateCollections(T instance, DBObject from) {
@@ -86,6 +84,9 @@ public class Mapper<T> {
         BasicDBObject object = new BasicDBObject();
         saveProperties(element, object);
         saveCollections(element, object);
+        if(hasId()) {
+            idMapper.saveTo(element, object);
+        }
         return object;
     }
 
@@ -105,5 +106,4 @@ public class Mapper<T> {
     public MappingContext getContext() {
         return context;
     }
-
 }

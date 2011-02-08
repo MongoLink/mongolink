@@ -39,6 +39,15 @@ public class MongoSession {
         db.getCollection(collectionName(element.getClass())).insert(dbObject);
     }
 
+    public void update(Object element) {
+        DBCollection collection = db.getCollection(collectionName(element.getClass()));
+        Mapper<?> mapper = context.mapperFor(element.getClass());
+        DBObject update = mapper.toDBObject(element);
+        DBObject query = new BasicDBObject();
+        query.put("_id", update.get("_id"));
+        collection.update(query, update);
+    }
+
     private <T>String collectionName(Class<T> clazz) {
         return clazz.getSimpleName().toLowerCase();
     }

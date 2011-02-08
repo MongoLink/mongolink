@@ -30,6 +30,9 @@ public class FakeDBCollection extends DBCollection {
 
     @Override
     public WriteResult update(DBObject q, DBObject o, boolean upsert, boolean multi, WriteConcern concern) throws MongoException {
+        DBObject old = findOne(q);
+        objects.remove(old);
+        objects.add(o);
         return null;
     }
 

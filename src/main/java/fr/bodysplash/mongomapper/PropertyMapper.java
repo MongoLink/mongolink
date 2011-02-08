@@ -22,7 +22,7 @@ public class PropertyMapper {
 
     public void saveTo(Object element, BasicDBObject object) {
         try {
-            object.put(name, method.invoke(element));
+            object.put(dbFieldName(), method.invoke(element));
         } catch (Exception e) {
             LOGGER.error("Can't saveInto property " + name, e);
         }
@@ -32,11 +32,15 @@ public class PropertyMapper {
         try {
             Field field = mapper.getPersistentType().getDeclaredField(name);
             field.setAccessible(true);
-            field.set(instance, from.get(name));
+            field.set(instance, from.get(dbFieldName()));
             field.setAccessible(false);
         } catch (Exception e) {
             LOGGER.error(e);
         }
+    }
+
+    protected String dbFieldName() {
+        return name;
     }
 
     public void setMapper(Mapper<?> mapper) {

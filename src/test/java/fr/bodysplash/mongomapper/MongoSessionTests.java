@@ -14,7 +14,7 @@ import static org.mockito.Mockito.*;
 
 public class MongoSessionTests {
 
-    private FakeDBCollection patates;
+    private FakeDBCollection entities;
     private FakeDB db;
     private MongoSession session;
 
@@ -22,11 +22,12 @@ public class MongoSessionTests {
     public void before() {
         Mongo mongo = mock(Mongo.class);
         db = spy(new FakeDB(mongo, "test"));
-        patates = new FakeDBCollection(db, "entity");
-        db.collections.put("entity", patates);
+        entities = new FakeDBCollection(db, "entity");
+        db.collections.put("entity", entities);
         ContextBuilder cb = new ContextBuilder();
         Mapping<Entity> mapping = cb.newMapping(Entity.class);
         mapping.property().getValue();
+        mapping.id().getId();
         MappingContext context = cb.createContext();
         session = new MongoSession(db);
         session.setMappingContext(context);
@@ -58,24 +59,33 @@ public class MongoSessionTests {
         assertThat(entity.getValue(), is("url de test"));
     }
 
-    private void createEntity(String id, String url) {
-        DBObject dbo = new BasicDBObject();
-        dbo.put("value", url);
-        dbo.put("_id", id);
-        patates.insert(dbo);
-    }
-
     @Test
     public void canSave() {
         Entity entity = new Entity("value");
 
         session.save(entity);
 
-        assertThat(patates.getObjects().size(), is(1));
-        DBObject dbo = patates.getObjects().get(0);
-        assertThat(dbo.get("value"), is((Object)"value"));
+        assertThat(entities.getObjects().size(), is(1));
+        DBObject dbo = entities.getObjects().get(0);
+        assertThat(dbo.get("value"), is((Object) "value"));
     }
-    
-    
-    
+
+    @Test
+    public void canUpdate() {
+        createEntity("id", "url de test");
+        Entity entity = session.get("id", Entity.class);
+        entity.setValue("un test de plus");
+
+        session.update(entity);
+
+        assertThat(entities.getObjects().get(0).get("value"), is((Object) "un test de plus"));
+    }
+
+    private void createEntity(String id, String url) {
+        DBObject dbo = new BasicDBObject();
+        dbo.put("value", url);
+        dbo.put("_id", id);
+        entities.insert(dbo);
+    }
+
 }

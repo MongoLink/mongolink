@@ -22,13 +22,23 @@ public class MapperTests {
     @Before
     public void before() throws UnknownHostException {
         ContextBuilder contextBuilder = new ContextBuilder();
-
         Mapping<Entity> entityMapping = contextBuilder.newMapping(Entity.class);
+        entityMapping.id().getId();
         entityMapping.property().getValue();
         entityMapping.collection().getComments();
         Mapping<Comment> commentMapping = contextBuilder.newMapping(Comment.class);
         commentMapping.property().getValue();
         context = contextBuilder.createContext();
+    }
+
+    @Test
+    public void canDealWithId() {
+        Entity entity = new Entity("test.com");
+        entity.setId("id de test");
+
+        DBObject dbObject = entityMapper().toDBObject(entity);
+
+        assertThat(dbObject.get("_id"), is((Object) "id de test"));
     }
 
     @Test
@@ -40,6 +50,7 @@ public class MapperTests {
 
         assertThat(dbo, notNullValue());
         assertThat(dbo.get("value"), is((Object) "test.com"));
+
     }
 
     @Test
@@ -55,6 +66,7 @@ public class MapperTests {
         assertThat(comments.size(), is(1));
         DBObject comment = (DBObject) comments.get(0);
         assertThat(comment.get("value"), is((Object) "un commentaire"));
+
     }
 
     @Test
@@ -67,7 +79,7 @@ public class MapperTests {
 
         assertThat(entity, notNullValue());
         assertThat(entity.getValue(), is("test.com"));
-        assertThat(entity.get_id(), is("id"));
+        assertThat(entity.getId(), is("id"));
     }
 
     @Test

@@ -7,7 +7,7 @@ import java.util.List;
 
 public class Entity {
 
-    private String _id;
+    private String id;
     private String value;
     private List<Comment> comments = Lists.newArrayList();
 
@@ -19,8 +19,12 @@ public class Entity {
         this.value = value;
     }
 
-    public String get_id() {
-        return _id;
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public String getValue() {
@@ -33,5 +37,9 @@ public class Entity {
 
     public void addComment(String comment) {
         comments.add(new Comment(comment));
+    }
+
+    public void setValue(String value) {
+        this.value = value;
     }
 }
