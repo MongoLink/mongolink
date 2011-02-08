@@ -6,10 +6,7 @@ import net.sf.cglib.proxy.MethodProxy;
 import java.lang.reflect.Method;
 
 
-public class
-
-
-        PropertyInterceptor implements MethodInterceptor {
+public class PropertyInterceptor implements MethodInterceptor {
     private Mapping<?> mapping;
 
 

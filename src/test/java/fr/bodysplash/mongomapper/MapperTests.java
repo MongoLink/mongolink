@@ -21,14 +21,14 @@ public class MapperTests {
 
     @Before
     public void before() throws UnknownHostException {
-        ContextBuilder factory = new ContextBuilder();
+        ContextBuilder contextBuilder = new ContextBuilder();
 
-        Mapping<Entity> entityMapping = factory.newMapping(Entity.class);
+        Mapping<Entity> entityMapping = contextBuilder.newMapping(Entity.class);
         entityMapping.property().getValue();
         entityMapping.collection().getComments();
-        Mapping<Comment> commentMapping = factory.newMapping(Comment.class);
+        Mapping<Comment> commentMapping = contextBuilder.newMapping(Comment.class);
         commentMapping.property().getValue();
-        context = factory.createContext();
+        context = contextBuilder.createContext();
     }
 
     @Test
