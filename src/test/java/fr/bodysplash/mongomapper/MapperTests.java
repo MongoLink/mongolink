@@ -5,6 +5,7 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import fr.bodysplash.mongomapper.test.Comment;
 import fr.bodysplash.mongomapper.test.Entity;
+import org.bson.types.ObjectId;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -34,11 +35,11 @@ public class MapperTests {
     @Test
     public void canDealWithId() {
         Entity entity = new Entity("test.com");
-        entity.setId("id de test");
+        entity.setId("4d53b7118653a70549fe1b78");
 
         DBObject dbObject = entityMapper().toDBObject(entity);
 
-        assertThat(dbObject.get("_id"), is((Object) "id de test"));
+        assertThat(dbObject.get("_id"), is((Object) new ObjectId("4d53b7118653a70549fe1b78")));
     }
 
     @Test

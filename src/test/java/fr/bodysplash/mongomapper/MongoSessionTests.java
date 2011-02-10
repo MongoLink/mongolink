@@ -3,6 +3,7 @@ package fr.bodysplash.mongomapper;
 
 import com.mongodb.*;
 import fr.bodysplash.mongomapper.test.Entity;
+import org.bson.types.ObjectId;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
@@ -49,14 +50,14 @@ public class MongoSessionTests {
 
     @Test
     public void canGetById() {
-        createEntity("id", "url de test");
-        createEntity("autreId", "autre url");
+        createEntity("4d53b7118653a70549fe1b78", "plop");
+        createEntity("4d53b7118653a70549fe1b78", "plap");
 
 
-        Entity entity = session.get("id", Entity.class);
+        Entity entity = session.get("4d53b7118653a70549fe1b78", Entity.class);
 
         assertThat(entity , notNullValue());
-        assertThat(entity.getValue(), is("url de test"));
+        assertThat(entity.getValue(), is("plop"));
     }
 
     @Test
@@ -72,8 +73,8 @@ public class MongoSessionTests {
 
     @Test
     public void canUpdate() {
-        createEntity("id", "url de test");
-        Entity entity = session.get("id", Entity.class);
+        createEntity("4d53b7118653a70549fe1b78", "url de test");
+        Entity entity = session.get("4d53b7118653a70549fe1b78", Entity.class);
         entity.setValue("un test de plus");
 
         session.update(entity);
@@ -84,7 +85,7 @@ public class MongoSessionTests {
     private void createEntity(String id, String url) {
         DBObject dbo = new BasicDBObject();
         dbo.put("value", url);
-        dbo.put("_id", id);
+        dbo.put("_id", new ObjectId(id));
         entities.insert(dbo);
     }
 

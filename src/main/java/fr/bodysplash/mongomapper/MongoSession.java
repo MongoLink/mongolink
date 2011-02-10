@@ -5,6 +5,7 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
+import org.bson.types.ObjectId;
 
 public class MongoSession {
 
@@ -27,11 +28,11 @@ public class MongoSession {
         this.context = context;
     }
 
-    public <T> T get(String id, Class<T> clazz) {
-        DBCollection collection = db.getCollection(collectionName(clazz));
-        DBObject query = new BasicDBObject("_id", id);
+    public <T> T get(String id, Class<T> entityType) {
+        DBCollection collection = db.getCollection(collectionName(entityType));
+        DBObject query = new BasicDBObject("_id", new ObjectId(id));
         DBObject result = collection.findOne(query);
-        return (T) context.mapperFor(clazz).toInstance(result);
+        return (T) context.mapperFor(entityType).toInstance(result);
     }
 
     public void save(Object element) {
