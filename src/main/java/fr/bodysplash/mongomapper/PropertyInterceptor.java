@@ -2,6 +2,7 @@ package fr.bodysplash.mongomapper;
 
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
+import org.apache.commons.lang.StringUtils;
 
 import java.lang.reflect.Method;
 
@@ -42,7 +43,7 @@ public class PropertyInterceptor implements MethodInterceptor {
     }
 
     private String methodName(Method method) {
-        return method.getName().substring(3, method.getName().length()).toLowerCase();
+        return StringUtils.uncapitalize(method.getName().substring(3, method.getName().length()));
     }
 
 }

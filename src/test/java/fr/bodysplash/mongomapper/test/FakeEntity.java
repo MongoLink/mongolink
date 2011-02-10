@@ -5,17 +5,17 @@ import com.google.common.collect.Lists;
 
 import java.util.List;
 
-public class Entity {
+public class FakeEntity {
 
     private String id;
     private String value;
     private List<Comment> comments = Lists.newArrayList();
 
-    Entity() {
+    FakeEntity() {
         
     }
 
-    public Entity(String value) {
+    public FakeEntity(String value) {
         this.value = value;
     }
 

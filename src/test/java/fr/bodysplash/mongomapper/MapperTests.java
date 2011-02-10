@@ -4,7 +4,8 @@ import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import fr.bodysplash.mongomapper.test.Comment;
-import fr.bodysplash.mongomapper.test.Entity;
+import fr.bodysplash.mongomapper.test.FakeEntity;
+import fr.bodysplash.mongomapper.test.FakeEntityWithNaturalId;
 import org.bson.types.ObjectId;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,12 +19,13 @@ import static org.junit.Assert.assertThat;
 
 public class MapperTests {
 
+
     private MappingContext context;
 
     @Before
     public void before() throws UnknownHostException {
         ContextBuilder contextBuilder = new ContextBuilder();
-        Mapping<Entity> entityMapping = contextBuilder.newMapping(Entity.class);
+        Mapping<FakeEntity> entityMapping = contextBuilder.newMapping(FakeEntity.class);
         entityMapping.id().getId();
         entityMapping.property().getValue();
         entityMapping.collection().getComments();
@@ -33,8 +35,8 @@ public class MapperTests {
     }
 
     @Test
-    public void canDealWithId() {
-        Entity entity = new Entity("test.com");
+    public void canSaveAutoId() {
+        FakeEntity entity = new FakeEntity("test.com");
         entity.setId("4d53b7118653a70549fe1b78");
 
         DBObject dbObject = entityMapper().toDBObject(entity);
@@ -43,8 +45,37 @@ public class MapperTests {
     }
 
     @Test
+    public void canSaveNaturalId() {
+        MappingContext mappingContext = contextWithNaturalId();
+        FakeEntityWithNaturalId entity = new FakeEntityWithNaturalId("natural key");
+
+        DBObject dbObject = mappingContext.mapperFor(FakeEntityWithNaturalId.class).toDBObject(entity);
+
+        assertThat(dbObject.get("_id"), is((Object) "natural key"));
+    }
+
+    @Test
+    public void canPopulateNaturalId() {
+        MappingContext mappingContext = contextWithNaturalId();
+        DBObject dbo = new BasicDBObject();
+        dbo.put("_id", "natural key");
+
+        FakeEntityWithNaturalId instance = mappingContext.mapperFor(FakeEntityWithNaturalId.class).toInstance(dbo);
+
+        assertThat(instance.getNaturalKey(), is((Object) "natural key"));
+    }
+
+
+    private MappingContext contextWithNaturalId() {
+        ContextBuilder contextBuilder = new ContextBuilder();
+        Mapping<FakeEntityWithNaturalId> mapping = contextBuilder.newMapping(FakeEntityWithNaturalId.class);
+        mapping.id(IdGeneration.Natural).getNaturalKey();
+        return contextBuilder.createContext();
+    }
+
+    @Test
     public void canSaveProperties() {
-        Entity entity = new Entity("test.com");
+        FakeEntity entity = new FakeEntity("test.com");
 
 
         DBObject dbo = entityMapper().toDBObject(entity);
@@ -56,7 +87,7 @@ public class MapperTests {
 
     @Test
     public void canSaveCollections() {
-        Entity entity = new Entity("test.com");
+        FakeEntity entity = new FakeEntity("test.com");
         entity.addComment("un commentaire");
 
         DBObject dbo = entityMapper().toDBObject(entity);
@@ -76,7 +107,7 @@ public class MapperTests {
         dbo.put("value", "test.com");
         dbo.put("_id", "id");
 
-        Entity entity = entityMapper().toInstance(dbo);
+        FakeEntity entity = entityMapper().toInstance(dbo);
 
         assertThat(entity, notNullValue());
         assertThat(entity.getValue(), is("test.com"));
@@ -94,14 +125,14 @@ public class MapperTests {
         comments.add(comment);
         dbo.put("comments", comments);
 
-        Entity entity = entityMapper().toInstance(dbo);
+        FakeEntity entity = entityMapper().toInstance(dbo);
 
         assertThat(entity.getComments().size(), is(1));
         assertThat(entity.getComments().get(0).getValue(), is("this is a mapper!"));
     }
 
-    private Mapper<Entity> entityMapper() {
-        return (Mapper<Entity>) context.mapperFor(Entity.class);
+    private Mapper<FakeEntity> entityMapper() {
+        return (Mapper<FakeEntity>) context.mapperFor(FakeEntity.class);
     }
 
 }

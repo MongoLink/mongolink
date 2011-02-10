@@ -106,4 +106,8 @@ public class Mapper<T> {
     public MappingContext getContext() {
         return context;
     }
+
+    public Object getDbId(String id) {
+        return idMapper.getDbValue(id);
+    }
 }

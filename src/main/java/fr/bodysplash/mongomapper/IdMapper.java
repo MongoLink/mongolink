@@ -7,18 +7,21 @@ import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 public class IdMapper {
 
     private String name;
+    private IdGeneration generationStrategy;
     private static final Logger LOGGER = Logger.getLogger(PropertyMapper.class);
     private Method method;
     private Mapper<?> mapper;
 
-    public IdMapper(String name, Method method) {
-        this.name = name;
+    public IdMapper(String name, Method method, IdGeneration generationStrategy) {
         this.method = method;
+        this.name = name;
+        this.generationStrategy = generationStrategy;
     }
 
     protected String dbFieldName() {
@@ -27,10 +30,18 @@ public class IdMapper {
 
     public void saveTo(Object element, BasicDBObject object) {
         try {
-            object.put(dbFieldName(), new ObjectId(method.invoke(element).toString()));
+            object.put(dbFieldName(), getIdValue(element));
         } catch (Exception e) {
             LOGGER.error("Can't saveInto property " + name, e);
         }
+    }
+
+    private Object getIdValue(Object element) throws IllegalAccessException, InvocationTargetException {
+        Object keyValue = method.invoke(element);
+        if (generationStrategy == IdGeneration.Auto) {
+            return new ObjectId(keyValue.toString());
+        }
+        return keyValue;
     }
 
     public void populateFrom(Object instance, DBObject from) {
@@ -47,5 +58,12 @@ public class IdMapper {
 
     public void setMapper(Mapper<?> mapper) {
         this.mapper = mapper;
+    }
+
+    public Object getDbValue(String id) {
+        if(generationStrategy == IdGeneration.Natural) {
+            return id;
+        }
+        return new ObjectId(id);
     }
 }

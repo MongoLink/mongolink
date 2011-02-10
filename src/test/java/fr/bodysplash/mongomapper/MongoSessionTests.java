@@ -2,7 +2,8 @@ package fr.bodysplash.mongomapper;
 
 
 import com.mongodb.*;
-import fr.bodysplash.mongomapper.test.Entity;
+import fr.bodysplash.mongomapper.test.FakeEntity;
+import fr.bodysplash.mongomapper.test.FakeEntityWithNaturalId;
 import org.bson.types.ObjectId;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,17 +19,22 @@ public class MongoSessionTests {
     private FakeDBCollection entities;
     private FakeDB db;
     private MongoSession session;
+    private FakeDBCollection fakeEntities;
 
     @Before
     public void before() {
         Mongo mongo = mock(Mongo.class);
         db = spy(new FakeDB(mongo, "test"));
         entities = new FakeDBCollection(db, "entity");
-        db.collections.put("entity", entities);
+        fakeEntities = new FakeDBCollection(db, "fakeentitywithnaturalid");
+        db.collections.put("fakeentity", entities);
+        db.collections.put("fakeentitywithnaturalid", fakeEntities);
         ContextBuilder cb = new ContextBuilder();
-        Mapping<Entity> mapping = cb.newMapping(Entity.class);
+        Mapping<FakeEntity> mapping = cb.newMapping(FakeEntity.class);
         mapping.property().getValue();
         mapping.id().getId();
+        Mapping<FakeEntityWithNaturalId> mappingNatural = cb.newMapping(FakeEntityWithNaturalId.class);
+        mappingNatural.id(IdGeneration.Natural).getNaturalKey();
         MappingContext context = cb.createContext();
         session = new MongoSession(db);
         session.setMappingContext(context);
@@ -49,20 +55,32 @@ public class MongoSessionTests {
 
 
     @Test
-    public void canGetById() {
+    public void canGetByAutoId() {
         createEntity("4d53b7118653a70549fe1b78", "plop");
         createEntity("4d53b7118653a70549fe1b78", "plap");
 
 
-        Entity entity = session.get("4d53b7118653a70549fe1b78", Entity.class);
+        FakeEntity entity = session.get("4d53b7118653a70549fe1b78", FakeEntity.class);
 
-        assertThat(entity , notNullValue());
+        assertThat(entity, notNullValue());
         assertThat(entity.getValue(), is("plop"));
     }
 
     @Test
+    public void canGetByNaturalId() {
+        DBObject dbo = new BasicDBObject();
+        dbo.put("_id", "a natural key");
+        fakeEntities.insert(dbo);
+
+        FakeEntityWithNaturalId entity = session.get("a natural key", FakeEntityWithNaturalId.class);
+
+        assertThat(entity, notNullValue());
+        assertThat(entity.getNaturalKey(), is("a natural key"));
+    }
+
+    @Test
     public void canSave() {
-        Entity entity = new Entity("value");
+        FakeEntity entity = new FakeEntity("value");
 
         session.save(entity);
 
@@ -74,7 +92,7 @@ public class MongoSessionTests {
     @Test
     public void canUpdate() {
         createEntity("4d53b7118653a70549fe1b78", "url de test");
-        Entity entity = session.get("4d53b7118653a70549fe1b78", Entity.class);
+        FakeEntity entity = session.get("4d53b7118653a70549fe1b78", FakeEntity.class);
         entity.setValue("un test de plus");
 
         session.update(entity);
