@@ -15,6 +15,10 @@ import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
 
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertThat;
+
 public class TestsMongoSession {
 
     private FakeDBCollection entities;
@@ -63,7 +67,7 @@ public class TestsMongoSession {
         FakeEntity entity = session.get("4d53b7118653a70549fe1b78", FakeEntity.class);
 
         Assert.assertThat(entity, Matchers.notNullValue());
-        Assert.assertThat(entity.getValue(), Matchers.is("plop"));
+        Assert.assertThat(entity.getValue(), is("plop"));
     }
 
     @Test
@@ -74,8 +78,8 @@ public class TestsMongoSession {
 
         FakeEntityWithNaturalId entity = session.get("a natural key", FakeEntityWithNaturalId.class);
 
-        Assert.assertThat(entity, Matchers.notNullValue());
-        Assert.assertThat(entity.getNaturalKey(), Matchers.is("a natural key"));
+        Assert.assertThat(entity, notNullValue());
+        Assert.assertThat(entity.getNaturalKey(), is("a natural key"));
     }
 
     @Test
@@ -84,9 +88,9 @@ public class TestsMongoSession {
 
         session.save(entity);
 
-        Assert.assertThat(entities.getObjects().size(), Matchers.is(1));
+        Assert.assertThat(entities.getObjects().size(), is(1));
         DBObject dbo = entities.getObjects().get(0);
-        Assert.assertThat(dbo.get("value"), Matchers.is((Object) "value"));
+        Assert.assertThat(dbo.get("value"), is((Object) "value"));
     }
 
     @Test
@@ -97,12 +101,20 @@ public class TestsMongoSession {
 
         session.update(entity);
 
-        Assert.assertThat(entities.getObjects().get(0).get("value"), Matchers.is((Object) "un test de plus"));
+        Assert.assertThat(entities.getObjects().get(0).get("value"), is((Object) "un test de plus"));
     }
 
     @Test
     public void canAutomaticalyUpdate() {
+        createEntity("4d53b7118653a70549fe1b78", "url de test");
+        session.start();
+        FakeEntity fakeEntity = session.get("4d53b7118653a70549fe1b78", FakeEntity.class);
+        fakeEntity.setValue("some new and strange value");
 
+        session.stop();
+
+        DBObject dbObject = entities.getObjects().get(0);
+        assertThat(dbObject.get("value"), is(((Object) "some new and strange value")));
     }
 
     private void createEntity(String id, String url) {
