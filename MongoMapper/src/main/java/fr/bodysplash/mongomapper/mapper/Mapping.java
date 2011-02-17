@@ -1,4 +1,4 @@
-package mongomapper;
+package fr.bodysplash.mongomapper.mapper;
 
 import net.sf.cglib.core.DefaultGeneratorStrategy;
 import net.sf.cglib.proxy.Enhancer;

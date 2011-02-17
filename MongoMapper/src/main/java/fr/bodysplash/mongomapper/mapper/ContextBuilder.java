@@ -1,4 +1,4 @@
-package mongomapper;
+package fr.bodysplash.mongomapper.mapper;
 
 import com.google.common.collect.Lists;
 
@@ -14,8 +14,8 @@ public class ContextBuilder {
         return result;
     }
 
-    public MappingContext createContext() {
-        MappingContext result = new MappingContext();
+    public MapperContext createContext() {
+        MapperContext result = new MapperContext();
         for (Mapping<?> mapping : mappings) {
             Mapper<?> mapper = mapping.createMapper();
             mapper.setContext(result);

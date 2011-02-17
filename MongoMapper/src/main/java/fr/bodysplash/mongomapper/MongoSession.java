@@ -1,4 +1,4 @@
-package mongomapper;
+package fr.bodysplash.mongomapper;
 
 
 import com.google.common.collect.Lists;
@@ -6,13 +6,15 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
+import fr.bodysplash.mongomapper.mapper.Mapper;
+import fr.bodysplash.mongomapper.mapper.MapperContext;
 
 import java.util.List;
 
 public class MongoSession {
 
     private DB db;
-    private MappingContext context;
+    private MapperContext context;
     private List<Object> unitOfWork = Lists.newArrayList();
 
     public MongoSession(DB db) {
@@ -30,7 +32,7 @@ public class MongoSession {
         db.requestDone();
     }
 
-    public void setMappingContext(MappingContext context) {
+    public void setMappingContext(MapperContext context) {
         this.context = context;
     }
 
@@ -58,7 +60,7 @@ public class MongoSession {
         collection.update(query, update);
     }
 
-    private <T>String collectionName(Class<T> clazz) {
+    private <T> String collectionName(Class<T> clazz) {
         return clazz.getSimpleName().toLowerCase();
     }
 }

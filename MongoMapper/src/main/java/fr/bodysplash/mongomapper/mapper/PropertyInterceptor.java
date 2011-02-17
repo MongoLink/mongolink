@@ -1,4 +1,4 @@
-package mongomapper;
+package fr.bodysplash.mongomapper.mapper;
 
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
@@ -17,7 +17,7 @@ public class PropertyInterceptor implements MethodInterceptor {
 
     @Override
     public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
-        if(mapping.isId()) {
+        if (mapping.isId()) {
             mapId(method);
         }
         if (mapping.isProperty()) {

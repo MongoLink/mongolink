@@ -1,4 +1,4 @@
-package mongomapper;
+package fr.bodysplash.mongomapper.mapper;
 
 
 import com.google.common.collect.Lists;
@@ -14,7 +14,7 @@ public class Mapper<T> {
     private Class<T> persistentType;
     private List<PropertyMapper> properties = Lists.newArrayList();
     private List<CollectionMapper> collections = Lists.newArrayList();
-    private MappingContext context;
+    private MapperContext context;
     private static final Logger LOGGER = Logger.getLogger(Mapper.class);
     private IdMapper idMapper;
 
@@ -26,7 +26,7 @@ public class Mapper<T> {
         return persistentType;
     }
 
-    void setContext(MappingContext context) {
+    void setContext(MapperContext context) {
         this.context = context;
     }
 
@@ -61,7 +61,7 @@ public class Mapper<T> {
             for (PropertyMapper property : properties) {
                 property.populateFrom(instance, from);
             }
-            if(hasId()) {
+            if (hasId()) {
                 idMapper.populateFrom(instance, from);
             }
         } catch (Exception e) {
@@ -84,7 +84,7 @@ public class Mapper<T> {
         BasicDBObject object = new BasicDBObject();
         saveProperties(element, object);
         saveCollections(element, object);
-        if(hasId()) {
+        if (hasId()) {
             idMapper.saveTo(element, object);
         }
         return object;
@@ -103,7 +103,7 @@ public class Mapper<T> {
 
     }
 
-    public MappingContext getContext() {
+    public MapperContext getContext() {
         return context;
     }
 

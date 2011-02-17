@@ -1,10 +1,15 @@
-package mongomapper;
+package fr.bodysplash.mongomapper;
 
 
 import com.mongodb.DB;
 import com.mongodb.Mongo;
-import mongomapper.test.FakeEntity;
-import mongomapper.test.FakeEntityWithNaturalId;
+import fr.bodysplash.mongomapper.mapper.ContextBuilder;
+import fr.bodysplash.mongomapper.mapper.IdGeneration;
+import fr.bodysplash.mongomapper.mapper.MapperContext;
+import fr.bodysplash.mongomapper.mapper.Mapping;
+import fr.bodysplash.mongomapper.test.FakeEntity;
+import fr.bodysplash.mongomapper.test.FakeEntityWithNaturalId;
+import fr.bodysplash.mongomapper.test.TestFactory;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Before;
@@ -27,7 +32,7 @@ public class TestsIntegration {
         mapping.property().getValue();
         Mapping<FakeEntityWithNaturalId> mappingNatural = builder.newMapping(FakeEntityWithNaturalId.class);
         mappingNatural.id(IdGeneration.Natural).getNaturalKey();
-        MappingContext context = builder.createContext();
+        MapperContext context = builder.createContext();
         mongoSession = new MongoSession(db);
         mongoSession.setMappingContext(context);
     }
@@ -52,6 +57,15 @@ public class TestsIntegration {
 
         Assert.assertThat(fakeEntityWithNaturalId, Matchers.notNullValue());
         Assert.assertThat(fakeEntityWithNaturalId.getNaturalKey(), Matchers.is("clef naturel"));
+    }
+
+
+    @Test
+    public void canUserSessionManager() {
+        ContextBuilder contextBuilder = TestFactory.contextBuilder().withFakeEntity();
+        MongoSessionManager manager = MongoSessionManager.create(contextBuilder, "test");
+        MongoSession session = manager.createSession();
+        session.save(new FakeEntity("a new value"));
     }
 
     private String createEntity(String value) {

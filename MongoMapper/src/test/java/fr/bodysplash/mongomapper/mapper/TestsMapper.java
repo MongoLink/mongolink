@@ -1,11 +1,11 @@
-package mongomapper;
+package fr.bodysplash.mongomapper.mapper;
 
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
-import mongomapper.test.Comment;
-import mongomapper.test.FakeEntity;
-import mongomapper.test.FakeEntityWithNaturalId;
+import fr.bodysplash.mongomapper.test.Comment;
+import fr.bodysplash.mongomapper.test.FakeEntity;
+import fr.bodysplash.mongomapper.test.FakeEntityWithNaturalId;
 import org.bson.types.ObjectId;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
@@ -18,7 +18,7 @@ import java.net.UnknownHostException;
 public class TestsMapper {
 
 
-    private MappingContext context;
+    private MapperContext context;
 
     @Before
     public void before() throws UnknownHostException {
@@ -44,27 +44,27 @@ public class TestsMapper {
 
     @Test
     public void canSaveNaturalId() {
-        MappingContext mappingContext = contextWithNaturalId();
+        MapperContext mapperContext = contextWithNaturalId();
         FakeEntityWithNaturalId entity = new FakeEntityWithNaturalId("natural key");
 
-        DBObject dbObject = mappingContext.mapperFor(FakeEntityWithNaturalId.class).toDBObject(entity);
+        DBObject dbObject = mapperContext.mapperFor(FakeEntityWithNaturalId.class).toDBObject(entity);
 
         Assert.assertThat(dbObject.get("_id"), Matchers.is((Object) "natural key"));
     }
 
     @Test
     public void canPopulateNaturalId() {
-        MappingContext mappingContext = contextWithNaturalId();
+        MapperContext mapperContext = contextWithNaturalId();
         DBObject dbo = new BasicDBObject();
         dbo.put("_id", "natural key");
 
-        FakeEntityWithNaturalId instance = mappingContext.mapperFor(FakeEntityWithNaturalId.class).toInstance(dbo);
+        FakeEntityWithNaturalId instance = mapperContext.mapperFor(FakeEntityWithNaturalId.class).toInstance(dbo);
 
         Assert.assertThat(instance.getNaturalKey(), Matchers.is((Object) "natural key"));
     }
 
 
-    private MappingContext contextWithNaturalId() {
+    private MapperContext contextWithNaturalId() {
         ContextBuilder contextBuilder = new ContextBuilder();
         Mapping<FakeEntityWithNaturalId> mapping = contextBuilder.newMapping(FakeEntityWithNaturalId.class);
         mapping.id(IdGeneration.Natural).getNaturalKey();

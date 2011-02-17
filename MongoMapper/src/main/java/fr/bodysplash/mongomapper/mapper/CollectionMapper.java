@@ -1,4 +1,4 @@
-package mongomapper;
+package fr.bodysplash.mongomapper.mapper;
 
 
 import com.mongodb.BasicDBList;
@@ -37,7 +37,7 @@ public class CollectionMapper {
         }
     }
 
-    private MappingContext context() {
+    private MapperContext context() {
         return mapper.getContext();
     }
 

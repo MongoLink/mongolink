@@ -1,4 +1,4 @@
-package mongomapper.test;
+package fr.bodysplash.mongomapper.test;
 
 
 import com.google.common.collect.Lists;
@@ -12,7 +12,7 @@ public class FakeEntity {
     private List<Comment> comments = Lists.newArrayList();
 
     FakeEntity() {
-        
+
     }
 
     public FakeEntity(String value) {

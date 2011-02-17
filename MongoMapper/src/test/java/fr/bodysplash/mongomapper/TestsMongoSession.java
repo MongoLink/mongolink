@@ -1,12 +1,16 @@
-package mongomapper;
+package fr.bodysplash.mongomapper;
 
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.mongodb.FakeDB;
 import com.mongodb.FakeDBCollection;
-import mongomapper.test.FakeEntity;
-import mongomapper.test.FakeEntityWithNaturalId;
+import fr.bodysplash.mongomapper.mapper.ContextBuilder;
+import fr.bodysplash.mongomapper.mapper.IdGeneration;
+import fr.bodysplash.mongomapper.mapper.MapperContext;
+import fr.bodysplash.mongomapper.mapper.Mapping;
+import fr.bodysplash.mongomapper.test.FakeEntity;
+import fr.bodysplash.mongomapper.test.FakeEntityWithNaturalId;
 import org.bson.types.ObjectId;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
@@ -39,7 +43,7 @@ public class TestsMongoSession {
         mapping.id().getId();
         Mapping<FakeEntityWithNaturalId> mappingNatural = cb.newMapping(FakeEntityWithNaturalId.class);
         mappingNatural.id(IdGeneration.Natural).getNaturalKey();
-        MappingContext context = cb.createContext();
+        MapperContext context = cb.createContext();
         session = new MongoSession(db);
         session.setMappingContext(context);
     }

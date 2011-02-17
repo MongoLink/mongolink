@@ -1,10 +1,10 @@
-package mongomapper;
+package fr.bodysplash.mongomapper.mapper;
 
 import com.google.common.collect.Maps;
 
 import java.util.Map;
 
-public class MappingContext {
+public class MapperContext {
 
     private Map<Class<?>, Mapper<?>> mappings = Maps.newHashMap();
 

@@ -1,4 +1,4 @@
-package mongomapper.test;
+package fr.bodysplash.mongomapper.test;
 
 
 public class Comment {

@@ -1,4 +1,4 @@
-package mongomapper;
+package fr.bodysplash.mongomapper.mapper;
 
 
 import com.mongodb.BasicDBObject;
@@ -38,7 +38,7 @@ public class IdMapper {
 
     private Object getIdValue(Object element) throws IllegalAccessException, InvocationTargetException {
         Object keyValue = method.invoke(element);
-        if (generationStrategy == IdGeneration.Auto) {
+        if (generationStrategy == IdGeneration.Auto && keyValue != null) {
             return new ObjectId(keyValue.toString());
         }
         return keyValue;
@@ -61,7 +61,7 @@ public class IdMapper {
     }
 
     public Object getDbValue(String id) {
-        if(generationStrategy == IdGeneration.Natural) {
+        if (generationStrategy == IdGeneration.Natural) {
             return id;
         }
         return new ObjectId(id);

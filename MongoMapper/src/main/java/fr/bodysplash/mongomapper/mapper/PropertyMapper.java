@@ -1,4 +1,4 @@
-package mongomapper;
+package fr.bodysplash.mongomapper.mapper;
 
 
 import com.mongodb.BasicDBObject;
@@ -9,7 +9,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 public class PropertyMapper {
-    
+
     private String name;
     private static final Logger LOGGER = Logger.getLogger(PropertyMapper.class);
     private Method method;
