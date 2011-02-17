@@ -61,6 +61,7 @@ public class TestsIntegration {
 
 
     @Test
+    @Ignore
     public void canUserSessionManager() {
         ContextBuilder contextBuilder = TestFactory.contextBuilder().withFakeEntity();
         MongoSessionManager manager = MongoSessionManager.create(contextBuilder, "test");
