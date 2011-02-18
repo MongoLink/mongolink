@@ -22,9 +22,17 @@ public class DbFactory {
 
     private synchronized void doInitializeMongo() {
         try {
-            mongo = new Mongo();
+            if (mongo == null) {
+                mongo = new Mongo();
+            }
         } catch (UnknownHostException e) {
             throw new MongoMapperError("Can't initialize mongo", e);
+        }
+    }
+
+    public void close() {
+        if(mongo != null) {
+            mongo.close();
         }
     }
 }

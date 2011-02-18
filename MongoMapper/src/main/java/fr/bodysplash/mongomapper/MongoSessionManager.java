@@ -36,4 +36,8 @@ public class MongoSessionManager {
     public void setDbFactory(DbFactory dbFactory) {
         this.dbFactory = dbFactory;
     }
+
+    public void close() {
+        dbFactory.close();
+    }
 }
