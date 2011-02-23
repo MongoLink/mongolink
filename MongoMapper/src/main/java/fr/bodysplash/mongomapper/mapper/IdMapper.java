@@ -10,12 +10,12 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-public class IdMapper {
+class IdMapper {
 
-    private String name;
-    private IdGeneration generationStrategy;
+    private final String name;
+    private final IdGeneration generationStrategy;
     private static final Logger LOGGER = Logger.getLogger(PropertyMapper.class);
-    private Method method;
+    private final Method method;
     private Mapper<?> mapper;
 
     public IdMapper(String name, Method method, IdGeneration generationStrategy) {
@@ -24,7 +24,7 @@ public class IdMapper {
         this.generationStrategy = generationStrategy;
     }
 
-    protected String dbFieldName() {
+    String dbFieldName() {
         return "_id";
     }
 

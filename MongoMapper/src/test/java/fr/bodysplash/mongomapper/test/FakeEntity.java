@@ -9,7 +9,7 @@ public class FakeEntity {
 
     private String id;
     private String value;
-    private List<Comment> comments = Lists.newArrayList();
+    private final List<Comment> comments = Lists.newArrayList();
 
     FakeEntity() {
 

@@ -6,9 +6,6 @@ import com.mongodb.DBObject;
 import com.mongodb.FakeDB;
 import com.mongodb.FakeDBCollection;
 import fr.bodysplash.mongomapper.mapper.ContextBuilder;
-import fr.bodysplash.mongomapper.mapper.IdGeneration;
-import fr.bodysplash.mongomapper.mapper.MapperContext;
-import fr.bodysplash.mongomapper.mapper.Mapping;
 import fr.bodysplash.mongomapper.test.FakeEntity;
 import fr.bodysplash.mongomapper.test.FakeEntityWithNaturalId;
 import org.bson.types.ObjectId;
@@ -37,15 +34,9 @@ public class TestsMongoSession {
         fakeEntities = new FakeDBCollection(db, "fakeentitywithnaturalid");
         db.collections.put("fakeentity", entities);
         db.collections.put("fakeentitywithnaturalid", fakeEntities);
-        ContextBuilder cb = new ContextBuilder();
-        Mapping<FakeEntity> mapping = cb.newMapping(FakeEntity.class);
-        mapping.property().getValue();
-        mapping.id().getId();
-        Mapping<FakeEntityWithNaturalId> mappingNatural = cb.newMapping(FakeEntityWithNaturalId.class);
-        mappingNatural.id(IdGeneration.Natural).getNaturalKey();
-        MapperContext context = cb.createContext();
+        ContextBuilder cb = new ContextBuilder("fr.bodysplash.mongomapper.test");
         session = new MongoSession(db);
-        session.setMappingContext(context);
+        session.setMappingContext(cb.createContext());
     }
 
 

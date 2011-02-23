@@ -13,9 +13,9 @@ import java.util.List;
 
 public class MongoSession {
 
-    private DB db;
+    private final DB db;
     private MapperContext context;
-    private List<Object> unitOfWork = Lists.newArrayList();
+    private final List<Object> unitOfWork = Lists.newArrayList();
 
     public MongoSession(DB db) {
         this.db = db;

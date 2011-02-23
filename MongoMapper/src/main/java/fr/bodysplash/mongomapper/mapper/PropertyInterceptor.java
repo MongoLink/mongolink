@@ -7,38 +7,37 @@ import org.apache.commons.lang.StringUtils;
 import java.lang.reflect.Method;
 
 
-public class PropertyInterceptor implements MethodInterceptor {
-    private Mapping<?> mapping;
+class PropertyInterceptor implements MethodInterceptor {
+    private final ClassMap<?> classMap;
 
-
-    public PropertyInterceptor(Mapping<?> Mapping) {
-        mapping = Mapping;
+    public PropertyInterceptor(ClassMap<?> classMap) {
+        this.classMap = classMap;
     }
 
     @Override
     public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
-        if (mapping.isId()) {
+        if (classMap.isId()) {
             mapId(method);
         }
-        if (mapping.isProperty()) {
+        if (classMap.isProperty()) {
             mapProperty(method);
         }
-        if (mapping.isCollection()) {
+        if (classMap.isCollection()) {
             mapCollection(method);
         }
         return null;
     }
 
     private void mapId(Method method) {
-        mapping.setId(methodName(method), method);
+        classMap.setId(methodName(method), method);
     }
 
     private void mapProperty(Method method) {
-        mapping.addProperty(methodName(method), method);
+        classMap.addProperty(methodName(method), method);
     }
 
     private void mapCollection(Method method) {
-        mapping.addCollection(methodName(method), method);
+        classMap.addCollection(methodName(method), method);
 
     }
 

@@ -8,11 +8,11 @@ import org.apache.log4j.Logger;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-public class PropertyMapper {
+class PropertyMapper {
 
-    private String name;
+    private final String name;
     private static final Logger LOGGER = Logger.getLogger(PropertyMapper.class);
-    private Method method;
+    private final Method method;
     private Mapper<?> mapper;
 
     public PropertyMapper(String name, Method method) {
@@ -39,7 +39,7 @@ public class PropertyMapper {
         }
     }
 
-    protected String dbFieldName() {
+    String dbFieldName() {
         return name;
     }
 

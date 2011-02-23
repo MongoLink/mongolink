@@ -16,8 +16,7 @@ public class TestsMongoSessionManager {
 
     @Test
     public void canCreateFromContextBuilder() {
-        ContextBuilder contextBuilder = new ContextBuilder();
-        contextBuilder.newMapping(FakeEntity.class);
+        ContextBuilder contextBuilder = new ContextBuilder("fr.bodysplash.mongomapper.test");
 
         MongoSessionManager sm = MongoSessionManager.create(contextBuilder, "freecomment");
 

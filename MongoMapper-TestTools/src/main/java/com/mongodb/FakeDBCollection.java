@@ -12,7 +12,7 @@ import java.util.List;
 public class FakeDBCollection extends DBCollection {
 
 
-    private List<DBObject> objects = Lists.newArrayList();
+    private final List<DBObject> objects = Lists.newArrayList();
 
     public FakeDBCollection(FakeDB base, String name) {
         super(base, name);

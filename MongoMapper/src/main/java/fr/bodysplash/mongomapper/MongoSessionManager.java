@@ -7,7 +7,7 @@ import fr.bodysplash.mongomapper.mapper.MapperContext;
 public class MongoSessionManager {
 
     private static String dbName;
-    private MapperContext mapperContext;
+    private final MapperContext mapperContext;
     private DbFactory dbFactory = new DbFactory();
 
     public static MongoSessionManager create(ContextBuilder contextBuilder, String dbName) {

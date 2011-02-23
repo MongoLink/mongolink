@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class FakeDbFactory extends DbFactory {
 
-    private Map<String, FakeDB> dbs = Maps.newHashMap();
+    private final Map<String, FakeDB> dbs = Maps.newHashMap();
 
 
     @Override

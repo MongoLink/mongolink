@@ -3,9 +3,7 @@ package fr.bodysplash.mongomapper.mapper;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
-import fr.bodysplash.mongomapper.test.Comment;
-import fr.bodysplash.mongomapper.test.FakeEntity;
-import fr.bodysplash.mongomapper.test.FakeEntityWithNaturalId;
+import fr.bodysplash.mongomapper.test.*;
 import org.bson.types.ObjectId;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
@@ -22,14 +20,11 @@ public class TestsMapper {
 
     @Before
     public void before() throws UnknownHostException {
-        ContextBuilder contextBuilder = new ContextBuilder();
-        Mapping<FakeEntity> entityMapping = contextBuilder.newMapping(FakeEntity.class);
-        entityMapping.id().getId();
-        entityMapping.property().getValue();
-        entityMapping.collection().getComments();
-        Mapping<Comment> commentMapping = contextBuilder.newMapping(Comment.class);
-        commentMapping.property().getValue();
-        context = contextBuilder.createContext();
+        FakeEntityMapping fakeEntityMapping = new FakeEntityMapping();
+        CommentMapping commentMapping = new CommentMapping();
+        context = new MapperContext();
+        fakeEntityMapping.buildMapper(context);
+        commentMapping.buildMapper(context);
     }
 
     @Test
@@ -65,10 +60,10 @@ public class TestsMapper {
 
 
     private MapperContext contextWithNaturalId() {
-        ContextBuilder contextBuilder = new ContextBuilder();
-        Mapping<FakeEntityWithNaturalId> mapping = contextBuilder.newMapping(FakeEntityWithNaturalId.class);
-        mapping.id(IdGeneration.Natural).getNaturalKey();
-        return contextBuilder.createContext();
+        FakeEntityWithNaturalIdMapping mapping = new FakeEntityWithNaturalIdMapping();
+        MapperContext mapperContext = new MapperContext();
+        mapping.buildMapper(mapperContext);
+        return mapperContext;
     }
 
     @Test

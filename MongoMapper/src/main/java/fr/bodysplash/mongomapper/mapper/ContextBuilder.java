@@ -1,26 +1,73 @@
 package fr.bodysplash.mongomapper.mapper;
 
 import com.google.common.collect.Lists;
+import org.apache.log4j.Logger;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 
 public class ContextBuilder {
 
-    private List<Mapping<?>> mappings = Lists.newArrayList();
 
-    public <T> Mapping<T> newMapping(Class<T> clazz) {
-        Mapping<T> result = Mapping.createNew(clazz);
-        mappings.add(result);
-        return result;
+    private final String packageToScan;
+
+    public ContextBuilder(String packageToScan) {
+
+        this.packageToScan = packageToScan;
     }
 
     public MapperContext createContext() {
         MapperContext result = new MapperContext();
-        for (Mapping<?> mapping : mappings) {
-            Mapper<?> mapper = mapping.createMapper();
-            mapper.setContext(result);
-            result.addMapper(mapper);
+        try {
+            Iterable<Class> classes = getClasses();
+            for (Class currentClass : classes) {
+                if(ClassMap.class.isAssignableFrom(currentClass)) {
+                    ClassMap<?> mapping = (ClassMap<?>) currentClass.newInstance();
+                    mapping.buildMapper(result);
+                }
+            }
+        } catch (Exception e) {
+            Logger.getLogger(ContextBuilder.class).error("Can't scan package", e);
+
         }
         return result;
+    }
+
+    private Iterable<Class> getClasses() throws ClassNotFoundException, IOException {
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        String path = packageToScan.replace('.', '/');
+        Enumeration<URL> resources = classLoader.getResources(path);
+        List<File> dirs = Lists.newArrayList();
+        while (resources.hasMoreElements()) {
+            URL resource = resources.nextElement();
+            dirs.add(new File(resource.getFile()));
+        }
+        List<Class> classes = Lists.newArrayList();
+        for (File directory : dirs) {
+            classes.addAll(findClasses(directory, packageToScan));
+        }
+
+        return classes;
+    }
+
+
+    private List<Class> findClasses(File directory, String packageName) throws ClassNotFoundException {
+        List<Class> classes = new ArrayList<Class>();
+        if (!directory.exists()) {
+            return classes;
+        }
+        File[] files = directory.listFiles();
+        for (File file : files) {
+            if (file.isDirectory()) {
+                classes.addAll(findClasses(file, packageName + "." + file.getName()));
+            } else if (file.getName().endsWith(".class")) {
+                classes.add(Class.forName(packageName + '.' + file.getName().substring(0, file.getName().length() - 6)));
+            }
+        }
+        return classes;
     }
 }

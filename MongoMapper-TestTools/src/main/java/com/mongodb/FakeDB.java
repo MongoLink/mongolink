@@ -37,5 +37,5 @@ public class FakeDB extends DB {
         return collections.get(name);
     }
 
-    public Map<String, FakeDBCollection> collections = Maps.newHashMap();
+    public final Map<String, FakeDBCollection> collections = Maps.newHashMap();
 }

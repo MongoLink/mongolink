@@ -6,13 +6,14 @@ import java.util.Map;
 
 public class MapperContext {
 
-    private Map<Class<?>, Mapper<?>> mappings = Maps.newHashMap();
+    private Map<Class<?>, Mapper<?>> mappers = Maps.newHashMap();
 
     public <T> Mapper<T> mapperFor(Class<T> aClass) {
-        return (Mapper<T>) mappings.get(aClass);
+        return (Mapper<T>) mappers.get(aClass);
     }
 
     void addMapper(Mapper<?> mapper) {
-        mappings.put(mapper.getPersistentType(), mapper);
+        mapper.setContext(this);
+        mappers.put(mapper.getPersistentType(), mapper);
     }
 }

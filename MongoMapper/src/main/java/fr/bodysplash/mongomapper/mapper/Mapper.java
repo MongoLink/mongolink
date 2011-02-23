@@ -11,9 +11,9 @@ import java.util.List;
 
 public class Mapper<T> {
 
-    private Class<T> persistentType;
-    private List<PropertyMapper> properties = Lists.newArrayList();
-    private List<CollectionMapper> collections = Lists.newArrayList();
+    private final Class<T> persistentType;
+    private final List<PropertyMapper> properties = Lists.newArrayList();
+    private final List<CollectionMapper> collections = Lists.newArrayList();
     private MapperContext context;
     private static final Logger LOGGER = Logger.getLogger(Mapper.class);
     private IdMapper idMapper;

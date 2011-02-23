@@ -11,10 +11,10 @@ import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.util.Collection;
 
-public class CollectionMapper {
+class CollectionMapper {
 
-    private Method method;
-    private String name;
+    private final Method method;
+    private final String name;
     private Mapper<?> mapper;
     private static final Logger LOGGER = Logger.getLogger(CollectionMapper.class);
 
