@@ -2,22 +2,18 @@ package fr.bodysplash.mongomapper.mapper;
 
 import net.sf.cglib.core.DefaultGeneratorStrategy;
 import net.sf.cglib.proxy.Enhancer;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import java.lang.reflect.Method;
 
 public abstract class ClassMap<T> {
 
-    private enum ElementType {
-        property, collection, id, none
-    }
-
+    private static final Logger LOGGER = Logger.getLogger(ClassMap.class);
+    private Method lastMethod;
     private final Class<T> type;
-    private ElementType elementType;
     private final T interceptor;
     private final Mapper<T> mapper;
-    private IdGeneration lastStrategy;
-    private static final Logger LOGGER = Logger.getLogger(ClassMap.class);
 
     protected ClassMap(Class<T> type) {
         mapper = new Mapper(type);
@@ -31,6 +27,10 @@ public abstract class ClassMap<T> {
         map();
     }
 
+    public void setLastMethod(Method lastMethod) {
+        this.lastMethod = lastMethod;
+    }
+
     protected abstract void map();
 
     protected T element() {
@@ -41,61 +41,33 @@ public abstract class ClassMap<T> {
         return type;
     }
 
-    protected T id(IdGeneration strategy) {
-        lastStrategy = strategy;
-        elementType = ElementType.id;
-        return interceptor;
-    }
-
-    protected T property() {
-        elementType = ElementType.property;
-        return interceptor;
-    }
-
-    protected T collection() {
-        elementType = ElementType.collection;
-        return interceptor;
-    }
-
-    protected T id() {
-        return id(IdGeneration.Auto);
-    }
-
-    void addProperty(String name, Method method) {
+    protected void property(Object value) {
+        String name = methodName();
         LOGGER.debug("Mapping property " + name);
-        PropertyMapper property = new PropertyMapper(name, method);
+        PropertyMapper property = new PropertyMapper(name, lastMethod);
         mapper.addProperty(property);
-        elementType = ClassMap.ElementType.none;
     }
 
-    void setId(String name, Method method) {
-        LOGGER.debug("Mapping id:" + name);
-        IdMapper id = new IdMapper(name, method, lastStrategy);
-        mapper.setId(id);
-        elementType = ClassMap.ElementType.none;
-    }
-
-    public void addCollection(String collectionName, Method method) {
+    protected void collection(Object value) {
+        String collectionName = methodName();
         LOGGER.debug("Mapping collection:" + collectionName);
-        CollectionMapper collection = new CollectionMapper(collectionName, method);
+        CollectionMapper collection = new CollectionMapper(collectionName, lastMethod);
         mapper.addCollection(collection);
-        elementType = ClassMap.ElementType.none;
     }
 
-    public boolean isProperty() {
-        return elementType == ElementType.property;
+    protected IdMapper id(Object value) {
+        String methodName = methodName();
+        LOGGER.debug("Mapping id " + methodName);
+        IdMapper id = new IdMapper(methodName, lastMethod, IdGeneration.Auto);
+        mapper.setId(id);
+        return id;
     }
-
-    public boolean isCollection() {
-        return elementType == ElementType.collection;
-    }
-
-    public boolean isId() {
-        return elementType == ElementType.id;
-    }
-
 
     public void buildMapper(MapperContext context) {
         context.addMapper(mapper);
+    }
+
+    private String methodName() {
+        return StringUtils.uncapitalize(lastMethod.getName().substring(3, lastMethod.getName().length()));
     }
 }

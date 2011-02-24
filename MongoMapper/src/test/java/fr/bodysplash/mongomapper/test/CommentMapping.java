@@ -10,6 +10,6 @@ public class CommentMapping extends ClassMap<Comment>{
 
     @Override
     protected void map() {
-        property().getValue();
+        property(element().getValue());
     }
 }

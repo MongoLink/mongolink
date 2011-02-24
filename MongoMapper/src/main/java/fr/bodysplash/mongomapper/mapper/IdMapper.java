@@ -10,10 +10,10 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-class IdMapper {
+public class IdMapper {
 
     private final String name;
-    private final IdGeneration generationStrategy;
+    private IdGeneration generationStrategy;
     private static final Logger LOGGER = Logger.getLogger(IdMapper.class);
     private final Method method;
     private Mapper<?> mapper;
@@ -65,5 +65,13 @@ class IdMapper {
             return id;
         }
         return new ObjectId(id);
+    }
+
+    public void natural() {
+        generationStrategy = IdGeneration.Natural;
+    }
+
+    public void auto() {
+        generationStrategy = IdGeneration.Auto;
     }
 }

@@ -10,9 +10,9 @@ public class FakeEntityMapping extends ClassMap<FakeEntity> {
 
     @Override
     public void map() {
-        id().getId();
-        property().getValue();
-        collection().getComments();
+        id(element().getId());
+        property(element().getValue());
+        collection(element().getComments());
     }
 
 }

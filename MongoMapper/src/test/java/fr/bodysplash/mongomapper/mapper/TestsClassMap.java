@@ -48,7 +48,7 @@ public class TestsClassMap {
 
         @Override
         protected void map() {
-            id().getId();
+            id(element().getId());
         }
 
     }
