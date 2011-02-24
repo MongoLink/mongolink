@@ -41,6 +41,9 @@ public class MongoSession {
         Object dbId = context.mapperFor(entityType).getDbId(id);
         DBObject query = new BasicDBObject("_id", dbId);
         DBObject result = collection.findOne(query);
+        if(result == null) {
+            return null;
+        }
         T entity = (T) context.mapperFor(entityType).toInstance(result);
         unitOfWork.add(entity);
         return entity;

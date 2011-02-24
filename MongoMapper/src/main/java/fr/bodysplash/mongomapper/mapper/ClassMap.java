@@ -9,7 +9,7 @@ import java.lang.reflect.Method;
 public abstract class ClassMap<T> {
 
     private enum ElementType {
-        property, collection, id
+        property, collection, id, none
     }
 
     private final Class<T> type;
@@ -27,12 +27,13 @@ public abstract class ClassMap<T> {
         enhancer.setStrategy(new DefaultGeneratorStrategy());
         enhancer.setCallback(new PropertyInterceptor(this));
         interceptor = (T) enhancer.create();
+        LOGGER.debug("Mapping " + getType());
         map();
     }
 
     protected abstract void map();
 
-    protected T descriptor() {
+    protected T element() {
         return interceptor;
     }
 
@@ -61,18 +62,24 @@ public abstract class ClassMap<T> {
     }
 
     void addProperty(String name, Method method) {
+        LOGGER.debug("Mapping property " + name);
         PropertyMapper property = new PropertyMapper(name, method);
         mapper.addProperty(property);
+        elementType = ClassMap.ElementType.none;
     }
 
     void setId(String name, Method method) {
+        LOGGER.debug("Mapping id:" + name);
         IdMapper id = new IdMapper(name, method, lastStrategy);
         mapper.setId(id);
+        elementType = ClassMap.ElementType.none;
     }
 
     public void addCollection(String collectionName, Method method) {
+        LOGGER.debug("Mapping collection:" + collectionName);
         CollectionMapper collection = new CollectionMapper(collectionName, method);
         mapper.addCollection(collection);
+        elementType = ClassMap.ElementType.none;
     }
 
     public boolean isProperty() {

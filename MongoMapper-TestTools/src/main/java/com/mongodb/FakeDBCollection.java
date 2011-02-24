@@ -49,12 +49,17 @@ public class FakeDBCollection extends DBCollection {
     @Override
     Iterator<DBObject> __find(DBObject ref, DBObject fields, int numToSkip, int batchSize, int options) throws MongoException {
         final Object id = ref.get("_id");
-        DBObject dbObject = Iterables.find(objects, new Predicate<DBObject>() {
-            @Override
-            public boolean apply(DBObject input) {
-                return input.get("_id").equals(id);
-            }
-        });
+        DBObject dbObject = null;
+        try {
+            dbObject = Iterables.find(objects, new Predicate<DBObject>() {
+                @Override
+                public boolean apply(DBObject input) {
+                    return input.get("_id").equals(id);
+                }
+            });
+        } catch (Exception e) {
+            return null;
+        }
         return Lists.newArrayList(dbObject).iterator();
     }
 

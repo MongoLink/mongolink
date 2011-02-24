@@ -12,6 +12,7 @@ import java.util.List;
 
 public class ContextBuilder {
 
+    private static final Logger LOGGER = Logger.getLogger(ContextBuilder.class);
 
     private final String packageToScan;
 
@@ -23,6 +24,7 @@ public class ContextBuilder {
     public MapperContext createContext() {
         MapperContext result = new MapperContext();
         try {
+            LOGGER.debug("Scanning package");
             Iterable<Class> classes = getClasses();
             for (Class currentClass : classes) {
                 if(ClassMap.class.isAssignableFrom(currentClass)) {
@@ -30,6 +32,7 @@ public class ContextBuilder {
                     mapping.buildMapper(result);
                 }
             }
+            LOGGER.debug("Done scanning package");
         } catch (Exception e) {
             Logger.getLogger(ContextBuilder.class).error("Can't scan package", e);
 

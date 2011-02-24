@@ -18,6 +18,7 @@ import org.mockito.Mockito;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 public class TestsMongoSession {
@@ -110,6 +111,13 @@ public class TestsMongoSession {
 
         DBObject dbObject = entities.getObjects().get(0);
         assertThat(dbObject.get("value"), is(((Object) "some new and strange value")));
+    }
+
+    @Test
+    public void returnNullIfNotFound() {
+        FakeEntityWithNaturalId entity = session.get("a natural key", FakeEntityWithNaturalId.class);
+
+        Assert.assertThat(entity, nullValue());
     }
 
     private void createEntity(String id, String url) {

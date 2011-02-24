@@ -14,7 +14,7 @@ class IdMapper {
 
     private final String name;
     private final IdGeneration generationStrategy;
-    private static final Logger LOGGER = Logger.getLogger(PropertyMapper.class);
+    private static final Logger LOGGER = Logger.getLogger(IdMapper.class);
     private final Method method;
     private Mapper<?> mapper;
 

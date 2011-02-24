@@ -24,7 +24,7 @@ class PropertyMapper {
         try {
             object.put(dbFieldName(), method.invoke(element));
         } catch (Exception e) {
-            LOGGER.error("Can't saveInto property " + name, e);
+            LOGGER.error("Can't save into property " + name, e);
         }
     }
 
