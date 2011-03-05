@@ -3,6 +3,8 @@ package fr.bodysplash.mongomapper.mapper;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
+import fr.bodysplash.mongomapper.MongoLinkException;
+import fr.bodysplash.mongomapper.converter.Converter;
 import org.apache.log4j.Logger;
 
 import java.lang.reflect.Field;
@@ -15,16 +17,26 @@ class PropertyMapper {
     private final Method method;
     private Mapper<?> mapper;
 
+
     public PropertyMapper(String name, Method method) {
         this.name = name;
         this.method = method;
     }
 
     public void saveTo(Object element, BasicDBObject object) {
+        object.put(dbFieldName(), converter().toDbValue(getValue(element)));
+    }
+
+    private Converter converter() {
+        return Converter.forMethod(method);
+    }
+
+    private Object getValue(Object element) {
         try {
-            object.put(dbFieldName(), method.invoke(element));
+            return method.invoke(element);
         } catch (Exception e) {
-            LOGGER.error("Can't save into property " + name, e);
+            LOGGER.warn("Can't get value from " + method.getName());
+            throw new MongoLinkException(e);
         }
     }
 
@@ -32,7 +44,8 @@ class PropertyMapper {
         try {
             Field field = mapper.getPersistentType().getDeclaredField(name);
             field.setAccessible(true);
-            field.set(instance, from.get(dbFieldName()));
+            Object value = from.get(dbFieldName());
+            field.set(instance, converter().fromDbValue(value));
             field.setAccessible(false);
         } catch (Exception e) {
             LOGGER.error(e);
