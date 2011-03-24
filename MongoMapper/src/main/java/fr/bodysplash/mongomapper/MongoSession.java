@@ -52,6 +52,7 @@ public class MongoSession {
     public void save(Object element) {
         DBObject dbObject = context.mapperFor(element.getClass()).toDBObject(element);
         db.getCollection(collectionName(element.getClass())).insert(dbObject);
+        unitOfWork.add(element);
     }
 
     public void update(Object element) {

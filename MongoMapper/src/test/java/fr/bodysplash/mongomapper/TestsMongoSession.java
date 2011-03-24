@@ -12,13 +12,12 @@ import org.bson.types.ObjectId;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
 public class TestsMongoSession {
@@ -97,7 +96,7 @@ public class TestsMongoSession {
 
         session.update(entity);
 
-        Assert.assertThat(entities.getObjects().get(0).get("value"), is((Object) "un test de plus"));
+        assertThat(entities.getObjects().get(0).get("value"), is((Object) "un test de plus"));
     }
 
     @Test
@@ -118,6 +117,23 @@ public class TestsMongoSession {
         FakeEntityWithNaturalId entity = session.get("a natural key", FakeEntityWithNaturalId.class);
 
         Assert.assertThat(entity, nullValue());
+    }
+
+    @Test
+    public void canUpdateJustSavedEntityWithNaturalId() {
+        FakeEntityWithNaturalId entity = new FakeEntityWithNaturalId("natural key");
+        session.save(entity);
+        entity.setValue("a value");
+
+        session.stop();
+
+        assertThat(fakeEntities.getObjects().get(0).get("value"), is((Object) "a value"));
+    }
+
+    @Test
+    @Ignore
+    public void savingSetIdForAutoId() {
+        // TODO : le faire
     }
 
     private void createEntity(String id, String url) {

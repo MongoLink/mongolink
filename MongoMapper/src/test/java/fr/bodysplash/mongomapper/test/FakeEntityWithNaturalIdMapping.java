@@ -11,5 +11,6 @@ public class FakeEntityWithNaturalIdMapping extends ClassMap<FakeEntityWithNatur
     @Override
     protected void map() {
         id(element().getNaturalKey()).natural();
+        property(element().getValue());
     }
 }
