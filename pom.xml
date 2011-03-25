@@ -6,7 +6,7 @@
 
     <groupId>fr.bodysplash
     </groupId>
-    <artifactId>MongoMapperParent</artifactId>
+    <artifactId>MongoLinkParent</artifactId>
     <packaging>pom</packaging>
     <version>0.0.1-SNAPSHOT</version>
 
@@ -28,8 +28,8 @@
         </pluginManagement>
     </build>
     <modules>
-        <module>MongoMapper-TestTools</module>
-        <module>MongoMapper</module>
+        <module>MongoLink-TestTools</module>
+        <module>MongoLink</module>
     </modules>
 
     <dependencies>
@@ -41,7 +41,7 @@
         <dependency>
             <groupId>org.mongodb</groupId>
             <artifactId>mongo-java-driver</artifactId>
-            <version>2.4</version>
+            <version>2.5.2</version>
         </dependency>
         <dependency>
             <groupId>commons-lang</groupId>
