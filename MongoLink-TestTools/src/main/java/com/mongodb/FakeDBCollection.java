@@ -44,7 +44,7 @@ public class FakeDBCollection extends DBCollection {
     public WriteResult remove(DBObject o, WriteConcern concern) throws MongoException {
         objects.remove(o);
         return null;
-    }
+    }   
 
     @Override
     Iterator<DBObject> __find(DBObject ref, DBObject fields, int numToSkip, int batchSize, int options) throws MongoException {
