@@ -44,10 +44,10 @@ public class FakeDBCollection extends DBCollection {
     public WriteResult remove(DBObject o, WriteConcern concern) throws MongoException {
         objects.remove(o);
         return null;
-    }   
+    }
 
     @Override
-    Iterator<DBObject> __find(DBObject ref, DBObject fields, int numToSkip, int batchSize, int options) throws MongoException {
+    Iterator<DBObject> __find(DBObject ref, DBObject fields, int i, int i1, int i2, int i3) throws MongoException {
         final Object id = ref.get("_id");
         DBObject dbObject = null;
         try {

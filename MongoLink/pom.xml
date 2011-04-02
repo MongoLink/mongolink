@@ -3,13 +3,13 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>MongoLinkParent</artifactId>
+        <artifactId>mongolink-parent</artifactId>
         <groupId>fr.bodysplash</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
-    <artifactId>MongoLink</artifactId>
+    <artifactId>mongolink</artifactId>
 
     <dependencies>
         <dependency>
@@ -38,7 +38,7 @@
         </dependency>
         <dependency>
             <groupId>fr.bodysplash</groupId>
-            <artifactId>MongoLink-TestTools</artifactId>
+            <artifactId>mongolink-testtools</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>

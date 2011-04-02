@@ -37,5 +37,10 @@ public class FakeDB extends DB {
         return collections.get(name);
     }
 
+    @Override
+    public void cleanCursors(boolean b) throws MongoException {
+        
+    }
+
     public final Map<String, FakeDBCollection> collections = Maps.newHashMap();
 }
