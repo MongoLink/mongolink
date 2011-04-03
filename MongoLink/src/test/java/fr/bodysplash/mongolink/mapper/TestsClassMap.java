@@ -1,12 +1,9 @@
 package fr.bodysplash.mongolink.mapper;
 
-import com.mongodb.DBObject;
 import fr.bodysplash.mongolink.test.FakeEntity;
 import fr.bodysplash.mongolink.test.FakeEntityMapping;
-import org.bson.types.ObjectId;
 import org.junit.Test;
 
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
@@ -20,36 +17,15 @@ public class TestsClassMap {
         mapping.buildMapper(context);
 
         assertThat(context.mapperFor(FakeEntity.class), notNullValue());
+        Mapper<FakeEntity> mapper = context.mapperFor(FakeEntity.class);
+
     }
 
     @Test
-    public void canMapId() {
-        FakeEntity entity = new FakeEntity("test.com");
-        entity.setId("4d53b7118653a70549fe1b78");
+    public void providesInterceptor() {
+        FakeEntityMapping mapping = new FakeEntityMapping();
 
-        Mapper<FakeEntity> mapper = entityMapper();
-        DBObject dbObject = mapper.toDBObject(entity);
-
-        assertThat(dbObject.get("_id"), is((Object) new ObjectId("4d53b7118653a70549fe1b78")));
+        assertThat(mapping.element(), notNullValue());
     }
 
-    private Mapper<FakeEntity> entityMapper() {
-        InnerFakeEntityMapping mapping = new InnerFakeEntityMapping();
-        MapperContext context = new MapperContext();
-        mapping.buildMapper(context);
-        return context.mapperFor(FakeEntity.class);
-    }
-
-    private static class InnerFakeEntityMapping extends ClassMap<FakeEntity>{
-
-        InnerFakeEntityMapping() {
-            super(FakeEntity.class);
-        }
-
-        @Override
-        protected void map() {
-            id(element().getId());
-        }
-
-    }
 }

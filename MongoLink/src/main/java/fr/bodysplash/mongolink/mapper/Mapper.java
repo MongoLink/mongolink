@@ -11,13 +11,6 @@ import java.util.List;
 
 public class Mapper<T> {
 
-    private final Class<T> persistentType;
-    private final List<PropertyMapper> properties = Lists.newArrayList();
-    private final List<CollectionMapper> collections = Lists.newArrayList();
-    private MapperContext context;
-    private static final Logger LOGGER = Logger.getLogger(Mapper.class);
-    private IdMapper idMapper;
-
     Mapper(Class<T> persistentType) {
         this.persistentType = persistentType;
     }
@@ -110,4 +103,11 @@ public class Mapper<T> {
     public Object getDbId(String id) {
         return idMapper.getDbValue(id);
     }
+
+    private final Class<T> persistentType;
+    private final List<PropertyMapper> properties = Lists.newArrayList();
+    private final List<CollectionMapper> collections = Lists.newArrayList();
+    private MapperContext context;
+    private static final Logger LOGGER = Logger.getLogger(Mapper.class);
+    private IdMapper idMapper;
 }

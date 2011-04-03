@@ -9,22 +9,20 @@ import java.lang.reflect.Method;
 
 public abstract class ClassMap<T> {
 
-    private static final Logger LOGGER = Logger.getLogger(ClassMap.class);
-    private Method lastMethod;
-    private final Class<T> type;
-    private final T interceptor;
-    private final Mapper<T> mapper;
-
     protected ClassMap(Class<T> type) {
         mapper = new Mapper(type);
         this.type = type;
+        interceptor = createInterceptor(type);
+        LOGGER.debug("Mapping " + getType());
+        map();
+    }
+
+    private T createInterceptor(Class<T> type) {
         Enhancer enhancer = new Enhancer();
         enhancer.setSuperclass(type);
         enhancer.setStrategy(new DefaultGeneratorStrategy());
         enhancer.setCallback(new PropertyInterceptor(this));
-        interceptor = (T) enhancer.create();
-        LOGGER.debug("Mapping " + getType());
-        map();
+        return (T) enhancer.create();
     }
 
     public void setLastMethod(Method lastMethod) {
@@ -70,4 +68,10 @@ public abstract class ClassMap<T> {
     private String methodName() {
         return StringUtils.uncapitalize(lastMethod.getName().substring(3, lastMethod.getName().length()));
     }
+
+    private static final Logger LOGGER = Logger.getLogger(ClassMap.class);
+    private Method lastMethod;
+    private final Class<T> type;
+    private final T interceptor;
+    private final Mapper<T> mapper;
 }
