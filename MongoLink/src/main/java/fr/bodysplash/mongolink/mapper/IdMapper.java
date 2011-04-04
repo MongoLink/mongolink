@@ -51,7 +51,7 @@ public class IdMapper {
         }
     }
 
-    public void setMapper(Mapper<?> mapper) {
+    public void setMapper(EntityMapper<?> mapper) {
         this.mapper = mapper;
     }
 
@@ -74,5 +74,5 @@ public class IdMapper {
     private IdGeneration generationStrategy;
     private static final Logger LOGGER = Logger.getLogger(IdMapper.class);
     private final Method method;
-    private Mapper<?> mapper;
+    private EntityMapper<?> mapper;
 }

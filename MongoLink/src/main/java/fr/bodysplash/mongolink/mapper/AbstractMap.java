@@ -10,10 +10,12 @@ public abstract class AbstractMap<T> {
     public AbstractMap(Class<T> type) {
         this.type = type;
         LOGGER.debug("Mapping " + getType());
-        mapper = new Mapper(type);
+        mapper = createMapper(type);
         interceptor = createInterceptor(type);
         map();
     }
+
+    protected abstract Mapper<T> createMapper(Class<T> type);
 
     protected T createInterceptor(Class<T> type) {
         Enhancer enhancer = new Enhancer();

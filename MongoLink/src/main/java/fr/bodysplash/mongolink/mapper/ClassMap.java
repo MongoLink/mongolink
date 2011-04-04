@@ -8,6 +8,16 @@ public abstract class ClassMap<T> extends AbstractMap<T> {
         super(type);
     }
 
+    @Override
+    protected Mapper<T> createMapper(Class<T> type) {
+        return new EntityMapper(type);
+    }
+
+    @Override
+    protected EntityMapper<T> getMapper() {
+        return (EntityMapper<T>) super.getMapper();
+    }
+
     protected IdMapper id(Object value) {
         LOGGER.debug("Mapping id " + getLastMethod().shortName());
         IdMapper id = new IdMapper(getLastMethod(), IdGeneration.Auto);

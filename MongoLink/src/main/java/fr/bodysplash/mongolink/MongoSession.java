@@ -6,6 +6,7 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
+import fr.bodysplash.mongolink.mapper.EntityMapper;
 import fr.bodysplash.mongolink.mapper.Mapper;
 import fr.bodysplash.mongolink.mapper.MapperContext;
 
@@ -38,7 +39,7 @@ public class MongoSession {
 
     public <T> T get(String id, Class<T> entityType) {
         DBCollection collection = db.getCollection(collectionName(entityType));
-        Object dbId = context.mapperFor(entityType).getDbId(id);
+        Object dbId = ((EntityMapper<T>) context.mapperFor(entityType)).getDbId(id);
         DBObject query = new BasicDBObject("_id", dbId);
         DBObject result = collection.findOne(query);
         if(result == null) {

@@ -27,8 +27,8 @@ public class ContextBuilder {
             LOGGER.debug("Scanning package");
             Iterable<Class> classes = getClasses();
             for (Class currentClass : classes) {
-                if(ClassMap.class.isAssignableFrom(currentClass)) {
-                    ClassMap<?> mapping = (ClassMap<?>) currentClass.newInstance();
+                if(AbstractMap.class.isAssignableFrom(currentClass)) {
+                    AbstractMap<?> mapping = (AbstractMap<?>) currentClass.newInstance();
                     mapping.buildMapper(result);
                 }
             }

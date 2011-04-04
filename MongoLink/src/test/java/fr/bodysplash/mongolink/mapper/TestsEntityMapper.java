@@ -12,11 +12,11 @@ import org.junit.Test;
 
 import java.net.UnknownHostException;
 
+import static org.junit.Assert.assertThat;
+import static org.hamcrest.Matchers.*;
 
-public class TestsMapper {
+public class TestsEntityMapper {
 
-
-    private MapperContext context;
 
     @Before
     public void before() throws UnknownHostException {
@@ -58,13 +58,13 @@ public class TestsMapper {
         Assert.assertThat(instance.getNaturalKey(), Matchers.is((Object) "natural key"));
     }
 
-
     private MapperContext contextWithNaturalId() {
         FakeEntityWithNaturalIdMapping mapping = new FakeEntityWithNaturalIdMapping();
         MapperContext mapperContext = new MapperContext();
         mapping.buildMapper(mapperContext);
         return mapperContext;
     }
+
 
     @Test
     public void canSaveProperties() {
@@ -120,12 +120,14 @@ public class TestsMapper {
 
         FakeEntity entity = entityMapper().toInstance(dbo);
 
-        Assert.assertThat(entity.getComments().size(), Matchers.is(1));
+        assertThat(entity.getComments().size(), is(1));
         Assert.assertThat(entity.getComments().get(0).getValue(), Matchers.is("this is a mapper!"));
     }
 
-    private Mapper<FakeEntity> entityMapper() {
-        return (Mapper<FakeEntity>) context.mapperFor(FakeEntity.class);
+    private EntityMapper<FakeEntity> entityMapper() {
+        return (EntityMapper<FakeEntity>) context.mapperFor(FakeEntity.class);
     }
+
+    private MapperContext context;
 
 }

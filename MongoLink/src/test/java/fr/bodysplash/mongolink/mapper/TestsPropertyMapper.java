@@ -54,7 +54,7 @@ public class TestsPropertyMapper {
 
     private PropertyMapper mapperForEnum() throws NoSuchMethodException {
         PropertyMapper propertyMapper = new PropertyMapper(new MethodContainer(FakeEntity.class.getDeclaredMethod("getValue")));
-        Mapper<FakeEntity> mapper = new Mapper<FakeEntity>(FakeEntity.class);
+        EntityMapper<FakeEntity> mapper = new EntityMapper<FakeEntity>(FakeEntity.class);
         propertyMapper.setMapper(mapper);
         return propertyMapper;
     }

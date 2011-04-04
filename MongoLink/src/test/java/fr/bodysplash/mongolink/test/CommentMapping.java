@@ -1,8 +1,8 @@
 package fr.bodysplash.mongolink.test;
 
-import fr.bodysplash.mongolink.mapper.ClassMap;
+import fr.bodysplash.mongolink.mapper.ComponentMap;
 
-public class CommentMapping extends ClassMap<Comment>{
+public class CommentMapping extends ComponentMap<Comment> {
 
     public CommentMapping() {
         super(Comment.class);
