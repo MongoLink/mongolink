@@ -1,6 +1,7 @@
 package fr.bodysplash.mongolink.mapper;
 
 import com.mongodb.BasicDBObject;
+import fr.bodysplash.mongolink.utils.MethodContainer;
 import org.junit.Test;
 
 import java.lang.reflect.Method;
@@ -52,7 +53,7 @@ public class TestsPropertyMapper {
     }
 
     private PropertyMapper mapperForEnum() throws NoSuchMethodException {
-        PropertyMapper propertyMapper = new PropertyMapper("value", FakeEntity.class.getDeclaredMethod("getValue"));
+        PropertyMapper propertyMapper = new PropertyMapper(new MethodContainer(FakeEntity.class.getDeclaredMethod("getValue")));
         Mapper<FakeEntity> mapper = new Mapper<FakeEntity>(FakeEntity.class);
         propertyMapper.setMapper(mapper);
         return propertyMapper;
@@ -60,7 +61,7 @@ public class TestsPropertyMapper {
 
     @Test
     public void canSavePrimitiveType() throws NoSuchMethodException {
-        PropertyMapper mapper = new PropertyMapper("primitive", primitiveGetter());
+        PropertyMapper mapper = new PropertyMapper(new MethodContainer(primitiveGetter()));
         FakeEntity entity = new FakeEntity();
         entity.primitive = 10;
         BasicDBObject object = new BasicDBObject();

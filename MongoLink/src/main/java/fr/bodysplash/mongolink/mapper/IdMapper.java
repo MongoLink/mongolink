@@ -3,6 +3,7 @@ package fr.bodysplash.mongolink.mapper;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
+import fr.bodysplash.mongolink.utils.MethodContainer;
 import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;
 
@@ -12,15 +13,9 @@ import java.lang.reflect.Method;
 
 public class IdMapper {
 
-    private final String name;
-    private IdGeneration generationStrategy;
-    private static final Logger LOGGER = Logger.getLogger(IdMapper.class);
-    private final Method method;
-    private Mapper<?> mapper;
-
-    public IdMapper(String name, Method method, IdGeneration generationStrategy) {
-        this.method = method;
-        this.name = name;
+    public IdMapper(MethodContainer methodContainer, IdGeneration auto) {
+        this.method = methodContainer.getMethod();
+        this.name = methodContainer.shortName();
         this.generationStrategy = generationStrategy;
     }
 
@@ -74,4 +69,10 @@ public class IdMapper {
     public void auto() {
         generationStrategy = IdGeneration.Auto;
     }
+
+    private final String name;
+    private IdGeneration generationStrategy;
+    private static final Logger LOGGER = Logger.getLogger(IdMapper.class);
+    private final Method method;
+    private Mapper<?> mapper;
 }

@@ -5,6 +5,7 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import fr.bodysplash.mongolink.MongoLinkException;
 import fr.bodysplash.mongolink.converter.Converter;
+import fr.bodysplash.mongolink.utils.MethodContainer;
 import org.apache.log4j.Logger;
 
 import java.lang.reflect.Field;
@@ -12,15 +13,9 @@ import java.lang.reflect.Method;
 
 class PropertyMapper {
 
-    private final String name;
-    private static final Logger LOGGER = Logger.getLogger(PropertyMapper.class);
-    private final Method method;
-    private Mapper<?> mapper;
-
-
-    public PropertyMapper(String name, Method method) {
-        this.name = name;
-        this.method = method;
+    public PropertyMapper(MethodContainer method) {
+        this.name = method.shortName();
+        this.method = method.getMethod();
     }
 
     public void saveTo(Object element, BasicDBObject object) {
@@ -59,4 +54,9 @@ class PropertyMapper {
     public void setMapper(Mapper<?> mapper) {
         this.mapper = mapper;
     }
+
+    private final String name;
+    private static final Logger LOGGER = Logger.getLogger(PropertyMapper.class);
+    private final Method method;
+    private Mapper<?> mapper;
 }

@@ -4,6 +4,7 @@ package fr.bodysplash.mongolink.mapper;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
+import fr.bodysplash.mongolink.utils.MethodContainer;
 import org.apache.log4j.Logger;
 
 import java.lang.reflect.Field;
@@ -13,14 +14,9 @@ import java.util.Collection;
 
 class CollectionMapper {
 
-    private final Method method;
-    private final String name;
-    private Mapper<?> mapper;
-    private static final Logger LOGGER = Logger.getLogger(CollectionMapper.class);
-
-    public CollectionMapper(String name, Method method) {
-        this.name = name;
-        this.method = method;
+    public CollectionMapper(MethodContainer methodContainer) {
+        this.name = methodContainer.shortName();
+        this.method = methodContainer.getMethod();
     }
 
     public void saveInto(Object element, BasicDBObject object) {
@@ -64,4 +60,9 @@ class CollectionMapper {
     public void setMapper(Mapper<?> mapper) {
         this.mapper = mapper;
     }
+
+    private final Method method;
+    private final String name;
+    private Mapper<?> mapper;
+    private static final Logger LOGGER = Logger.getLogger(CollectionMapper.class);
 }

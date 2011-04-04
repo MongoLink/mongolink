@@ -79,7 +79,7 @@ public class TestsMapper {
     }
 
     @Test
-    public void canSaveCollections() {
+    public void canSaveCollectionOfComponent() {
         FakeEntity entity = new FakeEntity("test.com");
         entity.addComment("un commentaire");
 

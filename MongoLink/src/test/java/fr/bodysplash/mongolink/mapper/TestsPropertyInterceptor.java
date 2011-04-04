@@ -1,6 +1,7 @@
 package fr.bodysplash.mongolink.mapper;
 
 import fr.bodysplash.mongolink.test.FakeEntity;
+import fr.bodysplash.mongolink.utils.MethodContainer;
 import org.junit.Test;
 
 import java.lang.reflect.Method;
@@ -18,6 +19,6 @@ public class TestsPropertyInterceptor {
 
         interceptor.intercept(null, method, null, null);
 
-        verify(classMap).setLastMethod(method);
+        verify(classMap).setLastMethod(new MethodContainer(method));
     }
 }
