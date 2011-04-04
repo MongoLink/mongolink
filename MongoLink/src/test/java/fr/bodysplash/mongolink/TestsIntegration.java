@@ -1,8 +1,8 @@
 package fr.bodysplash.mongolink;
 
 
-import com.mongodb.DB;
-import com.mongodb.Mongo;
+import com.google.common.collect.Lists;
+import com.mongodb.*;
 import fr.bodysplash.mongolink.mapper.ContextBuilder;
 import fr.bodysplash.mongolink.mapper.MapperContext;
 import fr.bodysplash.mongolink.test.FakeEntity;
@@ -21,11 +21,12 @@ import static org.junit.Assert.assertThat;
 public class TestsIntegration {
 
     private MongoSession mongoSession;
+    private DB db;
 
     @Before
     public void before() throws UnknownHostException {
         Mongo mongo = new Mongo();
-        DB db = mongo.getDB("test");
+        db = mongo.getDB("test");
         ContextBuilder builder = new ContextBuilder("fr.bodysplash.mongolink.test");
         MapperContext context = builder.createContext();
         mongoSession = new MongoSession(db);
@@ -62,6 +63,17 @@ public class TestsIntegration {
         MongoSessionManager manager = MongoSessionManager.create(contextBuilder, "test");
         MongoSession session = manager.createSession();
         session.save(new FakeEntity("a new value"));
+    }
+
+    @Test
+    @Ignore
+    public void insertingSetId() {
+        DBCollection testid = db.getCollection("testid");
+        BasicDBObject dbo = new BasicDBObject();
+
+        testid.insert(Lists.<DBObject>newArrayList(dbo));
+
+        assertThat(dbo.get("_id"), notNullValue());
     }
 
     private String createEntity(String value) {

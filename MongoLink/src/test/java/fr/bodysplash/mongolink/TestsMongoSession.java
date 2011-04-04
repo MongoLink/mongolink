@@ -6,14 +6,13 @@ import com.mongodb.DBObject;
 import com.mongodb.FakeDB;
 import com.mongodb.FakeDBCollection;
 import fr.bodysplash.mongolink.mapper.ContextBuilder;
+import fr.bodysplash.mongolink.test.Comment;
 import fr.bodysplash.mongolink.test.FakeEntity;
 import fr.bodysplash.mongolink.test.FakeEntityWithNaturalId;
 import org.bson.types.ObjectId;
 import org.hamcrest.Matchers;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.*;
+import org.junit.rules.ExpectedException;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
 
@@ -22,10 +21,8 @@ import static org.junit.Assert.assertThat;
 
 public class TestsMongoSession {
 
-    private FakeDBCollection entities;
-    private FakeDB db;
-    private MongoSession session;
-    private FakeDBCollection fakeEntities;
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
 
     @Before
     public void before() {
@@ -38,7 +35,6 @@ public class TestsMongoSession {
         session = new MongoSession(db);
         session.setMappingContext(cb.createContext());
     }
-
 
     @Test
     public void startAndStopASession() {
@@ -65,6 +61,14 @@ public class TestsMongoSession {
         Assert.assertThat(entity.getValue(), is("plop"));
     }
 
+
+    @Test
+    public void cantGetSomethingWichIsNotAnEntity() {
+        exception.expect(MongoLinkError.class);
+        exception.expectMessage("Comment is not an entity");
+        session.get("pouet", Comment.class);
+    }
+
     @Test
     public void canGetByNaturalId() {
         DBObject dbo = new BasicDBObject();
@@ -76,6 +80,7 @@ public class TestsMongoSession {
         Assert.assertThat(entity, notNullValue());
         Assert.assertThat(entity.getNaturalKey(), is("a natural key"));
     }
+
 
     @Test
     public void canSave() {
@@ -89,6 +94,13 @@ public class TestsMongoSession {
     }
 
     @Test
+    public void cantSaveSomethingWichIsNotAnEntity() {
+        exception.expect(MongoLinkError.class);
+        exception.expectMessage("Comment is not an entity");
+        session.save(new Comment());
+    }
+
+    @Test
     public void canUpdate() {
         createEntity("4d53b7118653a70549fe1b78", "url de test");
         FakeEntity entity = session.get("4d53b7118653a70549fe1b78", FakeEntity.class);
@@ -98,6 +110,14 @@ public class TestsMongoSession {
 
         assertThat(entities.getObjects().get(0).get("value"), is((Object) "un test de plus"));
     }
+
+    @Test
+    public void cantUpdateSomethingWichIsNotAnEntity() {
+        exception.expect(MongoLinkError.class);
+        exception.expectMessage("Comment is not an entity");
+        session.update(new Comment());
+    }
+
 
     @Test
     public void canAutomaticalyUpdate() {
@@ -131,9 +151,23 @@ public class TestsMongoSession {
     }
 
     @Test
-    @Ignore
+    public void canUpdateJustSavedEntityWithAutoId() {
+        FakeEntity entity = new FakeEntity("this is a value");
+        session.save(entity);
+        entity.setValue("a value");
+
+        session.stop();
+
+        assertThat(entities.getObjects().get(0).get("value"), is((Object) "a value"));
+    }
+
+    @Test
     public void savingSetIdForAutoId() {
-        // TODO : le faire
+        FakeEntity entity = new FakeEntity("a value");
+
+        session.save(entity);
+
+        assertThat(entity.getId(), notNullValue());
     }
 
     private void createEntity(String id, String url) {
@@ -142,5 +176,10 @@ public class TestsMongoSession {
         dbo.put("_id", new ObjectId(id));
         entities.insert(dbo);
     }
+
+    private FakeDBCollection entities;
+    private FakeDB db;
+    private MongoSession session;
+    private FakeDBCollection fakeEntities;
 
 }

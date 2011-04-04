@@ -12,7 +12,11 @@ public class EntityMapper<T> extends Mapper<T> {
 
     @Override
     protected void doPopulate(T instance, DBObject from) {
-        idMapper.populateFrom(instance, from);
+        populateId(instance, from);
+    }
+
+    public void populateId(Object element, DBObject dbObject) {
+        idMapper.populateFrom(element, dbObject);
     }
 
     @Override

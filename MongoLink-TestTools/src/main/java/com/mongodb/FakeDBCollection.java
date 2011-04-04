@@ -3,6 +3,7 @@ package com.mongodb;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import org.bson.types.ObjectId;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -24,7 +25,13 @@ public class FakeDBCollection extends DBCollection {
 
     @Override
     public WriteResult insert(DBObject[] arr, WriteConcern concern) throws MongoException {
-        objects.addAll(Arrays.asList(arr));
+        List<DBObject> dbObjects = Arrays.asList(arr);
+        objects.addAll(dbObjects);
+        for (DBObject dbObject : dbObjects) {
+            if(dbObject.get("_id") == null) {
+                dbObject.put("_id", ObjectId.get());
+            }
+        }
         return null;
     }
 
