@@ -59,8 +59,10 @@ public class TestsIntegration {
     @Test
     @Ignore
     public void canUserSessionManager() {
+        final DBAddressFactory dbAddressFactory = new DBAddressFactory();
+        final DBAddress dbAddress = dbAddressFactory.getLocal("test");
         ContextBuilder contextBuilder = TestFactory.contextBuilder().withFakeEntity();
-        MongoSessionManager manager = MongoSessionManager.create(contextBuilder, "test");
+        MongoSessionManager manager = MongoSessionManager.create(contextBuilder, dbAddress);
         MongoSession session = manager.createSession();
         session.save(new FakeEntity("a new value"));
     }

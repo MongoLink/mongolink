@@ -6,7 +6,7 @@ import net.sf.cglib.proxy.Enhancer;
 import org.apache.log4j.Logger;
 
 public abstract class AbstractMap<T> {
-    
+
     public AbstractMap(Class<T> type) {
         this.type = type;
         LOGGER.debug("Mapping " + getType());

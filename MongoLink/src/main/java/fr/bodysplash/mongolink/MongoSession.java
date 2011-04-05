@@ -39,7 +39,7 @@ public class MongoSession {
         Object dbId = mapper.getDbId(id);
         DBObject query = new BasicDBObject("_id", dbId);
         DBObject result = collection.findOne(query);
-        if(result == null) {
+        if (result == null) {
             return null;
         }
         T entity = (T) context.mapperFor(entityType).toInstance(result);
@@ -71,7 +71,7 @@ public class MongoSession {
 
     private void checkIsAnEntity(Class<?> entityType) {
         Mapper<?> mapper = context.mapperFor(entityType);
-        if(mapper == null || !(mapper instanceof EntityMapper)) {
+        if (mapper == null || !(mapper instanceof EntityMapper)) {
             throw new MongoLinkError(entityType.getName() + " is not an entity");
         }
     }
@@ -79,6 +79,7 @@ public class MongoSession {
     private <T> String collectionName(Class<T> clazz) {
         return clazz.getSimpleName().toLowerCase();
     }
+
     private final DB db;
     private MapperContext context;
     private final List<Object> unitOfWork = Lists.newArrayList();

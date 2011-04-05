@@ -12,8 +12,8 @@ import org.junit.Test;
 
 import java.net.UnknownHostException;
 
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
-import static org.hamcrest.Matchers.*;
 
 public class TestsEntityMapper {
 

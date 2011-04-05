@@ -1,17 +1,18 @@
 package fr.bodysplash.mongolink;
 
 import com.mongodb.DB;
+import com.mongodb.DBAddress;
 import fr.bodysplash.mongolink.mapper.ContextBuilder;
 import fr.bodysplash.mongolink.mapper.MapperContext;
 
 public class MongoSessionManager {
 
-    private static String dbName;
+    private static DBAddress db;
     private final MapperContext mapperContext;
     private DbFactory dbFactory = new DbFactory();
 
-    public static MongoSessionManager create(ContextBuilder contextBuilder, String dbName) {
-        MongoSessionManager.dbName = dbName;
+    public static MongoSessionManager create(ContextBuilder contextBuilder, DBAddress db) {
+        MongoSessionManager.db = db;
         return new MongoSessionManager(contextBuilder.createContext());
     }
 
@@ -26,7 +27,7 @@ public class MongoSessionManager {
     }
 
     private DB getDb() {
-        return dbFactory.get(dbName);
+        return dbFactory.get(db);
     }
 
     public MapperContext getMapperContext() {

@@ -9,7 +9,7 @@ import org.apache.log4j.Logger;
 import java.util.List;
 
 public abstract class Mapper<T> {
-    
+
     public Mapper(Class<T> persistentType) {
         this.persistentType = persistentType;
     }

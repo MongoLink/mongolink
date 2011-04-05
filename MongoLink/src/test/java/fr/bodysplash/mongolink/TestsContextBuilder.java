@@ -10,7 +10,7 @@ import org.junit.Test;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
-public class TestsContextBuilder{
+public class TestsContextBuilder {
 
     @Test
     public void canLoadMappingFromPackage() {
