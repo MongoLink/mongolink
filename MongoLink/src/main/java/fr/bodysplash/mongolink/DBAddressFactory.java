@@ -23,4 +23,14 @@ public class DBAddressFactory {
         }
         return null;
     }
+
+    public DBAddress get(String dbHost, int dbPort, String dbName) {
+        try {
+            return new DBAddress(dbHost, dbPort, dbName);
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }
