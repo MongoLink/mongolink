@@ -7,13 +7,16 @@ import fr.bodysplash.mongolink.mapper.MapperContext;
 
 public class MongoSessionManager {
 
-    private static DBAddress db;
+    private  DBAddress db;
     private final MapperContext mapperContext;
-    private DbFactory dbFactory = new DbFactory();
+    private DbFactory dbFactory;
+    private Settings settings;
 
-    public static MongoSessionManager create(ContextBuilder contextBuilder, DBAddress db) {
-        MongoSessionManager.db = db;
-        return new MongoSessionManager(contextBuilder.createContext());
+    public static MongoSessionManager create(ContextBuilder contextBuilder, Settings db) {
+        MongoSessionManager manager = new MongoSessionManager(contextBuilder.createContext());
+        manager.settings = db;
+        manager.dbFactory = db.createDbFactory();
+        return manager;
     }
 
     private MongoSessionManager(MapperContext mapperContext) {
@@ -27,15 +30,11 @@ public class MongoSessionManager {
     }
 
     private DB getDb() {
-        return dbFactory.get(db);
+        return dbFactory.get(settings.getDbName());
     }
 
     public MapperContext getMapperContext() {
         return mapperContext;
-    }
-
-    public void setDbFactory(DbFactory dbFactory) {
-        this.dbFactory = dbFactory;
     }
 
     public void close() {

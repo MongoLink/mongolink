@@ -80,7 +80,12 @@ public class MongoSession {
         return clazz.getSimpleName().toLowerCase();
     }
 
+    public DB getDb() {
+        return db;
+    }
+    
     private final DB db;
     private MapperContext context;
+
     private final List<Object> unitOfWork = Lists.newArrayList();
 }
