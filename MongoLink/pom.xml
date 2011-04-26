@@ -41,6 +41,11 @@
             <artifactId>mongolink-testtools</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>1.6.2</version>
+        </dependency>
     </dependencies>
 
     <build>
