@@ -2,12 +2,13 @@ package fr.bodysplash.mongolink.mapper;
 
 import com.mongodb.BasicDBObject;
 import fr.bodysplash.mongolink.utils.MethodContainer;
+import org.joda.time.DateTime;
 import org.junit.Test;
 
 import java.lang.reflect.Method;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.core.Is.*;
+import static org.junit.Assert.*;
 
 public class TestsPropertyMapper {
 
@@ -18,6 +19,15 @@ public class TestsPropertyMapper {
     public static class FakeEntity {
         private TestEnum value;
         private int primitive;
+        private DateTime creationDate;
+
+        public DateTime getCreationDate() {
+            return creationDate;
+        }
+
+        public void setCreationDate(final DateTime creationDate) {
+            this.creationDate = creationDate;
+        }
 
         public int getPrimitive() {
             return primitive;
@@ -73,5 +83,33 @@ public class TestsPropertyMapper {
 
     private Method primitiveGetter() throws NoSuchMethodException {
         return FakeEntity.class.getDeclaredMethod("getPrimitive");
+    }
+
+    @Test
+    public void canSaveDateTimeType() throws NoSuchMethodException {
+        PropertyMapper mapper = new PropertyMapper(new MethodContainer(FakeEntity.class.getDeclaredMethod("getCreationDate")));
+        FakeEntity fakeEntity = new FakeEntity();
+        DateTime now = new DateTime();
+        fakeEntity.setCreationDate(now);
+        BasicDBObject basicDBObject = new BasicDBObject();
+
+        mapper.saveTo(fakeEntity, basicDBObject);
+
+        assertThat(basicDBObject.get("creationDate"), is((Object) now.getMillis()));
+    }
+
+    @Test
+    public void canPopulateDateTimeType() throws NoSuchMethodException {
+        BasicDBObject object = new BasicDBObject();
+        DateTime dateTime = new DateTime();
+        object.put("creationDate", dateTime.getMillis());
+        PropertyMapper propertyMapper = new PropertyMapper(new MethodContainer(FakeEntity.class.getDeclaredMethod("getCreationDate")));
+        EntityMapper<FakeEntity> mapper = new EntityMapper<FakeEntity>(FakeEntity.class);
+        propertyMapper.setMapper(mapper);
+        FakeEntity instance = new FakeEntity();
+
+        propertyMapper.populateFrom(instance, object);
+
+        assertThat(instance.getCreationDate(), is(dateTime));
     }
 }

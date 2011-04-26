@@ -24,7 +24,7 @@ public class ContextBuilder {
     public MapperContext createContext() {
         MapperContext result = new MapperContext();
         try {
-            LOGGER.debug("Scanning package");
+            LOGGER.debug("Scanning converter");
             Iterable<Class> classes = getClasses();
             for (Class currentClass : classes) {
                 if (AbstractMap.class.isAssignableFrom(currentClass)) {
@@ -32,9 +32,9 @@ public class ContextBuilder {
                     mapping.buildMapper(result);
                 }
             }
-            LOGGER.debug("Done scanning package");
+            LOGGER.debug("Done scanning converter");
         } catch (Exception e) {
-            Logger.getLogger(ContextBuilder.class).error("Can't scan package", e);
+            Logger.getLogger(ContextBuilder.class).error("Can't scan converter", e);
 
         }
         return result;
