@@ -12,7 +12,7 @@ public abstract class Converter {
         if (method.getReturnType().isEnum()) {
             return new EnumConverter(method.getReturnType());
         }
-        if (method.getReturnType().isInstance(new DateTime())) {
+        if (DateTime.class.isAssignableFrom(method.getReturnType())) {
             return new DateTimeConverter();
         }
         return PRIMITIVE_CONVERTER;

@@ -28,4 +28,9 @@ public class TestsClassMap {
         assertThat(mapping.element(), notNullValue());
     }
 
+    @Test
+    public void canDeclareSubclass() {
+
+    }
+
 }

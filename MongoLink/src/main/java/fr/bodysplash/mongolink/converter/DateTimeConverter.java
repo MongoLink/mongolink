@@ -11,8 +11,6 @@ public class DateTimeConverter extends Converter {
 
     @Override
     public Object fromDbValue(final Object value) {
-        Long time = Long.parseLong(value.toString());
-        DateTime dateTime = new DateTime(time);
-        return dateTime;
+        return new DateTime((Long) value);
     }
 }
