@@ -18,7 +18,7 @@ public abstract class SubclassMap<T> extends AbstractMap<T>{
         return (SubclassMapper<T>) super.getMapper();
     }
 
-    public void setParentMap(ClassMap<?> parentMap) {
+    void setParentMap(ClassMap<?> parentMap) {
         getMapper().setParentMapper(parentMap.getMapper());
 
     }

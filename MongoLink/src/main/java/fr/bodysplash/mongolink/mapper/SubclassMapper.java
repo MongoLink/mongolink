@@ -27,7 +27,7 @@ public class SubclassMapper<T> extends Mapper<T> {
         return getPersistentType().getSimpleName();
     }
 
-    public void setParentMapper(Mapper<?> parentMapper) {
+    void setParentMapper(Mapper<?> parentMapper) {
         this.parentMapper = parentMapper;
     }
 
