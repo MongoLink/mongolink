@@ -6,9 +6,9 @@ import com.mongodb.DBObject;
 import com.mongodb.FakeDB;
 import com.mongodb.FakeDBCollection;
 import fr.bodysplash.mongolink.mapper.ContextBuilder;
-import fr.bodysplash.mongolink.test.Comment;
-import fr.bodysplash.mongolink.test.FakeEntity;
-import fr.bodysplash.mongolink.test.FakeEntityWithNaturalId;
+import fr.bodysplash.mongolink.test.entity.Comment;
+import fr.bodysplash.mongolink.test.entity.FakeEntity;
+import fr.bodysplash.mongolink.test.entity.FakeEntityWithNaturalId;
 import org.bson.types.ObjectId;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
@@ -34,7 +34,7 @@ public class TestsMongoSession {
         fakeEntities = new FakeDBCollection(db, "fakeentitywithnaturalid");
         db.collections.put("fakeentity", entities);
         db.collections.put("fakeentitywithnaturalid", fakeEntities);
-        ContextBuilder cb = new ContextBuilder("fr.bodysplash.mongolink.test");
+        ContextBuilder cb = new ContextBuilder("fr.bodysplash.mongolink.test.simpleMapping");
         session = new MongoSession(db);
         session.setMappingContext(cb.createContext());
     }

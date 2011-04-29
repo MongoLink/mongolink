@@ -1,7 +1,11 @@
 package fr.bodysplash.mongolink.mapper;
 
-import fr.bodysplash.mongolink.test.FakeEntity;
-import fr.bodysplash.mongolink.test.FakeEntityMapping;
+import fr.bodysplash.mongolink.test.entity.FakeChildEntity;
+import fr.bodysplash.mongolink.test.entity.FakeEntity;
+import fr.bodysplash.mongolink.test.entity.OtherFakeChildEntity;
+import fr.bodysplash.mongolink.test.inheritanceMapping.FakeEntityWithSubclassMapping;
+import fr.bodysplash.mongolink.test.inheritanceMapping.FakeEntityWithTwoSubclassMapping;
+import fr.bodysplash.mongolink.test.simpleMapping.FakeEntityMapping;
 import org.junit.Test;
 
 import static org.hamcrest.Matchers.notNullValue;
@@ -29,8 +33,26 @@ public class TestsClassMap {
     }
 
     @Test
-    public void canDeclareSubclass() {
+    public void subclassIsAddedToTheContext() {
+        FakeEntityWithSubclassMapping mapping = new FakeEntityWithSubclassMapping();
+        MapperContext context = new MapperContext();
 
+        mapping.buildMapper(context);
+
+        assertThat(context.mapperFor(FakeChildEntity.class), notNullValue());
     }
+
+    @Test
+    public void canHaveSeveralSubclasses() {
+        FakeEntityWithTwoSubclassMapping mapping = new FakeEntityWithTwoSubclassMapping();
+        MapperContext context = new MapperContext();
+
+        mapping.buildMapper(context);
+
+        assertThat(context.mapperFor(FakeChildEntity.class), notNullValue());
+        assertThat(context.mapperFor(OtherFakeChildEntity.class), notNullValue());
+    }
+
+
 
 }

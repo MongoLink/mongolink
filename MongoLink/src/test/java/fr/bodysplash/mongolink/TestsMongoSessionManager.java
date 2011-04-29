@@ -2,9 +2,9 @@ package fr.bodysplash.mongolink;
 
 import com.mongodb.FakeDB;
 import fr.bodysplash.mongolink.mapper.ContextBuilder;
-import fr.bodysplash.mongolink.test.FakeDbFactory;
-import fr.bodysplash.mongolink.test.FakeEntity;
-import fr.bodysplash.mongolink.test.TestFactory;
+import fr.bodysplash.mongolink.test.factory.FakeDbFactory;
+import fr.bodysplash.mongolink.test.entity.FakeEntity;
+import fr.bodysplash.mongolink.test.factory.TestFactory;
 import org.junit.Test;
 
 import static org.hamcrest.Matchers.is;
@@ -15,7 +15,7 @@ public class TestsMongoSessionManager {
 
     @Test
     public void canCreateFromContextBuilder() {
-        ContextBuilder contextBuilder = new ContextBuilder("fr.bodysplash.mongolink.test");
+        ContextBuilder contextBuilder = new ContextBuilder("fr.bodysplash.mongolink.test.simpleMapping");
 
         MongoSessionManager sm = MongoSessionManager.create(contextBuilder, Settings.defaultInstance());
 

@@ -2,8 +2,8 @@ package fr.bodysplash.mongolink.mapper;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
-import fr.bodysplash.mongolink.test.Comment;
-import fr.bodysplash.mongolink.test.CommentMapping;
+import fr.bodysplash.mongolink.test.entity.Comment;
+import fr.bodysplash.mongolink.test.simpleMapping.CommentMapping;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Before;

@@ -1,6 +1,6 @@
 package fr.bodysplash.mongolink.mapper;
 
-import fr.bodysplash.mongolink.test.FakeEntity;
+import fr.bodysplash.mongolink.test.entity.FakeEntity;
 import fr.bodysplash.mongolink.utils.MethodContainer;
 import org.junit.Test;
 

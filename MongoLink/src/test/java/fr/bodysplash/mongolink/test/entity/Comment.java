@@ -1,4 +1,4 @@
-package fr.bodysplash.mongolink.test;
+package fr.bodysplash.mongolink.test.entity;
 
 
 public class Comment {

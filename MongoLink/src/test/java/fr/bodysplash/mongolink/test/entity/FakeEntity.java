@@ -1,4 +1,4 @@
-package fr.bodysplash.mongolink.test;
+package fr.bodysplash.mongolink.test.entity;
 
 
 import com.google.common.collect.Lists;
@@ -6,10 +6,6 @@ import com.google.common.collect.Lists;
 import java.util.List;
 
 public class FakeEntity {
-
-    private String id;
-    private String value;
-    private final List<Comment> comments = Lists.newArrayList();
 
     FakeEntity() {
 
@@ -42,4 +38,8 @@ public class FakeEntity {
     public void setValue(String value) {
         this.value = value;
     }
+
+    private String id;
+    private String value;
+    private final List<Comment> comments = Lists.newArrayList();
 }

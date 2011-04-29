@@ -1,4 +1,4 @@
-package fr.bodysplash.mongolink.test;
+package fr.bodysplash.mongolink.test.factory;
 
 import com.google.common.collect.Maps;
 import com.mongodb.FakeDB;

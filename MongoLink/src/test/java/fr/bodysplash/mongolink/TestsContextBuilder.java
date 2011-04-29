@@ -2,9 +2,9 @@ package fr.bodysplash.mongolink;
 
 import fr.bodysplash.mongolink.mapper.ContextBuilder;
 import fr.bodysplash.mongolink.mapper.MapperContext;
-import fr.bodysplash.mongolink.test.Comment;
-import fr.bodysplash.mongolink.test.FakeEntity;
-import fr.bodysplash.mongolink.test.FakeEntityWithNaturalId;
+import fr.bodysplash.mongolink.test.entity.Comment;
+import fr.bodysplash.mongolink.test.entity.FakeEntity;
+import fr.bodysplash.mongolink.test.entity.FakeEntityWithNaturalId;
 import org.junit.Test;
 
 import static org.hamcrest.Matchers.notNullValue;
@@ -14,7 +14,7 @@ public class TestsContextBuilder {
 
     @Test
     public void canLoadMappingFromPackage() {
-        ContextBuilder builder = new ContextBuilder("fr.bodysplash.mongolink.test");
+        ContextBuilder builder = new ContextBuilder("fr.bodysplash.mongolink.test.simpleMapping");
 
         MapperContext context = builder.createContext();
 

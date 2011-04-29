@@ -1,10 +1,10 @@
-package fr.bodysplash.mongolink.test;
+package fr.bodysplash.mongolink.test.factory;
 
 import fr.bodysplash.mongolink.mapper.ContextBuilder;
 
 public class ContextBuilderTestFactory {
 
     public ContextBuilder withFakeEntity() {
-        return new ContextBuilder("fr.bodysplash.mongolink.test");
+        return new ContextBuilder("fr.bodysplash.mongolink.test.simpleMapping");
     }
 }

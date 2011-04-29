@@ -2,7 +2,7 @@ package fr.bodysplash.mongolink.utils;
 
 import fr.bodysplash.mongolink.DbFactory;
 import fr.bodysplash.mongolink.Settings;
-import fr.bodysplash.mongolink.test.FakeDbFactory;
+import fr.bodysplash.mongolink.test.factory.FakeDbFactory;
 import org.junit.Test;
 
 import static org.hamcrest.Matchers.*;

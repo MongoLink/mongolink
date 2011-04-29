@@ -34,9 +34,7 @@ public abstract class Mapper<T> {
 
     public T toInstance(DBObject from) {
         T instance = makeInstance();
-        populateProperties(instance, from);
-        populateCollections(instance, from);
-        doPopulate(instance, from);
+        populate(from, instance);
         return instance;
     }
 
@@ -44,9 +42,13 @@ public abstract class Mapper<T> {
         return (T) ReflectUtils.newInstance(persistentType);
     }
 
-    protected abstract void doPopulate(T instance, DBObject from);
+    final void populate(DBObject from, Object instance) {
+        populateProperties(instance, from);
+        populateCollections(instance, from);
+        doPopulate((T)instance, from);
+    }
 
-    private void populateProperties(T instance, DBObject from) {
+    private void populateProperties(Object instance, DBObject from) {
         try {
             for (PropertyMapper property : properties) {
                 property.populateFrom(instance, from);
@@ -56,18 +58,24 @@ public abstract class Mapper<T> {
         }
     }
 
-    private void populateCollections(T instance, DBObject from) {
+    private void populateCollections(Object instance, DBObject from) {
         for (CollectionMapper collection : collections) {
             collection.populateFrom(instance, from);
         }
     }
 
+    protected abstract void doPopulate(T instance, DBObject from);
+
     public DBObject toDBObject(Object element) {
         BasicDBObject object = new BasicDBObject();
+        save(element, object);
+        return object;
+    }
+
+    final void save(Object element, BasicDBObject object) {
         saveProperties(element, object);
         saveCollections(element, object);
         doSave(element, object);
-        return object;
     }
 
     private void saveCollections(Object element, BasicDBObject object) {

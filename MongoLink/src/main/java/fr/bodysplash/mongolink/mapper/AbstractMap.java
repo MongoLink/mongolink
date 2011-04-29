@@ -12,7 +12,6 @@ public abstract class AbstractMap<T> {
         LOGGER.debug("Mapping " + getType());
         mapper = createMapper(type);
         interceptor = createInterceptor(type);
-        map();
     }
 
     protected abstract Mapper<T> createMapper(Class<T> type);
@@ -53,6 +52,7 @@ public abstract class AbstractMap<T> {
     }
 
     public void buildMapper(MapperContext context) {
+        map();
         context.addMapper(mapper);
     }
 
