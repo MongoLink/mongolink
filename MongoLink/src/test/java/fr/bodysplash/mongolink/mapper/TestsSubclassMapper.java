@@ -4,6 +4,7 @@ package fr.bodysplash.mongolink.mapper;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import fr.bodysplash.mongolink.test.entity.FakeChildEntity;
+import fr.bodysplash.mongolink.test.entity.FakeEntity;
 import fr.bodysplash.mongolink.test.inheritanceMapping.FakeEntityWithSubclassMapping;
 import org.hamcrest.Matcher;
 import org.junit.Before;
@@ -32,8 +33,8 @@ public class TestsSubclassMapper {
         assertThat(dbObject, notNullValue());
         assertThat((String) dbObject.get("value"), is("this is a value"));
         assertThat((String) dbObject.get("_id"), is("good id"));
-        assertThat((String) dbObject.get("childName"), is("this is a name"));
         assertThat((String) dbObject.get("__discriminator"), is("FakeChildEntity"));
+        assertThat((String) dbObject.get("childName"), is("this is a name"));
     }
 
     @Test

@@ -2,8 +2,6 @@ package fr.bodysplash.mongolink.mapper;
 
 public abstract class SubclassMap<T> extends AbstractMap<T>{
 
-    private ClassMap<T> parentMap;
-
     public SubclassMap(Class<T> type) {
         super(type);
     }
@@ -18,8 +16,15 @@ public abstract class SubclassMap<T> extends AbstractMap<T>{
         return (SubclassMapper<T>) super.getMapper();
     }
 
-    void setParentMap(ClassMap<?> parentMap) {
-        getMapper().setParentMapper(parentMap.getMapper());
-
+    public <U> void setParent(ClassMap<U> parentMap) {
+        this.parentMap = parentMap;
     }
+
+    @Override
+    public void buildMapper(MapperContext context) {
+        super.buildMapper(context);
+        parentMap.getMapper().addSubclass(getMapper());
+    }
+
+    private ClassMap<?> parentMap;
 }

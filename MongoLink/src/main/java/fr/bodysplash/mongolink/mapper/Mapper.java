@@ -38,7 +38,7 @@ public abstract class Mapper<T> {
         return instance;
     }
 
-    private T makeInstance() {
+    protected T makeInstance() {
         return (T) ReflectUtils.newInstance(persistentType);
     }
 

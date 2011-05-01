@@ -42,7 +42,7 @@ public class MongoSession {
         if (result == null) {
             return null;
         }
-        T entity = (T) context.mapperFor(entityType).toInstance(result);
+        T entity = mapper.toInstance(result);
         unitOfWork.add(entity);
         return entity;
     }
@@ -86,6 +86,5 @@ public class MongoSession {
     
     private final DB db;
     private MapperContext context;
-
     private final List<Object> unitOfWork = Lists.newArrayList();
 }

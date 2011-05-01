@@ -29,8 +29,8 @@ public abstract class ClassMap<T> extends AbstractMap<T> {
     }
 
     protected <U extends T> void subclass(SubclassMap<U> subclassMap) {
+        subclassMap.setParent(this);
         subclasses.add(subclassMap);
-        subclassMap.setParentMap(this);
     }
 
     @Override

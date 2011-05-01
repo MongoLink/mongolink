@@ -23,7 +23,7 @@ public class SubclassMapper<T> extends Mapper<T> {
         object.put("__discriminator", discriminator());
     }
 
-    private String discriminator() {
+    String discriminator() {
         return getPersistentType().getSimpleName();
     }
 
@@ -32,4 +32,9 @@ public class SubclassMapper<T> extends Mapper<T> {
     }
 
     private Mapper<?> parentMapper;
+
+    public static String discriminatorValue(DBObject from) {
+        Object discriminator = from.get("__discriminator");
+        return discriminator == null ? "" : discriminator.toString();
+    }
 }

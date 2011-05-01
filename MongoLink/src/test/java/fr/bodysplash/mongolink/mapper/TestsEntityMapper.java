@@ -3,8 +3,10 @@ package fr.bodysplash.mongolink.mapper;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
+import fr.bodysplash.mongolink.test.entity.FakeChildEntity;
 import fr.bodysplash.mongolink.test.entity.FakeEntity;
 import fr.bodysplash.mongolink.test.entity.FakeEntityWithNaturalId;
+import fr.bodysplash.mongolink.test.inheritanceMapping.FakeEntityWithSubclassMapping;
 import fr.bodysplash.mongolink.test.simpleMapping.CommentMapping;
 import fr.bodysplash.mongolink.test.simpleMapping.FakeEntityMapping;
 import fr.bodysplash.mongolink.test.simpleMapping.FakeEntityWithNaturalIdMapping;
@@ -16,6 +18,8 @@ import org.junit.Test;
 
 import java.net.UnknownHostException;
 
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -126,6 +130,22 @@ public class TestsEntityMapper {
 
         assertThat(entity.getComments().size(), is(1));
         Assert.assertThat(entity.getComments().get(0).getValue(), Matchers.is("this is a mapper!"));
+    }
+
+    @Test
+    public void canCreateInstanceGivenDiscriminatorValue() {
+        MapperContext context = new MapperContext();
+        new FakeEntityWithSubclassMapping().buildMapper(context);
+        Mapper<FakeEntity> entityMapper = context.mapperFor(FakeEntity.class);
+        BasicDBObject dbo = new BasicDBObject();
+        dbo.put("_id", "1");
+        dbo.put("__discriminator", "FakeChildEntity");
+
+        FakeEntity instance = entityMapper.toInstance(dbo);
+
+        assertThat(instance, notNullValue());
+        assertThat(instance, instanceOf(FakeChildEntity.class));
+
     }
 
     private EntityMapper<FakeEntity> entityMapper() {
