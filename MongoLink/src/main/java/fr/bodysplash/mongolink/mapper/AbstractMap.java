@@ -60,10 +60,6 @@ public abstract class AbstractMap<T> {
         return lastMethod;
     }
 
-    protected T getInterceptor() {
-        return interceptor;
-    }
-
     protected Mapper<T> getMapper() {
         return mapper;
     }

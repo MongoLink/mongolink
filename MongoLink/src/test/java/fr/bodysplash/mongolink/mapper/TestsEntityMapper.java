@@ -148,6 +148,21 @@ public class TestsEntityMapper {
 
     }
 
+    @Test
+    public void createParentEntityWhenNoDiscriminatorGiven() {
+        MapperContext context = new MapperContext();
+        new FakeEntityWithSubclassMapping().buildMapper(context);
+        Mapper<FakeEntity> entityMapper = context.mapperFor(FakeEntity.class);
+        BasicDBObject dbo = new BasicDBObject();
+        dbo.put("_id", "1");
+
+        FakeEntity instance = entityMapper.toInstance(dbo);
+
+        assertThat(instance, notNullValue());
+        assertThat(instance, instanceOf(FakeEntity.class));
+
+    }
+
     private EntityMapper<FakeEntity> entityMapper() {
         return (EntityMapper<FakeEntity>) context.mapperFor(FakeEntity.class);
     }

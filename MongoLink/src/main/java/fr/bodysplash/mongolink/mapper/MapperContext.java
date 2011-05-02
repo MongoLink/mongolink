@@ -1,19 +1,25 @@
 package fr.bodysplash.mongolink.mapper;
 
-import com.google.common.collect.Maps;
+import com.google.common.collect.Lists;
 
-import java.util.Map;
+import java.util.List;
 
 public class MapperContext {
 
-    private Map<Class<?>, Mapper<?>> mappers = Maps.newHashMap();
 
     public <T> Mapper<T> mapperFor(Class<T> aClass) {
-        return (Mapper<T>) mappers.get(aClass);
+        for (Mapper<?> current : mappers) {
+            if (current.canMap(aClass)) {
+                return (Mapper<T>) current;
+            }
+        }
+        return null;
     }
 
     void addMapper(Mapper<?> mapper) {
         mapper.setContext(this);
-        mappers.put(mapper.getPersistentType(), mapper);
+        mappers.add(mapper);
     }
+
+    private List<Mapper<?>> mappers = Lists.newArrayList();
 }

@@ -31,7 +31,7 @@ public class EntityMapper<T> extends Mapper<T> {
         return idMapper != null;
     }
 
-    public void setId(IdMapper idMapper) {
+    void setId(IdMapper idMapper) {
         idMapper.setMapper(this);
         this.idMapper = idMapper;
     }
@@ -40,7 +40,7 @@ public class EntityMapper<T> extends Mapper<T> {
         return idMapper.getDbValue(id);
     }
 
-    public <U> void addSubclass(SubclassMapper<U> mapper) {
+    <U> void addSubclass(SubclassMapper<U> mapper) {
         mapper.setParentMapper(this);
         subclasses.put(mapper.discriminator(), mapper);
     }
@@ -54,6 +54,32 @@ public class EntityMapper<T> extends Mapper<T> {
         return super.toInstance(from);
     }
 
+    @Override
+    public DBObject toDBObject(Object element) {
+        if(isSubclass(element)) {
+            return subclassMapperFor(element).toDBObject(element);
+        }
+        return super.toDBObject(element);
+    }
+
+    private boolean isSubclass(Object element) {
+        return subclassMapperFor(element) != null;
+    }
+
+    private SubclassMapper<?> subclassMapperFor(Object element) {
+        for (SubclassMapper<?> subclassMapper : subclasses.values()) {
+            if(subclassMapper.getPersistentType().isAssignableFrom(element.getClass())) {
+                return subclassMapper;
+            }
+        }
+        return null;
+    }
+
+    public String collectionName() {
+        return persistentType.getSimpleName().toLowerCase();
+    }
+
     private IdMapper idMapper;
     private Map<String, SubclassMapper<?>> subclasses = Maps.newHashMap();
+
 }

@@ -97,9 +97,14 @@ public abstract class Mapper<T> {
         return context;
     }
 
+    public boolean canMap(Class<?> aClass) {
+        return persistentType.isAssignableFrom(aClass);
+    }
+
     private static final Logger LOGGER = Logger.getLogger(EntityMapper.class);
     protected final Class<T> persistentType;
     private final List<PropertyMapper> properties = Lists.newArrayList();
     private final List<CollectionMapper> collections = Lists.newArrayList();
+
     private MapperContext context;
 }

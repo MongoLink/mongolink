@@ -73,4 +73,9 @@ public class FakeDBCollection extends DBCollection {
     @Override
     public void createIndex(DBObject keys, DBObject options) throws MongoException {
     }
+
+    @Override
+    public long count() throws MongoException {
+        return objects.size();
+    }
 }

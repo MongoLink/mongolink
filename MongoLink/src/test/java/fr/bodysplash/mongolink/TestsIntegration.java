@@ -4,13 +4,12 @@ package fr.bodysplash.mongolink;
 import com.google.common.collect.Lists;
 import com.mongodb.*;
 import fr.bodysplash.mongolink.mapper.ContextBuilder;
-import fr.bodysplash.mongolink.mapper.MapperContext;
+import fr.bodysplash.mongolink.test.entity.FakeChildEntity;
 import fr.bodysplash.mongolink.test.entity.FakeEntity;
 import fr.bodysplash.mongolink.test.entity.FakeEntityWithNaturalId;
 import fr.bodysplash.mongolink.test.factory.TestFactory;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.bson.types.ObjectId;
+import org.junit.*;
 
 import java.net.UnknownHostException;
 
@@ -18,17 +17,50 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
+
 @Ignore
 public class TestsIntegration {
 
-    @Before
-    public void before() throws UnknownHostException {
+    @BeforeClass
+    public static void beforeClass() throws UnknownHostException {
         Mongo mongo = new Mongo();
         db = mongo.getDB("test");
-        ContextBuilder builder = new ContextBuilder("fr.bodysplash.mongolink.test");
-        MapperContext context = builder.createContext();
-        mongoSession = new MongoSession(db);
-        mongoSession.setMappingContext(context);
+        db.dropDatabase();
+        initData();
+        ContextBuilder builder = new ContextBuilder("fr.bodysplash.mongolink.test.integrationMapping");
+        sessionManager = MongoSessionManager.create(builder, Settings.defaultInstance());
+
+    }
+
+    private static void initData() {
+        BasicDBObject fakeEntity = new BasicDBObject();
+        fakeEntity.put("_id", new ObjectId("4d9d9b5e36a9a4265ea9ecbe"));
+        fakeEntity.put("value", "a new value");
+        BasicDBObject fakeChild = new BasicDBObject();
+        fakeChild.put("_id", new ObjectId("5d9d9b5e36a9a4265ea9ecbe"));
+        fakeChild.put("childName", "child value");
+        fakeChild.put("value", "parent value");
+        fakeChild.put("__discriminator", "FakeChildEntity");
+        db.getCollection("fakeentity").insert(fakeEntity, fakeChild);
+        BasicDBObject naturalIdEntity = new BasicDBObject();
+        naturalIdEntity.put("_id", "clef naturel");
+        db.getCollection("fakeentitywithnaturalid").insert(naturalIdEntity);
+    }
+
+    @Before
+    public void before() throws UnknownHostException {
+        mongoSession = sessionManager.createSession();
+        mongoSession.start();
+    }
+
+    @After
+    public void after() {
+        mongoSession.stop();
+    }
+
+    @AfterClass
+    public static void afterClass() {
+        sessionManager.close();
     }
 
     @Test
@@ -42,9 +74,6 @@ public class TestsIntegration {
 
     @Test
     public void canGetByNaturalId() {
-        FakeEntityWithNaturalId test = new FakeEntityWithNaturalId("clef naturel");
-        mongoSession.save(test);
-
         FakeEntityWithNaturalId fakeEntityWithNaturalId = mongoSession.get("clef naturel", FakeEntityWithNaturalId.class);
 
         assertThat(fakeEntityWithNaturalId, notNullValue());
@@ -59,7 +88,6 @@ public class TestsIntegration {
         session.save(new FakeEntity("a new value"));
     }
 
-
     @Test
     public void insertingSetId() {
         DBCollection testid = db.getCollection("testid");
@@ -70,13 +98,34 @@ public class TestsIntegration {
         assertThat(dbo.get("_id"), notNullValue());
     }
 
-    private String createEntity(String value) {
-        FakeEntity entity = new FakeEntity("value");
-        entity.setValue(value);
-        mongoSession.save(entity);
-        return entity.getId();
+
+    @Test
+    public void canGetChildEntity() {
+        FakeChildEntity entity = (FakeChildEntity) mongoSession.get("5d9d9b5e36a9a4265ea9ecbe", FakeEntity.class);
+
+        assertThat(entity, notNullValue());
+        assertThat(entity.getChildName(), is("child value"));
+        assertThat(entity.getValue(), is("parent value"));
     }
 
+    @Test
+    public void canSaveChildEntity() {
+        FakeChildEntity fakeChildEntity = new FakeChildEntity();
+        fakeChildEntity.setChildName("child");
+        fakeChildEntity.setValue("value from parent");
+        fakeChildEntity.addComment("this is a comment!");
+
+        mongoSession.save(fakeChildEntity);
+
+        FakeChildEntity entityFound = mongoSession.get(fakeChildEntity.getId(), FakeChildEntity.class);
+
+        assertThat(entityFound, notNullValue());
+        assertThat(entityFound.getComments().size(), is(1));
+    }
+
+
     private MongoSession mongoSession;
-    private DB db;
+
+    private static MongoSessionManager sessionManager;
+    private static DB db;
 }

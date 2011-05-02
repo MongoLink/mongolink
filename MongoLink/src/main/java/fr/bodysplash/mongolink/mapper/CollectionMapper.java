@@ -5,6 +5,7 @@ import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import fr.bodysplash.mongolink.utils.MethodContainer;
+import fr.bodysplash.mongolink.utils.ReflectionUtils;
 import org.apache.log4j.Logger;
 
 import java.lang.reflect.Field;
@@ -39,7 +40,7 @@ class CollectionMapper {
 
     public void populateFrom(Object instance, DBObject from) {
         try {
-            Field field = instance.getClass().getDeclaredField(name);
+            Field field = ReflectionUtils.findPrivateField(instance.getClass(), name);
             field.setAccessible(true);
             ParameterizedType gen = (ParameterizedType) field.getGenericType();
             Mapper<?> childMapper = context().mapperFor((Class<?>) gen.getActualTypeArguments()[0]);

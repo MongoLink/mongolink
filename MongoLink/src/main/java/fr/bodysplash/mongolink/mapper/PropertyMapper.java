@@ -6,6 +6,7 @@ import com.mongodb.DBObject;
 import fr.bodysplash.mongolink.MongoLinkException;
 import fr.bodysplash.mongolink.converter.Converter;
 import fr.bodysplash.mongolink.utils.MethodContainer;
+import fr.bodysplash.mongolink.utils.ReflectionUtils;
 import org.apache.log4j.Logger;
 
 import java.lang.reflect.Field;
@@ -37,7 +38,7 @@ class PropertyMapper {
 
     public void populateFrom(Object instance, DBObject from) {
         try {
-            Field field = mapper.getPersistentType().getDeclaredField(name);
+            Field field = ReflectionUtils.findPrivateField(mapper.getPersistentType(), name);
             field.setAccessible(true);
             Object value = from.get(dbFieldName());
             field.set(instance, converter().fromDbValue(value));

@@ -22,7 +22,7 @@ public abstract class SubclassMap<T> extends AbstractMap<T>{
 
     @Override
     public void buildMapper(MapperContext context) {
-        super.buildMapper(context);
+        map();
         parentMap.getMapper().addSubclass(getMapper());
     }
 

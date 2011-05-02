@@ -1,6 +1,7 @@
 package fr.bodysplash.mongolink.mapper;
 
 import com.google.common.collect.Lists;
+import fr.bodysplash.mongolink.MongoLinkError;
 import org.apache.log4j.Logger;
 
 import java.io.File;
@@ -34,14 +35,14 @@ public class ContextBuilder {
             }
             LOGGER.debug("Done scanning package");
         } catch (Exception e) {
-            Logger.getLogger(ContextBuilder.class).error("Can't scan package", e);
+            throw new MongoLinkError("Error scanning package", e);
 
         }
         return result;
     }
 
     private boolean isAMap(Class currentClass) {
-        return AbstractMap.class.isAssignableFrom(currentClass);
+        return AbstractMap.class.isAssignableFrom(currentClass) && !SubclassMap.class.isAssignableFrom(currentClass);
     }
 
     private Iterable<Class> getClasses() throws ClassNotFoundException, IOException {

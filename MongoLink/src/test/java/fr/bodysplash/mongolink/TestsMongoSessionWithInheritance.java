@@ -4,7 +4,6 @@ package fr.bodysplash.mongolink;
 import com.mongodb.BasicDBObject;
 import com.mongodb.FakeDB;
 import com.mongodb.FakeDBCollection;
-import fr.bodysplash.mongolink.mapper.ContextBuilder;
 import fr.bodysplash.mongolink.mapper.MapperContext;
 import fr.bodysplash.mongolink.test.entity.FakeChildEntity;
 import fr.bodysplash.mongolink.test.entity.FakeEntity;
@@ -13,8 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
 public class TestsMongoSessionWithInheritance {
@@ -22,7 +20,7 @@ public class TestsMongoSessionWithInheritance {
     @Before
     public void before() {
         db = Mockito.spy(new FakeDB());
-        entities = new FakeDBCollection(db, "entity");
+        entities = new FakeDBCollection(db, "fakeentity");
         db.collections.put("fakeentity", entities);
         FakeEntityWithSubclassMapping mapping = new FakeEntityWithSubclassMapping();
         session = new MongoSession(db);
@@ -46,7 +44,12 @@ public class TestsMongoSessionWithInheritance {
 
     @Test
     public void savesChildEntityInSameCollection() {
+        FakeChildEntity fakeChildEntity = new FakeChildEntity();
+        fakeChildEntity.setId("2");
 
+        session.save(fakeChildEntity);
+
+        assertThat(entities.count(), is(1L));
     }
 
     private FakeDBCollection entities;

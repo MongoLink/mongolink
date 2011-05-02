@@ -4,8 +4,6 @@ package fr.bodysplash.mongolink.mapper;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 
-import java.util.Map;
-
 public class SubclassMapper<T> extends Mapper<T> {
 
     public SubclassMapper(Class<T> type) {

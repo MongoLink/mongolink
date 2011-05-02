@@ -35,7 +35,7 @@ public class MongoSession {
 
     public <T> T get(String id, Class<T> entityType) {
         EntityMapper<T> mapper = (EntityMapper<T>) entityMapper(entityType);
-        DBCollection collection = db.getCollection(collectionName(entityType));
+        DBCollection collection = db.getCollection(mapper.collectionName());
         Object dbId = mapper.getDbId(id);
         DBObject query = new BasicDBObject("_id", dbId);
         DBObject result = collection.findOne(query);
@@ -50,14 +50,14 @@ public class MongoSession {
     public void save(Object element) {
         EntityMapper<?> mapper = entityMapper(element.getClass());
         DBObject dbObject = mapper.toDBObject(element);
-        db.getCollection(collectionName(element.getClass())).insert(dbObject);
+        db.getCollection(mapper.collectionName()).insert(dbObject);
         mapper.populateId(element, dbObject);
         unitOfWork.add(element);
     }
 
     public void update(Object element) {
         EntityMapper<?> mapper = entityMapper(element.getClass());
-        DBCollection collection = db.getCollection(collectionName(element.getClass()));
+        DBCollection collection = db.getCollection(mapper.collectionName());
         DBObject update = mapper.toDBObject(element);
         DBObject query = new BasicDBObject();
         query.put("_id", update.get("_id"));
@@ -74,10 +74,6 @@ public class MongoSession {
         if (mapper == null || !(mapper instanceof EntityMapper)) {
             throw new MongoLinkError(entityType.getName() + " is not an entity");
         }
-    }
-
-    private <T> String collectionName(Class<T> clazz) {
-        return clazz.getSimpleName().toLowerCase();
     }
 
     public DB getDb() {
