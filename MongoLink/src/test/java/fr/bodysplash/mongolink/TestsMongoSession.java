@@ -5,22 +5,22 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.mongodb.FakeDB;
 import com.mongodb.FakeDBCollection;
+import fr.bodysplash.mongolink.criteria.Criteria;
 import fr.bodysplash.mongolink.mapper.ContextBuilder;
 import fr.bodysplash.mongolink.test.entity.Comment;
 import fr.bodysplash.mongolink.test.entity.FakeEntity;
 import fr.bodysplash.mongolink.test.entity.FakeEntityWithNaturalId;
 import org.bson.types.ObjectId;
 import org.hamcrest.Matchers;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
 
+import java.util.List;
+
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 
 public class TestsMongoSession {
 
@@ -51,7 +51,6 @@ public class TestsMongoSession {
         inorder.verify(db).requestDone();
     }
 
-
     @Test
     public void canGetByAutoId() {
         createEntity("4d53b7118653a70549fe1b78", "plop");
@@ -63,7 +62,6 @@ public class TestsMongoSession {
         Assert.assertThat(entity, Matchers.notNullValue());
         Assert.assertThat(entity.getValue(), is("plop"));
     }
-
 
     @Test
     public void cantGetSomethingWichIsNotAnEntity() {
@@ -83,7 +81,6 @@ public class TestsMongoSession {
         Assert.assertThat(entity, notNullValue());
         Assert.assertThat(entity.getNaturalKey(), is("a natural key"));
     }
-
 
     @Test
     public void canSave() {
@@ -171,6 +168,38 @@ public class TestsMongoSession {
         session.save(entity);
 
         assertThat(entity.getId(), notNullValue());
+    }
+
+    @Test
+    public void canGetCriteria() {
+        final Criteria criteria = session.createCriteria(FakeEntity.class);
+
+        assertThat(criteria, notNullValue());
+        assertEquals(criteria.getEntityType(), FakeEntity.class);
+    }
+
+    @Test
+    public void canGetByCriteria() {
+        session.save(new FakeEntity("this is a value"));
+        session.save(new FakeEntity("this is a value"));
+        final Criteria criteria = session.createCriteria(FakeEntity.class);
+
+        List<FakeEntity> list =  criteria.list();
+
+        assertThat(list.size(), is(2));
+    }
+
+    @Test
+    @Ignore
+    public void returnSameInstance() {
+         DBObject dbo = new BasicDBObject();
+        dbo.put("_id", "a natural key");
+        fakeEntities.insert(dbo);
+
+        FakeEntityWithNaturalId first = session.get("a natural key", FakeEntityWithNaturalId.class);
+        FakeEntityWithNaturalId second = session.get("a natural key", FakeEntityWithNaturalId.class);
+
+        assertThat(first, sameInstance(second));
     }
 
     private void createEntity(String id, String url) {

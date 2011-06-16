@@ -6,6 +6,7 @@ import com.mongodb.DBObject;
 import fr.bodysplash.mongolink.test.entity.FakeChildEntity;
 import fr.bodysplash.mongolink.test.entity.FakeEntity;
 import fr.bodysplash.mongolink.test.simpleMapping.FakeEntityMapping;
+import org.bson.types.ObjectId;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -23,14 +24,14 @@ public class TestsSubclassMapper {
     public void canSaveSubclass() {
         FakeChildEntity entity = new FakeChildEntity();
         entity.setValue("this is a value");
-        entity.setId("good id");
+        entity.setId("5d9d9b5e36a9a4265ea9ecbe");
         entity.setChildName("this is a name");
 
         DBObject dbObject = mapper.toDBObject(entity);
 
         assertThat(dbObject, notNullValue());
         assertThat((String) dbObject.get("value"), is("this is a value"));
-        assertThat((String) dbObject.get("_id"), is("good id"));
+        assertThat( dbObject.get("_id"), is((Object)new ObjectId("5d9d9b5e36a9a4265ea9ecbe")));
         assertThat((String) dbObject.get("__discriminator"), is("FakeChildEntity"));
         assertThat((String) dbObject.get("childName"), is("this is a name"));
     }

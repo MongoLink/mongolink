@@ -2,10 +2,8 @@ package fr.bodysplash.mongolink;
 
 
 import com.google.common.collect.Lists;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBObject;
+import com.mongodb.*;
+import fr.bodysplash.mongolink.criteria.Criteria;
 import fr.bodysplash.mongolink.mapper.EntityMapper;
 import fr.bodysplash.mongolink.mapper.Mapper;
 import fr.bodysplash.mongolink.mapper.MapperContext;
@@ -35,16 +33,27 @@ public class MongoSession {
 
     public <T> T get(String id, Class<T> entityType) {
         EntityMapper<T> mapper = (EntityMapper<T>) entityMapper(entityType);
-        DBCollection collection = db.getCollection(mapper.collectionName());
         Object dbId = mapper.getDbId(id);
         DBObject query = new BasicDBObject("_id", dbId);
-        DBObject result = collection.findOne(query);
-        if (result == null) {
-            return null;
+        final List<T> list = executeQuery(entityType, query);
+        if (list.size() > 0) {
+            return list.get(0);
         }
-        T entity = mapper.toInstance(result);
-        unitOfWork.add(entity);
-        return entity;
+        return null;
+    }
+
+    public <T> List<T> executeQuery(Class<T> type, DBObject query) {
+        EntityMapper<T> mapper = (EntityMapper<T>) entityMapper(type);
+        final List<T> result = Lists.newArrayList();
+        DBCollection collection = db.getCollection(mapper.collectionName());
+        DBCursor cursor = collection.find();
+        while (cursor.hasNext()) {
+            final DBObject dbObject = cursor.next();
+            T entity = mapper.toInstance(dbObject);
+            unitOfWork.add(entity);
+            result.add(entity);
+        }
+        return result;
     }
 
     public void save(Object element) {
@@ -79,7 +88,11 @@ public class MongoSession {
     public DB getDb() {
         return db;
     }
-    
+
+    public Criteria createCriteria(Class<?> type) {
+        return new Criteria(type, this);
+    }
+
     private final DB db;
     private MapperContext context;
     private final List<Object> unitOfWork = Lists.newArrayList();

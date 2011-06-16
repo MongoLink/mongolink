@@ -13,7 +13,7 @@ import java.lang.reflect.Method;
 
 public class IdMapper {
 
-    public IdMapper(MethodContainer methodContainer, IdGeneration auto) {
+    public IdMapper(MethodContainer methodContainer, IdGeneration generationStrategy) {
         this.method = methodContainer.getMethod();
         this.name = methodContainer.shortName();
         this.generationStrategy = generationStrategy;

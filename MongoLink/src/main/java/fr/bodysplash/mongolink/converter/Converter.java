@@ -9,10 +9,14 @@ public abstract class Converter {
     private static final PrimitiveConverter PRIMITIVE_CONVERTER = new PrimitiveConverter();
 
     public static Converter forMethod(Method method) {
-        if (method.getReturnType().isEnum()) {
-            return new EnumConverter(method.getReturnType());
+        return forType(method.getReturnType());
+    }
+
+    public static Converter forType(Class<?> type) {
+        if (type.isEnum()) {
+            return new EnumConverter(type);
         }
-        if (DateTime.class.isAssignableFrom(method.getReturnType())) {
+        if (DateTime.class.isAssignableFrom(type)) {
             return new DateTimeConverter();
         }
         return PRIMITIVE_CONVERTER;
