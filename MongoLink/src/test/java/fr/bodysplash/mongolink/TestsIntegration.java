@@ -3,6 +3,8 @@ package fr.bodysplash.mongolink;
 
 import com.google.common.collect.Lists;
 import com.mongodb.*;
+import fr.bodysplash.mongolink.criteria.Criteria;
+import fr.bodysplash.mongolink.criteria.Restrictions;
 import fr.bodysplash.mongolink.mapper.ContextBuilder;
 import fr.bodysplash.mongolink.test.entity.FakeChildEntity;
 import fr.bodysplash.mongolink.test.entity.FakeEntity;
@@ -12,11 +14,10 @@ import org.bson.types.ObjectId;
 import org.junit.*;
 
 import java.net.UnknownHostException;
+import java.util.List;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertThat;
-
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
 
 @Ignore
 public class TestsIntegration {
@@ -36,6 +37,7 @@ public class TestsIntegration {
         BasicDBObject fakeEntity = new BasicDBObject();
         fakeEntity.put("_id", new ObjectId("4d9d9b5e36a9a4265ea9ecbe"));
         fakeEntity.put("value", "a new value");
+        fakeEntity.put("index", 42);
         BasicDBObject fakeChild = new BasicDBObject();
         fakeChild.put("_id", new ObjectId("5d9d9b5e36a9a4265ea9ecbe"));
         fakeChild.put("childName", "child value");
@@ -85,7 +87,7 @@ public class TestsIntegration {
         ContextBuilder contextBuilder = TestFactory.contextBuilder().withFakeEntity();
         MongoSessionManager manager = MongoSessionManager.create(contextBuilder, Settings.defaultInstance());
         MongoSession session = manager.createSession();
-        session.save(new FakeEntity("a new value"));
+        session.save(new FakeEntity("a new hope"));
     }
 
     @Test
@@ -123,6 +125,36 @@ public class TestsIntegration {
         assertThat(entityFound.getComments().size(), is(1));
     }
 
+
+    @Test
+    public void canGetByEqCriteria() {
+        final Criteria criteria = mongoSession.createCriteria(FakeEntity.class);
+        criteria.add(Restrictions.eq("value", "a new value"));
+
+        final List<FakeEntity> list = criteria.list();
+
+        assertThat(list.size(), is(1));
+    }
+
+    @Test
+    public void canGetByBetweenCriteria() {
+        final Criteria criteria = mongoSession.createCriteria(FakeEntity.class);
+        criteria.add(Restrictions.between("index", 42, 44));
+
+        final List<FakeEntity> list = criteria.list();
+
+        assertThat(list.size(), is(1));
+    }
+
+    @Test
+    public void canGetByBetweenCriteriaWithBadBoundaries() {
+        final Criteria criteria = mongoSession.createCriteria(FakeEntity.class);
+        criteria.add(Restrictions.between("index", 40, 42));
+
+        final List<FakeEntity> list = criteria.list();
+
+        assertThat(list.size(), is(0));
+    }
 
     private MongoSession mongoSession;
 

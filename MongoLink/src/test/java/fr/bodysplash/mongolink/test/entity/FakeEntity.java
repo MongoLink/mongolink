@@ -39,6 +39,15 @@ public class FakeEntity {
         this.value = value;
     }
 
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
+    private int index;
     private String id;
     private String value;
     private final List<Comment> comments = Lists.newArrayList();

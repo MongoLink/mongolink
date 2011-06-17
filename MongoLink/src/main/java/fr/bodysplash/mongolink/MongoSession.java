@@ -46,7 +46,7 @@ public class MongoSession {
         EntityMapper<T> mapper = (EntityMapper<T>) entityMapper(type);
         final List<T> result = Lists.newArrayList();
         DBCollection collection = db.getCollection(mapper.collectionName());
-        DBCursor cursor = collection.find();
+        DBCursor cursor = collection.find(query);
         while (cursor.hasNext()) {
             final DBObject dbObject = cursor.next();
             T entity = mapper.toInstance(dbObject);

@@ -17,6 +17,7 @@ public class FakeEntityWithTwoSubclassMapping extends ClassMap<FakeEntity> {
     public void map() {
         id(element().getId());
         property(element().getValue());
+        property(element().getIndex());
         collection(element().getComments());
         subclass(new SubclassMap<FakeChildEntity>(FakeChildEntity.class){
 
