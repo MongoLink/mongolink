@@ -1,5 +1,7 @@
 package fr.bodysplash.mongolink;
 
+import fr.bodysplash.mongolink.criteria.CriteriaFactory;
+
 public class Settings {
 
     public static Settings defaultInstance() {
@@ -7,6 +9,7 @@ public class Settings {
         settings.port = 27017;
         settings.host = "127.0.0.1";
         settings.factoryClass = DbFactory.class;
+        settings.criteriaFactoryClass = CriteriaFactory.class;
         settings.dbName = "test";
         return settings;
     }
@@ -44,8 +47,21 @@ public class Settings {
         }
     }
 
-    public Settings withFactory(Class<? extends DbFactory> FactoryClass) {
+    public Settings withDbFactory(Class<? extends DbFactory> FactoryClass) {
         factoryClass = FactoryClass;
+        return this;
+    }
+
+    public CriteriaFactory getCriteriaFactory() {
+        try {
+            return criteriaFactoryClass.newInstance();
+        } catch (Exception e) {
+           throw new MongoLinkError("Can,t create CriteriaFactory", e);
+        }
+    }
+
+    public Settings withCriteriaFactory(Class<? extends CriteriaFactory> criteriaFactoryClass) {
+        this.criteriaFactoryClass = criteriaFactoryClass;
         return this;
     }
 
@@ -53,6 +69,6 @@ public class Settings {
     private Class<? extends DbFactory> factoryClass;
     private String host;
     private int port;
-
     private String dbName;
+    private Class<? extends CriteriaFactory> criteriaFactoryClass;
 }

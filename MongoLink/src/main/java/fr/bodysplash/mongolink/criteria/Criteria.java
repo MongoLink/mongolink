@@ -5,6 +5,7 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import fr.bodysplash.mongolink.MongoSession;
 
+import java.util.Collections;
 import java.util.List;
 
 public class Criteria<T> {
@@ -34,6 +35,13 @@ public class Criteria<T> {
         return result;
     }
 
+    protected MongoSession getMongoSession() {
+        return mongoSession;
+    }
+
+    protected List<Restriction> getRestrictions() {
+        return Collections.unmodifiableList(restrictions);
+    }
 
     private Class<T> entityType;
     private MongoSession mongoSession;

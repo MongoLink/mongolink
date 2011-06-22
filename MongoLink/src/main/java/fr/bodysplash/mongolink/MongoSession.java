@@ -4,6 +4,7 @@ package fr.bodysplash.mongolink;
 import com.google.common.collect.Lists;
 import com.mongodb.*;
 import fr.bodysplash.mongolink.criteria.Criteria;
+import fr.bodysplash.mongolink.criteria.CriteriaFactory;
 import fr.bodysplash.mongolink.mapper.EntityMapper;
 import fr.bodysplash.mongolink.mapper.Mapper;
 import fr.bodysplash.mongolink.mapper.MapperContext;
@@ -12,8 +13,9 @@ import java.util.List;
 
 public class MongoSession {
 
-    public MongoSession(DB db) {
+    public MongoSession(DB db, CriteriaFactory criteriaFactory) {
         this.db = db;
+        this.criteriaFactory = criteriaFactory;
     }
 
     public void start() {
@@ -73,7 +75,7 @@ public class MongoSession {
         collection.update(query, update);
     }
 
-    private EntityMapper<?> entityMapper(Class<?> type) {
+    public EntityMapper<?> entityMapper(Class<?> type) {
         checkIsAnEntity(type);
         return (EntityMapper<?>) context.mapperFor(type);
     }
@@ -90,10 +92,11 @@ public class MongoSession {
     }
 
     public Criteria createCriteria(Class<?> type) {
-        return new Criteria(type, this);
+        return criteriaFactory.create(type, this);
     }
 
     private final DB db;
     private MapperContext context;
     private final List<Object> unitOfWork = Lists.newArrayList();
+    private CriteriaFactory criteriaFactory;
 }

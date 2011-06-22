@@ -13,8 +13,6 @@ import java.util.List;
 public class FakeDBCollection extends DBCollection {
 
 
-    private final List<DBObject> objects = Lists.newArrayList();
-
     public FakeDBCollection(FakeDB base, String name) {
         super(base, name);
     }
@@ -81,6 +79,8 @@ public class FakeDBCollection extends DBCollection {
     public long count() throws MongoException {
         return objects.size();
     }
+
+    private final List<DBObject> objects = Lists.newArrayList();
 
 
 }

@@ -7,9 +7,9 @@ import fr.bodysplash.mongolink.test.factory.FakeDbFactory;
 import fr.bodysplash.mongolink.test.factory.TestFactory;
 import org.junit.Test;
 
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.IsNull.notNullValue;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 
 public class TestsMongoSessionManager {
 
@@ -27,8 +27,7 @@ public class TestsMongoSessionManager {
     @Test
     public void canCreateSession() {
         ContextBuilder contextBuilder = TestFactory.contextBuilder().withFakeEntity();
-        MongoSessionManager sm = MongoSessionManager.create(contextBuilder, Settings.defaultInstance().withFactory(FakeDbFactory.class));
-
+        MongoSessionManager sm = MongoSessionManager.create(contextBuilder, Settings.defaultInstance().withDbFactory(FakeDbFactory.class));
 
         MongoSession session = sm.createSession();
 
@@ -36,6 +35,7 @@ public class TestsMongoSessionManager {
         session.save(new FakeEntity("id"));
         FakeDB db = (FakeDB) session.getDb();
         assertThat(db.collections.get("fakeentity").getObjects().size(), is(1));
+        assertThat(session.createCriteria(String.class), notNullValue());
     }
 
 }

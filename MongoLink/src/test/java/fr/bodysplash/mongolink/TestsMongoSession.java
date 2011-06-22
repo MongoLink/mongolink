@@ -6,6 +6,7 @@ import com.mongodb.DBObject;
 import com.mongodb.FakeDB;
 import com.mongodb.FakeDBCollection;
 import fr.bodysplash.mongolink.criteria.Criteria;
+import fr.bodysplash.mongolink.criteria.CriteriaFactory;
 import fr.bodysplash.mongolink.mapper.ContextBuilder;
 import fr.bodysplash.mongolink.test.entity.Comment;
 import fr.bodysplash.mongolink.test.entity.FakeEntity;
@@ -35,13 +36,13 @@ public class TestsMongoSession {
         db.collections.put("fakeentity", entities);
         db.collections.put("fakeentitywithnaturalid", fakeEntities);
         ContextBuilder cb = new ContextBuilder("fr.bodysplash.mongolink.test.simpleMapping");
-        session = new MongoSession(db);
+        session = new MongoSession(db, new CriteriaFactory());
         session.setMappingContext(cb.createContext());
     }
 
     @Test
     public void startAndStopASession() {
-        MongoSession session = new MongoSession(db);
+        MongoSession session = new MongoSession(db, new CriteriaFactory());
 
         session.start();
         session.stop();

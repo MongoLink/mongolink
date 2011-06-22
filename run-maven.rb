@@ -5,7 +5,7 @@ if ARGV.empty?
 	exit
 end
 
-projets = ["mongolink-parent", "mongolink-testtools", "mongolink"]
+projets = ["mongolink-parent", "mongolink-testtools", "mongolink", "mongolink-test"]
 
 projets.each do |projet|
 	Dir.chdir(projet)

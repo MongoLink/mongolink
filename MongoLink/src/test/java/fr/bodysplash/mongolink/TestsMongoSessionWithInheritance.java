@@ -4,6 +4,7 @@ package fr.bodysplash.mongolink;
 import com.mongodb.BasicDBObject;
 import com.mongodb.FakeDB;
 import com.mongodb.FakeDBCollection;
+import fr.bodysplash.mongolink.criteria.CriteriaFactory;
 import fr.bodysplash.mongolink.mapper.MapperContext;
 import fr.bodysplash.mongolink.test.entity.FakeChildEntity;
 import fr.bodysplash.mongolink.test.entity.FakeEntity;
@@ -23,7 +24,7 @@ public class TestsMongoSessionWithInheritance {
         entities = new FakeDBCollection(db, "fakeentity");
         db.collections.put("fakeentity", entities);
         FakeEntityWithSubclassMapping mapping = new FakeEntityWithSubclassMapping();
-        session = new MongoSession(db);
+        session = new MongoSession(db, new CriteriaFactory());
         MapperContext context = new MapperContext();
         mapping.buildMapper(context);
         session.setMappingContext(context);
