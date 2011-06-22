@@ -13,13 +13,21 @@ public abstract class Converter {
     }
 
     public static Converter forType(Class<?> type) {
-        if (type.isEnum()) {
+        if (isEnum(type)) {
             return new EnumConverter(type);
         }
-        if (DateTime.class.isAssignableFrom(type)) {
+        if (isDateTime(type)) {
             return new DateTimeConverter();
         }
         return PRIMITIVE_CONVERTER;
+    }
+
+    private static boolean isDateTime(Class<?> type) {
+        return DateTime.class.isAssignableFrom(type);
+    }
+
+    private static boolean isEnum(Class<?> type) {
+        return type.isEnum() || (type.getSuperclass() != null && type.getSuperclass().isEnum());
     }
 
     public abstract Object toDbValue(Object value);
