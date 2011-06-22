@@ -14,7 +14,7 @@ public class FakeRestrictionBetween extends RestrictionBetween implements FakeRe
     @Override
     public boolean isSatisfiedBy(DBObject entity) {
         final Comparable value = (Comparable) entity.get(getField());
-        return value.compareTo(start) >= 0 && value.compareTo(end) < 0;
+        return value.compareTo(getDBValue(start)) >= 0 && value.compareTo(getDBValue(end)) < 0;
     }
 
     private Object start;
