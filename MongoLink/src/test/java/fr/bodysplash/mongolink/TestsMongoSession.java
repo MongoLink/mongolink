@@ -193,7 +193,7 @@ public class TestsMongoSession {
     @Test
     @Ignore
     public void returnSameInstance() {
-         DBObject dbo = new BasicDBObject();
+        DBObject dbo = new BasicDBObject();
         dbo.put("_id", "a natural key");
         fakeEntities.insert(dbo);
 
