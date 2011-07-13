@@ -41,8 +41,7 @@
             <artifactId>mongolink-testtools</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>test</scope>
-        </dependency>jita
-        i
+        </dependency>
         <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
