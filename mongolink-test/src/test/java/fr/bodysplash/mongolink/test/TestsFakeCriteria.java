@@ -49,6 +49,20 @@ public class TestsFakeCriteria {
         assertThat(list.get(0).getValue(), is(4));
     }
 
+    @Test
+    public void canSearchByEqualityOnId() {
+        final String uri = "uri";
+        final FakeEntityWithStringId entity = new FakeEntityWithStringId(uri);
+        session.save(entity);
+        final Criteria criteria = session.createCriteria(FakeEntityWithStringId.class);
+        criteria.add(Restrictions.eq("_id", uri));
+
+        final List<FakeEntityWithStringId> list = criteria.list();
+
+        assertThat(list.size(), is(1));
+        assertThat(list.get(0).getUri(), is(uri));
+    }
+
     private void savedEntityWithValue(int value) {
         final FakeEntity element = new FakeEntity();
         element.setValue(value);
