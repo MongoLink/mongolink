@@ -18,14 +18,12 @@ public class ContextBuilder {
     private final String packageToScan;
 
     public ContextBuilder(String packageToScan) {
-
         this.packageToScan = packageToScan;
     }
 
     public MapperContext createContext() {
         MapperContext result = new MapperContext();
         try {
-            LOGGER.debug("Scanning package");
             Iterable<Class> classes = getClasses();
             for (Class currentClass : classes) {
                 if (isAMap(currentClass)) {
