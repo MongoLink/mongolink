@@ -17,10 +17,10 @@
     </distributionManagement>
 
     <scm>
-           <developerConnection>scm:git:git@github.com:BodySplash/MongoLink.git</developerConnection>
+        <developerConnection>scm:git:git@github.com:BodySplash/MongoLink.git</developerConnection>
     </scm>
 
-    
+
     <build>
         <pluginManagement>
             <plugins>
@@ -37,6 +37,13 @@
                 </plugin>
             </plugins>
         </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.2</version>
+            </plugin>
+        </plugins>
     </build>
     <dependencies>
         <dependency>
