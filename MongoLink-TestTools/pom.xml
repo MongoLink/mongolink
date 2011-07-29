@@ -12,6 +12,10 @@
 
     <artifactId>mongolink-testtools</artifactId>
 
+     <scm>
+        <developerConnection>scm:git:git@github.com:BodySplash/MongoLink.git</developerConnection>
+    </scm>
+
     <dependencies>
         <dependency>
             <groupId>org.hamcrest</groupId>
