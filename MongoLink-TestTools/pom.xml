@@ -12,7 +12,7 @@
 
     <artifactId>mongolink-testtools</artifactId>
 
-     <scm>
+    <scm>
         <developerConnection>scm:git:git@github.com:BodySplash/MongoLink.git</developerConnection>
     </scm>
 
@@ -33,19 +33,24 @@
         </dependency>
     </dependencies>
 
-	<build>
-		<plugins>
-			<plugin>
-	          <groupId>org.apache.maven.plugins</groupId>
-	          <artifactId>maven-source-plugin</artifactId>
-	          <executions>
-	              <execution>
-	                  <goals>
-	                      <goal>jar</goal>
-	                  </goals>
-	              </execution>
-	          </executions>
-			</plugin>
-		</plugins>
-	</build>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.2</version>
+            </plugin>
+        </plugins>
+    </build>
 </project>
