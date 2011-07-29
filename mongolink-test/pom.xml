@@ -28,6 +28,7 @@
     </parent>
 
     <artifactId>mongolink-test</artifactId>
+  <version>0.0.2-SNAPSHOT</version>
     <build>
         <plugins>
             <plugin>
