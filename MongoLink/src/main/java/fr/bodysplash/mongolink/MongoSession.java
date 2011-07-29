@@ -49,13 +49,18 @@ public class MongoSession {
         final List<T> result = Lists.newArrayList();
         DBCollection collection = db.getCollection(mapper.collectionName());
         DBCursor cursor = collection.find(query);
-        while (cursor.hasNext()) {
-            final DBObject dbObject = cursor.next();
-            T entity = mapper.toInstance(dbObject);
-            unitOfWork.add(entity);
-            result.add(entity);
+        try {
+            while (cursor.hasNext()) {
+                final DBObject dbObject = cursor.next();
+                T entity = mapper.toInstance(dbObject);
+                unitOfWork.add(entity);
+                result.add(entity);
+            }
+            return result;
+        } finally {
+            cursor.close();
         }
-        return result;
+
     }
 
     public void save(Object element) {
