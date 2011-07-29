@@ -7,6 +7,20 @@
     <artifactId>mongolink-parent</artifactId>
     <packaging>pom</packaging>
     <version>0.0.1-SNAPSHOT</version>
+
+    <distributionManagement>
+        <repository>
+            <id>nexus</id>
+            <name>nexus</name>
+            <url>http://nexus.bytedojo.com/content/repositories/mongolink-release/</url>
+        </repository>
+    </distributionManagement>
+
+    <scm>
+           <developerConnection>scm:git:git@github.com:BodySplash/MongoLink.git</developerConnection>
+    </scm>
+
+    
     <build>
         <pluginManagement>
             <plugins>
