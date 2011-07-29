@@ -17,7 +17,7 @@
     </distributionManagement>
 
     <scm>
-           <developerConnection>scm:git:git@github.com:BodySplash/MongoLink.git</developerConnection>
+           <developerConnection>scm:git:git@github.com:BodySplash/MongoLink.git/mongolink-parent</developerConnection>
     </scm>
 
     
