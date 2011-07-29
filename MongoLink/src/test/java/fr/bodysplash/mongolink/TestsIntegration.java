@@ -3,9 +3,9 @@ package fr.bodysplash.mongolink;
 
 import com.google.common.collect.Lists;
 import com.mongodb.*;
-import fr.bodysplash.mongolink.criteria.Criteria;
-import fr.bodysplash.mongolink.criteria.Restrictions;
-import fr.bodysplash.mongolink.mapper.ContextBuilder;
+import fr.bodysplash.mongolink.domain.criteria.Criteria;
+import fr.bodysplash.mongolink.domain.criteria.Restrictions;
+import fr.bodysplash.mongolink.domain.mapper.ContextBuilder;
 import fr.bodysplash.mongolink.test.entity.FakeChildEntity;
 import fr.bodysplash.mongolink.test.entity.FakeEntity;
 import fr.bodysplash.mongolink.test.entity.FakeEntityWithNaturalId;

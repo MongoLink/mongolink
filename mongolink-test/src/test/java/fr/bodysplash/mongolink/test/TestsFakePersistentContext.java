@@ -2,9 +2,9 @@ package fr.bodysplash.mongolink.test;
 
 import com.mongodb.FakeDB;
 import fr.bodysplash.mongolink.MongoSession;
-import fr.bodysplash.mongolink.criteria.Criteria;
-import fr.bodysplash.mongolink.criteria.Restriction;
-import fr.bodysplash.mongolink.criteria.Restrictions;
+import fr.bodysplash.mongolink.domain.criteria.Criteria;
+import fr.bodysplash.mongolink.domain.criteria.Restriction;
+import fr.bodysplash.mongolink.domain.criteria.Restrictions;
 import fr.bodysplash.mongolink.test.criteria.FakeRestrictionEq;
 import org.junit.Before;
 import org.junit.Test;

@@ -1,8 +1,8 @@
 package fr.bodysplash.mongolink.test.criteria;
 
-import fr.bodysplash.mongolink.criteria.Restriction;
-import fr.bodysplash.mongolink.criteria.RestrictionBetween;
-import fr.bodysplash.mongolink.criteria.RestrictionFactory;
+import fr.bodysplash.mongolink.domain.criteria.Restriction;
+import fr.bodysplash.mongolink.domain.criteria.RestrictionFactory;
+import fr.bodysplash.mongolink.domain.criteria.RestrictionBetween;
 
 public class FakeRestrictonFactory extends RestrictionFactory {
 

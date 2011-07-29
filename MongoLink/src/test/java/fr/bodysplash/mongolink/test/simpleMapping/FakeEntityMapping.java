@@ -1,6 +1,6 @@
 package fr.bodysplash.mongolink.test.simpleMapping;
 
-import fr.bodysplash.mongolink.mapper.ClassMap;
+import fr.bodysplash.mongolink.domain.mapper.ClassMap;
 import fr.bodysplash.mongolink.test.entity.FakeEntity;
 
 public class FakeEntityMapping extends ClassMap<FakeEntity> {

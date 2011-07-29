@@ -3,11 +3,11 @@ package fr.bodysplash.mongolink;
 
 import com.google.common.collect.Lists;
 import com.mongodb.*;
-import fr.bodysplash.mongolink.criteria.Criteria;
-import fr.bodysplash.mongolink.criteria.CriteriaFactory;
-import fr.bodysplash.mongolink.mapper.EntityMapper;
-import fr.bodysplash.mongolink.mapper.Mapper;
-import fr.bodysplash.mongolink.mapper.MapperContext;
+import fr.bodysplash.mongolink.domain.criteria.Criteria;
+import fr.bodysplash.mongolink.domain.criteria.CriteriaFactory;
+import fr.bodysplash.mongolink.domain.mapper.*;
+import fr.bodysplash.mongolink.domain.mapper.EntityMapper;
+import fr.bodysplash.mongolink.domain.mapper.MapperContext;
 
 import java.util.List;
 

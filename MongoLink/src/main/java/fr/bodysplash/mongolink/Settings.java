@@ -1,6 +1,6 @@
 package fr.bodysplash.mongolink;
 
-import fr.bodysplash.mongolink.criteria.CriteriaFactory;
+import fr.bodysplash.mongolink.domain.criteria.CriteriaFactory;
 
 public class Settings {
 

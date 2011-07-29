@@ -8,9 +8,9 @@ import com.mongodb.DBObject;
 import com.mongodb.FakeDB;
 import com.mongodb.FakeDBCollection;
 import fr.bodysplash.mongolink.MongoSession;
-import fr.bodysplash.mongolink.criteria.Criteria;
-import fr.bodysplash.mongolink.criteria.Restriction;
-import fr.bodysplash.mongolink.mapper.EntityMapper;
+import fr.bodysplash.mongolink.domain.criteria.*;
+import fr.bodysplash.mongolink.domain.criteria.Restriction;
+import fr.bodysplash.mongolink.domain.mapper.EntityMapper;
 import fr.bodysplash.mongolink.test.criteria.FakeRestriction;
 
 import java.util.List;

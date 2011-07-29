@@ -1,6 +1,6 @@
 package fr.bodysplash.mongolink.test.factory;
 
-import fr.bodysplash.mongolink.mapper.ContextBuilder;
+import fr.bodysplash.mongolink.domain.mapper.ContextBuilder;
 
 public class ContextBuilderTestFactory {
 

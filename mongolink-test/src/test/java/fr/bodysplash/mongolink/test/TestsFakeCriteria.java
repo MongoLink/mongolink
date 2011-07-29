@@ -1,8 +1,8 @@
 package fr.bodysplash.mongolink.test;
 
 import fr.bodysplash.mongolink.MongoSession;
-import fr.bodysplash.mongolink.criteria.Criteria;
-import fr.bodysplash.mongolink.criteria.Restrictions;
+import fr.bodysplash.mongolink.domain.criteria.Criteria;
+import fr.bodysplash.mongolink.domain.criteria.Restrictions;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

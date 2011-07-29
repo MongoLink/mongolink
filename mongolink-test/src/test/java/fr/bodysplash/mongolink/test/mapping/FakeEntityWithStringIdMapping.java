@@ -1,6 +1,6 @@
 package fr.bodysplash.mongolink.test.mapping;
 
-import fr.bodysplash.mongolink.mapper.ClassMap;
+import fr.bodysplash.mongolink.domain.mapper.ClassMap;
 import fr.bodysplash.mongolink.test.FakeEntityWithStringId;
 
 

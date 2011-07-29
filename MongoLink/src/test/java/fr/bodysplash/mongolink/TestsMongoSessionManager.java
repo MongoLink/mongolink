@@ -1,7 +1,7 @@
 package fr.bodysplash.mongolink;
 
 import com.mongodb.FakeDB;
-import fr.bodysplash.mongolink.mapper.ContextBuilder;
+import fr.bodysplash.mongolink.domain.mapper.ContextBuilder;
 import fr.bodysplash.mongolink.test.entity.FakeEntity;
 import fr.bodysplash.mongolink.test.factory.FakeDbFactory;
 import fr.bodysplash.mongolink.test.factory.TestFactory;

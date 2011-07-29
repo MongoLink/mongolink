@@ -1,8 +1,8 @@
 package fr.bodysplash.mongolink;
 
-import fr.bodysplash.mongolink.mapper.ContextBuilder;
-import fr.bodysplash.mongolink.mapper.Mapper;
-import fr.bodysplash.mongolink.mapper.MapperContext;
+import fr.bodysplash.mongolink.domain.mapper.ContextBuilder;
+import fr.bodysplash.mongolink.domain.mapper.Mapper;
+import fr.bodysplash.mongolink.domain.mapper.MapperContext;
 import fr.bodysplash.mongolink.test.entity.Comment;
 import fr.bodysplash.mongolink.test.entity.FakeChildEntity;
 import fr.bodysplash.mongolink.test.entity.FakeEntity;

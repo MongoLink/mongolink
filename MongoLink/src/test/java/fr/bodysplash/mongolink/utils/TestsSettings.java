@@ -3,8 +3,8 @@ package fr.bodysplash.mongolink.utils;
 import fr.bodysplash.mongolink.DbFactory;
 import fr.bodysplash.mongolink.MongoSession;
 import fr.bodysplash.mongolink.Settings;
-import fr.bodysplash.mongolink.criteria.Criteria;
-import fr.bodysplash.mongolink.criteria.CriteriaFactory;
+import fr.bodysplash.mongolink.domain.criteria.Criteria;
+import fr.bodysplash.mongolink.domain.criteria.CriteriaFactory;
 import fr.bodysplash.mongolink.test.factory.FakeDbFactory;
 import org.junit.Test;
 

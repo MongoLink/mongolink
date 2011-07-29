@@ -1,9 +1,9 @@
 package fr.bodysplash.mongolink;
 
 import com.mongodb.DB;
-import fr.bodysplash.mongolink.criteria.CriteriaFactory;
-import fr.bodysplash.mongolink.mapper.ContextBuilder;
-import fr.bodysplash.mongolink.mapper.MapperContext;
+import fr.bodysplash.mongolink.domain.criteria.CriteriaFactory;
+import fr.bodysplash.mongolink.domain.mapper.ContextBuilder;
+import fr.bodysplash.mongolink.domain.mapper.MapperContext;
 
 public class MongoSessionManager {
 
