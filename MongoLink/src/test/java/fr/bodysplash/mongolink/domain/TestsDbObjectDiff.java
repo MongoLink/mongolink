@@ -49,6 +49,9 @@ public class TestsDbObjectDiff {
 
         final DBObject diff = new DbObjectDiff(origin).compareWith(dirty);
 
-        assertThat(diff.keySet().size(), is(2));
+        final DBObject $set = (DBObject) diff.get("$set");
+        assertThat($set.keySet().size(), is(2));
+        assertThat((String) $set.get("value"), is("new value"));
+        assertThat((String) $set.get("other value"), is("new other value"));
     }
 }

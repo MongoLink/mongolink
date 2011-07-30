@@ -1,8 +1,8 @@
 package fr.bodysplash.mongolink.domain;
 
 
-import com.google.common.collect.Iterables;
-import com.mongodb.*;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
 
 public class DbObjectDiff {
 
@@ -12,22 +12,26 @@ public class DbObjectDiff {
 
     public DBObject compareWith(DBObject target) {
         final BasicDBObject result = new BasicDBObject();
-        final String key = Iterables.get(origin.keySet(), 0);
-        if (hasDifference(key, target)) {
-            final BasicDBObject value = diffFor(key, target);
-            result.append("$set", value);
+
+        final BasicDBObject set = generateSet(target);
+        if (!set.isEmpty()) {
+            result.append("$set", set);
         }
         return result;
     }
 
-    private boolean hasDifference(final String key, final DBObject target) {
-        return !origin.get(key).equals(target.get(key));
+    private BasicDBObject generateSet(DBObject target) {
+        BasicDBObject set = new BasicDBObject();
+        for (String key : target.keySet()) {
+            if (hasDifference(key, target)) {
+                set.append(key, target.get(key));
+            }
+        }
+        return set;
     }
 
-    private BasicDBObject diffFor(final String key, final DBObject target) {
-        final BasicDBObject result11 = new BasicDBObject();
-        result11.append(key, target.get(key));
-        return result11;
+    private boolean hasDifference(final String key, final DBObject target) {
+        return !origin.get(key).equals(target.get(key));
     }
 
     private BasicDBObject origin;
