@@ -3,12 +3,12 @@ package fr.bodysplash.mongolink.domain.mapper;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
+import fr.bodysplash.mongolink.MongoLinkError;
 import fr.bodysplash.mongolink.utils.MethodContainer;
 import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 public class IdMapper {
@@ -23,20 +23,24 @@ public class IdMapper {
         return "_id";
     }
 
-    public void saveTo(Object element, BasicDBObject object) {
+    public void saveTo(Object entity, BasicDBObject object) {
         try {
-            object.put(dbFieldName(), getIdValue(element));
+            object.put(dbFieldName(), getIdValue(entity));
         } catch (Exception e) {
             LOGGER.error("Can't saveInto property " + name, e);
         }
     }
 
-    private Object getIdValue(Object element) throws IllegalAccessException, InvocationTargetException {
-        Object keyValue = method.invoke(element);
-        if (generationStrategy == IdGeneration.Auto && keyValue != null) {
-            return new ObjectId(keyValue.toString());
+    protected Object getIdValue(Object element)  {
+        try {
+            Object keyValue = method.invoke(element);
+            if (generationStrategy == IdGeneration.Auto && keyValue != null) {
+                return new ObjectId(keyValue.toString());
+            }
+            return keyValue;
+        } catch (Exception e) {
+            throw new MongoLinkError("Can't get id value", e);
         }
-        return keyValue;
     }
 
     public void populateFrom(Object instance, DBObject from) {

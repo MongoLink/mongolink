@@ -27,10 +27,6 @@ public class EntityMapper<T> extends Mapper<T> {
         idMapper.saveTo(element, object);
     }
 
-    private boolean hasId() {
-        return idMapper != null;
-    }
-
     void setId(IdMapper idMapper) {
         idMapper.setMapper(this);
         this.idMapper = idMapper;
@@ -38,6 +34,10 @@ public class EntityMapper<T> extends Mapper<T> {
 
     public Object getDbId(String id) {
         return idMapper.getDbValue(id);
+    }
+
+    public Object getId(Object entity) {
+        return idMapper.getIdValue(entity);
     }
 
     <U> void addSubclass(SubclassMapper<U> mapper) {

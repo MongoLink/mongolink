@@ -3,6 +3,7 @@ package fr.bodysplash.mongolink;
 
 import com.google.common.collect.Lists;
 import com.mongodb.*;
+import fr.bodysplash.mongolink.domain.UnitOfWork;
 import fr.bodysplash.mongolink.domain.criteria.Criteria;
 import fr.bodysplash.mongolink.domain.criteria.CriteriaFactory;
 import fr.bodysplash.mongolink.domain.mapper.*;
@@ -23,9 +24,7 @@ public class MongoSession {
     }
 
     public void stop() {
-        for (Object o : unitOfWork) {
-            update(o);
-        }
+        unitOfWork.flush();
         db.requestDone();
     }
 
@@ -36,6 +35,9 @@ public class MongoSession {
     public <T> T get(String id, Class<T> entityType) {
         EntityMapper<T> mapper = (EntityMapper<T>) entityMapper(entityType);
         Object dbId = mapper.getDbId(id);
+        if(unitOfWork.contains(dbId)) {
+            return unitOfWork.get(dbId);
+        }
         DBObject query = new BasicDBObject("_id", dbId);
         final List<T> list = executeQuery(entityType, query);
         if (list.size() > 0) {
@@ -53,7 +55,7 @@ public class MongoSession {
             while (cursor.hasNext()) {
                 final DBObject dbObject = cursor.next();
                 T entity = mapper.toInstance(dbObject);
-                unitOfWork.add(entity);
+                unitOfWork.add(mapper.getId(entity), entity, dbObject);
                 result.add(entity);
             }
             return result;
@@ -68,7 +70,7 @@ public class MongoSession {
         DBObject dbObject = mapper.toDBObject(element);
         db.getCollection(mapper.collectionName()).insert(dbObject);
         mapper.populateId(element, dbObject);
-        unitOfWork.add(element);
+        unitOfWork.add(mapper.getId(element), element, dbObject);
     }
 
     public void update(Object element) {
@@ -102,6 +104,6 @@ public class MongoSession {
 
     private final DB db;
     private MapperContext context;
-    private final List<Object> unitOfWork = Lists.newArrayList();
+    private final UnitOfWork unitOfWork = new UnitOfWork(this);
     private CriteriaFactory criteriaFactory;
 }

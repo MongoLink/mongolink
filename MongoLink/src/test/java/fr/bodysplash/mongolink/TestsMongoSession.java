@@ -191,7 +191,6 @@ public class TestsMongoSession {
     }
 
     @Test
-    @Ignore
     public void returnSameInstance() {
         DBObject dbo = new BasicDBObject();
         dbo.put("_id", "a natural key");
@@ -202,6 +201,8 @@ public class TestsMongoSession {
 
         assertThat(first, sameInstance(second));
     }
+
+    
 
     private void createEntity(String id, String url) {
         DBObject dbo = new BasicDBObject();

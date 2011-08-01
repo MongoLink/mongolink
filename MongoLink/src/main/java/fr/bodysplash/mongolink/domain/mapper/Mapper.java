@@ -105,6 +105,5 @@ public abstract class Mapper<T> {
     protected final Class<T> persistentType;
     private final List<PropertyMapper> properties = Lists.newArrayList();
     private final List<CollectionMapper> collections = Lists.newArrayList();
-
     private MapperContext context;
 }
