@@ -38,8 +38,8 @@ public class MongoSession {
     public <T> T get(String id, Class<T> entityType) {
         EntityMapper<T> mapper = (EntityMapper<T>) entityMapper(entityType);
         Object dbId = mapper.getDbId(id);
-        if (unitOfWork.contains(dbId)) {
-            return unitOfWork.getEntity(dbId);
+        if (unitOfWork.contains(entityType, dbId)) {
+            return unitOfWork.getEntity(entityType, dbId);
         }
         DBObject query = new BasicDBObject("_id", dbId);
         final List<T> list = executeQuery(entityType, query);
@@ -66,8 +66,8 @@ public class MongoSession {
     }
 
     private <T> T loadEntity(EntityMapper<T> mapper, DBObject dbObject) {
-        if (unitOfWork.contains(mapper.getId(dbObject))) {
-            return unitOfWork.getEntity(mapper.getId(dbObject));
+        if (unitOfWork.contains(mapper.getPersistentType(), mapper.getId(dbObject))) {
+            return unitOfWork.getEntity(mapper.getPersistentType(), mapper.getId(dbObject));
         } else {
             T entity = mapper.toInstance(dbObject);
             unitOfWork.add(mapper.getId(entity), entity, dbObject);
@@ -85,7 +85,7 @@ public class MongoSession {
 
     public void update(Object element) {
         EntityMapper<?> mapper = entityMapper(element.getClass());
-        final DBObject initialValue = unitOfWork.getDBOBject(mapper.getId(element));
+        final DBObject initialValue = unitOfWork.getDBOBject(element.getClass(), mapper.getId(element));
         DBObject update = mapper.toDBObject(element);
         DBCollection collection = db.getCollection(mapper.collectionName());
         updateStrategy.update(initialValue, update, collection);

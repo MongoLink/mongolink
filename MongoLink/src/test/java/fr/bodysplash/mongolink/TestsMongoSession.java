@@ -12,6 +12,7 @@ import fr.bodysplash.mongolink.domain.mapper.ContextBuilder;
 import fr.bodysplash.mongolink.test.entity.Comment;
 import fr.bodysplash.mongolink.test.entity.FakeEntity;
 import fr.bodysplash.mongolink.test.entity.FakeEntityWithNaturalId;
+import fr.bodysplash.mongolink.test.entity.OtherEntityWithNaturalId;
 import org.bson.types.ObjectId;
 import org.junit.Assert;
 import org.junit.Before;
@@ -38,6 +39,7 @@ public class TestsMongoSession {
         fakeEntities = new FakeDBCollection(db, "fakeentitywithnaturalid");
         db.collections.put("fakeentity", entities);
         db.collections.put("fakeentitywithnaturalid", fakeEntities);
+        db.collections.put("otherentitywithnaturalid", new FakeDBCollection(db, "otherentitywithnaturalid"));
         ContextBuilder cb = new ContextBuilder("fr.bodysplash.mongolink.test.simpleMapping");
         session = new MongoSession(db, new CriteriaFactory());
         session.setMappingContext(cb.createContext());
@@ -227,7 +229,7 @@ public class TestsMongoSession {
         session.save(new FakeEntity("this is a value"));
         final Criteria criteria = session.createCriteria(FakeEntity.class);
 
-        List<FakeEntity> list = criteria.list();
+        List list = criteria.list();
 
         assertThat(list.size(), is(2));
     }
@@ -253,6 +255,16 @@ public class TestsMongoSession {
         final FakeEntity instanceByCriteria = (FakeEntity) criteria.list().get(0);
 
         assertThat(instanceById, sameInstance(instanceByCriteria));
+    }
+
+    @Test
+    public void entitiesAreCachedUsingTheirTypeAndId() {
+        session.save(new FakeEntityWithNaturalId("cle unique"));
+        session.save(new OtherEntityWithNaturalId("cle unique"));
+
+        final FakeEntityWithNaturalId entity = session.get("cle unique", FakeEntityWithNaturalId.class);
+
+        assertThat(entity, notNullValue());
     }
 
     private void createEntity(String id, String url) {

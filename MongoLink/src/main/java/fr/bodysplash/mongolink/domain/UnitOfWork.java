@@ -1,5 +1,6 @@
 package fr.bodysplash.mongolink.domain;
 
+import com.google.common.base.Objects;
 import com.google.common.collect.Maps;
 import com.mongodb.DBObject;
 import fr.bodysplash.mongolink.MongoSession;
@@ -13,7 +14,7 @@ public class UnitOfWork {
     }
 
     public void add(Object id, Object entity, DBObject initialValue) {
-        values.put(id, new Value(entity, initialValue));
+        values.put(new Key(entity.getClass(), id), new Value(entity, initialValue));
     }
 
     public void flush() {
@@ -22,20 +23,24 @@ public class UnitOfWork {
         }
     }
 
-    public boolean contains(Object dbId) {
-        return values.containsKey(dbId);
+    public boolean contains(Class<?> type, Object dbId) {
+        return values.containsKey(new Key(type, dbId));
     }
 
-    public <T> T getEntity(Object dbId) {
-        return (T) values.get(dbId).entity;
+    public <T> T getEntity(Class<?> type, Object dbId) {
+        return (T) getValue(type, dbId).entity;
     }
 
-    public DBObject getDBOBject(Object dbId) {
-        return values.get(dbId).initialValue;
+    public DBObject getDBOBject(Class<?> type, Object dbId) {
+        return getValue(type, dbId).initialValue;
+    }
+
+    private Value getValue(Class<?> type, Object dbId) {
+        return values.get(new Key(type, dbId));
     }
 
     public void update(Object id, Object element, DBObject update) {
-        values.put(id, new Value(element, update));
+        values.put(new Key(element.getClass(), id), new Value(element, update));
     }
 
     private class Value {
@@ -49,6 +54,30 @@ public class UnitOfWork {
         DBObject initialValue;
     }
 
+    private class Key {
+
+        private Key(Class<?> type, Object id) {
+            this.type = type;
+            this.id = id;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            Key other = (Key) o;
+            return Objects.equal(type, other.type) && Objects.equal(id, other.id);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hashCode(type, id);
+        }
+
+        Class<?> type;
+
+        Object id;
+    }
+
     private MongoSession session;
-    private Map<Object, Value> values = Maps.newHashMap();
+
+    private Map<Key, Value> values = Maps.newHashMap();
 }
