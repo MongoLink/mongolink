@@ -40,6 +40,10 @@ public class EntityMapper<T> extends Mapper<T> {
         return idMapper.getIdValue(entity);
     }
 
+    public Object getId(DBObject dbo) {
+        return idMapper.getIdValue(dbo);
+    }
+
     <U> void addSubclass(SubclassMapper<U> mapper) {
         mapper.setParentMapper(this);
         subclasses.put(mapper.discriminator(), mapper);

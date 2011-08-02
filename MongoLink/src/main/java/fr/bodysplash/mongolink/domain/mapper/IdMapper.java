@@ -47,12 +47,16 @@ public class IdMapper {
         try {
             Field field = mapper.getPersistentType().getDeclaredField(name);
             field.setAccessible(true);
-            Object value = from.get(dbFieldName());
+            Object value = getIdValue(from);
             field.set(instance, value.toString());
             field.setAccessible(false);
         } catch (Exception e) {
             LOGGER.error(e);
         }
+    }
+
+    protected Object getIdValue(DBObject from) {
+        return from.get(dbFieldName());
     }
 
     public void setMapper(EntityMapper<?> mapper) {

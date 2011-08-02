@@ -179,6 +179,20 @@ public class TestsMongoSession {
     }
 
     @Test
+    public void dontMakeUpdateTwice() {
+        session.setUpdateStrategy(UpdateStrategies.DIFF);
+        FakeEntity entity = new FakeEntity("this is a value");
+        session.save(entity);
+        entity.setValue("a value");
+
+        session.update(entity);
+        final DBObject update = entities.lastUpdate();
+        session.update(entity);
+
+        assertThat(update, sameInstance(entities.lastUpdate()));
+    }
+
+    @Test
     public void dontMakeUpdateWhenNoDiffWithDiffStrategy() {
         session.setUpdateStrategy(UpdateStrategies.DIFF);
         FakeEntity entity = new FakeEntity("this is a value");
@@ -219,7 +233,7 @@ public class TestsMongoSession {
     }
 
     @Test
-    public void returnSameInstance() {
+    public void returnSameInstanceOnGetById() {
         DBObject dbo = new BasicDBObject();
         dbo.put("_id", "a natural key");
         fakeEntities.insert(dbo);
@@ -230,6 +244,16 @@ public class TestsMongoSession {
         assertThat(first, sameInstance(second));
     }
 
+    @Test
+    public void returnSameInstanceOnGetByCriteria() {
+        createEntity("4d53b7118653a70549fe1b78", "plop");
+        final Criteria criteria = session.createCriteria(FakeEntity.class);
+
+        final FakeEntity instanceById = session.get("4d53b7118653a70549fe1b78", FakeEntity.class);
+        final FakeEntity instanceByCriteria = (FakeEntity) criteria.list().get(0);
+
+        assertThat(instanceById, sameInstance(instanceByCriteria));
+    }
 
     private void createEntity(String id, String url) {
         DBObject dbo = new BasicDBObject();

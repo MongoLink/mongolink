@@ -56,16 +56,23 @@ public class MongoSession {
         DBCursor cursor = collection.find(query);
         try {
             while (cursor.hasNext()) {
-                final DBObject dbObject = cursor.next();
-                T entity = mapper.toInstance(dbObject);
-                unitOfWork.add(mapper.getId(entity), entity, dbObject);
-                result.add(entity);
+                result.add(loadEntity(mapper, cursor.next()));
             }
             return result;
         } finally {
             cursor.close();
         }
 
+    }
+
+    private <T> T loadEntity(EntityMapper<T> mapper, DBObject dbObject) {
+        if (unitOfWork.contains(mapper.getId(dbObject))) {
+            return unitOfWork.getEntity(mapper.getId(dbObject));
+        } else {
+            T entity = mapper.toInstance(dbObject);
+            unitOfWork.add(mapper.getId(entity), entity, dbObject);
+            return entity;
+        }
     }
 
     public void save(Object element) {
@@ -82,6 +89,7 @@ public class MongoSession {
         DBObject update = mapper.toDBObject(element);
         DBCollection collection = db.getCollection(mapper.collectionName());
         updateStrategy.update(initialValue, update, collection);
+        unitOfWork.update(mapper.getId(element), element, update);
     }
 
     public EntityMapper<?> entityMapper(Class<?> type) {
