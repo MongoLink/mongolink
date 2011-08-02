@@ -83,6 +83,16 @@
                 <artifactId>mockito-all</artifactId>
                 <version>1.8.0</version>
             </dependency>
+            <dependency>
+            	<groupId>fr.bodysplash</groupId>
+            	<artifactId>mongolink</artifactId>
+            	<version>${project.version}</version>
+        	</dependency>
+	        <dependency>
+    	        <groupId>fr.bodysplash</groupId>
+        	    <artifactId>mongolink-testtools</artifactId>
+               	<version>${project.version}</version>
+        	</dependency>
         </dependencies>
     </dependencyManagement>
 

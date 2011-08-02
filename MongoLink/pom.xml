@@ -41,7 +41,6 @@
         <dependency>
             <groupId>fr.bodysplash</groupId>
             <artifactId>mongolink-testtools</artifactId>
-            <version>0.0.2-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
         <dependency>
