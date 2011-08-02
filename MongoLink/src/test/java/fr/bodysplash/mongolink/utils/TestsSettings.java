@@ -3,6 +3,7 @@ package fr.bodysplash.mongolink.utils;
 import fr.bodysplash.mongolink.DbFactory;
 import fr.bodysplash.mongolink.MongoSession;
 import fr.bodysplash.mongolink.Settings;
+import fr.bodysplash.mongolink.domain.UpdateStrategies;
 import fr.bodysplash.mongolink.domain.criteria.Criteria;
 import fr.bodysplash.mongolink.domain.criteria.CriteriaFactory;
 import fr.bodysplash.mongolink.test.factory.FakeDbFactory;
@@ -34,6 +35,7 @@ public class TestsSettings {
         assertThat(dbFactory.getPort(), is(27017));
         assertThat(dbFactory.getHost(), is("127.0.0.1"));
         assertThat(settings.getDbName(), is("test"));
+        assertThat(settings.getUpdateStrategy(), is(UpdateStrategies.OVERWRITE));
     }
 
     @Test
@@ -51,6 +53,13 @@ public class TestsSettings {
 
         assertThat(criteriaFactory, notNullValue());
         assertThat(criteriaFactory, instanceOf(DummyCriteriaFactory.class));
+    }
+
+    @Test
+    public void canDefineUpdateStrategy() {
+        Settings settings = Settings.defaultInstance().withDefaultUpdateStrategy(UpdateStrategies.DIFF);
+
+        assertThat(settings.getUpdateStrategy(), is(UpdateStrategies.DIFF));
     }
 
     public static class DummyCriteriaFactory extends CriteriaFactory {

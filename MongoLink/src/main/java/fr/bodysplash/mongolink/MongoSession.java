@@ -4,11 +4,14 @@ package fr.bodysplash.mongolink;
 import com.google.common.collect.Lists;
 import com.mongodb.*;
 import fr.bodysplash.mongolink.domain.UnitOfWork;
+import fr.bodysplash.mongolink.domain.UpdateStrategies;
 import fr.bodysplash.mongolink.domain.criteria.Criteria;
 import fr.bodysplash.mongolink.domain.criteria.CriteriaFactory;
-import fr.bodysplash.mongolink.domain.mapper.*;
 import fr.bodysplash.mongolink.domain.mapper.EntityMapper;
+import fr.bodysplash.mongolink.domain.mapper.Mapper;
 import fr.bodysplash.mongolink.domain.mapper.MapperContext;
+import fr.bodysplash.mongolink.domain.updateStategy.OverwriteStrategy;
+import fr.bodysplash.mongolink.domain.updateStategy.UpdateStrategy;
 
 import java.util.List;
 
@@ -35,8 +38,8 @@ public class MongoSession {
     public <T> T get(String id, Class<T> entityType) {
         EntityMapper<T> mapper = (EntityMapper<T>) entityMapper(entityType);
         Object dbId = mapper.getDbId(id);
-        if(unitOfWork.contains(dbId)) {
-            return unitOfWork.get(dbId);
+        if (unitOfWork.contains(dbId)) {
+            return unitOfWork.getEntity(dbId);
         }
         DBObject query = new BasicDBObject("_id", dbId);
         final List<T> list = executeQuery(entityType, query);
@@ -75,11 +78,10 @@ public class MongoSession {
 
     public void update(Object element) {
         EntityMapper<?> mapper = entityMapper(element.getClass());
-        DBCollection collection = db.getCollection(mapper.collectionName());
+        final DBObject initialValue = unitOfWork.getDBOBject(mapper.getId(element));
         DBObject update = mapper.toDBObject(element);
-        DBObject query = new BasicDBObject();
-        query.put("_id", update.get("_id"));
-        collection.update(query, update);
+        DBCollection collection = db.getCollection(mapper.collectionName());
+        updateStrategy.update(initialValue, update, collection);
     }
 
     public EntityMapper<?> entityMapper(Class<?> type) {
@@ -102,8 +104,17 @@ public class MongoSession {
         return criteriaFactory.create(type, this);
     }
 
+    public UpdateStrategy getUpdateStrategy() {
+        return updateStrategy;
+    }
+
+    public void setUpdateStrategy(UpdateStrategies updateStrategy) {
+        this.updateStrategy = updateStrategy.instance();
+    }
+
     private final DB db;
     private MapperContext context;
     private final UnitOfWork unitOfWork = new UnitOfWork(this);
     private CriteriaFactory criteriaFactory;
+    private UpdateStrategy updateStrategy = new OverwriteStrategy();
 }

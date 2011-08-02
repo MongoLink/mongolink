@@ -23,6 +23,9 @@ public class FakeDBCollection extends DBCollection {
 
     @Override
     public WriteResult insert(DBObject[] arr, WriteConcern concern) throws MongoException {
+        if(arr == null) {
+            return null;
+        }
         List<DBObject> dbObjects = Arrays.asList(arr);
         objects.addAll(dbObjects);
         for (DBObject dbObject : dbObjects) {
@@ -35,6 +38,7 @@ public class FakeDBCollection extends DBCollection {
 
     @Override
     public WriteResult update(DBObject q, DBObject o, boolean upsert, boolean multi, WriteConcern concern) throws MongoException {
+        lastUpdate = o;
         DBObject old = findOne(q);
         objects.remove(old);
         objects.add(o);
@@ -80,7 +84,10 @@ public class FakeDBCollection extends DBCollection {
         return objects.size();
     }
 
+    public DBObject lastUpdate() {
+        return lastUpdate;
+    }
+
     private final List<DBObject> objects = Lists.newArrayList();
-
-
+    private DBObject lastUpdate;
 }

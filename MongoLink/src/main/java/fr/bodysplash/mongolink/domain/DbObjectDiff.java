@@ -7,7 +7,7 @@ import com.mongodb.DBObject;
 
 public class DbObjectDiff {
 
-    public DbObjectDiff(final BasicDBObject origin) {
+    public DbObjectDiff(final DBObject origin) {
         this.origin = origin;
     }
 
@@ -66,7 +66,7 @@ public class DbObjectDiff {
         }
     }
 
-    private BasicDBObject origin;
+    private DBObject origin;
     private BasicDBObject set;
     private BasicDBObject push;
 }

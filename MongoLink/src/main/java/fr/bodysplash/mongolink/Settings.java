@@ -1,5 +1,6 @@
 package fr.bodysplash.mongolink;
 
+import fr.bodysplash.mongolink.domain.UpdateStrategies;
 import fr.bodysplash.mongolink.domain.criteria.CriteriaFactory;
 
 public class Settings {
@@ -65,10 +66,20 @@ public class Settings {
         return this;
     }
 
+    public UpdateStrategies getUpdateStrategy() {
+        return updateStrategy;
+    }
+
+    public Settings withDefaultUpdateStrategy(UpdateStrategies strategy) {
+        updateStrategy = strategy;
+        return this;
+    }
+
 
     private Class<? extends DbFactory> factoryClass;
     private String host;
     private int port;
     private String dbName;
     private Class<? extends CriteriaFactory> criteriaFactoryClass;
+    private UpdateStrategies updateStrategy = UpdateStrategies.OVERWRITE;
 }

@@ -5,6 +5,7 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.mongodb.FakeDB;
 import com.mongodb.FakeDBCollection;
+import fr.bodysplash.mongolink.domain.UpdateStrategies;
 import fr.bodysplash.mongolink.domain.criteria.Criteria;
 import fr.bodysplash.mongolink.domain.criteria.CriteriaFactory;
 import fr.bodysplash.mongolink.domain.mapper.ContextBuilder;
@@ -12,16 +13,18 @@ import fr.bodysplash.mongolink.test.entity.Comment;
 import fr.bodysplash.mongolink.test.entity.FakeEntity;
 import fr.bodysplash.mongolink.test.entity.FakeEntityWithNaturalId;
 import org.bson.types.ObjectId;
-import org.hamcrest.Matchers;
-import org.junit.*;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mockito.InOrder;
-import org.mockito.Mockito;
 
 import java.util.List;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 public class TestsMongoSession {
 
@@ -30,7 +33,7 @@ public class TestsMongoSession {
 
     @Before
     public void before() {
-        db = Mockito.spy(new FakeDB());
+        db = spy(new FakeDB());
         entities = new FakeDBCollection(db, "entity");
         fakeEntities = new FakeDBCollection(db, "fakeentitywithnaturalid");
         db.collections.put("fakeentity", entities);
@@ -47,7 +50,7 @@ public class TestsMongoSession {
         session.start();
         session.stop();
 
-        InOrder inorder = Mockito.inOrder(db);
+        InOrder inorder = inOrder(db);
         inorder.verify(db).requestStart();
         inorder.verify(db).requestDone();
     }
@@ -60,7 +63,7 @@ public class TestsMongoSession {
 
         FakeEntity entity = session.get("4d53b7118653a70549fe1b78", FakeEntity.class);
 
-        Assert.assertThat(entity, Matchers.notNullValue());
+        Assert.assertThat(entity, notNullValue());
         Assert.assertThat(entity.getValue(), is("plop"));
     }
 
@@ -163,6 +166,31 @@ public class TestsMongoSession {
     }
 
     @Test
+    public void canUpdateWithDiffStategy() {
+        session.setUpdateStrategy(UpdateStrategies.DIFF);
+        FakeEntity entity = new FakeEntity("this is a value");
+        session.save(entity);
+        entity.setValue("a value");
+
+        session.update(entity);
+
+        final DBObject update = entities.lastUpdate();
+        assertThat(update.containsField("$set"), is(true));
+    }
+
+    @Test
+    public void dontMakeUpdateWhenNoDiffWithDiffStrategy() {
+        session.setUpdateStrategy(UpdateStrategies.DIFF);
+        FakeEntity entity = new FakeEntity("this is a value");
+        session.save(entity);
+
+        session.update(entity);
+
+        final DBObject update = entities.lastUpdate();
+        assertThat(update, nullValue());
+    }
+
+    @Test
     public void savingSetIdForAutoId() {
         FakeEntity entity = new FakeEntity("a value");
 
@@ -185,7 +213,7 @@ public class TestsMongoSession {
         session.save(new FakeEntity("this is a value"));
         final Criteria criteria = session.createCriteria(FakeEntity.class);
 
-        List<FakeEntity> list =  criteria.list();
+        List<FakeEntity> list = criteria.list();
 
         assertThat(list.size(), is(2));
     }
@@ -202,7 +230,6 @@ public class TestsMongoSession {
         assertThat(first, sameInstance(second));
     }
 
-    
 
     private void createEntity(String id, String url) {
         DBObject dbo = new BasicDBObject();

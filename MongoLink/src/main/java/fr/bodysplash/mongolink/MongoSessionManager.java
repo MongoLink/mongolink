@@ -22,6 +22,7 @@ public class MongoSessionManager {
     public MongoSession createSession() {
         MongoSession mongoSession = new MongoSession(getDb(), getCriteriaFactory());
         mongoSession.setMappingContext(mapperContext);
+        mongoSession.setUpdateStrategy(settings.getUpdateStrategy());
         return mongoSession;
     }
 

@@ -1,7 +1,9 @@
 package fr.bodysplash.mongolink;
 
 import com.mongodb.FakeDB;
+import fr.bodysplash.mongolink.domain.UpdateStrategies;
 import fr.bodysplash.mongolink.domain.mapper.ContextBuilder;
+import fr.bodysplash.mongolink.domain.updateStategy.DiffStrategy;
 import fr.bodysplash.mongolink.test.entity.FakeEntity;
 import fr.bodysplash.mongolink.test.factory.FakeDbFactory;
 import fr.bodysplash.mongolink.test.factory.TestFactory;
@@ -33,9 +35,23 @@ public class TestsMongoSessionManager {
 
         assertThat(session, notNullValue());
         session.save(new FakeEntity("id"));
+
         FakeDB db = (FakeDB) session.getDb();
         assertThat(db.collections.get("fakeentity").getObjects().size(), is(1));
         assertThat(session.createCriteria(String.class), notNullValue());
+    }
+
+    @Test
+    public void canSetUpdateStrategy() {
+        ContextBuilder contextBuilder = TestFactory.contextBuilder().withFakeEntity();
+        final Settings settings = Settings.defaultInstance()
+                .withDbFactory(FakeDbFactory.class)
+                .withDefaultUpdateStrategy(UpdateStrategies.DIFF);
+        MongoSessionManager sm = MongoSessionManager.create(contextBuilder, settings);
+
+        final MongoSession session = sm.createSession();
+
+        assertThat(session.getUpdateStrategy(), instanceOf(DiffStrategy.class));
     }
 
 }

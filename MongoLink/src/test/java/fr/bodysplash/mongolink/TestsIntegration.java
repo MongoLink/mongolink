@@ -36,15 +36,19 @@ public class TestsIntegration {
         BasicDBObject fakeEntity = new BasicDBObject();
         fakeEntity.put("_id", new ObjectId("4d9d9b5e36a9a4265ea9ecbe"));
         fakeEntity.put("value", "a new value");
+        fakeEntity.put("comments", new BasicDBList());
         fakeEntity.put("index", 42);
         BasicDBObject fakeChild = new BasicDBObject();
         fakeChild.put("_id", new ObjectId("5d9d9b5e36a9a4265ea9ecbe"));
         fakeChild.put("childName", "child value");
         fakeChild.put("value", "parent value");
+        fakeChild.put("comments", new BasicDBList());
+        fakeChild.put("index", 0);
         fakeChild.put("__discriminator", "FakeChildEntity");
         db.getCollection("fakeentity").insert(fakeEntity, fakeChild);
         BasicDBObject naturalIdEntity = new BasicDBObject();
         naturalIdEntity.put("_id", "clef naturel");
+        naturalIdEntity.put("value", "uste");
         db.getCollection("fakeentitywithnaturalid").insert(naturalIdEntity);
     }
 
@@ -156,7 +160,6 @@ public class TestsIntegration {
     }
 
     private MongoSession mongoSession;
-
     private static MongoSessionManager sessionManager;
     private static DB db;
 }
