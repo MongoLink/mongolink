@@ -49,6 +49,15 @@ public class MongoSession {
         return null;
     }
 
+    public <T>List<T> getAll(Class<T> entityType) {
+        DBObject query = new BasicDBObject();
+        final List<T> list = executeQuery(entityType, query);
+        if (list.size() > 0) {
+            return list;
+        }
+        return null;
+    }
+
     public <T> List<T> executeQuery(Class<T> type, DBObject query) {
         EntityMapper<T> mapper = (EntityMapper<T>) entityMapper(type);
         final List<T> result = Lists.newArrayList();
@@ -62,7 +71,6 @@ public class MongoSession {
         } finally {
             cursor.close();
         }
-
     }
 
     private <T> T loadEntity(EntityMapper<T> mapper, DBObject dbObject) {

@@ -267,6 +267,17 @@ public class TestsMongoSession {
         assertThat(entity, notNullValue());
     }
 
+    @Test
+    public void canGetAll() {
+        createEntity("4d53b7118653a70549fe1b78", "plop");
+        createEntity("4d53b7118653a70549fe1b78", "plap");
+
+        List<FakeEntity> entityList = session.getAll(FakeEntity.class);
+
+        Assert.assertThat(entityList, notNullValue());
+        Assert.assertThat(entityList.size(), is(2));
+    }
+
     private void createEntity(String id, String url) {
         DBObject dbo = new BasicDBObject();
         dbo.put("value", url);
