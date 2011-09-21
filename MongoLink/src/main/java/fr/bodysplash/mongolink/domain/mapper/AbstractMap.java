@@ -64,6 +64,10 @@ public abstract class AbstractMap<T> {
         return mapper;
     }
 
+    protected void setCapped(boolean value) {
+        mapper.setCapped(value);
+    }
+
     private static final Logger LOGGER = Logger.getLogger(ClassMap.class);
     private MethodContainer lastMethod;
     private final Class<T> type;

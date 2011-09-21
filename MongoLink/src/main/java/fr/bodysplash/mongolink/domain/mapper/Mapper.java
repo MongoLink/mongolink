@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 
 import java.util.List;
 
+@SuppressWarnings("unchecked")
 public abstract class Mapper<T> {
 
     public Mapper(Class<T> persistentType) {
@@ -101,6 +102,15 @@ public abstract class Mapper<T> {
         return persistentType.isAssignableFrom(aClass);
     }
 
+    public boolean isCapped() {
+        return capped;
+    }
+
+    public void setCapped(boolean capped) {
+        this.capped = capped;
+    }
+
+    private boolean capped = false;
     private static final Logger LOGGER = Logger.getLogger(EntityMapper.class);
     protected final Class<T> persistentType;
     private final List<PropertyMapper> properties = Lists.newArrayList();

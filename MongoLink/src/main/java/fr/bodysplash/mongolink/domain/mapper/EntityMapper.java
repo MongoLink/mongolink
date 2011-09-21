@@ -85,5 +85,4 @@ public class EntityMapper<T> extends Mapper<T> {
 
     private IdMapper idMapper;
     private Map<String, SubclassMapper<?>> subclasses = Maps.newHashMap();
-
 }

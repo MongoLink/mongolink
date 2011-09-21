@@ -1,16 +1,15 @@
 package fr.bodysplash.mongolink.domain.mapper;
 
-import fr.bodysplash.mongolink.domain.mapper.*;
 import fr.bodysplash.mongolink.test.entity.FakeChildEntity;
 import fr.bodysplash.mongolink.test.entity.FakeEntity;
 import fr.bodysplash.mongolink.test.entity.OtherFakeChildEntity;
 import fr.bodysplash.mongolink.test.inheritanceMapping.FakeEntityWithSubclassMapping;
 import fr.bodysplash.mongolink.test.inheritanceMapping.FakeEntityWithTwoSubclassMapping;
-import fr.bodysplash.mongolink.test.simpleMapping.FakeEntityMapping;
+import fr.bodysplash.mongolink.test.simpleMapping.*;
 import org.junit.Test;
 
-import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
 
 public class TestsClassMap {
 
@@ -54,6 +53,13 @@ public class TestsClassMap {
         assertThat(context.mapperFor(OtherFakeChildEntity.class), notNullValue());
     }
 
+    @Test
+    public void canSetCap() {
+        FakeEntityMappingWithCap mapping = new FakeEntityMappingWithCap();
+        MapperContext context = new MapperContext();
 
+        mapping.buildMapper(context);
 
+        assertThat(context.mapperFor(FakeEntity.class).isCapped(), is(true));
+    }
 }
