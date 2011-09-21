@@ -1,7 +1,7 @@
 package fr.bodysplash.mongolink.test.entity;
 
 public class OtherEntityWithNaturalId {
-    
+
     public OtherEntityWithNaturalId() {
     }
 

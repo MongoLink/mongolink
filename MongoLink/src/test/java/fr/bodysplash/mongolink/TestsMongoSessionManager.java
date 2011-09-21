@@ -5,8 +5,7 @@ import fr.bodysplash.mongolink.domain.UpdateStrategies;
 import fr.bodysplash.mongolink.domain.mapper.ContextBuilder;
 import fr.bodysplash.mongolink.domain.updateStategy.DiffStrategy;
 import fr.bodysplash.mongolink.test.entity.FakeEntity;
-import fr.bodysplash.mongolink.test.factory.FakeDbFactory;
-import fr.bodysplash.mongolink.test.factory.TestFactory;
+import fr.bodysplash.mongolink.test.factory.*;
 import org.junit.Test;
 
 import static org.hamcrest.Matchers.*;

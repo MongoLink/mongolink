@@ -1,7 +1,6 @@
 package fr.bodysplash.mongolink;
 
-import com.mongodb.DB;
-import com.mongodb.Mongo;
+import com.mongodb.*;
 
 import java.net.UnknownHostException;
 

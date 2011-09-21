@@ -3,12 +3,9 @@ package fr.bodysplash.mongolink;
 
 import com.google.common.collect.Lists;
 import com.mongodb.*;
-import fr.bodysplash.mongolink.domain.criteria.Criteria;
-import fr.bodysplash.mongolink.domain.criteria.Restrictions;
+import fr.bodysplash.mongolink.domain.criteria.*;
 import fr.bodysplash.mongolink.domain.mapper.ContextBuilder;
-import fr.bodysplash.mongolink.test.entity.FakeChildEntity;
-import fr.bodysplash.mongolink.test.entity.FakeEntity;
-import fr.bodysplash.mongolink.test.entity.FakeEntityWithNaturalId;
+import fr.bodysplash.mongolink.test.entity.*;
 import fr.bodysplash.mongolink.test.factory.TestFactory;
 import org.bson.types.ObjectId;
 import org.junit.*;
@@ -29,7 +26,6 @@ public class TestsIntegration {
         initData();
         ContextBuilder builder = new ContextBuilder("fr.bodysplash.mongolink.test.integrationMapping");
         sessionManager = MongoSessionManager.create(builder, Settings.defaultInstance());
-
     }
 
     private static void initData() {

@@ -1,12 +1,10 @@
 package fr.bodysplash.mongolink.domain.criteria;
 
 import com.google.common.collect.Lists;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
+import com.mongodb.*;
 import fr.bodysplash.mongolink.MongoSession;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class Criteria<T> {
 

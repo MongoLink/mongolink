@@ -2,11 +2,9 @@ package fr.bodysplash.mongolink;
 
 import com.mongodb.DB;
 import fr.bodysplash.mongolink.domain.criteria.CriteriaFactory;
-import fr.bodysplash.mongolink.domain.mapper.ContextBuilder;
-import fr.bodysplash.mongolink.domain.mapper.MapperContext;
+import fr.bodysplash.mongolink.domain.mapper.*;
 
 public class MongoSessionManager {
-
 
     public static MongoSessionManager create(ContextBuilder contextBuilder, Settings settings) {
         MongoSessionManager manager = new MongoSessionManager(contextBuilder.createContext());

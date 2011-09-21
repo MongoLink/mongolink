@@ -3,7 +3,7 @@ package fr.bodysplash.mongolink.domain.criteria;
 public class Restrictions {
 
     public static Restriction eq(String field, Object value) {
-       return factory.getEq(field, value);
+        return factory.getEq(field, value);
     }
 
     public static Restriction between(String field, Object start, Object end) {

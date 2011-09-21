@@ -1,7 +1,7 @@
 package fr.bodysplash.mongolink.test.entity;
 
 
-public class FakeChildEntity extends FakeEntity{
+public class FakeChildEntity extends FakeEntity {
 
     private String childName;
 

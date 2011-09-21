@@ -1,7 +1,6 @@
 package fr.bodysplash.mongolink.domain.criteria;
 
 import com.mongodb.DBObject;
-import fr.bodysplash.mongolink.domain.criteria.*;
 import fr.bodysplash.mongolink.test.entity.FakeEntity;
 import org.joda.time.DateTime;
 import org.junit.Test;

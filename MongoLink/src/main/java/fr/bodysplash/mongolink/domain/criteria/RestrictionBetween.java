@@ -1,7 +1,6 @@
 package fr.bodysplash.mongolink.domain.criteria;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
+import com.mongodb.*;
 
 public class RestrictionBetween extends Restriction {
     public RestrictionBetween(String field, Object start, Object end) {

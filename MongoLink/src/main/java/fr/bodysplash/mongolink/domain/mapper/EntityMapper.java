@@ -2,8 +2,7 @@ package fr.bodysplash.mongolink.domain.mapper;
 
 
 import com.google.common.collect.Maps;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
+import com.mongodb.*;
 
 import java.util.Map;
 
@@ -52,7 +51,7 @@ public class EntityMapper<T> extends Mapper<T> {
     @Override
     public T toInstance(DBObject from) {
         String discriminator = SubclassMapper.discriminatorValue(from);
-        if(subclasses.get(discriminator) != null) {
+        if (subclasses.get(discriminator) != null) {
             return (T) subclasses.get(discriminator).toInstance(from);
         }
         return super.toInstance(from);
@@ -60,7 +59,7 @@ public class EntityMapper<T> extends Mapper<T> {
 
     @Override
     public DBObject toDBObject(Object element) {
-        if(isSubclass(element)) {
+        if (isSubclass(element)) {
             return subclassMapperFor(element).toDBObject(element);
         }
         return super.toDBObject(element);
@@ -72,7 +71,7 @@ public class EntityMapper<T> extends Mapper<T> {
 
     private SubclassMapper<?> subclassMapperFor(Object element) {
         for (SubclassMapper<?> subclassMapper : subclasses.values()) {
-            if(subclassMapper.getPersistentType().isAssignableFrom(element.getClass())) {
+            if (subclassMapper.getPersistentType().isAssignableFrom(element.getClass())) {
                 return subclassMapper;
             }
         }

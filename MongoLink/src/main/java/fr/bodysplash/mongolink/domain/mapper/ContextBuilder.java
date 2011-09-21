@@ -4,12 +4,9 @@ import com.google.common.collect.Lists;
 import fr.bodysplash.mongolink.MongoLinkError;
 import org.apache.log4j.Logger;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
+import java.util.*;
 
 public class ContextBuilder {
 

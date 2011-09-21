@@ -1,11 +1,9 @@
 package fr.bodysplash.mongolink.domain;
 
-import fr.bodysplash.mongolink.domain.updateStategy.DiffStrategy;
-import fr.bodysplash.mongolink.domain.updateStategy.OverwriteStrategy;
-import fr.bodysplash.mongolink.domain.updateStategy.UpdateStrategy;
+import fr.bodysplash.mongolink.domain.updateStategy.*;
 import org.junit.Test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
 
 public class TestsUpdateStrategies {

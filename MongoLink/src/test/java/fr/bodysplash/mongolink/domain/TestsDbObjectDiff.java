@@ -1,11 +1,8 @@
 package fr.bodysplash.mongolink.domain;
 
 
-import com.mongodb.BasicDBList;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
-import org.junit.Before;
-import org.junit.Test;
+import com.mongodb.*;
+import org.junit.*;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;

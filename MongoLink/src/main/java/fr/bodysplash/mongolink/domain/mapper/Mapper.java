@@ -1,8 +1,7 @@
 package fr.bodysplash.mongolink.domain.mapper;
 
 import com.google.common.collect.Lists;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
+import com.mongodb.*;
 import net.sf.cglib.core.ReflectUtils;
 import org.apache.log4j.Logger;
 
@@ -46,7 +45,7 @@ public abstract class Mapper<T> {
     final void populate(DBObject from, Object instance) {
         populateProperties(instance, from);
         populateCollections(instance, from);
-        doPopulate((T)instance, from);
+        doPopulate((T) instance, from);
     }
 
     private void populateProperties(Object instance, DBObject from) {
