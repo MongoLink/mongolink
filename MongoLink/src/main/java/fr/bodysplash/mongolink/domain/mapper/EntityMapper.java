@@ -6,6 +6,7 @@ import com.mongodb.*;
 
 import java.util.Map;
 
+@SuppressWarnings("unchecked")
 public class EntityMapper<T> extends Mapper<T> {
 
     EntityMapper(Class<T> persistentType) {

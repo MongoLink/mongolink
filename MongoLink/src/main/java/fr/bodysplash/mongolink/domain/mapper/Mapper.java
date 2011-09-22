@@ -105,10 +105,22 @@ public abstract class Mapper<T> {
         return capped;
     }
 
-    public void setCapped(boolean capped) {
+    public void setCapped(boolean capped, int cappedSize, int cappedMax) {
         this.capped = capped;
+        this.cappedSize = cappedSize;
+        this.cappedMax = cappedMax;
+    }
+    
+    public int getCappedSize() {
+        return cappedSize;
     }
 
+    public int getCappedMax() {
+        return cappedMax;
+    }
+
+    private int cappedSize;
+    private int cappedMax;
     private boolean capped = false;
     private static final Logger LOGGER = Logger.getLogger(EntityMapper.class);
     protected final Class<T> persistentType;

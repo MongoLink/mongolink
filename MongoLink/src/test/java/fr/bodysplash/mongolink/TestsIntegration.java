@@ -132,7 +132,7 @@ public class TestsIntegration {
     }
     
     @Test
-    public void cappedCollectionDropLastItem() throws InterruptedException {
+    public void cappedCollectionDropItems() throws InterruptedException {
         for (int i = 0; i < 100; i++) {
             BasicDBObject naturalIdEntity = new BasicDBObject();
             naturalIdEntity.put("_id", "cappedid" + i);

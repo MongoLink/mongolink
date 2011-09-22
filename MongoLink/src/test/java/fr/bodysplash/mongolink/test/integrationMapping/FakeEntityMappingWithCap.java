@@ -11,6 +11,6 @@ public class FakeEntityMappingWithCap extends ClassMap<FakeEntityWithCap> {
 
     @Override
     public void map() {
-        setCapped(true);
+        setCapped(true, 1048076, 50);
     }
 }

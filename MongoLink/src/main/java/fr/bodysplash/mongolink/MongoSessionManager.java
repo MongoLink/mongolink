@@ -27,8 +27,8 @@ public class MongoSessionManager {
                     session.start();
                     final DBObject options = new BasicDBObject();
                     options.put("capped", "true");
-                    options.put("size", 1048076);
-                    options.put("max", 50);
+                    options.put("size", entityMapper.getCappedSize());
+                    options.put("max", entityMapper.getCappedMax());
                     session.getDb().createCollection(entityMapper.collectionName(), options);
                     session.stop();
                 }
