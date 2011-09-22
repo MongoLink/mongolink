@@ -57,6 +57,6 @@ public class TestsClassMap {
 
         mapping.buildMapper(context);
 
-        assertThat(context.mapperFor(FakeEntity.class).isCapped(), is(true));
+        assertThat(context.mapperFor(FakeEntityWithCap.class).isCapped(), is(true));
     }
 }
