@@ -3,7 +3,7 @@ package com.mongodb;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 
 public class TestsFakeDB {
 
@@ -23,5 +23,14 @@ public class TestsFakeDB {
         final DBCollection test = fakeDB.getCollection("test");
 
         assertThat(test, notNullValue());
+    }
+
+    @Test
+    public void canCreateAFakeCollection() {
+        final FakeDB fakeDB = new FakeDB();
+
+        fakeDB.createCollection("test", new BasicDBObject());
+
+        assertThat(fakeDB.collections.size(), is(1));
     }
 }

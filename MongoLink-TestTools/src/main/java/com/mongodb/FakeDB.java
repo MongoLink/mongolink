@@ -42,5 +42,12 @@ public class FakeDB extends DB {
         
     }
 
+    @Override
+    public CommandResult command(final DBObject cmd, final int options) throws MongoException {
+        final CommandResult commandResult = new CommandResult();
+        commandResult.put("ok", true);
+        return commandResult;
+    }
+
     public final Map<String, FakeDBCollection> collections = Maps.newHashMap();
 }
