@@ -43,6 +43,10 @@ public class UnitOfWork {
         values.put(new Key(element.getClass(), id), new Value(element, update));
     }
 
+    public void clear() {
+        values.clear();
+    }
+
     private class Value {
 
         private Value(Object entity, DBObject initialValue) {

@@ -128,6 +128,10 @@ public class MongoSession {
         this.updateStrategy = updateStrategy.instance();
     }
 
+    public void clear() {
+        unitOfWork.clear();
+    }
+
     private final DB db;
     private MapperContext context;
     private final UnitOfWork unitOfWork = new UnitOfWork(this);
