@@ -21,5 +21,9 @@ public class MapperContext {
         mappers.add(mapper);
     }
 
+    public List<Mapper<?>> getMappers() {
+        return mappers;
+    }
+
     private List<Mapper<?>> mappers = Lists.newArrayList();
 }

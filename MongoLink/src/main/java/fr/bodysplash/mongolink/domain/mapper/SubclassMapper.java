@@ -1,8 +1,7 @@
 package fr.bodysplash.mongolink.domain.mapper;
 
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
+import com.mongodb.*;
 
 public class SubclassMapper<T> extends Mapper<T> {
 

@@ -57,7 +57,7 @@ public class UnitOfWork {
         Object entity;
         DBObject initialValue;
     }
-    
+
     private class Key {
 
         private Key(Class<?> type, Object id) {

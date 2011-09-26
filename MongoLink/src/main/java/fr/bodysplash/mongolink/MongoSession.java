@@ -3,15 +3,10 @@ package fr.bodysplash.mongolink;
 
 import com.google.common.collect.Lists;
 import com.mongodb.*;
-import fr.bodysplash.mongolink.domain.UnitOfWork;
-import fr.bodysplash.mongolink.domain.UpdateStrategies;
-import fr.bodysplash.mongolink.domain.criteria.Criteria;
-import fr.bodysplash.mongolink.domain.criteria.CriteriaFactory;
-import fr.bodysplash.mongolink.domain.mapper.EntityMapper;
-import fr.bodysplash.mongolink.domain.mapper.Mapper;
-import fr.bodysplash.mongolink.domain.mapper.MapperContext;
-import fr.bodysplash.mongolink.domain.updateStategy.OverwriteStrategy;
-import fr.bodysplash.mongolink.domain.updateStategy.UpdateStrategy;
+import fr.bodysplash.mongolink.domain.*;
+import fr.bodysplash.mongolink.domain.criteria.*;
+import fr.bodysplash.mongolink.domain.mapper.*;
+import fr.bodysplash.mongolink.domain.updateStategy.*;
 
 import java.util.List;
 
@@ -49,7 +44,7 @@ public class MongoSession {
         return null;
     }
 
-    public <T>List<T> getAll(Class<T> entityType) {
+    public <T> List<T> getAll(Class<T> entityType) {
         DBObject query = new BasicDBObject();
         final List<T> list = executeQuery(entityType, query);
         if (list.size() > 0) {

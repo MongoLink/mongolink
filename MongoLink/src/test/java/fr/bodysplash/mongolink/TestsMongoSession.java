@@ -1,23 +1,13 @@
 package fr.bodysplash.mongolink;
 
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
-import com.mongodb.FakeDB;
-import com.mongodb.FakeDBCollection;
+import com.mongodb.*;
 import fr.bodysplash.mongolink.domain.UpdateStrategies;
-import fr.bodysplash.mongolink.domain.criteria.Criteria;
-import fr.bodysplash.mongolink.domain.criteria.CriteriaFactory;
+import fr.bodysplash.mongolink.domain.criteria.*;
 import fr.bodysplash.mongolink.domain.mapper.ContextBuilder;
-import fr.bodysplash.mongolink.test.entity.Comment;
-import fr.bodysplash.mongolink.test.entity.FakeEntity;
-import fr.bodysplash.mongolink.test.entity.FakeEntityWithNaturalId;
-import fr.bodysplash.mongolink.test.entity.OtherEntityWithNaturalId;
+import fr.bodysplash.mongolink.test.entity.*;
 import org.bson.types.ObjectId;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.mockito.InOrder;
 

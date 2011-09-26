@@ -1,9 +1,7 @@
 package fr.bodysplash.mongolink.domain;
 
 
-import com.mongodb.BasicDBList;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
+import com.mongodb.*;
 
 public class DbObjectDiff {
 
@@ -37,7 +35,7 @@ public class DbObjectDiff {
 
     private void compareList(final String key, final BasicDBList field) {
         BasicDBList originalList = (BasicDBList) origin.get(key);
-        if(originalList.size() == field.size()) {
+        if (originalList.size() == field.size()) {
             return;
         }
         push.put(key, field.get(field.size() - 1));

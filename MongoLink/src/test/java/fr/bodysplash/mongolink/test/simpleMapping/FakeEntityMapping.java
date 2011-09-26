@@ -15,5 +15,4 @@ public class FakeEntityMapping extends ClassMap<FakeEntity> {
         property(element().getValue());
         collection(element().getComments());
     }
-
 }

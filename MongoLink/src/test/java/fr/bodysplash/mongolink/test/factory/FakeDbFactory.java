@@ -13,7 +13,6 @@ public class FakeDbFactory extends DbFactory {
         this.host = host;
     }
 
-
     @Override
     public void setPort(int port) {
         this.port = port;

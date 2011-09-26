@@ -1,16 +1,13 @@
 package fr.bodysplash.mongolink.domain.mapper;
 
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
+import com.mongodb.*;
 import fr.bodysplash.mongolink.MongoLinkException;
 import fr.bodysplash.mongolink.domain.converter.Converter;
-import fr.bodysplash.mongolink.utils.MethodContainer;
-import fr.bodysplash.mongolink.utils.ReflectionUtils;
+import fr.bodysplash.mongolink.utils.*;
 import org.apache.log4j.Logger;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
+import java.lang.reflect.*;
 
 class PropertyMapper {
 

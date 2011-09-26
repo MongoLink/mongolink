@@ -1,6 +1,5 @@
 package fr.bodysplash.mongolink.domain.converter;
 
-import fr.bodysplash.mongolink.domain.converter.*;
 import org.junit.Test;
 
 import static org.hamcrest.Matchers.*;
@@ -12,7 +11,7 @@ public class TestsConverter {
         value {
             @Override
             void test() {
-                
+
             }
         };
 

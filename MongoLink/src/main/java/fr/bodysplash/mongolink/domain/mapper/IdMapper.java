@@ -1,15 +1,13 @@
 package fr.bodysplash.mongolink.domain.mapper;
 
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
+import com.mongodb.*;
 import fr.bodysplash.mongolink.MongoLinkError;
 import fr.bodysplash.mongolink.utils.MethodContainer;
 import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
+import java.lang.reflect.*;
 
 public class IdMapper {
 
@@ -31,7 +29,7 @@ public class IdMapper {
         }
     }
 
-    protected Object getIdValue(Object element)  {
+    protected Object getIdValue(Object element) {
         try {
             Object keyValue = method.invoke(element);
             if (generationStrategy == IdGeneration.Auto && keyValue != null) {

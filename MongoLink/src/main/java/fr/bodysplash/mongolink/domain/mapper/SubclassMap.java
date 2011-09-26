@@ -1,6 +1,6 @@
 package fr.bodysplash.mongolink.domain.mapper;
 
-public abstract class SubclassMap<T> extends AbstractMap<T>{
+public abstract class SubclassMap<T> extends AbstractMap<T> {
 
     public SubclassMap(Class<T> type) {
         super(type);

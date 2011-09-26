@@ -1,14 +1,12 @@
 package fr.bodysplash.mongolink.domain.mapper;
 
-import fr.bodysplash.mongolink.domain.mapper.*;
 import fr.bodysplash.mongolink.test.entity.FakeEntity;
 import fr.bodysplash.mongolink.utils.MethodContainer;
 import org.junit.Test;
 
 import java.lang.reflect.Method;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 public class TestsPropertyInterceptor {
 

@@ -1,8 +1,6 @@
 package fr.bodysplash.mongolink.domain.updateStategy;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBCollection;
-import com.mongodb.DBObject;
+import com.mongodb.*;
 
 public abstract class UpdateStrategy {
 

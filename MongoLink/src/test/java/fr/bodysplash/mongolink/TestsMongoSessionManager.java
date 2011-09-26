@@ -1,13 +1,14 @@
 package fr.bodysplash.mongolink;
 
-import com.mongodb.FakeDB;
+import com.mongodb.*;
 import fr.bodysplash.mongolink.domain.UpdateStrategies;
-import fr.bodysplash.mongolink.domain.mapper.ContextBuilder;
+import fr.bodysplash.mongolink.domain.mapper.*;
 import fr.bodysplash.mongolink.domain.updateStategy.DiffStrategy;
-import fr.bodysplash.mongolink.test.entity.FakeEntity;
-import fr.bodysplash.mongolink.test.factory.FakeDbFactory;
+import fr.bodysplash.mongolink.test.entity.*;
 import fr.bodysplash.mongolink.test.factory.TestFactory;
-import org.junit.Test;
+import org.junit.*;
+
+import java.net.UnknownHostException;
 
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.IsNull.notNullValue;
@@ -15,43 +16,56 @@ import static org.junit.Assert.*;
 
 public class TestsMongoSessionManager {
 
+    @Before
+    public void before() {
+        contextBuilder = TestFactory.contextBuilder().withFakeEntity();
+        manager = MongoSessionManager.create(contextBuilder, Settings.defaultInstance().withDefaultUpdateStrategy(UpdateStrategies.DIFF));
+    }
+
+    @After
+    public void after() throws UnknownHostException {
+        manager.close();
+        Mongo mongo = new Mongo();
+        DB db = mongo.getDB("test");
+        db.dropDatabase();
+    }
+
     @Test
     public void canCreateFromContextBuilder() {
-        ContextBuilder contextBuilder = new ContextBuilder("fr.bodysplash.mongolink.test.simpleMapping");
-
-        MongoSessionManager sm = MongoSessionManager.create(contextBuilder, Settings.defaultInstance());
-
-        assertThat(sm, notNullValue());
-        assertThat(sm.getMapperContext(), notNullValue());
-        assertThat(sm.getMapperContext().mapperFor(FakeEntity.class), notNullValue());
+        assertThat(manager, notNullValue());
+        assertThat(manager.getMapperContext(), notNullValue());
+        assertThat(manager.getMapperContext().mapperFor(FakeEntity.class), notNullValue());
     }
 
     @Test
     public void canCreateSession() {
-        ContextBuilder contextBuilder = TestFactory.contextBuilder().withFakeEntity();
-        MongoSessionManager sm = MongoSessionManager.create(contextBuilder, Settings.defaultInstance().withDbFactory(FakeDbFactory.class));
-
-        MongoSession session = sm.createSession();
+        MongoSession session = manager.createSession();
 
         assertThat(session, notNullValue());
         session.save(new FakeEntity("id"));
 
-        FakeDB db = (FakeDB) session.getDb();
-        assertThat(db.collections.get("fakeentity").getObjects().size(), is(1));
+        assertThat(session.getDb().getCollection("fakeentity").count(), is(1L));
         assertThat(session.createCriteria(String.class), notNullValue());
     }
 
     @Test
     public void canSetUpdateStrategy() {
-        ContextBuilder contextBuilder = TestFactory.contextBuilder().withFakeEntity();
-        final Settings settings = Settings.defaultInstance()
-                .withDbFactory(FakeDbFactory.class)
-                .withDefaultUpdateStrategy(UpdateStrategies.DIFF);
-        MongoSessionManager sm = MongoSessionManager.create(contextBuilder, settings);
-
-        final MongoSession session = sm.createSession();
+        final MongoSession session = manager.createSession();
 
         assertThat(session.getUpdateStrategy(), instanceOf(DiffStrategy.class));
     }
 
+    @Test
+    public void canSetCappedCollections() {
+        final MapperContext mapperContext = manager.getMapperContext();
+        final EntityMapper<FakeEntityWithCap> fakeEntityWithCapMapper = (EntityMapper<FakeEntityWithCap>) mapperContext.mapperFor(FakeEntityWithCap.class);
+        final MongoSession session = manager.createSession();
+        
+        assertThat(session.getDb().getCollection(fakeEntityWithCapMapper.collectionName()).isCapped(), is(true));
+        assertThat(fakeEntityWithCapMapper.getCappedSize(), is(1048076));
+        assertThat(fakeEntityWithCapMapper.getCappedMax(), is(50));
+    }
+
+    private static ContextBuilder contextBuilder;
+    private static MongoSessionManager manager;
 }

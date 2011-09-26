@@ -57,7 +57,7 @@ public class Settings {
         try {
             return criteriaFactoryClass.newInstance();
         } catch (Exception e) {
-           throw new MongoLinkError("Can,t create CriteriaFactory", e);
+            throw new MongoLinkError("Can,t create CriteriaFactory", e);
         }
     }
 

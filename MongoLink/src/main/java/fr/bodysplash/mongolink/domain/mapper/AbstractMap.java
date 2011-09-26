@@ -5,6 +5,7 @@ import net.sf.cglib.core.DefaultGeneratorStrategy;
 import net.sf.cglib.proxy.Enhancer;
 import org.apache.log4j.Logger;
 
+@SuppressWarnings("unchecked")
 public abstract class AbstractMap<T> {
 
     public AbstractMap(Class<T> type) {
@@ -62,6 +63,10 @@ public abstract class AbstractMap<T> {
 
     protected Mapper<T> getMapper() {
         return mapper;
+    }
+
+    protected void setCapped(boolean value, int cappedSize, int cappedMax) {
+        mapper.setCapped(value, cappedSize, cappedMax);
     }
 
     private static final Logger LOGGER = Logger.getLogger(ClassMap.class);
