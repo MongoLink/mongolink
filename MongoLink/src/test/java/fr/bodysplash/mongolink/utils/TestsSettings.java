@@ -1,6 +1,7 @@
 package fr.bodysplash.mongolink.utils;
 
 import fr.bodysplash.mongolink.*;
+import fr.bodysplash.mongolink.domain.QueryExecutor;
 import fr.bodysplash.mongolink.domain.UpdateStrategies;
 import fr.bodysplash.mongolink.domain.criteria.*;
 import fr.bodysplash.mongolink.test.factory.FakeDbFactory;
@@ -62,14 +63,14 @@ public class TestsSettings {
     public static class DummyCriteriaFactory extends CriteriaFactory {
 
         @Override
-        public Criteria create(Class<?> type, MongoSession mongoSession) {
+        public Criteria create(QueryExecutor executor) {
             return new DummyCriteria();
         }
     }
 
     public static class DummyCriteria extends Criteria {
         public DummyCriteria() {
-            super(null, null);
+            super(null);
         }
     }
 }

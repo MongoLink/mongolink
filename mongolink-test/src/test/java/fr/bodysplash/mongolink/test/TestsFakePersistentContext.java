@@ -35,7 +35,7 @@ public class TestsFakePersistentContext {
     public void doesUseFakeCriteria() {
         final MongoSession session = context.getSession();
 
-        final Criteria criteria = session.createCriteria(String.class);
+        final Criteria criteria = session.createCriteria(FakeEntity.class);
 
         assertThat(criteria, instanceOf(FakeCriteria.class));
     }

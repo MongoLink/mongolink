@@ -42,10 +42,22 @@ public class TestsMongoSessionManager {
         MongoSession session = manager.createSession();
 
         assertThat(session, notNullValue());
+    }
+
+    @Test
+    public void canGetCriteria() {
+        MongoSession session = manager.createSession();
+        
+        assertThat(session.createCriteria(FakeEntity.class), notNullValue());
+    }
+
+    @Test
+    public void canSave() {
+        MongoSession session = manager.createSession();
+
         session.save(new FakeEntity("id"));
 
         assertThat(session.getDb().getCollection("fakeentity").count(), is(1L));
-        assertThat(session.createCriteria(String.class), notNullValue());
     }
 
     @Test

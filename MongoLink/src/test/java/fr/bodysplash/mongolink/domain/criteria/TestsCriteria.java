@@ -1,18 +1,19 @@
 package fr.bodysplash.mongolink.domain.criteria;
 
 import com.mongodb.DBObject;
-import fr.bodysplash.mongolink.test.entity.FakeEntity;
+import fr.bodysplash.mongolink.domain.QueryExecutor;
 import org.joda.time.DateTime;
 import org.junit.Test;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 public class TestsCriteria {
 
     @Test
     public void canTestEquality() {
-        final Criteria criteria = new Criteria(FakeEntity.class, null);
+        final Criteria criteria = new Criteria(mock(QueryExecutor.class));
         criteria.add(Restrictions.eq("id", "test"));
 
         DBObject query = criteria.createQuery();
@@ -23,7 +24,7 @@ public class TestsCriteria {
 
     @Test
     public void canTestMultipleEquality() {
-        final Criteria criteria = new Criteria(FakeEntity.class, null);
+        final Criteria criteria = new Criteria(mock(QueryExecutor.class));
         criteria.add(Restrictions.eq("id", "test"));
         criteria.add(Restrictions.eq("toto", "tata"));
 
@@ -36,7 +37,7 @@ public class TestsCriteria {
 
     @Test
     public void canTestBetween() {
-        final Criteria criteria = new Criteria(FakeEntity.class, null);
+        final Criteria criteria = new Criteria(mock(QueryExecutor.class));
         criteria.add(Restrictions.between("date", 1, 2));
 
         DBObject query = criteria.createQuery();
@@ -49,7 +50,7 @@ public class TestsCriteria {
 
     @Test
     public void canUseConverterInEq() {
-        final Criteria criteria = new Criteria(FakeEntity.class, null);
+        final Criteria criteria = new Criteria(mock(QueryExecutor.class));
         final DateTime date = new DateTime();
         criteria.add(Restrictions.eq("date", date));
 
@@ -61,7 +62,7 @@ public class TestsCriteria {
 
     @Test
     public void canUseConverterInBetween() {
-        final Criteria criteria = new Criteria(FakeEntity.class, null);
+        final Criteria criteria = new Criteria(mock(QueryExecutor.class));
         final DateTime date = new DateTime();
         criteria.add(Restrictions.between("date", date, date));
 

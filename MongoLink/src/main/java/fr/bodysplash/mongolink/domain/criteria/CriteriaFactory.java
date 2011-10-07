@@ -1,14 +1,10 @@
 package fr.bodysplash.mongolink.domain.criteria;
 
-import fr.bodysplash.mongolink.MongoSession;
+import fr.bodysplash.mongolink.domain.QueryExecutor;
 
 public class CriteriaFactory {
 
-    public Criteria create(Class<?> type, MongoSession mongoSession) {
-        return new Criteria(type, mongoSession);
-    }
-
-    public Criteria create(Class<?> type, MongoSession mongoSession, int skipNumber, int limitNumber) {
-        return new Criteria(type, mongoSession, skipNumber, limitNumber);
+    public Criteria create(QueryExecutor executor) {
+        return new Criteria(executor);
     }
 }

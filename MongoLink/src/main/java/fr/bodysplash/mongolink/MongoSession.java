@@ -1,7 +1,6 @@
 package fr.bodysplash.mongolink;
 
 
-import com.google.common.collect.Lists;
 import com.mongodb.*;
 import fr.bodysplash.mongolink.domain.*;
 import fr.bodysplash.mongolink.domain.criteria.*;
@@ -26,7 +25,7 @@ public class MongoSession {
         db.requestDone();
     }
 
-    public void setMappingContext(MapperContext context) {
+    protected void setMappingContext(MapperContext context) {
         this.context = context;
     }
 
@@ -37,49 +36,11 @@ public class MongoSession {
             return unitOfWork.getEntity(entityType, dbId);
         }
         DBObject query = new BasicDBObject("_id", dbId);
-        final List<T> list = executeQuery(entityType, query);
-        if (list.size() > 0) {
-            return list.get(0);
-        }
-        return null;
+        return getExecutor(mapper).executeUnique(query);
     }
 
     public <T> List<T> getAll(Class<T> entityType) {
-        DBObject query = new BasicDBObject();
-        final List<T> list = executeQuery(entityType, query);
-        if (list.size() > 0) {
-            return list;
-        }
-        return null;
-    }
-
-    public <T> List<T> executeQuery(Class<T> type, DBObject query) {
-        return executeQuery(type, query, 0, 0);
-    }
-
-    public <T> List<T> executeQuery(Class<T> type, DBObject query, int skipNumber, int limitNumber) {
-        EntityMapper<T> mapper = (EntityMapper<T>) entityMapper(type);
-        final List<T> result = Lists.newArrayList();
-        DBCollection collection = db.getCollection(mapper.collectionName());
-        DBCursor cursor = collection.find(query).skip(skipNumber).limit(limitNumber);
-        try {
-            while (cursor.hasNext()) {
-                result.add(loadEntity(mapper, cursor.next()));
-            }
-            return result;
-        } finally {
-            cursor.close();
-        }
-    }
-
-    private <T> T loadEntity(EntityMapper<T> mapper, DBObject dbObject) {
-        if (unitOfWork.contains(mapper.getPersistentType(), mapper.getId(dbObject))) {
-            return unitOfWork.getEntity(mapper.getPersistentType(), mapper.getId(dbObject));
-        } else {
-            T entity = mapper.toInstance(dbObject);
-            unitOfWork.add(mapper.getId(entity), entity, dbObject);
-            return entity;
-        }
+        return getExecutor(entityMapper(entityType)).execute(new BasicDBObject());
     }
 
     public void save(Object element) {
@@ -99,28 +60,12 @@ public class MongoSession {
         unitOfWork.update(mapper.getId(element), element, update);
     }
 
-    public EntityMapper<?> entityMapper(Class<?> type) {
-        checkIsAnEntity(type);
-        return (EntityMapper<?>) context.mapperFor(type);
-    }
-
-    private void checkIsAnEntity(Class<?> entityType) {
-        Mapper<?> mapper = context.mapperFor(entityType);
-        if (mapper == null || !(mapper instanceof EntityMapper)) {
-            throw new MongoLinkError(entityType.getName() + " is not an entity");
-        }
-    }
-
     public DB getDb() {
         return db;
     }
 
     public Criteria createCriteria(Class<?> type) {
-        return criteriaFactory.create(type, this);
-    }
-
-    public Criteria createCriteria(Class<?> type, int skipNumber, int limitNumber) {
-        return criteriaFactory.create(type, this, skipNumber, limitNumber);
+        return criteriaFactory.create(getExecutor(entityMapper(type)));
     }
 
     public UpdateStrategy getUpdateStrategy() {
@@ -133,6 +78,22 @@ public class MongoSession {
 
     public void clear() {
         unitOfWork.clear();
+    }
+
+    private QueryExecutor getExecutor(EntityMapper<?> mapper) {
+        return new QueryExecutor(db, mapper, unitOfWork);
+    }
+
+    private EntityMapper<?> entityMapper(Class<?> type) {
+        checkIsAnEntity(type);
+        return (EntityMapper<?>) context.mapperFor(type);
+    }
+
+    private void checkIsAnEntity(Class<?> entityType) {
+        Mapper<?> mapper = context.mapperFor(entityType);
+        if (mapper == null || !(mapper instanceof EntityMapper)) {
+            throw new MongoLinkError(entityType.getName() + " is not an entity");
+        }
     }
 
     private final DB db;

@@ -1,33 +1,20 @@
 package fr.bodysplash.mongolink.domain.criteria;
 
 import com.google.common.collect.Lists;
-import com.mongodb.*;
-import fr.bodysplash.mongolink.MongoSession;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
+import fr.bodysplash.mongolink.domain.QueryExecutor;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
 
 public class Criteria<T> {
 
-    public Criteria(Class<T> entityType, MongoSession mongoSession) {
-        this.entityType = entityType;
-        this.mongoSession = mongoSession;
-        this.skipNumber = 0;
-        this.limitNumber = 0;
+    public Criteria(QueryExecutor executor) {
+        this.executor = executor;
     }
-
-    public Criteria(Class<T> entityType, MongoSession mongoSession, int skipNumber, int limitNumber) {
-        this.entityType = entityType;
-        this.mongoSession = mongoSession;
-        this.skipNumber = skipNumber;
-        this.limitNumber = limitNumber;
-    }
-
-    public Class<?> getEntityType() {
-        return entityType;
-    }
-
     public List<T> list() {
-        return mongoSession.executeQuery(entityType, createQuery(), skipNumber, limitNumber);
+        return executor.execute(createQuery());
     }
 
     public void add(Restriction restriction) {
@@ -42,17 +29,14 @@ public class Criteria<T> {
         return result;
     }
 
-    protected MongoSession getMongoSession() {
-        return mongoSession;
-    }
-
     protected List<Restriction> getRestrictions() {
         return Collections.unmodifiableList(restrictions);
     }
 
-    private Class<T> entityType;
-    private MongoSession mongoSession;
+    protected QueryExecutor getExecutor() {
+        return executor;
+    }
+
     private List<Restriction> restrictions = Lists.newArrayList();
-    private int skipNumber;
-    private int limitNumber;
+    private QueryExecutor executor;
 }
