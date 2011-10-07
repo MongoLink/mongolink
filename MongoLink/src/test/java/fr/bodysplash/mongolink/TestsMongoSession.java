@@ -256,6 +256,17 @@ public class TestsMongoSession {
     }
 
     @Test
+    public void canClear() {
+        final FakeEntityWithNaturalId element = new FakeEntityWithNaturalId("cle unique");
+        session.save(element);
+
+        session.clear();
+
+        final FakeEntityWithNaturalId elementFound = session.get("cle unique", FakeEntityWithNaturalId.class);
+        assertThat(elementFound, not(element));
+    }
+
+    @Test
     public void canGetAll() {
         createEntity("4d53b7118653a70549fe1b78", "plop");
         createEntity("4d53b7118653a70549fe1b78", "plap");

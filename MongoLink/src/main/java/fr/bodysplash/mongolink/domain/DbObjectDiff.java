@@ -18,7 +18,7 @@ public class DbObjectDiff {
 
     private void generateDiff(DBObject target) {
         set = new BasicDBObject();
-        push = new BasicDBObject();
+        push = new BasicDBObject(); 
         for (String key : target.keySet()) {
             diffFor(key, target);
         }
