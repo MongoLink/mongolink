@@ -1,16 +1,13 @@
 package fr.bodysplash.mongolink.test;
 
 import fr.bodysplash.mongolink.MongoSession;
-import fr.bodysplash.mongolink.domain.criteria.Criteria;
-import fr.bodysplash.mongolink.domain.criteria.Restrictions;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import fr.bodysplash.mongolink.domain.criteria.*;
+import org.junit.*;
 
 import java.util.List;
 
-import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
 
 public class TestsFakeCriteria {
 

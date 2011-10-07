@@ -54,10 +54,14 @@ public class MongoSession {
     }
 
     public <T> List<T> executeQuery(Class<T> type, DBObject query) {
+        return executeQuery(type, query, 0, 0);
+    }
+
+    public <T> List<T> executeQuery(Class<T> type, DBObject query, int skipNumber, int limitNumber) {
         EntityMapper<T> mapper = (EntityMapper<T>) entityMapper(type);
         final List<T> result = Lists.newArrayList();
         DBCollection collection = db.getCollection(mapper.collectionName());
-        DBCursor cursor = collection.find(query);
+        DBCursor cursor = collection.find(query).skip(skipNumber).limit(limitNumber);
         try {
             while (cursor.hasNext()) {
                 result.add(loadEntity(mapper, cursor.next()));

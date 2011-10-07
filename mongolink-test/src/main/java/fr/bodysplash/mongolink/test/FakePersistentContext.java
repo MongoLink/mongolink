@@ -1,10 +1,7 @@
 package fr.bodysplash.mongolink.test;
 
-import fr.bodysplash.mongolink.MongoSession;
-import fr.bodysplash.mongolink.MongoSessionManager;
-import fr.bodysplash.mongolink.Settings;
-import fr.bodysplash.mongolink.domain.criteria.RestrictionFactory;
-import fr.bodysplash.mongolink.domain.criteria.Restrictions;
+import fr.bodysplash.mongolink.*;
+import fr.bodysplash.mongolink.domain.criteria.*;
 import fr.bodysplash.mongolink.domain.mapper.ContextBuilder;
 import fr.bodysplash.mongolink.test.criteria.FakeRestrictonFactory;
 import org.junit.rules.ExternalResource;

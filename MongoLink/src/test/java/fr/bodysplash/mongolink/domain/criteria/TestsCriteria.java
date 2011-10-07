@@ -72,5 +72,4 @@ public class TestsCriteria {
         assertThat(restriction.get("$gte"), is((Object) date.getMillis()));
         assertThat(restriction.get("$lt"), is((Object) date.getMillis()));
     }
-
 }

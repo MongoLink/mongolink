@@ -130,7 +130,7 @@ public class TestsIntegration {
 
         assertThat(list.size(), is(0));
     }
-    
+
     @Test
     public void cappedCollectionDropItems() throws InterruptedException {
         for (int i = 0; i < 100; i++) {

@@ -4,7 +4,7 @@ import com.google.common.collect.Maps;
 
 import java.util.Map;
 
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 
 
 public class FakeDB extends DB {
@@ -39,7 +39,7 @@ public class FakeDB extends DB {
 
     @Override
     public void cleanCursors(boolean b) throws MongoException {
-        
+
     }
 
     @Override

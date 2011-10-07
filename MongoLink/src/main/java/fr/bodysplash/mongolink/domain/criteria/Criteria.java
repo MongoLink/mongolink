@@ -11,6 +11,15 @@ public class Criteria<T> {
     public Criteria(Class<T> entityType, MongoSession mongoSession) {
         this.entityType = entityType;
         this.mongoSession = mongoSession;
+        this.skipNumber = 0;
+        this.limitNumber = 0;
+    }
+
+    public Criteria(Class<T> entityType, MongoSession mongoSession, int skipNumber, int limitNumber) {
+        this.entityType = entityType;
+        this.mongoSession = mongoSession;
+        this.skipNumber = skipNumber;
+        this.limitNumber = limitNumber;
     }
 
     public Class<?> getEntityType() {
@@ -18,7 +27,7 @@ public class Criteria<T> {
     }
 
     public List<T> list() {
-        return mongoSession.executeQuery(entityType, createQuery());
+        return mongoSession.executeQuery(entityType, createQuery(), skipNumber, limitNumber);
     }
 
     public void add(Restriction restriction) {
@@ -44,4 +53,6 @@ public class Criteria<T> {
     private Class<T> entityType;
     private MongoSession mongoSession;
     private List<Restriction> restrictions = Lists.newArrayList();
+    private int skipNumber;
+    private int limitNumber;
 }

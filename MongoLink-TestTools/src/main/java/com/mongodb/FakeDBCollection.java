@@ -1,17 +1,12 @@
 package com.mongodb;
 
 import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
+import com.google.common.collect.*;
 import org.bson.types.ObjectId;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-
+import java.util.*;
 
 public class FakeDBCollection extends DBCollection {
-
 
     public FakeDBCollection(FakeDB base, String name) {
         super(base, name);
@@ -23,13 +18,13 @@ public class FakeDBCollection extends DBCollection {
 
     @Override
     public WriteResult insert(DBObject[] arr, WriteConcern concern) throws MongoException {
-        if(arr == null) {
+        if (arr == null) {
             return null;
         }
         List<DBObject> dbObjects = Arrays.asList(arr);
         objects.addAll(dbObjects);
         for (DBObject dbObject : dbObjects) {
-            if(dbObject.get("_id") == null) {
+            if (dbObject.get("_id") == null) {
                 dbObject.put("_id", ObjectId.get());
             }
         }
@@ -58,7 +53,7 @@ public class FakeDBCollection extends DBCollection {
     @Override
     Iterator<DBObject> __find(DBObject ref, DBObject fields, int i, int i1, int i2, int i3) throws MongoException {
         final Object id = ref.get("_id");
-        if(id == null) {
+        if (id == null) {
             return objects.iterator();
         }
         DBObject dbObject = null;

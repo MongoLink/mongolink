@@ -3,7 +3,7 @@ package fr.bodysplash.mongolink.test.criteria;
 import com.mongodb.DBObject;
 import fr.bodysplash.mongolink.domain.criteria.RestrictionBetween;
 
-public class FakeRestrictionBetween extends RestrictionBetween implements FakeRestriction{
+public class FakeRestrictionBetween extends RestrictionBetween implements FakeRestriction {
 
     public FakeRestrictionBetween(String field, Object start, Object end) {
         super(field, start, end);

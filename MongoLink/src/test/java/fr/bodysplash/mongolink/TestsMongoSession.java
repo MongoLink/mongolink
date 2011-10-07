@@ -1,6 +1,5 @@
 package fr.bodysplash.mongolink;
 
-
 import com.mongodb.*;
 import fr.bodysplash.mongolink.domain.UpdateStrategies;
 import fr.bodysplash.mongolink.domain.criteria.*;
@@ -51,7 +50,6 @@ public class TestsMongoSession {
     public void canGetByAutoId() {
         createEntity("4d53b7118653a70549fe1b78", "plop");
         createEntity("4d53b7118653a70549fe1b78", "plap");
-
 
         FakeEntity entity = session.get("4d53b7118653a70549fe1b78", FakeEntity.class);
 
@@ -266,6 +264,11 @@ public class TestsMongoSession {
 
         Assert.assertThat(entityList, notNullValue());
         Assert.assertThat(entityList.size(), is(2));
+    }
+
+    @Test
+    public void canExecutePageQuery() {
+
     }
 
     private void createEntity(String id, String url) {

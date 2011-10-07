@@ -1,7 +1,7 @@
 package fr.bodysplash.mongolink.test.simpleMapping;
 
 import fr.bodysplash.mongolink.domain.mapper.ClassMap;
-import fr.bodysplash.mongolink.test.entity.*;
+import fr.bodysplash.mongolink.test.entity.FakeEntityWithCap;
 
 public class FakeEntityMappingWithCap extends ClassMap<FakeEntityWithCap> {
 

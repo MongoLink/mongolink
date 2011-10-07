@@ -60,7 +60,7 @@ public class TestsMongoSessionManager {
         final MapperContext mapperContext = manager.getMapperContext();
         final EntityMapper<FakeEntityWithCap> fakeEntityWithCapMapper = (EntityMapper<FakeEntityWithCap>) mapperContext.mapperFor(FakeEntityWithCap.class);
         final MongoSession session = manager.createSession();
-        
+
         assertThat(session.getDb().getCollection(fakeEntityWithCapMapper.collectionName()).isCapped(), is(true));
         assertThat(fakeEntityWithCapMapper.getCappedSize(), is(1048076));
         assertThat(fakeEntityWithCapMapper.getCappedMax(), is(50));

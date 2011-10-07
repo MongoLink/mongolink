@@ -110,7 +110,7 @@ public abstract class Mapper<T> {
         this.cappedSize = cappedSize;
         this.cappedMax = cappedMax;
     }
-    
+
     public int getCappedSize() {
         return cappedSize;
     }
