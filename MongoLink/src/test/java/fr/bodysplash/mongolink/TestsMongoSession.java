@@ -205,19 +205,18 @@ public class TestsMongoSession {
 
     @Test
     public void canGetCriteria() {
-        final Criteria criteria = session.createCriteria(FakeEntity.class);
+        final Criteria<FakeEntity> criteria = session.createCriteria(FakeEntity.class);
 
         assertThat(criteria, notNullValue());
-        //assertEquals(criteria.getEntityType(), FakeEntity.class);
     }
 
     @Test
     public void canGetByCriteria() {
         session.save(new FakeEntity("this is a value"));
         session.save(new FakeEntity("this is a value"));
-        final Criteria criteria = session.createCriteria(FakeEntity.class);
+        final Criteria<FakeEntity> criteria = session.createCriteria(FakeEntity.class);
 
-        List list = criteria.list();
+        List<FakeEntity> list = criteria.list();
 
         assertThat(list.size(), is(2));
     }
