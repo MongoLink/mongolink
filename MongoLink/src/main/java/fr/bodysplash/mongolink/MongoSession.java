@@ -119,6 +119,10 @@ public class MongoSession {
         return criteriaFactory.create(type, this);
     }
 
+    public Criteria createCriteria(Class<?> type, int skipNumber, int limitNumber) {
+        return criteriaFactory.create(type, this, skipNumber, limitNumber);
+    }
+
     public UpdateStrategy getUpdateStrategy() {
         return updateStrategy;
     }
