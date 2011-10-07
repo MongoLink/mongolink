@@ -10,21 +10,21 @@ import fr.bodysplash.mongolink.domain.mapper.MapperContext;
 
 import java.util.List;
 
-public class QueryExecutor {
+public class QueryExecutor<T> {
 
-    public QueryExecutor(DB db, EntityMapper<?> mapper, UnitOfWork unitOfWork) {
+    public QueryExecutor(DB db, EntityMapper<T> mapper, UnitOfWork unitOfWork) {
         this.db = db;
         this.mapper = mapper;
         this.unitOfWork = unitOfWork;
     }
 
-    public <T> List<T> execute(DBObject query) {
+    public List<T> execute(DBObject query) {
         final List<T> result = Lists.newArrayList();
         DBCollection collection = db.getCollection(mapper.collectionName());
         DBCursor cursor = collection.find(query);
         try {
             while (cursor.hasNext()) {
-                result.add((T) loadEntity(cursor.next()));
+                result.add(loadEntity(cursor.next()));
             }
             return result;
         } finally {
@@ -32,7 +32,7 @@ public class QueryExecutor {
         }
     }
 
-    public <T> T executeUnique(DBObject query) {
+    public T executeUnique(DBObject query) {
         final List<T> list = execute(query);
         if (list.size() > 0) {
             return list.get(0);
@@ -40,11 +40,11 @@ public class QueryExecutor {
         return null;
     }
 
-    private <T> T loadEntity(DBObject dbObject) {
+    private T loadEntity(DBObject dbObject) {
         if (unitOfWork.contains(mapper.getPersistentType(), mapper.getId(dbObject))) {
             return unitOfWork.getEntity(mapper.getPersistentType(), mapper.getId(dbObject));
         } else {
-            T entity = (T) mapper.toInstance(dbObject);
+            T entity = mapper.toInstance(dbObject);
             unitOfWork.add(mapper.getId(entity), entity, dbObject);
             return entity;
         }
@@ -59,7 +59,7 @@ public class QueryExecutor {
     }
 
     private DB db;
-    private EntityMapper<?> mapper;
+    private EntityMapper<T> mapper;
     private MapperContext context;
     private UnitOfWork unitOfWork;
 }

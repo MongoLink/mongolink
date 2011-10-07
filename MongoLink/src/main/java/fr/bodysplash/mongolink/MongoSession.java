@@ -36,11 +36,11 @@ public class MongoSession {
             return unitOfWork.getEntity(entityType, dbId);
         }
         DBObject query = new BasicDBObject("_id", dbId);
-        return getExecutor(mapper).executeUnique(query);
+        return (T) createExecutor(mapper).executeUnique(query);
     }
 
     public <T> List<T> getAll(Class<T> entityType) {
-        return getExecutor(entityMapper(entityType)).execute(new BasicDBObject());
+        return createExecutor(entityMapper(entityType)).execute(new BasicDBObject());
     }
 
     public void save(Object element) {
@@ -65,7 +65,7 @@ public class MongoSession {
     }
 
     public Criteria createCriteria(Class<?> type) {
-        return criteriaFactory.create(getExecutor(entityMapper(type)));
+        return criteriaFactory.create(createExecutor(entityMapper(type)));
     }
 
     public UpdateStrategy getUpdateStrategy() {
@@ -80,7 +80,7 @@ public class MongoSession {
         unitOfWork.clear();
     }
 
-    private QueryExecutor getExecutor(EntityMapper<?> mapper) {
+    private QueryExecutor createExecutor(EntityMapper<?> mapper) {
         return new QueryExecutor(db, mapper, unitOfWork);
     }
 
