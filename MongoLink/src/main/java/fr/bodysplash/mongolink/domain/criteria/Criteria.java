@@ -3,6 +3,7 @@ package fr.bodysplash.mongolink.domain.criteria;
 import com.google.common.collect.Lists;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
+import fr.bodysplash.mongolink.domain.CursorParameter;
 import fr.bodysplash.mongolink.domain.QueryExecutor;
 
 import java.util.Collections;
@@ -14,7 +15,7 @@ public class Criteria<T> {
         this.executor = executor;
     }
     public List<T> list() {
-        return executor.execute(createQuery());
+        return executor.execute(createQuery(), parameter);
     }
 
     public void add(Restriction restriction) {
@@ -37,6 +38,15 @@ public class Criteria<T> {
         return executor;
     }
 
+    public void limit(int limit) {
+        parameter = parameter.limit(limit);
+    }
+
+    public void skip(int skip) {
+        parameter = parameter.skip(skip);
+    }
+
     private List<Restriction> restrictions = Lists.newArrayList();
     private QueryExecutor executor;
+    private CursorParameter parameter = CursorParameter.empty();
 }

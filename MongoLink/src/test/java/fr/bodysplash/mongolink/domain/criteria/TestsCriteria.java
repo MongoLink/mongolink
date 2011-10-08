@@ -1,12 +1,15 @@
 package fr.bodysplash.mongolink.domain.criteria;
 
 import com.mongodb.DBObject;
+import fr.bodysplash.mongolink.domain.CursorParameter;
 import fr.bodysplash.mongolink.domain.QueryExecutor;
 import org.joda.time.DateTime;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
 public class TestsCriteria {
@@ -72,5 +75,21 @@ public class TestsCriteria {
         assertThat(restriction, notNullValue());
         assertThat(restriction.get("$gte"), is((Object) date.getMillis()));
         assertThat(restriction.get("$lt"), is((Object) date.getMillis()));
+    }
+
+    @Test
+    public void canGiveLimitAndSkip() {
+        final QueryExecutor executor = mock(QueryExecutor.class);
+        final Criteria criteria = new Criteria(executor);
+        criteria.limit(10);
+        criteria.skip(3);
+
+        criteria.list();
+
+        final ArgumentCaptor<CursorParameter> captor = ArgumentCaptor.forClass(CursorParameter.class);
+        verify(executor).execute(any(DBObject.class), captor.capture());
+        final CursorParameter cursorParameter = captor.getValue();
+        assertThat(cursorParameter.getLimit(), is(10));
+        assertThat(cursorParameter.getSkip(), is(3));
     }
 }

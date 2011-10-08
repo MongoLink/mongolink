@@ -35,6 +35,14 @@ public class CursorParameter {
         return this;
     }
 
+    public int getLimit() {
+        return limit;
+    }
+
+    public int getSkip() {
+        return skip;
+    }
+
     private int skip;
     private int limit;
 }
