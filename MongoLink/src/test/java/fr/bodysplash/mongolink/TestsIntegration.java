@@ -26,6 +26,30 @@ public class TestsIntegration {
         initData();
     }
 
+    private static void initData() {
+        BasicDBObject fakeEntity = new BasicDBObject();
+        fakeEntity.put("_id", new ObjectId("4d9d9b5e36a9a4265ea9ecbe"));
+        fakeEntity.put("value", "fake entity value");
+        fakeEntity.put("comments", new BasicDBList());
+        fakeEntity.put("index", 42);
+
+        BasicDBObject fakeChild = new BasicDBObject();
+        fakeChild.put("_id", new ObjectId("5d9d9b5e36a9a4265ea9ecbe"));
+        fakeChild.put("childName", "child value");
+        fakeChild.put("value", "parent value");
+        fakeChild.put("comments", new BasicDBList());
+        fakeChild.put("index", 0);
+        fakeChild.put("__discriminator", "FakeChildEntity");
+
+        db.getCollection("fakeentity").insert(fakeEntity, fakeChild);
+
+        BasicDBObject naturalIdEntity = new BasicDBObject();
+        naturalIdEntity.put("_id", "naturalkey");
+        naturalIdEntity.put("value", "naturalvalue");
+
+        db.getCollection("fakeentitywithnaturalid").insert(naturalIdEntity);
+    }
+
     @AfterClass
     public static void afterClass() {
         db.dropDatabase();
@@ -144,28 +168,32 @@ public class TestsIntegration {
         assertThat(db.getCollection("fakeentitywithcap").count(), is(50L));
     }
 
-    private static void initData() {
-        BasicDBObject fakeEntity = new BasicDBObject();
-        fakeEntity.put("_id", new ObjectId("4d9d9b5e36a9a4265ea9ecbe"));
-        fakeEntity.put("value", "fake entity value");
-        fakeEntity.put("comments", new BasicDBList());
-        fakeEntity.put("index", 42);
+    @Test
+    public void canLimitSearch() {
+        for(int i = 0; i < 10; i++) {
+            mongoSession.save(new FakeEntity("valeur"));
+        }
+        final Criteria criteria = mongoSession.createCriteria(FakeEntity.class);
+        criteria.add(Restrictions.eq("value", "valeur"));
+        criteria.limit(1);
 
-        BasicDBObject fakeChild = new BasicDBObject();
-        fakeChild.put("_id", new ObjectId("5d9d9b5e36a9a4265ea9ecbe"));
-        fakeChild.put("childName", "child value");
-        fakeChild.put("value", "parent value");
-        fakeChild.put("comments", new BasicDBList());
-        fakeChild.put("index", 0);
-        fakeChild.put("__discriminator", "FakeChildEntity");
+        final List result = criteria.list();
 
-        db.getCollection("fakeentity").insert(fakeEntity, fakeChild);
+        assertThat(result.size(), is(1));
+    }
 
-        BasicDBObject naturalIdEntity = new BasicDBObject();
-        naturalIdEntity.put("_id", "naturalkey");
-        naturalIdEntity.put("value", "naturalvalue");
+    @Test
+    public void canSkipSearch() {
+        for(int i = 0; i < 10; i++) {
+            mongoSession.save(new FakeEntity("valeur"));
+        }
+        final Criteria criteria = mongoSession.createCriteria(FakeEntity.class);
+        criteria.add(Restrictions.eq("value", "valeur"));
+        criteria.skip(1);
 
-        db.getCollection("fakeentitywithnaturalid").insert(naturalIdEntity);
+        final List result = criteria.list();
+
+        assertThat(result.size(), is(9));
     }
 
     private static DB db;
