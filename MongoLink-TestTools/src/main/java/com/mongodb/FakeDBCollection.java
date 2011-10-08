@@ -51,11 +51,15 @@ public class FakeDBCollection extends DBCollection {
     }
 
     @Override
-    Iterator<DBObject> __find(DBObject ref, DBObject fields, int i, int i1, int i2, int i3) throws MongoException {
+    Iterator<DBObject> __find(DBObject ref, DBObject fields, int numToSkip, int batchSize, int limit, int options) throws MongoException {
         final Object id = ref.get("_id");
         if (id == null) {
-            return objects.iterator();
+            return returnAll(numToSkip, limit);
         }
+        return findById(id);
+    }
+
+    private Iterator<DBObject> findById(final Object id) {
         DBObject dbObject = null;
         try {
             dbObject = Iterables.find(objects, new Predicate<DBObject>() {
@@ -68,6 +72,17 @@ public class FakeDBCollection extends DBCollection {
             return null;
         }
         return Lists.newArrayList(dbObject).iterator();
+    }
+
+    private Iterator<DBObject> returnAll(int skip, int limit) {
+        List<DBObject> result = objects;
+        if(skip > 0) {
+            result =  Lists.newArrayList(Iterables.skip(result, skip));
+        }
+        if(limit > 0) {
+            return Iterables.limit(result, limit).iterator();
+        }
+        return result.iterator();
     }
 
     @Override

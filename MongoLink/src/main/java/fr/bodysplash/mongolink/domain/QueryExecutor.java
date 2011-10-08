@@ -18,10 +18,11 @@ public class QueryExecutor<T> {
         this.unitOfWork = unitOfWork;
     }
 
-    public List<T> execute(DBObject query) {
+    public List<T> execute(DBObject query, CursorParameter cursorParameter) {
         final List<T> result = Lists.newArrayList();
         DBCollection collection = db.getCollection(mapper.collectionName());
         DBCursor cursor = collection.find(query);
+        cursor = cursorParameter.apply(cursor);
         try {
             while (cursor.hasNext()) {
                 result.add(loadEntity(cursor.next()));
@@ -30,6 +31,10 @@ public class QueryExecutor<T> {
         } finally {
             cursor.close();
         }
+    }
+
+    public List<T> execute(DBObject query) {
+        return execute(query, CursorParameter.empty());
     }
 
     public T executeUnique(DBObject query) {
