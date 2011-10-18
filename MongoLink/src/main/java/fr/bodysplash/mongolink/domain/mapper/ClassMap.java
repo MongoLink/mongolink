@@ -21,8 +21,6 @@ public abstract class ClassMap<T> {
         return (T) enhancer.create();
     }
 
-    protected abstract void map();
-
     public void setLastMethod(MethodContainer lastMethod) {
         this.lastMethod = lastMethod;
     }
@@ -53,11 +51,11 @@ public abstract class ClassMap<T> {
         context.addMapper(getMapper());
     }
 
+    protected abstract void map();
+
     protected MethodContainer getLastMethod() {
         return lastMethod;
     }
-
-   
 
     protected void setCapped(boolean value, int cappedSize, int cappedMax) {
         getMapper().setCapped(value, cappedSize, cappedMax);

@@ -97,7 +97,10 @@ public class TestsEntityMap {
 
         map.buildMapper(new MapperContext());
 
-        ArgumentCaptor captor = ArgumentCaptor.forClass(ReferenceMapper.class);
-        verify(mockMapper).addReference();
+        ArgumentCaptor<ReferenceMapper> captor = ArgumentCaptor.forClass(ReferenceMapper.class);
+        verify(mockMapper).addReference(captor.capture());
+        final ReferenceMapper mapper = captor.getValue();
+        assertThat(mapper, notNullValue());
+
     }
 }

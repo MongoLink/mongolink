@@ -17,7 +17,7 @@ public class EntityMapper<T> extends ClassMapper<T> {
         idMapper.populate(element, dbObject);
     }
     
-    void setId(IdMapper idMapper) {
+    void setIdMapper(IdMapper idMapper) {
         idMapper.setMapper(this);
         addMapper(idMapper);
         this.idMapper = idMapper;
@@ -40,7 +40,7 @@ public class EntityMapper<T> extends ClassMapper<T> {
         subclasses.put(mapper.discriminator(), mapper);
     }
 
-    void addReference() {
+    void addReference(ReferenceMapper mapper) {
         //To change body of created methods use File | Settings | File Templates.
     }
 

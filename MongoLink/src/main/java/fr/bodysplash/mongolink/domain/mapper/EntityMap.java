@@ -20,7 +20,7 @@ public abstract class EntityMap<T> extends ClassMap<T> {
     protected IdMapper id(Object value) {
         LOGGER.debug("Mapping id " + getLastMethod().shortName());
         IdMapper id = new IdMapper(getLastMethod(), IdGeneration.Auto);
-        getMapper().setId(id);
+        getMapper().setIdMapper(id);
         return id;
     }
 
@@ -30,7 +30,7 @@ public abstract class EntityMap<T> extends ClassMap<T> {
     }
 
     protected void References(Object reference) {
-        getMapper().addReference();
+        getMapper().addReference(new ReferenceMapper(getLastMethod()));
     }
 
     @Override
