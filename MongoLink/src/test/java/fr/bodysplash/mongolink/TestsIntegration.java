@@ -23,7 +23,6 @@ public class TestsIntegration {
         sessionManager = MongoSessionManager.create(builder, Settings.defaultInstance());
         mongoSession = sessionManager.createSession();
         db = mongoSession.getDb();
-        initData();
     }
 
     private static void initData() {
@@ -58,12 +57,15 @@ public class TestsIntegration {
 
     @Before
     public void before() {
+        initData();
         mongoSession.start();
     }
 
     @After
     public void after() {
         mongoSession.stop();
+        db.getCollection("fakeentity").remove(new BasicDBObject());
+        db.getCollection("fakeentitywithnaturalid").remove(new BasicDBObject());
     }
 
     @Test
