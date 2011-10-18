@@ -6,23 +6,18 @@ import com.mongodb.*;
 public class SubclassMapper<T> extends ClassMapper<T> {
 
     public static String discriminatorValue(DBObject from) {
-        Object discriminator = from.get("__discriminator");
+        Object discriminator = from.get(DISCRIMINATOR);
         return discriminator == null ? "" : discriminator.toString();
     }
 
     public SubclassMapper(Class<T> type) {
         super(type);
     }
-
+    
     @Override
-    protected void doPopulate(T instance, DBObject from) {
-        parentMapper.populate(instance, from);
-    }
-
-    @Override
-    protected void doSave(Object element, DBObject object) {
-        parentMapper.save(element, object);
-        object.put("__discriminator", discriminator());
+    public void save(Object instance, DBObject into) {
+        super.save(instance, into);
+        into.put(DISCRIMINATOR, discriminator());
     }
 
     String discriminator() {
@@ -30,8 +25,10 @@ public class SubclassMapper<T> extends ClassMapper<T> {
     }
 
     void setParentMapper(ClassMapper<?> parentMapper) {
+        addMapper(parentMapper);
         this.parentMapper = parentMapper;
     }
 
     private ClassMapper<?> parentMapper;
+    public static final String DISCRIMINATOR = "__discriminator";
 }

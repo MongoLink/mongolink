@@ -13,22 +13,13 @@ public class EntityMapper<T> extends ClassMapper<T> {
         super(persistentType);
     }
 
-    @Override
-    protected void doPopulate(T instance, DBObject from) {
-        populateId(instance, from);
-    }
-
     public void populateId(Object element, DBObject dbObject) {
         idMapper.populate(element, dbObject);
     }
-
-    @Override
-    protected void doSave(Object element, DBObject object) {
-        idMapper.save(element, object);
-    }
-
+    
     void setId(IdMapper idMapper) {
         idMapper.setMapper(this);
+        addMapper(idMapper);
         this.idMapper = idMapper;
     }
 

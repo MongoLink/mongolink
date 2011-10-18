@@ -25,11 +25,15 @@ public abstract class ClassMapper<T> implements Mapper {
 
     void addCollection(CollectionMapper collection) {
         collection.setMapper(this);
-        mappers.add(collection);
+        addMapper(collection);
     }
 
     public void addProperty(PropertyMapper property) {
         property.setMapper(this);
+        addMapper(property);
+    }
+
+    protected void addMapper(Mapper property) {
         mappers.add(property);
     }
 
@@ -48,11 +52,8 @@ public abstract class ClassMapper<T> implements Mapper {
         for (Mapper mapper : mappers) {
             mapper.populate(instance, from);
         }
-        doPopulate((T) instance, from);
     }
     
-    protected abstract void doPopulate(T instance, DBObject from);
-
     public DBObject toDBObject(Object element) {
         BasicDBObject object = new BasicDBObject();
         save(element, object);
@@ -64,10 +65,7 @@ public abstract class ClassMapper<T> implements Mapper {
         for (Mapper mapper : mappers) {
             mapper.save(instance, into);
         }
-        doSave(instance, into);
     }
-
-    protected abstract void doSave(Object element, DBObject object);
 
     public MapperContext getContext() {
         return context;
