@@ -7,9 +7,9 @@ import com.mongodb.*;
 import java.util.Map;
 
 @SuppressWarnings("unchecked")
-public class EntityMapper<T> extends Mapper<T> {
+public class EntityMapper<T> extends ClassMapper<T> {
 
-    EntityMapper(Class<T> persistentType) {
+    public EntityMapper(Class<T> persistentType) {
         super(persistentType);
     }
 
@@ -19,12 +19,12 @@ public class EntityMapper<T> extends Mapper<T> {
     }
 
     public void populateId(Object element, DBObject dbObject) {
-        idMapper.populateFrom(element, dbObject);
+        idMapper.populate(element, dbObject);
     }
 
     @Override
-    protected void doSave(Object element, BasicDBObject object) {
-        idMapper.saveTo(element, object);
+    protected void doSave(Object element, DBObject object) {
+        idMapper.save(element, object);
     }
 
     void setId(IdMapper idMapper) {
@@ -33,7 +33,7 @@ public class EntityMapper<T> extends Mapper<T> {
     }
 
     public Object getDbId(String id) {
-        return idMapper.getDbValue(id);
+        return idMapper.convertToDbValue(id);
     }
 
     public Object getId(Object entity) {
@@ -47,6 +47,10 @@ public class EntityMapper<T> extends Mapper<T> {
     <U> void addSubclass(SubclassMapper<U> mapper) {
         mapper.setParentMapper(this);
         subclasses.put(mapper.discriminator(), mapper);
+    }
+
+    void addReference() {
+        //To change body of created methods use File | Settings | File Templates.
     }
 
     @Override
@@ -80,7 +84,7 @@ public class EntityMapper<T> extends Mapper<T> {
     }
 
     public String collectionName() {
-        return persistentType.getSimpleName().toLowerCase();
+        return getPersistentType().getSimpleName().toLowerCase();
     }
 
     private IdMapper idMapper;

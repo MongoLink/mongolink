@@ -1,13 +1,16 @@
 package fr.bodysplash.mongolink.domain.mapper;
 
-public abstract class ComponentMap<T> extends AbstractMap<T> {
+public abstract class ComponentMap<T> extends ClassMap<T> {
 
     public ComponentMap(Class<T> type) {
         super(type);
+        mapper = new ComponentMapper(type);
     }
 
     @Override
-    protected Mapper<T> createMapper(Class<T> type) {
-        return new ComponentMapper(type);
+    protected ClassMapper<T> getMapper() {
+        return mapper;
     }
+
+    private ComponentMapper<T> mapper;
 }

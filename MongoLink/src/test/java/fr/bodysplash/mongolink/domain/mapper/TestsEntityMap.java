@@ -1,14 +1,22 @@
 package fr.bodysplash.mongolink.domain.mapper;
 
-import fr.bodysplash.mongolink.test.entity.*;
-import fr.bodysplash.mongolink.test.inheritanceMapping.*;
-import fr.bodysplash.mongolink.test.simpleMapping.*;
+import fr.bodysplash.mongolink.test.entity.FakeChildEntity;
+import fr.bodysplash.mongolink.test.entity.FakeEntity;
+import fr.bodysplash.mongolink.test.entity.FakeEntityWithCap;
+import fr.bodysplash.mongolink.test.entity.OtherFakeChildEntity;
+import fr.bodysplash.mongolink.test.inheritanceMapping.FakeEntityWithSubclassMapping;
+import fr.bodysplash.mongolink.test.inheritanceMapping.FakeEntityWithTwoSubclassMapping;
+import fr.bodysplash.mongolink.test.simpleMapping.FakeEntityMapping;
+import fr.bodysplash.mongolink.test.simpleMapping.FakeEntityMappingWithCap;
+import fr.bodysplash.mongolink.test.simpleMapping.FakeEntityMappingWithReference;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
-public class TestsClassMap {
+public class TestsEntityMap {
 
     @Test
     public void canBuildMapper() {
@@ -18,7 +26,7 @@ public class TestsClassMap {
         mapping.buildMapper(context);
 
         assertThat(context.mapperFor(FakeEntity.class), notNullValue());
-        Mapper<FakeEntity> mapper = context.mapperFor(FakeEntity.class);
+        ClassMapper<FakeEntity> mapper = context.mapperFor(FakeEntity.class);
 
     }
 
@@ -80,5 +88,16 @@ public class TestsClassMap {
 
         EntityMapper<?> entityMapper = (EntityMapper<?>) context.mapperFor(FakeEntityWithCap.class);
         assertThat(entityMapper.getCappedMax(), is(50));
+    }
+
+    @Test
+    public void canDeclareReference() {
+        final EntityMapper<FakeEntity> mockMapper = mock(EntityMapper.class);
+        final FakeEntityMappingWithReference map = new FakeEntityMappingWithReference(mockMapper);
+
+        map.buildMapper(new MapperContext());
+
+        ArgumentCaptor captor = ArgumentCaptor.forClass(ReferenceMapper.class);
+        verify(mockMapper).addReference();
     }
 }

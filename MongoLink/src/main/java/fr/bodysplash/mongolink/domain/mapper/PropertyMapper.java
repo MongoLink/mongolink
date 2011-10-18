@@ -9,15 +9,16 @@ import org.apache.log4j.Logger;
 
 import java.lang.reflect.*;
 
-class PropertyMapper {
+class PropertyMapper implements Mapper {
 
     public PropertyMapper(MethodContainer method) {
         this.name = method.shortName();
         this.method = method.getMethod();
     }
 
-    public void saveTo(Object element, BasicDBObject object) {
-        object.put(dbFieldName(), converter().toDbValue(getValue(element)));
+    @Override
+    public void save(Object instance, DBObject into) {
+        into.put(dbFieldName(), converter().toDbValue(getValue(instance)));
     }
 
     private Converter converter() {
@@ -33,7 +34,8 @@ class PropertyMapper {
         }
     }
 
-    public void populateFrom(Object instance, DBObject from) {
+    @Override
+    public void populate(Object instance, DBObject from) {
         try {
             Field field = ReflectionUtils.findPrivateField(mapper.getPersistentType(), name);
             field.setAccessible(true);
@@ -49,12 +51,12 @@ class PropertyMapper {
         return name;
     }
 
-    public void setMapper(Mapper<?> mapper) {
+    public void setMapper(ClassMapper<?> mapper) {
         this.mapper = mapper;
     }
 
     private final String name;
     private static final Logger LOGGER = Logger.getLogger(PropertyMapper.class);
     private final Method method;
-    private Mapper<?> mapper;
+    private ClassMapper<?> mapper;
 }

@@ -1,46 +1,72 @@
 package fr.bodysplash.mongolink.domain.mapper;
 
-import com.google.common.collect.Lists;
+import fr.bodysplash.mongolink.utils.MethodContainer;
+import net.sf.cglib.core.DefaultGeneratorStrategy;
+import net.sf.cglib.proxy.Enhancer;
 import org.apache.log4j.Logger;
 
-import java.util.List;
+@SuppressWarnings("unchecked")
+public abstract class ClassMap<T> {
 
-public abstract class ClassMap<T> extends AbstractMap<T> {
-
-    protected ClassMap(Class<T> type) {
-        super(type);
+    public ClassMap(Class<T> type) {
+        this.type = type;
+        LOGGER.debug("Mapping " + getType());
+        interceptor = createInterceptor(type);
+    }
+    protected T createInterceptor(Class<T> type) {
+        Enhancer enhancer = new Enhancer();
+        enhancer.setSuperclass(type);
+        enhancer.setStrategy(new DefaultGeneratorStrategy());
+        enhancer.setCallback(new PropertyInterceptor(this));
+        return (T) enhancer.create();
     }
 
-    @Override
-    protected Mapper<T> createMapper(Class<T> type) {
-        return new EntityMapper(type);
+    protected abstract void map();
+
+    public void setLastMethod(MethodContainer lastMethod) {
+        this.lastMethod = lastMethod;
     }
 
-    @Override
-    protected EntityMapper<T> getMapper() {
-        return (EntityMapper<T>) super.getMapper();
+    protected T element() {
+        return interceptor;
     }
 
-    protected IdMapper id(Object value) {
-        LOGGER.debug("Mapping id " + getLastMethod().shortName());
-        IdMapper id = new IdMapper(getLastMethod(), IdGeneration.Auto);
-        getMapper().setId(id);
-        return id;
+    public Class<T> getType() {
+        return type;
     }
 
-    protected <U extends T> void subclass(SubclassMap<U> subclassMap) {
-        subclassMap.setParent(this);
-        subclasses.add(subclassMap);
+    protected void property(Object value) {
+        String name = lastMethod.shortName();
+        LOGGER.debug("Mapping property " + name);
+        PropertyMapper property = new PropertyMapper(lastMethod);
+        getMapper().addProperty(property);
     }
 
-    @Override
+    protected void collection(Object value) {
+        LOGGER.debug("Mapping collection:" + lastMethod.shortName());
+        CollectionMapper collection = new CollectionMapper(lastMethod);
+        getMapper().addCollection(collection);
+    }
+
     public void buildMapper(MapperContext context) {
-        super.buildMapper(context);
-        for (SubclassMap<?> subclass : subclasses) {
-            subclass.buildMapper(context);
-        }
+        map();
+        context.addMapper(getMapper());
     }
 
-    private static final Logger LOGGER = Logger.getLogger(ClassMap.class);
-    private final List<SubclassMap<? extends T>> subclasses = Lists.newArrayList();
+    protected MethodContainer getLastMethod() {
+        return lastMethod;
+    }
+
+   
+
+    protected void setCapped(boolean value, int cappedSize, int cappedMax) {
+        getMapper().setCapped(value, cappedSize, cappedMax);
+    }
+
+    protected abstract ClassMapper<T> getMapper();
+
+    private static final Logger LOGGER = Logger.getLogger(EntityMap.class);
+    private MethodContainer lastMethod;
+    private final Class<T> type;
+    private final T interceptor;
 }

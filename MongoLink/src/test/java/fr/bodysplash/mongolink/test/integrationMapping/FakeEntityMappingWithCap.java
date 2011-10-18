@@ -1,9 +1,9 @@
 package fr.bodysplash.mongolink.test.integrationMapping;
 
-import fr.bodysplash.mongolink.domain.mapper.ClassMap;
+import fr.bodysplash.mongolink.domain.mapper.EntityMap;
 import fr.bodysplash.mongolink.test.entity.FakeEntityWithCap;
 
-public class FakeEntityMappingWithCap extends ClassMap<FakeEntityWithCap> {
+public class FakeEntityMappingWithCap extends EntityMap<FakeEntityWithCap> {
 
     public FakeEntityMappingWithCap() {
         super(FakeEntityWithCap.class);

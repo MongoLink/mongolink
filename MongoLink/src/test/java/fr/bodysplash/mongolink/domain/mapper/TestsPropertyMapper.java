@@ -45,7 +45,7 @@ public class TestsPropertyMapper {
         entity.value = TestsPropertyMapper.TestEnum.good;
         BasicDBObject object = new BasicDBObject();
 
-        mapper.saveTo(entity, object);
+        mapper.save(entity, object);
 
         assertThat(object.get("value"), is((Object) "good"));
     }
@@ -57,7 +57,7 @@ public class TestsPropertyMapper {
         PropertyMapper mapper = mapperForEnum();
         FakeEntity instance = new FakeEntity();
 
-        mapper.populateFrom(instance, object);
+        mapper.populate(instance, object);
 
         assertThat(instance.getValue(), is(TestEnum.bad));
     }
@@ -76,7 +76,7 @@ public class TestsPropertyMapper {
         entity.primitive = 10;
         BasicDBObject object = new BasicDBObject();
 
-        mapper.saveTo(entity, object);
+        mapper.save(entity, object);
 
         assertThat(object.get("primitive"), is((Object) 10));
     }
@@ -93,7 +93,7 @@ public class TestsPropertyMapper {
         fakeEntity.setCreationDate(now);
         BasicDBObject basicDBObject = new BasicDBObject();
 
-        mapper.saveTo(fakeEntity, basicDBObject);
+        mapper.save(fakeEntity, basicDBObject);
 
         assertThat(basicDBObject.get("creationDate"), is((Object) now.getMillis()));
     }
@@ -108,7 +108,7 @@ public class TestsPropertyMapper {
         propertyMapper.setMapper(mapper);
         FakeEntity instance = new FakeEntity();
 
-        propertyMapper.populateFrom(instance, object);
+        propertyMapper.populate(instance, object);
 
         assertThat(instance.getCreationDate(), is(dateTime));
     }

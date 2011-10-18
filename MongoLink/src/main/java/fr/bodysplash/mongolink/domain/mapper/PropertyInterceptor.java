@@ -7,9 +7,9 @@ import java.lang.reflect.Method;
 
 
 class PropertyInterceptor implements MethodInterceptor {
-    private final AbstractMap<?> classMap;
+    private final ClassMap<?> classMap;
 
-    public PropertyInterceptor(AbstractMap<?> classMap) {
+    public PropertyInterceptor(ClassMap<?> classMap) {
         this.classMap = classMap;
     }
 

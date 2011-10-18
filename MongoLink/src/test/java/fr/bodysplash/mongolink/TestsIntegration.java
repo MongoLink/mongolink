@@ -195,7 +195,7 @@ public class TestsIntegration {
 
         assertThat(result.size(), is(9));
     }
-
+    
     private static DB db;
     private static MongoSession mongoSession;
     private static MongoSessionManager sessionManager;

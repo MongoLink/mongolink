@@ -7,23 +7,23 @@ import java.util.List;
 public class MapperContext {
 
 
-    public <T> Mapper<T> mapperFor(Class<T> aClass) {
-        for (Mapper<?> current : mappers) {
+    public <T> ClassMapper<T> mapperFor(Class<T> aClass) {
+        for (ClassMapper<?> current : mappers) {
             if (current.canMap(aClass)) {
-                return (Mapper<T>) current;
+                return (ClassMapper<T>) current;
             }
         }
         return null;
     }
 
-    void addMapper(Mapper<?> mapper) {
+    void addMapper(ClassMapper<?> mapper) {
         mapper.setContext(this);
         mappers.add(mapper);
     }
 
-    public List<Mapper<?>> getMappers() {
+    public List<ClassMapper<?>> getMappers() {
         return mappers;
     }
 
-    private List<Mapper<?>> mappers = Lists.newArrayList();
+    private List<ClassMapper<?>> mappers = Lists.newArrayList();
 }

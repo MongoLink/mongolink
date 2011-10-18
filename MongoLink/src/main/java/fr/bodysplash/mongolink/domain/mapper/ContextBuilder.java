@@ -24,7 +24,7 @@ public class ContextBuilder {
             Iterable<Class> classes = getClasses();
             for (Class currentClass : classes) {
                 if (isAMap(currentClass)) {
-                    AbstractMap<?> mapping = (AbstractMap<?>) currentClass.newInstance();
+                    ClassMap<?> mapping = (ClassMap<?>) currentClass.newInstance();
                     mapping.buildMapper(result);
                 }
             }
@@ -37,7 +37,7 @@ public class ContextBuilder {
     }
 
     private boolean isAMap(Class currentClass) {
-        return AbstractMap.class.isAssignableFrom(currentClass) && !SubclassMap.class.isAssignableFrom(currentClass);
+        return ClassMap.class.isAssignableFrom(currentClass) && !SubclassMap.class.isAssignableFrom(currentClass);
     }
 
     private Iterable<Class> getClasses() throws ClassNotFoundException, IOException {

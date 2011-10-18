@@ -128,7 +128,7 @@ public class TestsEntityMapper {
     public void canCreateInstanceGivenDiscriminatorValue() {
         MapperContext context = new MapperContext();
         new FakeEntityWithSubclassMapping().buildMapper(context);
-        Mapper<FakeEntity> entityMapper = context.mapperFor(FakeEntity.class);
+        ClassMapper<FakeEntity> entityMapper = context.mapperFor(FakeEntity.class);
         BasicDBObject dbo = new BasicDBObject();
         dbo.put("_id", "1");
         dbo.put("__discriminator", "FakeChildEntity");
@@ -144,7 +144,7 @@ public class TestsEntityMapper {
     public void createParentEntityWhenNoDiscriminatorGiven() {
         MapperContext context = new MapperContext();
         new FakeEntityWithSubclassMapping().buildMapper(context);
-        Mapper<FakeEntity> entityMapper = context.mapperFor(FakeEntity.class);
+        ClassMapper<FakeEntity> entityMapper = context.mapperFor(FakeEntity.class);
         BasicDBObject dbo = new BasicDBObject();
         dbo.put("_id", "1");
 

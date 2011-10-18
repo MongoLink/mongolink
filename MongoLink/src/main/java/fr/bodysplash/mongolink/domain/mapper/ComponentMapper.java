@@ -2,7 +2,7 @@ package fr.bodysplash.mongolink.domain.mapper;
 
 import com.mongodb.*;
 
-public class ComponentMapper<T> extends Mapper<T> {
+public class ComponentMapper<T> extends ClassMapper<T> {
 
     public ComponentMapper(Class<T> type) {
         super(type);
@@ -13,6 +13,6 @@ public class ComponentMapper<T> extends Mapper<T> {
     }
 
     @Override
-    protected void doSave(Object element, BasicDBObject object) {
+    protected void doSave(Object element, DBObject object) {
     }
 }

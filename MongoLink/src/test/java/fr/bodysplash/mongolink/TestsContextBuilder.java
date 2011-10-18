@@ -27,7 +27,7 @@ public class TestsContextBuilder {
 
         MapperContext context = builder.createContext();
 
-        Mapper mapper = context.mapperFor(FakeChildEntity.class);
-        assertThat(mapper, is((Mapper) context.mapperFor(FakeEntity.class)));
+        ClassMapper mapper = context.mapperFor(FakeChildEntity.class);
+        assertThat(mapper, is((ClassMapper) context.mapperFor(FakeEntity.class)));
     }
 }

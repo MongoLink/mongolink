@@ -90,7 +90,7 @@ public class MongoSession {
     }
 
     private void checkIsAnEntity(Class<?> entityType) {
-        Mapper<?> mapper = context.mapperFor(entityType);
+        ClassMapper<?> mapper = context.mapperFor(entityType);
         if (mapper == null || !(mapper instanceof EntityMapper)) {
             throw new MongoLinkError(entityType.getName() + " is not an entity");
         }

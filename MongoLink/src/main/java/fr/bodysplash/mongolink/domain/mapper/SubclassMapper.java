@@ -3,7 +3,12 @@ package fr.bodysplash.mongolink.domain.mapper;
 
 import com.mongodb.*;
 
-public class SubclassMapper<T> extends Mapper<T> {
+public class SubclassMapper<T> extends ClassMapper<T> {
+
+    public static String discriminatorValue(DBObject from) {
+        Object discriminator = from.get("__discriminator");
+        return discriminator == null ? "" : discriminator.toString();
+    }
 
     public SubclassMapper(Class<T> type) {
         super(type);
@@ -11,11 +16,11 @@ public class SubclassMapper<T> extends Mapper<T> {
 
     @Override
     protected void doPopulate(T instance, DBObject from) {
-        parentMapper.populate(from, instance);
+        parentMapper.populate(instance, from);
     }
 
     @Override
-    protected void doSave(Object element, BasicDBObject object) {
+    protected void doSave(Object element, DBObject object) {
         parentMapper.save(element, object);
         object.put("__discriminator", discriminator());
     }
@@ -24,14 +29,9 @@ public class SubclassMapper<T> extends Mapper<T> {
         return getPersistentType().getSimpleName();
     }
 
-    void setParentMapper(Mapper<?> parentMapper) {
+    void setParentMapper(ClassMapper<?> parentMapper) {
         this.parentMapper = parentMapper;
     }
 
-    private Mapper<?> parentMapper;
-
-    public static String discriminatorValue(DBObject from) {
-        Object discriminator = from.get("__discriminator");
-        return discriminator == null ? "" : discriminator.toString();
-    }
+    private ClassMapper<?> parentMapper;
 }

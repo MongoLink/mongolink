@@ -4,7 +4,7 @@ import fr.bodysplash.mongolink.domain.mapper.*;
 import fr.bodysplash.mongolink.test.entity.*;
 
 
-public class FakeEntityWithSubclassMapping extends ClassMap<FakeEntity> {
+public class FakeEntityWithSubclassMapping extends EntityMap<FakeEntity> {
 
     public FakeEntityWithSubclassMapping() {
         super(FakeEntity.class);

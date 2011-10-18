@@ -19,7 +19,7 @@ public class MongoSessionManager {
     }
 
     private void createCappedCollections() {
-        for (Mapper mapper : mapperContext.getMappers()) {
+        for (ClassMapper mapper : mapperContext.getMappers()) {
             if (mapper.isCapped()) {
                 EntityMapper<?> entityMapper = (EntityMapper<?>) mapper;
                 final MongoSession session = createSession();
