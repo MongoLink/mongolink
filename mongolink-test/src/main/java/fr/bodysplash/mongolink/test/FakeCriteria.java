@@ -30,6 +30,9 @@ public class FakeCriteria<T> extends Criteria<T> {
 
     private Iterable<T> applyLimit(Iterable<T> list) {
         final CursorParameter parameter = getCursorParameter();
+        if(parameter.getLimit() == 0) {
+            return list;
+        }
         return Iterables.limit(list, parameter.getLimit());
     }
 
