@@ -60,6 +60,19 @@ public class TestsFakeCriteria {
         assertThat(list.get(0).getUri(), is(uri));
     }
 
+    @Test
+    public void canLimit() {
+        savedEntityWithValue(4);
+        savedEntityWithValue(10);
+        final Criteria criteria = session.createCriteria(FakeEntity.class);
+        criteria.limit(1);
+
+        final List<FakeEntity> list = criteria.list();
+
+        assertThat(list.size(), is(1));
+        assertThat(list.get(0).getValue(), is(4));
+    }
+
     private void savedEntityWithValue(int value) {
         final FakeEntity element = new FakeEntity();
         element.setValue(value);

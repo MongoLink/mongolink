@@ -46,6 +46,10 @@ public class Criteria<T> {
         parameter = parameter.skip(skip);
     }
 
+    protected CursorParameter getCursorParameter() {
+        return parameter;
+    }
+
     private List<Restriction> restrictions = Lists.newArrayList();
     private QueryExecutor executor;
     private CursorParameter parameter = CursorParameter.empty();
