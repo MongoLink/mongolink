@@ -6,7 +6,11 @@ public class RestrictionFactory {
         return new RestrictionBetween(field, start, end);
     }
 
-    public Restriction getEq(String field, Object value) {
-        return new RestrictionEq(field, value);
+    public Restriction getEquals(String field, Object value) {
+        return new RestrictionEquals(field, value);
+    }
+
+    public Restriction getNotEquals(String field, Object value) {
+        return new RestrictionNotEquals(field, value);
     }
 }

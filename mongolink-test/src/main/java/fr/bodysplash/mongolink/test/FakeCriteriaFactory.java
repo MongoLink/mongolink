@@ -1,8 +1,7 @@
 package fr.bodysplash.mongolink.test;
 
 import fr.bodysplash.mongolink.domain.QueryExecutor;
-import fr.bodysplash.mongolink.domain.criteria.Criteria;
-import fr.bodysplash.mongolink.domain.criteria.CriteriaFactory;
+import fr.bodysplash.mongolink.domain.criteria.*;
 
 public class FakeCriteriaFactory extends CriteriaFactory {
 

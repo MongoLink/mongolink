@@ -76,10 +76,10 @@ public class FakeDBCollection extends DBCollection {
 
     private Iterator<DBObject> returnAll(int skip, int limit) {
         List<DBObject> result = objects;
-        if(skip > 0) {
-            result =  Lists.newArrayList(Iterables.skip(result, skip));
+        if (skip > 0) {
+            result = Lists.newArrayList(Iterables.skip(result, skip));
         }
-        if(limit > 0) {
+        if (limit > 0) {
             return Iterables.limit(result, limit).iterator();
         }
         return result.iterator();

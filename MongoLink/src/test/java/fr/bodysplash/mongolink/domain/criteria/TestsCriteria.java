@@ -16,7 +16,7 @@ public class TestsCriteria {
     @Test
     public void canTestEquality() {
         final Criteria criteria = new Criteria(mock(QueryExecutor.class));
-        criteria.add(Restrictions.eq("id", "test"));
+        criteria.add(Restrictions.equals("id", "test"));
 
         DBObject query = criteria.createQuery();
 
@@ -27,8 +27,8 @@ public class TestsCriteria {
     @Test
     public void canTestMultipleEquality() {
         final Criteria criteria = new Criteria(mock(QueryExecutor.class));
-        criteria.add(Restrictions.eq("id", "test"));
-        criteria.add(Restrictions.eq("toto", "tata"));
+        criteria.add(Restrictions.equals("id", "test"));
+        criteria.add(Restrictions.equals("toto", "tata"));
 
         DBObject query = criteria.createQuery();
 
@@ -54,7 +54,7 @@ public class TestsCriteria {
     public void canUseConverterInEq() {
         final Criteria criteria = new Criteria(mock(QueryExecutor.class));
         final DateTime date = new DateTime();
-        criteria.add(Restrictions.eq("date", date));
+        criteria.add(Restrictions.equals("date", date));
 
         DBObject query = criteria.createQuery();
 
@@ -106,5 +106,17 @@ public class TestsCriteria {
         final BasicDBObject sortQuery = cursorParameter.getSort();
         assertTrue(sortQuery.containsKey((Object) "field"));
         assertTrue(sortQuery.get("field").equals(1));
+    }
+
+    @Test
+    public void TestInequality() {
+        final Criteria criteria = new Criteria(mock(QueryExecutor.class));
+        criteria.add(Restrictions.notEquals("text", "value"));
+
+        DBObject query = criteria.createQuery();
+
+        DBObject restriction = (DBObject) query.get("text");
+        assertThat(restriction, notNullValue());
+        assertThat(restriction.get("$ne"), is((Object) "value"));
     }
 }

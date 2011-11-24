@@ -1,11 +1,11 @@
 package fr.bodysplash.mongolink.test.criteria;
 
 import com.mongodb.DBObject;
-import fr.bodysplash.mongolink.domain.criteria.RestrictionEq;
+import fr.bodysplash.mongolink.domain.criteria.RestrictionEquals;
 
-public class FakeRestrictionEq extends RestrictionEq implements FakeRestriction {
+public class FakeRestrictionEquals extends RestrictionEquals implements FakeRestriction {
 
-    public FakeRestrictionEq(String field, Object value) {
+    public FakeRestrictionEquals(String field, Object value) {
         super(field, value);
         this.value = value;
     }

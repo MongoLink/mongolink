@@ -13,6 +13,7 @@ public abstract class ClassMap<T> {
         LOGGER.debug("Mapping " + getType());
         interceptor = createInterceptor(type);
     }
+
     protected T createInterceptor(Class<T> type) {
         Enhancer enhancer = new Enhancer();
         enhancer.setSuperclass(type);

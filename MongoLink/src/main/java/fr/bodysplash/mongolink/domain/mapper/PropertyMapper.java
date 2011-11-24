@@ -1,7 +1,7 @@
 package fr.bodysplash.mongolink.domain.mapper;
 
 
-import com.mongodb.*;
+import com.mongodb.DBObject;
 import fr.bodysplash.mongolink.MongoLinkException;
 import fr.bodysplash.mongolink.domain.converter.Converter;
 import fr.bodysplash.mongolink.utils.*;

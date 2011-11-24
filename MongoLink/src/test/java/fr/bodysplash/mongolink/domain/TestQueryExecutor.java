@@ -9,9 +9,9 @@ import org.mockito.Matchers;
 
 import java.util.List;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.Mockito.*;
+import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
+import static org.mockito.Mockito.*;
 
 @SuppressWarnings("unchecked")
 public class TestQueryExecutor {
@@ -38,7 +38,7 @@ public class TestQueryExecutor {
     public void canSort() {
         final QueryExecutor<FakeEntity> executor = createQueryExecutor();
 
-        final List<FakeEntity> list = executor.execute(new BasicDBObject(), CursorParameter.withSort("value",11));
+        final List<FakeEntity> list = executor.execute(new BasicDBObject(), CursorParameter.withSort("value", 11));
 
         assertThat(list.size(), is(20));
     }
@@ -46,7 +46,7 @@ public class TestQueryExecutor {
     private QueryExecutor createQueryExecutor() {
         final DB db = new FakeDB();
         collection = (FakeDBCollection) db.getCollection("collection");
-        for(int i = 0; i<20; i++) {
+        for (int i = 0; i < 20; i++) {
             final BasicDBObject element = new BasicDBObject();
             element.put("value", i);
             collection.getObjects().add(element);

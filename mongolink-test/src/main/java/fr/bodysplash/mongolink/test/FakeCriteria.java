@@ -1,16 +1,10 @@
 package fr.bodysplash.mongolink.test;
 
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-import com.mongodb.DBObject;
-import com.mongodb.FakeDB;
-import com.mongodb.FakeDBCollection;
-import fr.bodysplash.mongolink.domain.CursorParameter;
-import fr.bodysplash.mongolink.domain.QueryExecutor;
-import fr.bodysplash.mongolink.domain.criteria.Criteria;
-import fr.bodysplash.mongolink.domain.criteria.Restriction;
+import com.google.common.base.*;
+import com.google.common.collect.*;
+import com.mongodb.*;
+import fr.bodysplash.mongolink.domain.*;
+import fr.bodysplash.mongolink.domain.criteria.*;
 import fr.bodysplash.mongolink.test.criteria.FakeRestriction;
 
 import java.util.List;
@@ -34,7 +28,7 @@ public class FakeCriteria<T> extends Criteria<T> {
 
     private Iterable<T> applySkip(Iterable<T> list) {
         final CursorParameter parameter = getCursorParameter();
-        if(parameter.getSkip() == 0) {
+        if (parameter.getSkip() == 0) {
             return list;
         }
         return Iterables.skip(list, parameter.getSkip());
@@ -42,7 +36,7 @@ public class FakeCriteria<T> extends Criteria<T> {
 
     private Iterable<T> applyLimit(Iterable<T> list) {
         final CursorParameter parameter = getCursorParameter();
-        if(parameter.getLimit() == 0) {
+        if (parameter.getLimit() == 0) {
             return list;
         }
         return Iterables.limit(list, parameter.getLimit());

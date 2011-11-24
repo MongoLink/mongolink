@@ -130,7 +130,7 @@ public class TestsIntegration {
     @Test
     public void canGetByEqCriteria() {
         final Criteria criteria = mongoSession.createCriteria(FakeEntity.class);
-        criteria.add(Restrictions.eq("value", "fake entity value"));
+        criteria.add(Restrictions.equals("value", "fake entity value"));
 
         final List<FakeEntity> list = criteria.list();
 
@@ -172,11 +172,11 @@ public class TestsIntegration {
 
     @Test
     public void canLimitSearch() {
-        for(int i = 0; i < 10; i++) {
+        for (int i = 0; i < 10; i++) {
             mongoSession.save(new FakeEntity("valeur"));
         }
         final Criteria criteria = mongoSession.createCriteria(FakeEntity.class);
-        criteria.add(Restrictions.eq("value", "valeur"));
+        criteria.add(Restrictions.equals("value", "valeur"));
         criteria.limit(1);
 
         final List result = criteria.list();
@@ -186,18 +186,18 @@ public class TestsIntegration {
 
     @Test
     public void canSkipSearch() {
-        for(int i = 0; i < 10; i++) {
+        for (int i = 0; i < 10; i++) {
             mongoSession.save(new FakeEntity("valeur"));
         }
         final Criteria criteria = mongoSession.createCriteria(FakeEntity.class);
-        criteria.add(Restrictions.eq("value", "valeur"));
+        criteria.add(Restrictions.equals("value", "valeur"));
         criteria.skip(1);
 
         final List result = criteria.list();
 
         assertThat(result.size(), is(9));
     }
-    
+
     private static DB db;
     private static MongoSession mongoSession;
     private static MongoSessionManager sessionManager;

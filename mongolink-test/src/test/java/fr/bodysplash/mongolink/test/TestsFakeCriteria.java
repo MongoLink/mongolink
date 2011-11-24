@@ -24,7 +24,7 @@ public class TestsFakeCriteria {
         savedEntityWithValue(3);
         savedEntityWithValue(2);
         final Criteria criteria = session.createCriteria(FakeEntity.class);
-        criteria.add(Restrictions.eq("value", 3));
+        criteria.add(Restrictions.equals("value", 3));
 
         final List<FakeEntity> list = criteria.list();
 
@@ -51,7 +51,7 @@ public class TestsFakeCriteria {
         final FakeEntityWithStringId entity = new FakeEntityWithStringId(uri);
         session.save(entity);
         final Criteria criteria = session.createCriteria(FakeEntityWithStringId.class);
-        criteria.add(Restrictions.eq("_id", uri));
+        criteria.add(Restrictions.equals("_id", uri));
 
         final List<FakeEntityWithStringId> list = criteria.list();
 
@@ -101,6 +101,19 @@ public class TestsFakeCriteria {
         assertThat(list.size(), is(2));
         assertThat(list.get(0).getValue(), is(2));
         assertThat(list.get(1).getValue(), is(3));
+    }
+
+    @Test
+    public void canSearchByInequality() {
+        savedEntityWithValue(3);
+        savedEntityWithValue(2);
+        final Criteria criteria = session.createCriteria(FakeEntity.class);
+        criteria.add(Restrictions.notEquals("value", 3));
+
+        final List<FakeEntity> list = criteria.list();
+
+        assertThat(list.size(), is(1));
+        assertThat(list.get(0).getValue(), is(2));
     }
 
     private void savedEntityWithValue(int value) {

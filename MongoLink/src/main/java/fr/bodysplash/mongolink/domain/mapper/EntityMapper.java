@@ -2,7 +2,7 @@ package fr.bodysplash.mongolink.domain.mapper;
 
 
 import com.google.common.collect.Maps;
-import com.mongodb.*;
+import com.mongodb.DBObject;
 
 import java.util.Map;
 
@@ -16,7 +16,7 @@ public class EntityMapper<T> extends ClassMapper<T> {
     public void populateId(Object element, DBObject dbObject) {
         idMapper.populate(element, dbObject);
     }
-    
+
     void setIdMapper(IdMapper idMapper) {
         idMapper.setMapper(this);
         addMapper(idMapper);

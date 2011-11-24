@@ -1,7 +1,7 @@
 package fr.bodysplash.mongolink.domain.mapper;
 
 
-import com.mongodb.*;
+import com.mongodb.DBObject;
 
 public class SubclassMapper<T> extends ClassMapper<T> {
 
@@ -13,7 +13,7 @@ public class SubclassMapper<T> extends ClassMapper<T> {
     public SubclassMapper(Class<T> type) {
         super(type);
     }
-    
+
     @Override
     public void save(Object instance, DBObject into) {
         super.save(instance, into);

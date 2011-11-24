@@ -3,6 +3,7 @@ package fr.bodysplash.mongolink.domain.criteria;
 import com.mongodb.*;
 
 public class RestrictionBetween extends Restriction {
+
     public RestrictionBetween(String field, Object start, Object end) {
         super(field);
         this.start = start;

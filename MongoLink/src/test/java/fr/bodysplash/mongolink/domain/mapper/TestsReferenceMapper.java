@@ -6,6 +6,6 @@ public class TestsReferenceMapper {
 
     @Test
     public void canSave() {
-        
+
     }
 }

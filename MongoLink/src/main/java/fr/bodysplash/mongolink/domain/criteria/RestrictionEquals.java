@@ -2,9 +2,9 @@ package fr.bodysplash.mongolink.domain.criteria;
 
 import com.mongodb.DBObject;
 
-public class RestrictionEq extends Restriction {
+public class RestrictionEquals extends Restriction {
 
-    public RestrictionEq(String field, Object value) {
+    public RestrictionEquals(String field, Object value) {
         super(field);
         this.value = value;
     }

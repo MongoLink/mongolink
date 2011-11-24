@@ -1,7 +1,7 @@
 package fr.bodysplash.mongolink.domain.mapper;
 
 
-import com.mongodb.*;
+import com.mongodb.DBObject;
 import fr.bodysplash.mongolink.MongoLinkError;
 import fr.bodysplash.mongolink.utils.MethodContainer;
 import org.apache.log4j.Logger;
