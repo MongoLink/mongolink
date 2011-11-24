@@ -1,8 +1,7 @@
 package fr.bodysplash.mongolink.domain.criteria;
 
-import com.mongodb.DBObject;
-import fr.bodysplash.mongolink.domain.CursorParameter;
-import fr.bodysplash.mongolink.domain.QueryExecutor;
+import com.mongodb.*;
+import fr.bodysplash.mongolink.domain.*;
 import org.joda.time.DateTime;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -91,5 +90,21 @@ public class TestsCriteria {
         final CursorParameter cursorParameter = captor.getValue();
         assertThat(cursorParameter.getLimit(), is(10));
         assertThat(cursorParameter.getSkip(), is(3));
+    }
+
+    @Test
+    public void canSort() {
+        final QueryExecutor executor = mock(QueryExecutor.class);
+        final Criteria criteria = new Criteria(executor);
+        criteria.sort("field", 1);
+
+        criteria.list();
+
+        final ArgumentCaptor<CursorParameter> captor = ArgumentCaptor.forClass(CursorParameter.class);
+        verify(executor).execute(any(DBObject.class), captor.capture());
+        final CursorParameter cursorParameter = captor.getValue();
+        final BasicDBObject sortQuery = cursorParameter.getSort();
+        assertTrue(sortQuery.containsKey((Object) "field"));
+        assertTrue(sortQuery.get("field").equals(1));
     }
 }

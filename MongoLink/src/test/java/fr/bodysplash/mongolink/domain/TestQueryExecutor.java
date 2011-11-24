@@ -13,6 +13,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.*;
 import static org.hamcrest.Matchers.*;
 
+@SuppressWarnings("unchecked")
 public class TestQueryExecutor {
 
     @Test
@@ -33,11 +34,22 @@ public class TestQueryExecutor {
         assertThat(list.size(), is(9));
     }
 
+    @Test
+    public void canSort() {
+        final QueryExecutor<FakeEntity> executor = createQueryExecutor();
+
+        final List<FakeEntity> list = executor.execute(new BasicDBObject(), CursorParameter.withSort("value",11));
+
+        assertThat(list.size(), is(20));
+    }
+
     private QueryExecutor createQueryExecutor() {
         final DB db = new FakeDB();
         collection = (FakeDBCollection) db.getCollection("collection");
         for(int i = 0; i<20; i++) {
-            collection.getObjects().add(new BasicDBObject());
+            final BasicDBObject element = new BasicDBObject();
+            element.put("value", i);
+            collection.getObjects().add(element);
         }
         final EntityMapper entityMapper = mock(EntityMapper.class);
         when(entityMapper.collectionName()).thenReturn("collection");

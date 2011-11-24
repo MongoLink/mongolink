@@ -1,19 +1,18 @@
 package fr.bodysplash.mongolink.domain.criteria;
 
 import com.google.common.collect.Lists;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
-import fr.bodysplash.mongolink.domain.CursorParameter;
-import fr.bodysplash.mongolink.domain.QueryExecutor;
+import com.mongodb.*;
+import fr.bodysplash.mongolink.domain.*;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
+@SuppressWarnings("unchecked")
 public class Criteria<T> {
 
     public Criteria(QueryExecutor executor) {
         this.executor = executor;
     }
+
     public List<T> list() {
         return executor.execute(createQuery(), parameter);
     }
@@ -44,6 +43,10 @@ public class Criteria<T> {
 
     public void skip(int skip) {
         parameter = parameter.skip(skip);
+    }
+
+    public void sort(final String sortField, final int sortOrder) {
+        parameter = parameter.sort(sortField, sortOrder);
     }
 
     protected CursorParameter getCursorParameter() {

@@ -1,10 +1,11 @@
 package fr.bodysplash.mongolink.domain;
 
-import com.mongodb.DBCursor;
+import com.mongodb.*;
 
 public class CursorParameter {
+
     public static CursorParameter empty() {
-        return new EmptyCursorParamter();
+        return new EmptyCursorParameter();
     }
 
     public static CursorParameter withSkip(int skip) {
@@ -15,15 +16,18 @@ public class CursorParameter {
         return new CursorParameter().limit(limit);
     }
 
+    public static CursorParameter withSort(String sortField, int sortOrder) {
+        return new CursorParameter().sort(sortField, sortOrder);
+    }
+
     protected CursorParameter() {
 
     }
 
     DBCursor apply(DBCursor cursor) {
-        cursor = cursor.limit(limit).skip(skip);
+        cursor = cursor.limit(limit).skip(skip).sort(orderBy);
         return cursor;
     }
-
 
     public CursorParameter limit(int limit) {
         this.limit = limit;
@@ -35,6 +39,11 @@ public class CursorParameter {
         return this;
     }
 
+    public CursorParameter sort(String sortField, int sortOrder) {
+        orderBy.put(sortField, sortOrder);
+        return this;
+    }
+
     public int getLimit() {
         return limit;
     }
@@ -43,6 +52,11 @@ public class CursorParameter {
         return skip;
     }
 
+    public BasicDBObject getSort() {
+        return orderBy;
+    }
+
     private int skip;
     private int limit;
+    private BasicDBObject orderBy = new BasicDBObject();
 }
