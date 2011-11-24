@@ -14,7 +14,6 @@ public class TestsFakeCriteria {
     @Rule
     public FakePersistentContext fakePersistentContext = new FakePersistentContext("fr.bodysplash.mongolink.test.mapping");
 
-
     @Before
     public void setUp() throws Exception {
         session = fakePersistentContext.getSession();
@@ -73,12 +72,24 @@ public class TestsFakeCriteria {
         assertThat(list.get(0).getValue(), is(4));
     }
 
+    @Test
+    public void canSkip() {
+        savedEntityWithValue(4);
+        savedEntityWithValue(10);
+        final Criteria criteria = session.createCriteria(FakeEntity.class);
+        criteria.skip(1);
+
+        final List<FakeEntity> list = criteria.list();
+
+        assertThat(list.size(), is(1));
+        assertThat(list.get(0).getValue(), is(10));
+    }
+
     private void savedEntityWithValue(int value) {
         final FakeEntity element = new FakeEntity();
         element.setValue(value);
         session.save(element);
     }
-
 
     private MongoSession session;
 }

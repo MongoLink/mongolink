@@ -25,7 +25,19 @@ public class FakeCriteria<T> extends Criteria<T> {
     public List<T> list() {
         FakeDB db = (FakeDB) getExecutor().getDb();
         final FakeDBCollection collection = (FakeDBCollection) db.getCollection(collectionName());
-        return Lists.newArrayList(applyLimit(Iterables.transform(filter(collection), toInstance())));
+        return Lists.newArrayList(applyParameters(Iterables.transform(filter(collection), toInstance())));
+    }
+
+    private Iterable<T> applyParameters(Iterable<T> list) {
+        return applySkip(applyLimit(list));
+    }
+
+    private Iterable<T> applySkip(Iterable<T> list) {
+        final CursorParameter parameter = getCursorParameter();
+        if(parameter.getSkip() == 0) {
+            return list;
+        }
+        return Iterables.skip(list, parameter.getSkip());
     }
 
     private Iterable<T> applyLimit(Iterable<T> list) {
