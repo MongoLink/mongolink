@@ -29,7 +29,7 @@ public class FakeCriteria<T> extends Criteria<T> {
     }
 
     private Iterable<T> applyParameters(Iterable<T> list) {
-        return applySkip(applyLimit(list));
+        return applyLimit(applySkip(list));
     }
 
     private Iterable<T> applySkip(Iterable<T> list) {

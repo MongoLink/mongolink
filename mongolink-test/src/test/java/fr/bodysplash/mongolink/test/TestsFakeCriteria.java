@@ -85,6 +85,24 @@ public class TestsFakeCriteria {
         assertThat(list.get(0).getValue(), is(10));
     }
 
+    @Test
+    public void canLimitAndSkip() {
+        savedEntityWithValue(1);
+        savedEntityWithValue(2);
+        savedEntityWithValue(3);
+        savedEntityWithValue(4);
+        final Criteria criteria = session.createCriteria(FakeEntity.class);
+
+        criteria.skip(1);
+        criteria.limit(2);
+
+        final List<FakeEntity> list = criteria.list();
+
+        assertThat(list.size(), is(2));
+        assertThat(list.get(0).getValue(), is(2));
+        assertThat(list.get(1).getValue(), is(3));
+    }
+
     private void savedEntityWithValue(int value) {
         final FakeEntity element = new FakeEntity();
         element.setValue(value);
