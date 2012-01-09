@@ -1,19 +1,27 @@
 package fr.bodysplash.mongolink.domain.mapper;
 
-import com.mongodb.*;
-import fr.bodysplash.mongolink.test.entity.*;
+import com.mongodb.BasicDBList;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
+import fr.bodysplash.mongolink.test.entity.FakeChildEntity;
+import fr.bodysplash.mongolink.test.entity.FakeEntity;
+import fr.bodysplash.mongolink.test.entity.FakeEntityWithNaturalId;
 import fr.bodysplash.mongolink.test.inheritanceMapping.FakeEntityWithSubclassMapping;
-import fr.bodysplash.mongolink.test.simpleMapping.*;
+import fr.bodysplash.mongolink.test.simpleMapping.CommentMapping;
+import fr.bodysplash.mongolink.test.simpleMapping.FakeEntityMapping;
+import fr.bodysplash.mongolink.test.simpleMapping.FakeEntityWithNaturalIdMapping;
 import org.bson.types.ObjectId;
 import org.hamcrest.Matchers;
-import org.junit.*;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.net.UnknownHostException;
 
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 public class TestsEntityMapper {
 

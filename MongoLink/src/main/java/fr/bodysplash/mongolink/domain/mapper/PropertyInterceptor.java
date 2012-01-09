@@ -1,7 +1,8 @@
 package fr.bodysplash.mongolink.domain.mapper;
 
 import fr.bodysplash.mongolink.utils.MethodContainer;
-import net.sf.cglib.proxy.*;
+import net.sf.cglib.proxy.MethodInterceptor;
+import net.sf.cglib.proxy.MethodProxy;
 
 import java.lang.reflect.Method;
 

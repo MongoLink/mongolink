@@ -1,13 +1,16 @@
 package fr.bodysplash.mongolink.utils;
 
-import fr.bodysplash.mongolink.*;
-import fr.bodysplash.mongolink.domain.*;
-import fr.bodysplash.mongolink.domain.criteria.*;
+import fr.bodysplash.mongolink.DbFactory;
+import fr.bodysplash.mongolink.Settings;
+import fr.bodysplash.mongolink.domain.QueryExecutor;
+import fr.bodysplash.mongolink.domain.UpdateStrategies;
+import fr.bodysplash.mongolink.domain.criteria.Criteria;
+import fr.bodysplash.mongolink.domain.criteria.CriteriaFactory;
 import fr.bodysplash.mongolink.test.factory.FakeDbFactory;
 import org.junit.Test;
 
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 public class TestsSettings {
 

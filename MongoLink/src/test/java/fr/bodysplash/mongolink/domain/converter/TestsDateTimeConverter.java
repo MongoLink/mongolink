@@ -2,10 +2,11 @@ package fr.bodysplash.mongolink.domain.converter;
 
 
 import org.joda.time.DateTime;
-import org.junit.*;
+import org.junit.Before;
+import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 public class TestsDateTimeConverter {
 

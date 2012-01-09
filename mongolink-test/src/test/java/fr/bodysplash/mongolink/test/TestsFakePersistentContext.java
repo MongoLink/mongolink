@@ -2,12 +2,16 @@ package fr.bodysplash.mongolink.test;
 
 import com.mongodb.FakeDB;
 import fr.bodysplash.mongolink.MongoSession;
-import fr.bodysplash.mongolink.domain.criteria.*;
+import fr.bodysplash.mongolink.domain.criteria.Criteria;
+import fr.bodysplash.mongolink.domain.criteria.Restriction;
+import fr.bodysplash.mongolink.domain.criteria.Restrictions;
 import fr.bodysplash.mongolink.test.criteria.FakeRestrictionEquals;
-import org.junit.*;
+import org.junit.Before;
+import org.junit.Test;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertThat;
 
 public class TestsFakePersistentContext {
 

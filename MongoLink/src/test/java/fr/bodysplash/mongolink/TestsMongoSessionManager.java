@@ -1,17 +1,25 @@
 package fr.bodysplash.mongolink;
 
 import fr.bodysplash.mongolink.domain.UpdateStrategies;
-import fr.bodysplash.mongolink.domain.mapper.*;
+import fr.bodysplash.mongolink.domain.mapper.ContextBuilder;
+import fr.bodysplash.mongolink.domain.mapper.EntityMapper;
+import fr.bodysplash.mongolink.domain.mapper.MapperContext;
 import fr.bodysplash.mongolink.domain.updateStategy.DiffStrategy;
-import fr.bodysplash.mongolink.test.entity.*;
-import fr.bodysplash.mongolink.test.factory.*;
-import org.junit.*;
+import fr.bodysplash.mongolink.test.entity.FakeEntity;
+import fr.bodysplash.mongolink.test.entity.FakeEntityWithCap;
+import fr.bodysplash.mongolink.test.factory.FakeDbFactory;
+import fr.bodysplash.mongolink.test.factory.TestFactory;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
 
 import java.net.UnknownHostException;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsNull.notNullValue;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 public class TestsMongoSessionManager {
 

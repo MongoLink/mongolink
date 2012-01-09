@@ -1,7 +1,9 @@
 package fr.bodysplash.mongolink.domain;
 
 
-import com.mongodb.*;
+import com.mongodb.BasicDBList;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
 
 public class DbObjectDiff {
 

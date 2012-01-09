@@ -1,14 +1,15 @@
 package com.mongodb;
 
 import com.google.common.collect.Lists;
-import org.junit.*;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 public class TestsFakeDBCollection {
 

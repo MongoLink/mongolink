@@ -1,15 +1,22 @@
 package fr.bodysplash.mongolink.domain.mapper;
 
-import fr.bodysplash.mongolink.test.entity.*;
-import fr.bodysplash.mongolink.test.inheritanceMapping.*;
+import fr.bodysplash.mongolink.test.entity.FakeChildEntity;
+import fr.bodysplash.mongolink.test.entity.FakeEntity;
+import fr.bodysplash.mongolink.test.entity.FakeEntityWithCap;
+import fr.bodysplash.mongolink.test.entity.OtherFakeChildEntity;
+import fr.bodysplash.mongolink.test.inheritanceMapping.FakeEntityWithSubclassMapping;
+import fr.bodysplash.mongolink.test.inheritanceMapping.FakeEntityWithTwoSubclassMapping;
 import fr.bodysplash.mongolink.test.referenceMapping.FakeEntityMappingWithReference;
-import fr.bodysplash.mongolink.test.simpleMapping.*;
+import fr.bodysplash.mongolink.test.simpleMapping.FakeEntityMapping;
+import fr.bodysplash.mongolink.test.simpleMapping.FakeEntityMappingWithCap;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 public class TestsEntityMap {
 

@@ -1,7 +1,10 @@
 package fr.bodysplash.mongolink.test.integrationMapping;
 
-import fr.bodysplash.mongolink.domain.mapper.*;
-import fr.bodysplash.mongolink.test.entity.*;
+import fr.bodysplash.mongolink.domain.mapper.EntityMap;
+import fr.bodysplash.mongolink.domain.mapper.SubclassMap;
+import fr.bodysplash.mongolink.test.entity.FakeChildEntity;
+import fr.bodysplash.mongolink.test.entity.FakeEntity;
+import fr.bodysplash.mongolink.test.entity.OtherFakeChildEntity;
 
 
 public class FakeEntityWithTwoSubclassMapping extends EntityMap<FakeEntity> {

@@ -7,7 +7,8 @@ import fr.bodysplash.mongolink.utils.MethodContainer;
 import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;
 
-import java.lang.reflect.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 public class IdMapper implements Mapper {
 

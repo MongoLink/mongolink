@@ -46,7 +46,7 @@ public class ContextBuilder {
     private Iterable<Class> getCandidateClasses() throws ClassNotFoundException, IOException {
         List<Class> classes = Lists.newArrayList();
         for (URL url : getResources()) {
-            if(isAJar(url)) {
+            if (isAJar(url)) {
                 classes.addAll(findClassesFromJar(url));
             } else {
                 classes.addAll(findClassesFromDirectory(new File(url.getFile()), packageToScan));
@@ -106,7 +106,7 @@ public class ContextBuilder {
         final List<Class> result = Lists.newArrayList();
         JarURLConnection jarCon = (JarURLConnection) url.openConnection();
         final JarFile jarFile = jarCon.getJarFile();
-        for (Enumeration<JarEntry> entries = jarFile.entries(); entries.hasMoreElements();) {
+        for (Enumeration<JarEntry> entries = jarFile.entries(); entries.hasMoreElements(); ) {
             result.addAll(extractClass(entries));
         }
         return result;
@@ -115,7 +115,7 @@ public class ContextBuilder {
     private List<Class<?>> extractClass(Enumeration<JarEntry> entries) throws ClassNotFoundException {
         JarEntry entry = entries.nextElement();
         String entryPath = entry.getName();
-        if(entryPath.startsWith(packageToDirectory()) && entryPath.endsWith(CLASS_EXTENSION)) {
+        if (entryPath.startsWith(packageToDirectory()) && entryPath.endsWith(CLASS_EXTENSION)) {
             final String classPath = entryPath.substring(0, entryPath.length() - CLASS_EXTENSION.length()).replace(File.separator, ".");
             return Lists.<Class<?>>newArrayList(Class.forName(classPath));
         }

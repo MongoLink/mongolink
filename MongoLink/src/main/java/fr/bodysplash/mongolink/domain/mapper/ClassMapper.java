@@ -1,7 +1,8 @@
 package fr.bodysplash.mongolink.domain.mapper;
 
 import com.google.common.collect.Lists;
-import com.mongodb.*;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
 import net.sf.cglib.core.ReflectUtils;
 import org.apache.log4j.Logger;
 

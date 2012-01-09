@@ -7,8 +7,8 @@ import org.junit.Test;
 
 import java.lang.reflect.Method;
 
-import static org.hamcrest.core.Is.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
 
 public class TestsPropertyMapper {
 

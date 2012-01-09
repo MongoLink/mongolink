@@ -1,8 +1,12 @@
 package fr.bodysplash.mongolink.domain;
 
 import com.google.common.collect.Lists;
-import com.mongodb.*;
-import fr.bodysplash.mongolink.domain.mapper.*;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
+import fr.bodysplash.mongolink.domain.mapper.EntityMapper;
+import fr.bodysplash.mongolink.domain.mapper.MapperContext;
 
 import java.util.List;
 

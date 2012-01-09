@@ -1,6 +1,7 @@
 package fr.bodysplash.mongolink.domain.updateStategy;
 
-import com.mongodb.*;
+import com.mongodb.DBCollection;
+import com.mongodb.DBObject;
 import fr.bodysplash.mongolink.domain.DbObjectDiff;
 import org.apache.log4j.Logger;
 

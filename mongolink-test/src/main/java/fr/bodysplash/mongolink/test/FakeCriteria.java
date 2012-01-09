@@ -1,10 +1,16 @@
 package fr.bodysplash.mongolink.test;
 
-import com.google.common.base.*;
-import com.google.common.collect.*;
-import com.mongodb.*;
-import fr.bodysplash.mongolink.domain.*;
-import fr.bodysplash.mongolink.domain.criteria.*;
+import com.google.common.base.Function;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+import com.mongodb.DBObject;
+import com.mongodb.FakeDB;
+import com.mongodb.FakeDBCollection;
+import fr.bodysplash.mongolink.domain.CursorParameter;
+import fr.bodysplash.mongolink.domain.QueryExecutor;
+import fr.bodysplash.mongolink.domain.criteria.Criteria;
+import fr.bodysplash.mongolink.domain.criteria.Restriction;
 import fr.bodysplash.mongolink.test.criteria.FakeRestriction;
 
 import java.util.List;

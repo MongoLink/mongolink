@@ -1,6 +1,8 @@
 package fr.bodysplash.mongolink.domain;
 
-import fr.bodysplash.mongolink.domain.updateStategy.*;
+import fr.bodysplash.mongolink.domain.updateStategy.DiffStrategy;
+import fr.bodysplash.mongolink.domain.updateStategy.OverwriteStrategy;
+import fr.bodysplash.mongolink.domain.updateStategy.UpdateStrategy;
 
 public enum UpdateStrategies {
     DIFF {

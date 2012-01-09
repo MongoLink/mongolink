@@ -1,15 +1,20 @@
 package fr.bodysplash.mongolink.domain.criteria;
 
-import com.mongodb.*;
-import fr.bodysplash.mongolink.domain.*;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
+import fr.bodysplash.mongolink.domain.CursorParameter;
+import fr.bodysplash.mongolink.domain.QueryExecutor;
 import org.joda.time.DateTime;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 public class TestsCriteria {
 

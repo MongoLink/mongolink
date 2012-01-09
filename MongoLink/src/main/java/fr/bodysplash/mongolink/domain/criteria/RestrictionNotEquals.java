@@ -1,6 +1,7 @@
 package fr.bodysplash.mongolink.domain.criteria;
 
-import com.mongodb.*;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
 
 public class RestrictionNotEquals extends Restriction {
 

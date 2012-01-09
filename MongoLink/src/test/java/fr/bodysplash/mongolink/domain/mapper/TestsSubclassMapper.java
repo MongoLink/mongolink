@@ -1,14 +1,17 @@
 package fr.bodysplash.mongolink.domain.mapper;
 
 
-import com.mongodb.*;
-import fr.bodysplash.mongolink.test.entity.*;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
+import fr.bodysplash.mongolink.test.entity.FakeChildEntity;
+import fr.bodysplash.mongolink.test.entity.FakeEntity;
 import fr.bodysplash.mongolink.test.simpleMapping.FakeEntityMapping;
 import org.bson.types.ObjectId;
-import org.junit.*;
+import org.junit.Before;
+import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 public class TestsSubclassMapper {
 

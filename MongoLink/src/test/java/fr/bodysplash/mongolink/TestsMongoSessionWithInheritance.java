@@ -1,16 +1,20 @@
 package fr.bodysplash.mongolink;
 
 
-import com.mongodb.*;
+import com.mongodb.BasicDBObject;
+import com.mongodb.FakeDB;
+import com.mongodb.FakeDBCollection;
 import fr.bodysplash.mongolink.domain.criteria.CriteriaFactory;
 import fr.bodysplash.mongolink.domain.mapper.MapperContext;
-import fr.bodysplash.mongolink.test.entity.*;
+import fr.bodysplash.mongolink.test.entity.FakeChildEntity;
+import fr.bodysplash.mongolink.test.entity.FakeEntity;
 import fr.bodysplash.mongolink.test.inheritanceMapping.FakeEntityWithSubclassMapping;
-import org.junit.*;
+import org.junit.Before;
+import org.junit.Test;
 import org.mockito.Mockito;
 
 import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 public class TestsMongoSessionWithInheritance {
 

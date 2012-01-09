@@ -1,6 +1,7 @@
 package fr.bodysplash.mongolink.domain;
 
-import com.mongodb.*;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBCursor;
 
 public class CursorParameter {
 

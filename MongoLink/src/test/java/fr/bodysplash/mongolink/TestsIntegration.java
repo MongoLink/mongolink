@@ -2,17 +2,21 @@ package fr.bodysplash.mongolink;
 
 import com.google.common.collect.Lists;
 import com.mongodb.*;
-import fr.bodysplash.mongolink.domain.criteria.*;
+import fr.bodysplash.mongolink.domain.criteria.Criteria;
+import fr.bodysplash.mongolink.domain.criteria.Restrictions;
 import fr.bodysplash.mongolink.domain.mapper.ContextBuilder;
-import fr.bodysplash.mongolink.test.entity.*;
+import fr.bodysplash.mongolink.test.entity.FakeChildEntity;
+import fr.bodysplash.mongolink.test.entity.FakeEntity;
+import fr.bodysplash.mongolink.test.entity.FakeEntityWithNaturalId;
 import fr.bodysplash.mongolink.test.factory.TestFactory;
 import org.bson.types.ObjectId;
 import org.junit.*;
 
 import java.util.List;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertThat;
 
 @SuppressWarnings("unchecked")
 public class TestsIntegration {

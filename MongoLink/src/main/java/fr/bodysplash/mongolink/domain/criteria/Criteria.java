@@ -1,10 +1,13 @@
 package fr.bodysplash.mongolink.domain.criteria;
 
 import com.google.common.collect.Lists;
-import com.mongodb.*;
-import fr.bodysplash.mongolink.domain.*;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
+import fr.bodysplash.mongolink.domain.CursorParameter;
+import fr.bodysplash.mongolink.domain.QueryExecutor;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
 
 @SuppressWarnings("unchecked")
 public class Criteria<T> {

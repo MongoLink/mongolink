@@ -1,11 +1,20 @@
 package fr.bodysplash.mongolink;
 
 
-import com.mongodb.*;
-import fr.bodysplash.mongolink.domain.*;
-import fr.bodysplash.mongolink.domain.criteria.*;
-import fr.bodysplash.mongolink.domain.mapper.*;
-import fr.bodysplash.mongolink.domain.updateStategy.*;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBObject;
+import fr.bodysplash.mongolink.domain.QueryExecutor;
+import fr.bodysplash.mongolink.domain.UnitOfWork;
+import fr.bodysplash.mongolink.domain.UpdateStrategies;
+import fr.bodysplash.mongolink.domain.criteria.Criteria;
+import fr.bodysplash.mongolink.domain.criteria.CriteriaFactory;
+import fr.bodysplash.mongolink.domain.mapper.ClassMapper;
+import fr.bodysplash.mongolink.domain.mapper.EntityMapper;
+import fr.bodysplash.mongolink.domain.mapper.MapperContext;
+import fr.bodysplash.mongolink.domain.updateStategy.OverwriteStrategy;
+import fr.bodysplash.mongolink.domain.updateStategy.UpdateStrategy;
 
 import java.util.List;
 

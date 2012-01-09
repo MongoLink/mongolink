@@ -4,7 +4,7 @@ import com.google.common.collect.Maps;
 
 import java.util.Map;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
 
 
 public class FakeDB extends DB {

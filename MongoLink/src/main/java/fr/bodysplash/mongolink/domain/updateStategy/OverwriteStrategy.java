@@ -1,6 +1,8 @@
 package fr.bodysplash.mongolink.domain.updateStategy;
 
-import com.mongodb.*;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBCollection;
+import com.mongodb.DBObject;
 
 public class OverwriteStrategy extends UpdateStrategy {
 

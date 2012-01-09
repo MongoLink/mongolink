@@ -1,8 +1,13 @@
 package fr.bodysplash.mongolink;
 
-import com.mongodb.*;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
+import com.mongodb.DBObject;
 import fr.bodysplash.mongolink.domain.criteria.CriteriaFactory;
-import fr.bodysplash.mongolink.domain.mapper.*;
+import fr.bodysplash.mongolink.domain.mapper.ClassMapper;
+import fr.bodysplash.mongolink.domain.mapper.ContextBuilder;
+import fr.bodysplash.mongolink.domain.mapper.EntityMapper;
+import fr.bodysplash.mongolink.domain.mapper.MapperContext;
 
 public class MongoSessionManager {
 

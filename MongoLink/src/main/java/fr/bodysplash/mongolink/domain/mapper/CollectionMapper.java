@@ -1,11 +1,15 @@
 package fr.bodysplash.mongolink.domain.mapper;
 
 
-import com.mongodb.*;
-import fr.bodysplash.mongolink.utils.*;
+import com.mongodb.BasicDBList;
+import com.mongodb.DBObject;
+import fr.bodysplash.mongolink.utils.MethodContainer;
+import fr.bodysplash.mongolink.utils.ReflectionUtils;
 import org.apache.log4j.Logger;
 
-import java.lang.reflect.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
 import java.util.Collection;
 
 class CollectionMapper implements Mapper {

@@ -1,6 +1,7 @@
 package fr.bodysplash.mongolink.test.referenceMapping;
 
-import fr.bodysplash.mongolink.domain.mapper.*;
+import fr.bodysplash.mongolink.domain.mapper.EntityMap;
+import fr.bodysplash.mongolink.domain.mapper.EntityMapper;
 import fr.bodysplash.mongolink.test.entity.FakeEntity;
 
 public class FakeEntityMappingWithReference extends EntityMap<FakeEntity> {
