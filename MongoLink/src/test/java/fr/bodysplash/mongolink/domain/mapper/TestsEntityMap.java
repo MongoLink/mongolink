@@ -1,5 +1,6 @@
 package fr.bodysplash.mongolink.domain.mapper;
 
+import fr.bodysplash.mongolink.test.componentMapping.FakeEntityMappingWithComponent;
 import fr.bodysplash.mongolink.test.entity.FakeChildEntity;
 import fr.bodysplash.mongolink.test.entity.FakeEntity;
 import fr.bodysplash.mongolink.test.entity.FakeEntityWithCap;
@@ -12,11 +13,9 @@ import fr.bodysplash.mongolink.test.simpleMapping.FakeEntityMappingWithCap;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 public class TestsEntityMap {
 
@@ -103,6 +102,18 @@ public class TestsEntityMap {
         verify(mockMapper).addReference(captor.capture());
         final ReferenceMapper mapper = captor.getValue();
         assertThat(mapper, notNullValue());
+    }
 
+    @Test
+    public void canDeclareComponent() {
+        final EntityMapper<FakeEntity> mockMapper = mock(EntityMapper.class);
+        final FakeEntityMappingWithComponent map = new FakeEntityMappingWithComponent(mockMapper);
+
+        map.buildMapper(new MapperContext());
+
+        ArgumentCaptor<PropertyComponentMapper> captor = ArgumentCaptor.forClass(PropertyComponentMapper.class);
+        verify(mockMapper).addComponent(captor.capture());
+        final PropertyComponentMapper propertyComponentMapper = captor.getValue();
+        assertThat(propertyComponentMapper, notNullValue());
     }
 }

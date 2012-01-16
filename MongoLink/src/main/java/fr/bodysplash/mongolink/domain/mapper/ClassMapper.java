@@ -37,6 +37,11 @@ public abstract class ClassMapper<T> implements Mapper {
         mappers.add(property);
     }
 
+    public void addComponent(PropertyComponentMapper propertyComponentMapper) {
+        propertyComponentMapper.setMapper(this);
+        mappers.add(propertyComponentMapper);
+    }
+
     public T toInstance(DBObject from) {
         T instance = makeInstance();
         populate(instance, from);
@@ -96,8 +101,8 @@ public abstract class ClassMapper<T> implements Mapper {
     private int cappedSize;
     private int cappedMax;
     private boolean capped = false;
-    private static final Logger LOGGER = Logger.getLogger(EntityMapper.class);
     protected final Class<T> persistentType;
     private final List<Mapper> mappers = Lists.newArrayList();
     private MapperContext context;
+    private static final Logger LOGGER = Logger.getLogger(EntityMapper.class);
 }

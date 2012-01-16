@@ -33,6 +33,10 @@ public abstract class EntityMap<T> extends ClassMap<T> {
         getMapper().addReference(new ReferenceMapper(getLastMethod()));
     }
 
+    protected void component(Object component) {
+        getMapper().addComponent(new PropertyComponentMapper(getLastMethod().getMethod().getReturnType() ,getLastMethod()));
+    }
+
     @Override
     public void buildMapper(MapperContext context) {
         super.buildMapper(context);

@@ -20,14 +20,14 @@ class PropertyMapper implements Mapper {
 
     @Override
     public void save(Object instance, DBObject into) {
-        into.put(dbFieldName(), converter().toDbValue(getValue(instance)));
+        into.put(dbFieldName(), converter().toDbValue(getPropertyValue(instance)));
     }
 
     private Converter converter() {
         return Converter.forMethod(method);
     }
 
-    private Object getValue(Object element) {
+    protected Object getPropertyValue(Object element) {
         try {
             return method.invoke(element);
         } catch (Exception e) {
@@ -41,12 +41,15 @@ class PropertyMapper implements Mapper {
         try {
             Field field = ReflectionUtils.findPrivateField(mapper.getPersistentType(), name);
             field.setAccessible(true);
-            Object value = from.get(dbFieldName());
-            field.set(instance, converter().fromDbValue(value));
+            field.set(instance, valueFrom(from));
             field.setAccessible(false);
         } catch (Exception e) {
             LOGGER.error(e);
         }
+    }
+
+    protected Object valueFrom(DBObject from) {
+        return converter().fromDbValue(from.get(dbFieldName()));
     }
 
     String dbFieldName() {
@@ -55,6 +58,10 @@ class PropertyMapper implements Mapper {
 
     public void setMapper(ClassMapper<?> mapper) {
         this.mapper = mapper;
+    }
+
+    protected ClassMapper<?> getMapper() {
+        return mapper;
     }
 
     private final String name;

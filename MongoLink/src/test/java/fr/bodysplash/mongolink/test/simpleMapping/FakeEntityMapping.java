@@ -14,5 +14,6 @@ public class FakeEntityMapping extends EntityMap<FakeEntity> {
         id(element().getId());
         property(element().getValue());
         collection(element().getComments());
+        component(element().getComment());
     }
 }

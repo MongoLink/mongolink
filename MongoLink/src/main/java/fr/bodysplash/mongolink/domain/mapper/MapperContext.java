@@ -6,7 +6,6 @@ import java.util.List;
 
 public class MapperContext {
 
-
     public <T> ClassMapper<T> mapperFor(Class<T> aClass) {
         for (ClassMapper<?> current : mappers) {
             if (current.canMap(aClass)) {

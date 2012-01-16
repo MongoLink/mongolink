@@ -19,6 +19,7 @@ public class FakeEntityWithTwoSubclassMapping extends EntityMap<FakeEntity> {
         property(element().getValue());
         property(element().getIndex());
         collection(element().getComments());
+        component(element().getComment());
         subclass(new SubclassMap<FakeChildEntity>(FakeChildEntity.class) {
 
             @Override

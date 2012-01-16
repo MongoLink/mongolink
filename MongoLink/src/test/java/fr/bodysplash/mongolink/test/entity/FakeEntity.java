@@ -51,9 +51,18 @@ public class FakeEntity {
         return otherEntity;
     }
 
+    public Comment getComment() {
+        return comment;
+    }
+
+    public void setComment(Comment comment) {
+        this.comment = comment;
+    }
+
     private int index;
     private String id;
     private String value;
     private final List<Comment> comments = Lists.newArrayList();
     private FakeEntity otherEntity;
+    private Comment comment;
 }
