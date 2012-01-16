@@ -14,9 +14,8 @@ import org.junit.*;
 
 import java.util.List;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
 
 @SuppressWarnings("unchecked")
 public class TestsIntegration {
@@ -35,6 +34,7 @@ public class TestsIntegration {
         fakeEntity.put("value", "fake entity value");
         fakeEntity.put("comments", new BasicDBList());
         fakeEntity.put("index", 42);
+        fakeEntity.put("comment", new BasicDBObject("value", "the comment"));
 
         BasicDBObject fakeChild = new BasicDBObject();
         fakeChild.put("_id", new ObjectId("5d9d9b5e36a9a4265ea9ecbe"));
@@ -90,7 +90,7 @@ public class TestsIntegration {
     }
 
     @Test
-    public void canUserSessionManager() {
+    public void canUseSessionManager() {
         ContextBuilder contextBuilder = TestFactory.contextBuilder().withFakeEntity();
         MongoSessionManager manager = MongoSessionManager.create(contextBuilder, Settings.defaultInstance());
         MongoSession session = manager.createSession();
@@ -200,6 +200,14 @@ public class TestsIntegration {
         final List result = criteria.list();
 
         assertThat(result.size(), is(9));
+    }
+
+    @Test
+    public void canPopulateComponent() {
+        final FakeEntity entity = mongoSession.get("4d9d9b5e36a9a4265ea9ecbe", FakeEntity.class);
+
+        assertThat(entity.getComment(), notNullValue());
+        assertThat(entity.getComment().getValue(), is("the comment"));
     }
 
     private static DB db;
