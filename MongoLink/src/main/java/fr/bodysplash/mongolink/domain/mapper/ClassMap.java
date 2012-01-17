@@ -37,14 +37,12 @@ public abstract class ClassMap<T> {
     protected void property(Object value) {
         String name = lastMethod.shortName();
         LOGGER.debug("Mapping property " + name);
-        PropertyMapper property = new PropertyMapper(lastMethod);
-        getMapper().addProperty(property);
+        getMapper().addProperty(new PropertyMapper(lastMethod));
     }
 
     protected void collection(Object value) {
         LOGGER.debug("Mapping collection:" + lastMethod.shortName());
-        CollectionMapper collection = new CollectionMapper(lastMethod);
-        getMapper().addCollection(collection);
+        getMapper().addCollection(new CollectionMapper(lastMethod));
     }
 
     public void buildMapper(MapperContext context) {
@@ -63,6 +61,10 @@ public abstract class ClassMap<T> {
     }
 
     protected abstract ClassMapper<T> getMapper();
+
+    protected void component(Object component) {
+        getMapper().addComponent(new PropertyComponentMapper(getLastMethod().getMethod().getReturnType() ,getLastMethod()));
+    }
 
     private static final Logger LOGGER = Logger.getLogger(EntityMap.class);
     private MethodContainer lastMethod;

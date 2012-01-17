@@ -3,13 +3,14 @@ package fr.bodysplash.mongolink.domain.mapper;
 import com.google.common.collect.Lists;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
+import fr.bodysplash.mongolink.domain.converter.Converter;
 import net.sf.cglib.core.ReflectUtils;
 import org.apache.log4j.Logger;
 
 import java.util.List;
 
 @SuppressWarnings("unchecked")
-public abstract class ClassMapper<T> implements Mapper {
+public abstract class ClassMapper<T> extends Converter implements Mapper {
 
     public ClassMapper(Class<T> persistentType) {
         this.persistentType = persistentType;
@@ -42,6 +43,11 @@ public abstract class ClassMapper<T> implements Mapper {
         mappers.add(propertyComponentMapper);
     }
 
+    @Override
+    public Object fromDbValue(Object value) {
+        return toInstance((DBObject) value);
+    }
+
     public T toInstance(DBObject from) {
         T instance = makeInstance();
         populate(instance, from);
@@ -57,6 +63,11 @@ public abstract class ClassMapper<T> implements Mapper {
         for (Mapper mapper : mappers) {
             mapper.populate(instance, from);
         }
+    }
+
+    @Override
+    public Object toDbValue(Object value) {
+        return toDBObject(value);
     }
 
     public DBObject toDBObject(Object element) {

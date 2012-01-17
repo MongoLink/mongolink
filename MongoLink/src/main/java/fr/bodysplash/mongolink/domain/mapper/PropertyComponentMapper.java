@@ -12,10 +12,6 @@ public class PropertyComponentMapper extends PropertyMapper {
         this.type = type;
     }
 
-    public ComponentMapper<?> find() {
-        return (ComponentMapper<?>) context().mapperFor(type);
-    }
-
     private MapperContext context() {
         return getMapper().getContext();
     }
@@ -28,6 +24,10 @@ public class PropertyComponentMapper extends PropertyMapper {
             find().save(propertyValue, child);
             into.put(dbFieldName(), child);
         }
+    }
+
+    public ComponentMapper<?> find() {
+        return (ComponentMapper<?>) context().mapperFor(type);
     }
 
     @Override

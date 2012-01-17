@@ -1,6 +1,7 @@
 package fr.bodysplash.mongolink.domain.mapper;
 
 import com.google.common.collect.Lists;
+import fr.bodysplash.mongolink.domain.converter.Converter;
 
 import java.util.List;
 
@@ -22,6 +23,14 @@ public class MapperContext {
 
     public List<ClassMapper<?>> getMappers() {
         return mappers;
+    }
+
+    public Converter converterFor(Class<?> type) {
+        final ClassMapper<?> classMapper = mapperFor(type);
+        if(classMapper != null) {
+            return classMapper;
+        }
+        return Converter.forType(type);
     }
 
     private List<ClassMapper<?>> mappers = Lists.newArrayList();
