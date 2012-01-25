@@ -1,14 +1,20 @@
 package fr.bodysplash.mongolink.domain.mapper;
 
 import com.mongodb.BasicDBObject;
+import fr.bodysplash.mongolink.test.entity.Comment;
+import fr.bodysplash.mongolink.test.simpleMapping.CommentMapping;
 import fr.bodysplash.mongolink.utils.MethodContainer;
+import org.hamcrest.Matchers;
 import org.joda.time.DateTime;
 import org.junit.Test;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 public class TestsPropertyMapper {
 
@@ -64,14 +70,13 @@ public class TestsPropertyMapper {
 
     private PropertyMapper mapperForEnum() throws NoSuchMethodException {
         PropertyMapper propertyMapper = new PropertyMapper(new MethodContainer(FakeEntity.class.getDeclaredMethod("getValue")));
-        EntityMapper<FakeEntity> mapper = new EntityMapper<FakeEntity>(FakeEntity.class);
-        propertyMapper.setMapper(mapper);
+        propertyMapper.setMapper(parentMapper());
         return propertyMapper;
     }
 
     @Test
     public void canSavePrimitiveType() throws NoSuchMethodException {
-        PropertyMapper mapper = new PropertyMapper(new MethodContainer(primitiveGetter()));
+        PropertyMapper mapper = mapperForProperty();
         FakeEntity entity = new FakeEntity();
         entity.primitive = 10;
         BasicDBObject object = new BasicDBObject();
@@ -81,13 +86,19 @@ public class TestsPropertyMapper {
         assertThat(object.get("primitive"), is((Object) 10));
     }
 
+    private PropertyMapper mapperForProperty() throws NoSuchMethodException {
+        final PropertyMapper propertyMapper = new PropertyMapper(new MethodContainer(primitiveGetter()));
+        propertyMapper.setMapper(parentMapper());
+        return propertyMapper;
+    }
+
     private Method primitiveGetter() throws NoSuchMethodException {
         return FakeEntity.class.getDeclaredMethod("getPrimitive");
     }
 
     @Test
     public void canSaveDateTimeType() throws NoSuchMethodException {
-        PropertyMapper mapper = new PropertyMapper(new MethodContainer(FakeEntity.class.getDeclaredMethod("getCreationDate")));
+        PropertyMapper mapper = propertyMapperForDate();
         FakeEntity fakeEntity = new FakeEntity();
         DateTime now = new DateTime();
         fakeEntity.setCreationDate(now);
@@ -103,13 +114,67 @@ public class TestsPropertyMapper {
         BasicDBObject object = new BasicDBObject();
         DateTime dateTime = new DateTime();
         object.put("creationDate", dateTime.getMillis());
-        PropertyMapper propertyMapper = new PropertyMapper(new MethodContainer(FakeEntity.class.getDeclaredMethod("getCreationDate")));
-        EntityMapper<FakeEntity> mapper = new EntityMapper<FakeEntity>(FakeEntity.class);
-        propertyMapper.setMapper(mapper);
+        PropertyMapper propertyMapper = propertyMapperForDate();
         FakeEntity instance = new FakeEntity();
 
         propertyMapper.populate(instance, object);
 
         assertThat(instance.getCreationDate(), is(dateTime));
     }
+
+    private PropertyMapper propertyMapperForDate() throws NoSuchMethodException {
+        final PropertyMapper result = new PropertyMapper(new MethodContainer(FakeEntity.class.getDeclaredMethod("getCreationDate")));
+        result.setMapper(parentMapper());
+        return result;
+    }
+
+    private EntityMapper<FakeEntity> parentMapper() {
+        EntityMapper<FakeEntity> mapper = new EntityMapper<FakeEntity>(FakeEntity.class);
+        final MapperContext context = new MapperContext();
+        context.addMapper(mapper);
+        return mapper;
+    }
+
+    @Test
+    public void canSerializeToDBOject() throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
+        final BasicDBObject into = new BasicDBObject();
+        fr.bodysplash.mongolink.test.entity.FakeEntity entity = new fr.bodysplash.mongolink.test.entity.FakeEntity("te");
+        final Comment comment = new Comment("tes");
+        entity.setComment(comment);
+
+        propertyMapperForComponent().save(entity, into);
+
+        final BasicDBObject commentDB = (BasicDBObject) into.get("comment");
+        assertThat(commentDB, notNullValue());
+        assertThat(commentDB.get("value").toString(), Matchers.is("tes"));
+    }
+
+    @Test
+    public void canPopulate() throws NoSuchMethodException {
+        final BasicDBObject from = new BasicDBObject();
+        final BasicDBObject val = new BasicDBObject();
+        val.put("value", "valeur");
+        from.put("comment", val);
+        fr.bodysplash.mongolink.test.entity.FakeEntity instance = new fr.bodysplash.mongolink.test.entity.FakeEntity("kjklj");
+
+        propertyMapperForComponent().populate(instance, from);
+
+        assertThat(instance.getComment().getValue(), Matchers.is("valeur"));
+    }
+
+
+    public PropertyMapper propertyMapperForComponent() throws NoSuchMethodException {
+        MapperContext context = new MapperContext();
+        CommentMapping mapping = new CommentMapping();
+        mapping.buildMapper(context);
+        final ClassMapper classMapper = mock(ClassMapper.class);
+        when(classMapper.getContext()).thenReturn(context);
+        when(classMapper.getPersistentType()).thenReturn(fr.bodysplash.mongolink.test.entity.FakeEntity.class);
+        final Method method = fr.bodysplash.mongolink.test.entity.FakeEntity.class.getMethod("getComment", null);
+        MethodContainer methodContainer = new MethodContainer(method);
+        PropertyMapper propertyComponentMapper = new PropertyMapper(methodContainer);
+        propertyComponentMapper.setMapper(classMapper);
+        return propertyComponentMapper;
+    }
+
 }

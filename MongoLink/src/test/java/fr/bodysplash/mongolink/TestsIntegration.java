@@ -112,8 +112,8 @@ public class TestsIntegration {
         FakeChildEntity entity = (FakeChildEntity) mongoSession.get("5d9d9b5e36a9a4265ea9ecbe", FakeEntity.class);
 
         assertThat(entity, notNullValue());
-        assertThat(entity.getChildName(), is("child value"));
         assertThat(entity.getValue(), is("parent value"));
+        assertThat(entity.getChildName(), is("child value"));
     }
 
     @Test

@@ -20,6 +20,7 @@ public abstract class SubclassMap<T> extends ClassMap<T> {
     public void buildMapper(MapperContext context) {
         map();
         parentMap.getMapper().addSubclass(getMapper());
+        getMapper().setContext(context);
     }
 
     private EntityMap<?> parentMap;

@@ -13,7 +13,7 @@ public class FakeEntityMappingWithComponent extends EntityMap<FakeEntity> {
 
     @Override
     protected void map() {
-        component(element().getComment());
+        property(element().getComment());
     }
 
     @Override

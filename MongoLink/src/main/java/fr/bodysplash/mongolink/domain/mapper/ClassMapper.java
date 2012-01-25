@@ -38,11 +38,6 @@ public abstract class ClassMapper<T> extends Converter implements Mapper {
         mappers.add(property);
     }
 
-    public void addComponent(PropertyComponentMapper propertyComponentMapper) {
-        propertyComponentMapper.setMapper(this);
-        mappers.add(propertyComponentMapper);
-    }
-
     @Override
     public Object fromDbValue(Object value) {
         return toInstance((DBObject) value);

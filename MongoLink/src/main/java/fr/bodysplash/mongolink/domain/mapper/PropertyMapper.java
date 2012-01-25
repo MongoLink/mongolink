@@ -20,11 +20,14 @@ class PropertyMapper implements Mapper {
 
     @Override
     public void save(Object instance, DBObject into) {
-        into.put(dbFieldName(), converter().toDbValue(getPropertyValue(instance)));
+        final Object propertyValue = getPropertyValue(instance);
+        if (propertyValue != null) {
+            into.put(dbFieldName(), converter().toDbValue(propertyValue));
+        }
     }
 
     private Converter converter() {
-        return Converter.forMethod(method);
+        return getMapper().getContext().converterFor(method.getReturnType());
     }
 
     protected Object getPropertyValue(Object element) {

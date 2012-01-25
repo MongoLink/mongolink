@@ -104,16 +104,4 @@ public class TestsEntityMap {
         assertThat(mapper, notNullValue());
     }
 
-    @Test
-    public void canDeclareComponent() {
-        final EntityMapper<FakeEntity> mockMapper = mock(EntityMapper.class);
-        final FakeEntityMappingWithComponent map = new FakeEntityMappingWithComponent(mockMapper);
-
-        map.buildMapper(new MapperContext());
-
-        ArgumentCaptor<PropertyComponentMapper> captor = ArgumentCaptor.forClass(PropertyComponentMapper.class);
-        verify(mockMapper).addComponent(captor.capture());
-        final PropertyComponentMapper propertyComponentMapper = captor.getValue();
-        assertThat(propertyComponentMapper, notNullValue());
-    }
 }

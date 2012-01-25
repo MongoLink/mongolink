@@ -62,10 +62,6 @@ public abstract class ClassMap<T> {
 
     protected abstract ClassMapper<T> getMapper();
 
-    protected void component(Object component) {
-        getMapper().addComponent(new PropertyComponentMapper(getLastMethod().getMethod().getReturnType() ,getLastMethod()));
-    }
-
     private static final Logger LOGGER = Logger.getLogger(EntityMap.class);
     private MethodContainer lastMethod;
     private final Class<T> type;
