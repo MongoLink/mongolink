@@ -83,5 +83,5 @@ public class UnitOfWork {
 
     private MongoSession session;
 
-    private Map<Key, Value> values = Maps.newHashMap();
+    private Map<Key, Value> values = Maps.newConcurrentMap();
 }
