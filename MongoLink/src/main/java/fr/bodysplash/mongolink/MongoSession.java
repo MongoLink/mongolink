@@ -20,7 +20,7 @@ import fr.bodysplash.mongolink.domain.updateStategy.UpdateStrategy;
 
 public class MongoSession {
 
-	public MongoSession(final DB db, final CriteriaFactory criteriaFactory) {
+	public MongoSession(DB db, CriteriaFactory criteriaFactory) {
 		this.db = db;
 		this.criteriaFactory = criteriaFactory;
 	}
@@ -34,11 +34,11 @@ public class MongoSession {
 		db.requestDone();
 	}
 
-	protected void setMappingContext(final MapperContext context) {
+	protected void setMappingContext(MapperContext context) {
 		this.context = context;
 	}
 
-	public <T> T get(final String id, final Class<T> entityType) {
+	public <T> T get(String id, Class<T> entityType) {
 		EntityMapper<T> mapper = (EntityMapper<T>) entityMapper(entityType);
 		Object dbId = mapper.getDbId(id);
 		if (unitOfWork.contains(entityType, dbId)) {
@@ -48,11 +48,11 @@ public class MongoSession {
 		return (T) createExecutor(mapper).executeUnique(query);
 	}
 
-	public <T> List<T> getAll(final Class<T> entityType) {
+	public <T> List<T> getAll(Class<T> entityType) {
 		return createExecutor(entityMapper(entityType)).execute(new BasicDBObject());
 	}
 
-	public void save(final Object element) {
+	public void save(Object element) {
 		EntityMapper<?> mapper = entityMapper(element.getClass());
 		DBObject dbObject = mapper.toDBObject(element);
 		getDbCollection(mapper).insert(dbObject);
@@ -60,22 +60,22 @@ public class MongoSession {
 		unitOfWork.add(mapper.getId(element), element, dbObject);
 	}
 
-	public void update(final Object element) {
+	public void update(Object element) {
 		EntityMapper<?> mapper = entityMapper(element.getClass());
-		final DBObject initialValue = unitOfWork.getDBOBject(element.getClass(), mapper.getId(element));
+		DBObject initialValue = unitOfWork.getDBOBject(element.getClass(), mapper.getId(element));
 		DBObject update = mapper.toDBObject(element);
 		updateStrategy.update(initialValue, update, getDbCollection(mapper));
 		unitOfWork.update(mapper.getId(element), element, update);
 	}
 
-	public void delete(final Object element) {
+	public void delete(Object element) {
 		EntityMapper<?> mapper = entityMapper(element.getClass());
-		final DBObject value = unitOfWork.getDBOBject(element.getClass(), mapper.getId(element));
+		DBObject value = unitOfWork.getDBOBject(element.getClass(), mapper.getId(element));
 		getDbCollection(mapper).remove(value);
 		unitOfWork.delete(mapper.getId(element), element);
 	}
 
-	private DBCollection getDbCollection(final EntityMapper<?> mapper) {
+	private DBCollection getDbCollection(EntityMapper<?> mapper) {
 		return db.getCollection(mapper.collectionName());
 	}
 
@@ -83,7 +83,7 @@ public class MongoSession {
 		return db;
 	}
 
-	public Criteria createCriteria(final Class<?> type) {
+	public Criteria createCriteria(Class<?> type) {
 		return criteriaFactory.create(createExecutor(entityMapper(type)));
 	}
 
@@ -91,7 +91,7 @@ public class MongoSession {
 		return updateStrategy;
 	}
 
-	public void setUpdateStrategy(final UpdateStrategies updateStrategy) {
+	public void setUpdateStrategy(UpdateStrategies updateStrategy) {
 		this.updateStrategy = updateStrategy.instance();
 	}
 
@@ -99,16 +99,16 @@ public class MongoSession {
 		unitOfWork.clear();
 	}
 
-	private QueryExecutor createExecutor(final EntityMapper<?> mapper) {
+	private QueryExecutor createExecutor(EntityMapper<?> mapper) {
 		return new QueryExecutor(db, mapper, unitOfWork);
 	}
 
-	private EntityMapper<?> entityMapper(final Class<?> type) {
+	private EntityMapper<?> entityMapper(Class<?> type) {
 		checkIsAnEntity(type);
 		return (EntityMapper<?>) context.mapperFor(type);
 	}
 
-	private void checkIsAnEntity(final Class<?> entityType) {
+	private void checkIsAnEntity(Class<?> entityType) {
 		ClassMapper<?> mapper = context.mapperFor(entityType);
 		if (mapper == null || !(mapper instanceof EntityMapper)) {
 			throw new MongoLinkError(entityType.getName() + " is not an entity");
@@ -118,6 +118,6 @@ public class MongoSession {
 	private final DB db;
 	private MapperContext context;
 	private final UnitOfWork unitOfWork = new UnitOfWork(this);
-	private final CriteriaFactory criteriaFactory;
+	private CriteriaFactory criteriaFactory;
 	private UpdateStrategy updateStrategy = new OverwriteStrategy();
 }

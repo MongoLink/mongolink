@@ -10,11 +10,11 @@ import fr.bodysplash.mongolink.MongoSession;
 
 public class UnitOfWork {
 
-	public UnitOfWork(final MongoSession session) {
+	public UnitOfWork(MongoSession session) {
 		this.session = session;
 	}
 
-	public void add(final Object id, final Object entity, final DBObject initialValue) {
+	public void add(Object id, Object entity, DBObject initialValue) {
 		values.put(new Key(entity.getClass(), id), new Value(entity, initialValue));
 	}
 
@@ -24,24 +24,24 @@ public class UnitOfWork {
 		}
 	}
 
-	public boolean contains(final Class<?> type, final Object dbId) {
+	public boolean contains(Class<?> type, Object dbId) {
 		return values.containsKey(new Key(type, dbId));
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T> T getEntity(final Class<?> type, final Object dbId) {
+	public <T> T getEntity(Class<?> type, Object dbId) {
 		return (T) getValue(type, dbId).entity;
 	}
 
-	public DBObject getDBOBject(final Class<?> type, final Object dbId) {
+	public DBObject getDBOBject(Class<?> type, Object dbId) {
 		return getValue(type, dbId).initialValue;
 	}
 
-	private Value getValue(final Class<?> type, final Object dbId) {
+	private Value getValue(Class<?> type, Object dbId) {
 		return values.get(new Key(type, dbId));
 	}
 
-	public void update(final Object id, final Object element, final DBObject update) {
+	public void update(Object id, Object element, DBObject update) {
 		values.put(new Key(element.getClass(), id), new Value(element, update));
 	}
 
@@ -49,13 +49,13 @@ public class UnitOfWork {
 		values.clear();
 	}
 
-	public void delete(final Object id, final Object element) {
+	public void delete(Object id, Object element) {
 		values.remove(new Key(element.getClass(), id));
 	}
 
 	private class Value {
 
-		private Value(final Object entity, final DBObject initialValue) {
+		private Value(Object entity, DBObject initialValue) {
 			this.entity = entity;
 			this.initialValue = initialValue;
 		}
@@ -66,13 +66,13 @@ public class UnitOfWork {
 
 	private class Key {
 
-		private Key(final Class<?> type, final Object id) {
+		private Key(Class<?> type, Object id) {
 			this.type = type;
 			this.id = id;
 		}
 
 		@Override
-		public boolean equals(final Object o) {
+		public boolean equals(Object o) {
 			Key other = (Key) o;
 			return Objects.equal(type, other.type) && Objects.equal(id, other.id);
 		}
@@ -87,8 +87,8 @@ public class UnitOfWork {
 		Object id;
 	}
 
-	private final MongoSession session;
+	private MongoSession session;
 
-	private final Map<Key, Value> values = Maps.newHashMap();
+	private Map<Key, Value> values = Maps.newHashMap();
 
 }
