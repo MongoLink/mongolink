@@ -8,7 +8,6 @@ import java.util.List;
 
 import org.bson.types.ObjectId;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -304,16 +303,14 @@ public class TestsMongoSession {
 	}
 
 	@Test
-	@Ignore
-	public void canDeleteEntityIfNotInCache() {
+	public void cantDeleteEntityNotInCache() {
 		final FakeEntityWithNaturalId entity = new FakeEntityWithNaturalId("cle unique");
 		session.save(entity);
 		session.clear();
 
+		exception.expect(MongoLinkError.class);
+		exception.expectMessage("Entity to delete not loaded");
 		session.delete(entity);
-
-		assertThat(entities.getObjects().size(), is(0));
-		assertThat(session.get("cle unique", FakeEntityWithNaturalId.class), nullValue());
 	}
 
 	@Test
