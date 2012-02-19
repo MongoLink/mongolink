@@ -70,9 +70,16 @@ public class MongoSession {
 
 	public void delete(Object element) {
 		EntityMapper<?> mapper = entityMapper(element.getClass());
+		checkEntityIsInCache(element, mapper);
 		DBObject value = unitOfWork.getDBOBject(element.getClass(), mapper.getId(element));
 		getDbCollection(mapper).remove(value);
 		unitOfWork.delete(mapper.getId(element), element);
+	}
+
+	private void checkEntityIsInCache(Object element, EntityMapper<?> mapper) {
+		if (!unitOfWork.contains(element.getClass(), mapper.getId(element))) {
+			throw new MongoLinkError("Entity to delete not loaded");
+		}
 	}
 
 	private DBCollection getDbCollection(EntityMapper<?> mapper) {
