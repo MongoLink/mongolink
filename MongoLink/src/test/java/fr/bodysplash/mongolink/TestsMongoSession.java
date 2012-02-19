@@ -305,7 +305,7 @@ public class TestsMongoSession {
 
 	@Test
 	@Ignore
-	public void canDeleteEntityIfNotCache() {
+	public void canDeleteEntityIfNotInCache() {
 		final FakeEntityWithNaturalId entity = new FakeEntityWithNaturalId("cle unique");
 		session.save(entity);
 		session.clear();
