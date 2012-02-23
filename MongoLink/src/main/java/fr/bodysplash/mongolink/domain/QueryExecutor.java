@@ -6,7 +6,6 @@ import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import fr.bodysplash.mongolink.domain.mapper.EntityMapper;
-import fr.bodysplash.mongolink.domain.mapper.MapperContext;
 
 import java.util.List;
 
@@ -65,6 +64,5 @@ public class QueryExecutor<T> {
 
     private DB db;
     private EntityMapper<T> mapper;
-    private MapperContext context;
     private UnitOfWork unitOfWork;
 }
