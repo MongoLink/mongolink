@@ -22,7 +22,7 @@ public abstract class ClassMap<T> {
         return (T) enhancer.create();
     }
 
-    public void setLastMethod(MethodContainer lastMethod) {
+    void setLastMethod(MethodContainer lastMethod) {
         this.lastMethod = lastMethod;
     }
 
@@ -52,7 +52,7 @@ public abstract class ClassMap<T> {
 
     protected abstract void map();
 
-    protected MethodContainer getLastMethod() {
+    MethodContainer getLastMethod() {
         return lastMethod;
     }
 
