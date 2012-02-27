@@ -25,6 +25,7 @@ package fr.bodysplash.mongolink.domain;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
+import fr.bodysplash.mongolink.domain.updateStategy.DbObjectDiff;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -89,6 +90,7 @@ public class TestsDbObjectDiff {
         final DBObject push = (DBObject) diff.get("$push");
         assertThat(push, notNullValue());
         assertThat(push.keySet().size(), is(1));
+        assertThat(push.get("list").toString(), is("new value") );
     }
 
     @Test

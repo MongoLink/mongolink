@@ -19,10 +19,9 @@
  *
  */
 
-package fr.bodysplash.mongolink.domain;
+package fr.bodysplash.mongolink.domain.updateStategy;
 
 
-import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 
@@ -42,40 +41,15 @@ public class DbObjectDiff {
     private void generateDiff(DBObject target) {
         set = new BasicDBObject();
         push = new BasicDBObject();
-        for (String key : target.keySet()) {
-            diffFor(key, target);
-        }
+        new DocumentVisitor(this, origin).visit(target);
     }
 
-    private void diffFor(String key, DBObject target) {
-        final Object field = target.get(key);
-        if (isAList(field)) {
-            compareList(key, (BasicDBList) field);
-        } else {
-            compareProperty(key, field);
-        }
+    void addPut(final String key, Object val) {
+        push.put(key, val);
     }
 
-    private void compareList(final String key, final BasicDBList field) {
-        BasicDBList originalList = (BasicDBList) origin.get(key);
-        if (originalList.size() == field.size()) {
-            return;
-        }
-        push.put(key, field.get(field.size() - 1));
-    }
-
-    private boolean isAList(Object field) {
-        return field instanceof BasicDBList;
-    }
-
-    private void compareProperty(String key, Object field) {
-        if (hasDifference(key, field)) {
-            set.append(key, field);
-        }
-    }
-
-    private boolean hasDifference(final String key, Object field) {
-        return !origin.get(key).equals(field);
+    void addSet(final String key, final Object field) {
+        set.append(key, field);
     }
 
     private void appendChanges(BasicDBObject result) {

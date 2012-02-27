@@ -21,21 +21,29 @@
 
 package fr.bodysplash.mongolink.domain.updateStategy;
 
-import com.mongodb.DBCollection;
-import com.mongodb.DBObject;
-import org.apache.log4j.Logger;
+import com.mongodb.BasicDBList;
 
-public class DiffStrategy extends UpdateStrategy {
+/**
+ * @author jb
+ */
+public class ListVisitor extends Visitor {
 
-    @Override
-    public void update(DBObject initialValue, DBObject update, DBCollection collection) {
-        final DBObject diff = new DbObjectDiff(initialValue).compareWith(update);
-        if (!diff.keySet().isEmpty()) {
-            final DBObject q = updateQuery(initialValue);
-            LOGGER.debug("Updating query:" + q + " values: " + diff);
-            collection.update(q, diff);
-        }
+    public ListVisitor(final DbObjectDiff dbObjectDiff, String key, final BasicDBList origin) {
+        super(dbObjectDiff, key, origin);
     }
 
-    private static Logger LOGGER = Logger.getLogger(DiffStrategy.class);
+    @Override
+    public void visit(final Object target) {
+        final BasicDBList targetList = (BasicDBList) target;
+        if (getOrigin().size() == targetList.size()) {
+            return;
+        }
+        getDbObjectDiff().addPut(getKey(), targetList.get(targetList.size() -1));
+    }
+
+    @Override
+    protected BasicDBList getOrigin() {
+        return (BasicDBList) super.getOrigin();
+    }
+
 }
