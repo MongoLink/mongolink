@@ -30,14 +30,16 @@ import com.mongodb.DBObject;
 public class DocumentVisitor extends Visitor{
 
     public DocumentVisitor(final DbObjectDiff dbObjectDiff, final DBObject origin) {
-        super(dbObjectDiff, "", origin);
+        super(dbObjectDiff, origin);
     }
 
     @Override
     public void visit(final Object target) {
         final DBObject dbObject = (DBObject) target;
         for (String key : dbObject.keySet()) {
+            getDbObjectDiff().pushKey(key);
             visit(key, (DBObject) target);
+            getDbObjectDiff().popKey();
         }
     }
 
@@ -45,27 +47,26 @@ public class DocumentVisitor extends Visitor{
         final Object field = target.get(key);
         if (isAList(field)) {
             visitList(key, (BasicDBList) field);
-        } else {
+        }else {
             visitProperty(key, field);
         }
     }
 
+    private boolean isAList(Object field) {
+        return field instanceof BasicDBList;
+    }
+
     private void visitList(final String key, final BasicDBList field) {
-        new ListVisitor(getDbObjectDiff(), key, (BasicDBList) getOrigin().get(key)).visit((BasicDBList) field);
+        visitList((BasicDBList) getOrigin().get(key), field);
     }
 
     private void visitProperty(final String key, final Object field) {
-        new PropertyVisitor(getDbObjectDiff(), key, getOrigin().get(key)).visit(field);
-
+        visitProperty(getOrigin().get(key), field);
     }
 
     @Override
     protected DBObject getOrigin() {
         return (DBObject) super.getOrigin();
-    }
-
-    private boolean isAList(Object field) {
-        return field instanceof BasicDBList;
     }
 
 }

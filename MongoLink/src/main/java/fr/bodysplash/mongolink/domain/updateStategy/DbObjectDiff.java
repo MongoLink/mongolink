@@ -25,6 +25,8 @@ package fr.bodysplash.mongolink.domain.updateStategy;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 
+import java.util.Stack;
+
 public class DbObjectDiff {
 
     public DbObjectDiff(final DBObject origin) {
@@ -44,12 +46,22 @@ public class DbObjectDiff {
         new DocumentVisitor(this, origin).visit(target);
     }
 
-    void addPut(final String key, Object val) {
-        push.put(key, val);
+    void addPut(Object value) {
+        push.put(makeKey(), value);
     }
 
-    void addSet(final String key, final Object field) {
-        set.append(key, field);
+    void addSet(final Object value) {
+        set.append(makeKey(), value);
+    }
+
+    private String makeKey() {
+        StringBuilder keyBuilder = new StringBuilder();
+        for (String s : keys) {
+            keyBuilder.append(s);
+            keyBuilder.append(".");
+        }
+        keyBuilder.deleteCharAt(keyBuilder.length() -1);
+        return keyBuilder.toString();
     }
 
     private void appendChanges(BasicDBObject result) {
@@ -61,6 +73,15 @@ public class DbObjectDiff {
         }
     }
 
+    public void pushKey(final String key) {
+        keys.push(key);
+    }
+
+    public void popKey() {
+        keys.pop();
+    }
+
+    private Stack<String> keys = new Stack<String>();
     private DBObject origin;
     private BasicDBObject set;
     private BasicDBObject push;

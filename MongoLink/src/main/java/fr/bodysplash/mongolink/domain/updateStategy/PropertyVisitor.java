@@ -21,27 +21,31 @@
 
 package fr.bodysplash.mongolink.domain.updateStategy;
 
+import com.mongodb.DBObject;
+
 /**
  * @author jb
  */
-public class PropertyVisitor {
-    public PropertyVisitor(final DbObjectDiff dbObjectDiff, final String key, final Object origin) {
-        this.dbObjectDiff = dbObjectDiff;
-        this.key = key;
-        this.origin = origin;
+public class PropertyVisitor extends Visitor {
+
+    public PropertyVisitor(final DbObjectDiff dbObjectDiff, final Object origin) {
+        super(dbObjectDiff, origin);
     }
 
     public void visit(final Object field) {
-        if (hasDifference(key, field)) {
-            dbObjectDiff.addSet(key, field);
+        if (isADocument(field)) {
+            visitDocument((DBObject) getOrigin(), field);
+        } else if (hasDifference(field)) {
+            getDbObjectDiff().addSet(field);
         }
     }
 
-    private boolean hasDifference(final String key, Object field) {
-        return !origin.equals(field);
+    private boolean isADocument(final Object field) {
+        return DBObject.class.isAssignableFrom(field.getClass());
     }
 
-    private DbObjectDiff dbObjectDiff;
-    private String key;
-    private Object origin;
+    private boolean hasDifference(Object field) {
+        return !getOrigin().equals(field);
+    }
+
 }

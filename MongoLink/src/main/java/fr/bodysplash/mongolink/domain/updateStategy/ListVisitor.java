@@ -28,8 +28,8 @@ import com.mongodb.BasicDBList;
  */
 public class ListVisitor extends Visitor {
 
-    public ListVisitor(final DbObjectDiff dbObjectDiff, String key, final BasicDBList origin) {
-        super(dbObjectDiff, key, origin);
+    public ListVisitor(final DbObjectDiff dbObjectDiff, final BasicDBList origin) {
+        super(dbObjectDiff, origin);
     }
 
     @Override
@@ -38,7 +38,7 @@ public class ListVisitor extends Visitor {
         if (getOrigin().size() == targetList.size()) {
             return;
         }
-        getDbObjectDiff().addPut(getKey(), targetList.get(targetList.size() -1));
+        getDbObjectDiff().addPut(targetList.get(targetList.size() -1));
     }
 
     @Override

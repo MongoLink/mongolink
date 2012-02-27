@@ -29,8 +29,7 @@ import fr.bodysplash.mongolink.domain.updateStategy.DbObjectDiff;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
 public class TestsDbObjectDiff {
@@ -121,6 +120,41 @@ public class TestsDbObjectDiff {
         final DBObject diff = new DbObjectDiff(origin).compareWith(dirty);
 
         assertThat(diff.containsField("$push"), is(false));
+    }
+
+    @Test
+    public void canNavigateInComponent() {
+        BasicDBObject subElement = new BasicDBObject();
+        subElement.put("test", "old value");
+        final BasicDBObject otherSubElement = new BasicDBObject();
+        otherSubElement.put("test", "new value");
+        addValue("sub", subElement, otherSubElement);
+        addValue("firstLevel", "old", "new");
+
+        final DBObject diff = new DbObjectDiff(origin).compareWith(dirty);
+
+        final DBObject $set = (DBObject) diff.get("$set");
+        assertThat($set.keySet().size(), is(2));
+        assertThat($set.keySet(), hasItem("sub.test"));
+        assertThat($set.keySet(), hasItem("firstLevel"));
+    }
+
+    @Test
+    public void canGeneratePushIntoASubElement() {
+        BasicDBObject subElement = new BasicDBObject();
+        final BasicDBList val = new BasicDBList();
+        val.add("old list value");
+        subElement.put("test", val.clone());
+        final BasicDBObject otherSubElement = new BasicDBObject();
+        val.add("new value");
+        otherSubElement.put("test", val);
+        addValue("sub", subElement, otherSubElement);
+
+        final DBObject diff = new DbObjectDiff(origin).compareWith(dirty);
+
+        final DBObject $put = (DBObject) diff.get("$put");
+        assertThat($put.keySet().size(), is(1));
+        assertThat($put.keySet(), hasItem("sub.test"));
     }
 
     private void addValue(String key, Object originalValue, Object dirtyValue) {
