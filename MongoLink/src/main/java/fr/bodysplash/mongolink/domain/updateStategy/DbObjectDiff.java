@@ -46,7 +46,7 @@ public class DbObjectDiff {
         new DocumentVisitor(this, origin).visit(target);
     }
 
-    void addPut(Object value) {
+    void addPush(Object value) {
         push.put(makeKey(), value);
     }
 

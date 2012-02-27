@@ -152,7 +152,7 @@ public class TestsDbObjectDiff {
 
         final DBObject diff = new DbObjectDiff(origin).compareWith(dirty);
 
-        final DBObject $put = (DBObject) diff.get("$put");
+        final DBObject $put = (DBObject) diff.get("$push");
         assertThat($put.keySet().size(), is(1));
         assertThat($put.keySet(), hasItem("sub.test"));
     }

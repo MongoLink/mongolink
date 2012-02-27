@@ -38,7 +38,7 @@ public class ListVisitor extends Visitor {
         if (getOrigin().size() == targetList.size()) {
             return;
         }
-        getDbObjectDiff().addPut(targetList.get(targetList.size() -1));
+        getDbObjectDiff().addPush(targetList.get(targetList.size() - 1));
     }
 
     @Override
