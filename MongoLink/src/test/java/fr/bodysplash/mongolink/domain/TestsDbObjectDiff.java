@@ -30,7 +30,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 
 public class TestsDbObjectDiff {
 
@@ -89,7 +89,7 @@ public class TestsDbObjectDiff {
         final DBObject push = (DBObject) diff.get("$push");
         assertThat(push, notNullValue());
         assertThat(push.keySet().size(), is(1));
-        assertThat(push.get("list").toString(), is("new value") );
+        assertThat(push.get("list").toString(), is("new value"));
     }
 
     @Test
@@ -155,6 +155,35 @@ public class TestsDbObjectDiff {
         final DBObject $put = (DBObject) diff.get("$push");
         assertThat($put.keySet().size(), is(1));
         assertThat($put.keySet(), hasItem("sub.test"));
+    }
+
+    @Test
+    public void canGeneratePull() {
+        BasicDBList originalList = new BasicDBList();
+        BasicDBList dirtyList = new BasicDBList();
+        originalList.add("original");
+        addValue("list", originalList, dirtyList);
+
+        final DBObject diff = new DbObjectDiff(origin).compareWith(dirty);
+
+        final DBObject pull = (DBObject) diff.get("$pull");
+        assertThat(pull, notNullValue());
+        assertThat(pull.keySet().size(), is(1));
+    }
+
+    @Test
+    public void canGeneratePullOnFirstElement() {
+        BasicDBList originalList = new BasicDBList();
+        BasicDBList dirtyList = new BasicDBList();
+        originalList.add("original");
+        originalList.add("second value");
+        dirtyList.add("second value");
+        addValue("list", originalList, dirtyList);
+
+        final DBObject diff = new DbObjectDiff(origin).compareWith(dirty);
+
+        final DBObject pull = (DBObject) diff.get("$pull");
+        assertThat((String) pull.get("list"), is("original"));
     }
 
     private void addValue(String key, Object originalValue, Object dirtyValue) {

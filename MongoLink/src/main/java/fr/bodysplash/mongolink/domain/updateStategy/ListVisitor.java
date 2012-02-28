@@ -37,9 +37,21 @@ public class ListVisitor extends Visitor {
         final BasicDBList targetList = (BasicDBList) target;
         if (getOrigin().size() == targetList.size()) {
             return;
+        }else if (getOrigin().size() < targetList.size()) {
+            getDbObjectDiff().addPush(targetList.get(targetList.size() - 1));
+        } else {
+            compareDeletedElementsInList(targetList);
         }
-        getDbObjectDiff().addPush(targetList.get(targetList.size() - 1));
     }
+
+    private void compareDeletedElementsInList(final BasicDBList target) {
+        for (Object currentObject : getOrigin()) {
+            if (!target.contains(currentObject)) {
+                getDbObjectDiff().appPull(currentObject);
+            }
+        }
+    }
+
 
     @Override
     protected BasicDBList getOrigin() {

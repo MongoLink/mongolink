@@ -22,9 +22,11 @@
 package fr.bodysplash.mongolink.domain.updateStategy;
 
 
+import com.google.common.collect.Maps;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 
+import java.util.Map;
 import java.util.Stack;
 
 public class DbObjectDiff {
@@ -41,17 +43,26 @@ public class DbObjectDiff {
     }
 
     private void generateDiff(DBObject target) {
-        set = new BasicDBObject();
-        push = new BasicDBObject();
+        for (Modifier modifier : Modifier.values()) {
+            modifiers.put(modifier, new BasicDBObject());
+        }
         new DocumentVisitor(this, origin).visit(target);
     }
 
     void addPush(Object value) {
-        push.put(makeKey(), value);
+        addForModifier(Modifier.PUSH, value);
     }
 
     void addSet(final Object value) {
-        set.append(makeKey(), value);
+        addForModifier(Modifier.SET, value);
+    }
+
+    public void appPull(final Object value) {
+        addForModifier(Modifier.PULL, value);
+    }
+
+    private void addForModifier(final Modifier key, final Object value) {
+        modifiers.get(key).put(makeKey(), value);
     }
 
     private String makeKey() {
@@ -65,11 +76,14 @@ public class DbObjectDiff {
     }
 
     private void appendChanges(BasicDBObject result) {
-        if (!set.isEmpty()) {
-            result.append("$set", set);
+        for (Map.Entry<Modifier, BasicDBObject> entry : modifiers.entrySet()) {
+            appendIfNeeded(entry, result);
         }
-        if (!push.isEmpty()) {
-            result.append("$push", push);
+    }
+
+    private void appendIfNeeded(final Map.Entry<Modifier, BasicDBObject> entry, final BasicDBObject result) {
+        if(!entry.getValue().isEmpty()) {
+            result.append(entry.getKey().key, entry.getValue());
         }
     }
 
@@ -81,8 +95,16 @@ public class DbObjectDiff {
         keys.pop();
     }
 
+    private enum Modifier {
+        SET("$set"), PUSH("$push"), PULL("$pull");
+        Modifier(String key) {
+            this.key = key;
+        }
+
+        private String key;
+    }
+    
     private Stack<String> keys = new Stack<String>();
     private DBObject origin;
-    private BasicDBObject set;
-    private BasicDBObject push;
+    private Map<Modifier, BasicDBObject> modifiers = Maps.newConcurrentMap();
 }
