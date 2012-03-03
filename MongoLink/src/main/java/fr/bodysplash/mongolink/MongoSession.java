@@ -21,13 +21,10 @@
 
 package fr.bodysplash.mongolink;
 
-import java.util.List;
-
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
-
 import fr.bodysplash.mongolink.domain.QueryExecutor;
 import fr.bodysplash.mongolink.domain.UnitOfWork;
 import fr.bodysplash.mongolink.domain.UpdateStrategies;
@@ -38,6 +35,8 @@ import fr.bodysplash.mongolink.domain.mapper.EntityMapper;
 import fr.bodysplash.mongolink.domain.mapper.MapperContext;
 import fr.bodysplash.mongolink.domain.updateStategy.OverwriteStrategy;
 import fr.bodysplash.mongolink.domain.updateStategy.UpdateStrategy;
+
+import java.util.List;
 
 public class MongoSession {
 
@@ -111,7 +110,7 @@ public class MongoSession {
 		return db;
 	}
 
-	public Criteria createCriteria(Class<?> type) {
+	public <U> Criteria createCriteria(Class<U> type) {
 		return criteriaFactory.create(createExecutor(entityMapper(type)));
 	}
 
