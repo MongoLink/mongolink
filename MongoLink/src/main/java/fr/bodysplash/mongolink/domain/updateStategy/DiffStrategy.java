@@ -21,6 +21,7 @@
 
 package fr.bodysplash.mongolink.domain.updateStategy;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 import org.apache.log4j.Logger;
@@ -32,8 +33,16 @@ public class DiffStrategy extends UpdateStrategy {
         final DBObject diff = new DbObjectDiff(initialValue).compareWith(update);
         if (!diff.keySet().isEmpty()) {
             final DBObject q = updateQuery(initialValue);
+            final DBObject pull = (DBObject) diff.get(DbObjectDiff.Modifier.PULL.toString());
+            diff.removeField(DbObjectDiff.Modifier.PULL.toString());
             LOGGER.debug("Updating query:" + q + " values: " + diff);
             collection.update(q, diff);
+            // ugly hack to support removing element by index
+            // see https://jira.mongodb.org/browse/SERVER-1014
+            if(pull != null) {
+                LOGGER.debug("Cleaning collection:" + q + " values: " + pull);
+                collection.update(q, new BasicDBObject(DbObjectDiff.Modifier.PULL.toString(), pull));
+            }
         }
     }
 

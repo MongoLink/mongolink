@@ -23,6 +23,7 @@ package fr.bodysplash.mongolink;
 
 import com.google.common.collect.Lists;
 import com.mongodb.*;
+import fr.bodysplash.mongolink.domain.UpdateStrategies;
 import fr.bodysplash.mongolink.domain.criteria.Criteria;
 import fr.bodysplash.mongolink.domain.criteria.Restrictions;
 import fr.bodysplash.mongolink.domain.mapper.ContextBuilder;
@@ -44,7 +45,7 @@ public class TestsIntegration {
     @BeforeClass
     public static void beforeClass() {
         ContextBuilder builder = new ContextBuilder("fr.bodysplash.mongolink.test.integrationMapping");
-        sessionManager = MongoSessionManager.create(builder, Settings.defaultInstance());
+        sessionManager = MongoSessionManager.create(builder, Settings.defaultInstance().withDefaultUpdateStrategy(UpdateStrategies.DIFF));
         mongoSession = sessionManager.createSession();
         db = mongoSession.getDb();
     }
@@ -229,6 +230,20 @@ public class TestsIntegration {
 
         assertThat(entity.getComment(), notNullValue());
         assertThat(entity.getComment().getValue(), is("the comment"));
+    }
+
+    @Test
+    public void canRemoveElementFromArray() {
+        FakeEntity fake = new FakeEntity("test");
+        fake.addComment("a comment");
+        mongoSession.save(fake);
+        fake.getComments().clear();
+
+        mongoSession.stop();
+        mongoSession = sessionManager.createSession();
+        final FakeEntity entityFound = mongoSession.get(fake.getId(), FakeEntity.class);
+        assertThat(entityFound.getComments().size(), is(0));
+
     }
 
     private static DB db;

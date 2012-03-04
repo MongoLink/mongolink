@@ -49,6 +49,19 @@ public class DbObjectDiff {
         new DocumentVisitor(this, origin).visit(target);
     }
 
+    private void appendChanges(BasicDBObject result) {
+        for (Modifier modifier : Modifier.values()) {
+            appendIfNeeded(modifier, modifiers.get(modifier), result);
+        }
+        
+    }
+
+    private void appendIfNeeded(final Modifier key, final BasicDBObject entry, final BasicDBObject result) {
+        if(!entry.isEmpty()) {
+            result.append(key.key, entry);
+        }
+    }
+
     void addPush(Object value) {
         addForModifier(Modifier.PUSH, value);
     }
@@ -79,18 +92,6 @@ public class DbObjectDiff {
         return keyBuilder.toString();
     }
 
-    private void appendChanges(BasicDBObject result) {
-        for (Map.Entry<Modifier, BasicDBObject> entry : modifiers.entrySet()) {
-            appendIfNeeded(entry, result);
-        }
-    }
-
-    private void appendIfNeeded(final Map.Entry<Modifier, BasicDBObject> entry, final BasicDBObject result) {
-        if(!entry.getValue().isEmpty()) {
-            result.append(entry.getKey().key, entry.getValue());
-        }
-    }
-
     public void pushKey(final String key) {
         keys.push(key);
     }
@@ -99,10 +100,15 @@ public class DbObjectDiff {
         keys.pop();
     }
 
-    private enum Modifier {
-        SET("$set"), PUSH("$push"), PULL("$pull"), UNSET("$unset");
+    enum Modifier {
+        SET("$set"), PUSH("$push"), UNSET("$unset"), PULL("$pull");
         Modifier(String key) {
             this.key = key;
+        }
+
+        @Override
+        public String toString() {
+            return key;
         }
 
         private String key;
