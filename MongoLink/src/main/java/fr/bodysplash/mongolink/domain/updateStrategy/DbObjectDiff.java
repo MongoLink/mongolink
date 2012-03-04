@@ -19,7 +19,7 @@
  *
  */
 
-package fr.bodysplash.mongolink.domain.updateStategy;
+package fr.bodysplash.mongolink.domain.updateStrategy;
 
 
 import com.google.common.collect.Maps;

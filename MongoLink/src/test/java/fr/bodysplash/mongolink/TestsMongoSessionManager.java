@@ -25,7 +25,7 @@ import fr.bodysplash.mongolink.domain.UpdateStrategies;
 import fr.bodysplash.mongolink.domain.mapper.ContextBuilder;
 import fr.bodysplash.mongolink.domain.mapper.EntityMapper;
 import fr.bodysplash.mongolink.domain.mapper.MapperContext;
-import fr.bodysplash.mongolink.domain.updateStategy.DiffStrategy;
+import fr.bodysplash.mongolink.domain.updateStrategy.DiffStrategy;
 import fr.bodysplash.mongolink.test.entity.FakeEntity;
 import fr.bodysplash.mongolink.test.entity.FakeEntityWithCap;
 import fr.bodysplash.mongolink.test.factory.FakeDbFactory;
