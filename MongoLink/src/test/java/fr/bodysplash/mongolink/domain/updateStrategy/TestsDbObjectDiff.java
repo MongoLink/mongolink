@@ -19,12 +19,15 @@
  *
  */
 
-package fr.bodysplash.mongolink.domain.updateStategy;
+package fr.bodysplash.mongolink.domain.updateStrategy;
 
 
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
+
+import fr.bodysplash.mongolink.domain.updateStrategy.DbObjectDiff;
+
 import org.junit.Before;
 import org.junit.Test;
 

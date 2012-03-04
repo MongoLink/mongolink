@@ -33,8 +33,8 @@ import fr.bodysplash.mongolink.domain.criteria.CriteriaFactory;
 import fr.bodysplash.mongolink.domain.mapper.ClassMapper;
 import fr.bodysplash.mongolink.domain.mapper.EntityMapper;
 import fr.bodysplash.mongolink.domain.mapper.MapperContext;
-import fr.bodysplash.mongolink.domain.updateStategy.OverwriteStrategy;
-import fr.bodysplash.mongolink.domain.updateStategy.UpdateStrategy;
+import fr.bodysplash.mongolink.domain.updateStrategy.OverwriteStrategy;
+import fr.bodysplash.mongolink.domain.updateStrategy.UpdateStrategy;
 
 import java.util.List;
 
