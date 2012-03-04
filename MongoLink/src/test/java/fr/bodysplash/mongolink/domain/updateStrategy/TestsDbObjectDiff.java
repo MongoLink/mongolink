@@ -21,189 +21,199 @@
 
 package fr.bodysplash.mongolink.domain.updateStrategy;
 
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
+
+import org.junit.Before;
+import org.junit.Test;
 
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 
-import fr.bodysplash.mongolink.domain.updateStrategy.DbObjectDiff;
-
-import org.junit.Before;
-import org.junit.Test;
-
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
-
 public class TestsDbObjectDiff {
 
-    @Before
-    public void before() {
-        origin = new BasicDBObject();
-        dirty = new BasicDBObject();
-    }
+	@Before
+	public void before() {
+		origin = new BasicDBObject();
+		dirty = new BasicDBObject();
+	}
 
-    @Test
-    public void canDiffProperty() {
-        addValue("value", "original", "new one");
+	@Test
+	public void canDiffProperty() {
+		addValue("value", "original", "new one");
 
-        final DBObject diff = new DbObjectDiff(origin).compareWith(dirty);
+		final DBObject diff = new DbObjectDiff(origin).compareWith(dirty);
 
-        assertThat(diff.containsField("$set"), is(true));
-        final DBObject set = (DBObject) diff.get("$set");
-        assertThat(set, notNullValue());
-        assertThat(set.containsField("value"), is(true));
-        assertThat((String) set.get("value"), is("new one"));
-    }
+		assertThat(diff.containsField("$set"), is(true));
+		final DBObject set = (DBObject) diff.get("$set");
+		assertThat(set, notNullValue());
+		assertThat(set.containsField("value"), is(true));
+		assertThat((String) set.get("value"), is("new one"));
+	}
 
-    @Test
-    public void dontGenerateDiffWhenNoChanges() {
-        addValue("value", "value", "value");
+	@Test
+	public void canDiffPropertyWhenOriginalPropertyDoesNotExist() {
+		dirty.append("value", "new one");
 
-        final DBObject diff = new DbObjectDiff(origin).compareWith(dirty);
+		final DBObject diff = new DbObjectDiff(origin).compareWith(dirty);
 
-        assertThat(diff.keySet().size(), is(0));
-    }
+		assertThat(diff.containsField("$set"), is(true));
+		final DBObject set = (DBObject) diff.get("$set");
+		assertThat(set, notNullValue());
+		assertThat(set.containsField("value"), is(true));
+		assertThat((String) set.get("value"), is("new one"));
+	}
 
-    @Test
-    public void canGenerateMulipleDiff() {
-        addValue("value", "original", "new value");
-        addValue("other value", "other", "new other value");
+	@Test
+	public void dontGenerateDiffWhenNoChanges() {
+		addValue("value", "value", "value");
 
-        final DBObject diff = new DbObjectDiff(origin).compareWith(dirty);
+		final DBObject diff = new DbObjectDiff(origin).compareWith(dirty);
 
-        final DBObject $set = (DBObject) diff.get("$set");
-        assertThat($set.keySet().size(), is(2));
-        assertThat((String) $set.get("value"), is("new value"));
-        assertThat((String) $set.get("other value"), is("new other value"));
-    }
+		assertThat(diff.keySet().size(), is(0));
+	}
 
-    @Test
-    public void canGeneratePush() {
-        BasicDBList originalList = new BasicDBList();
-        BasicDBList dirtyList = new BasicDBList();
-        originalList.add("original");
-        dirtyList.add("original");
-        dirtyList.add("new value");
-        addValue("list", originalList, dirtyList);
+	@Test
+	public void canGenerateMulipleDiff() {
+		addValue("value", "original", "new value");
+		addValue("other value", "other", "new other value");
 
-        final DBObject diff = new DbObjectDiff(origin).compareWith(dirty);
+		final DBObject diff = new DbObjectDiff(origin).compareWith(dirty);
 
-        final DBObject push = (DBObject) diff.get("$push");
-        assertThat(push, notNullValue());
-        assertThat(push.keySet().size(), is(1));
-        assertThat(push.get("list").toString(), is("new value"));
-    }
+		final DBObject $set = (DBObject) diff.get("$set");
+		assertThat($set.keySet().size(), is(2));
+		assertThat((String) $set.get("value"), is("new value"));
+		assertThat((String) $set.get("other value"), is("new other value"));
+	}
 
-    @Test
-    public void canGeneratePushOnLastElement() {
-        BasicDBList originalList = new BasicDBList();
-        BasicDBList dirtyList = new BasicDBList();
-        originalList.add("original");
-        originalList.add("second value");
-        dirtyList.add("original");
-        dirtyList.add("second value");
-        dirtyList.add("new value");
-        addValue("list", originalList, dirtyList);
+	@Test
+	public void canGeneratePush() {
+		BasicDBList originalList = new BasicDBList();
+		BasicDBList dirtyList = new BasicDBList();
+		originalList.add("original");
+		dirtyList.add("original");
+		dirtyList.add("new value");
+		addValue("list", originalList, dirtyList);
 
-        final DBObject diff = new DbObjectDiff(origin).compareWith(dirty);
+		final DBObject diff = new DbObjectDiff(origin).compareWith(dirty);
 
-        final DBObject push = (DBObject) diff.get("$push");
-        assertThat((String) push.get("list"), is("new value"));
-    }
+		final DBObject push = (DBObject) diff.get("$push");
+		assertThat(push, notNullValue());
+		assertThat(push.keySet().size(), is(1));
+		assertThat(push.get("list").toString(), is("new value"));
+	}
 
-    @Test
-    public void dontGeneratePushWhenNoDiff() {
-        BasicDBList originalList = new BasicDBList();
-        BasicDBList dirtyList = new BasicDBList();
-        originalList.add("original");
-        dirtyList.add("original");
-        addValue("list", originalList, dirtyList);
+	@Test
+	public void canGeneratePushOnLastElement() {
+		BasicDBList originalList = new BasicDBList();
+		BasicDBList dirtyList = new BasicDBList();
+		originalList.add("original");
+		originalList.add("second value");
+		dirtyList.add("original");
+		dirtyList.add("second value");
+		dirtyList.add("new value");
+		addValue("list", originalList, dirtyList);
 
-        final DBObject diff = new DbObjectDiff(origin).compareWith(dirty);
+		final DBObject diff = new DbObjectDiff(origin).compareWith(dirty);
 
-        assertThat(diff.containsField("$push"), is(false));
-    }
+		final DBObject push = (DBObject) diff.get("$push");
+		assertThat((String) push.get("list"), is("new value"));
+	}
 
-    @Test
-    public void canNavigateInComponent() {
-        BasicDBObject subElement = new BasicDBObject();
-        subElement.put("test", "old value");
-        final BasicDBObject otherSubElement = new BasicDBObject();
-        otherSubElement.put("test", "new value");
-        addValue("sub", subElement, otherSubElement);
-        addValue("firstLevel", "old", "new");
+	@Test
+	public void dontGeneratePushWhenNoDiff() {
+		BasicDBList originalList = new BasicDBList();
+		BasicDBList dirtyList = new BasicDBList();
+		originalList.add("original");
+		dirtyList.add("original");
+		addValue("list", originalList, dirtyList);
 
-        final DBObject diff = new DbObjectDiff(origin).compareWith(dirty);
+		final DBObject diff = new DbObjectDiff(origin).compareWith(dirty);
 
-        final DBObject $set = (DBObject) diff.get("$set");
-        assertThat($set.keySet().size(), is(2));
-        assertThat($set.keySet(), hasItem("sub.test"));
-        assertThat($set.keySet(), hasItem("firstLevel"));
-    }
+		assertThat(diff.containsField("$push"), is(false));
+	}
 
-    @Test
-    public void canGeneratePushIntoASubElement() {
-        BasicDBObject subElement = new BasicDBObject();
-        final BasicDBList val = new BasicDBList();
-        val.add("old list value");
-        subElement.put("test", val.clone());
-        final BasicDBObject otherSubElement = new BasicDBObject();
-        val.add("new value");
-        otherSubElement.put("test", val);
-        addValue("sub", subElement, otherSubElement);
+	@Test
+	public void canNavigateInComponent() {
+		BasicDBObject subElement = new BasicDBObject();
+		subElement.put("test", "old value");
+		final BasicDBObject otherSubElement = new BasicDBObject();
+		otherSubElement.put("test", "new value");
+		addValue("sub", subElement, otherSubElement);
+		addValue("firstLevel", "old", "new");
 
-        final DBObject diff = new DbObjectDiff(origin).compareWith(dirty);
+		final DBObject diff = new DbObjectDiff(origin).compareWith(dirty);
 
-        final DBObject $put = (DBObject) diff.get("$push");
-        assertThat($put.keySet().size(), is(1));
-        assertThat($put.keySet(), hasItem("sub.test"));
-    }
+		final DBObject $set = (DBObject) diff.get("$set");
+		assertThat($set.keySet().size(), is(2));
+		assertThat($set.keySet(), hasItem("sub.test"));
+		assertThat($set.keySet(), hasItem("firstLevel"));
+	}
 
-    @Test
-    public void canGeneratePull() {
-        BasicDBList originalList = new BasicDBList();
-        BasicDBList dirtyList = new BasicDBList();
-        originalList.add("original");
-        addValue("list", originalList, dirtyList);
+	@Test
+	public void canGeneratePushIntoASubElement() {
+		BasicDBObject subElement = new BasicDBObject();
+		final BasicDBList val = new BasicDBList();
+		val.add("old list value");
+		subElement.put("test", val.clone());
+		final BasicDBObject otherSubElement = new BasicDBObject();
+		val.add("new value");
+		otherSubElement.put("test", val);
+		addValue("sub", subElement, otherSubElement);
 
-        final DBObject diff = new DbObjectDiff(origin).compareWith(dirty);
+		final DBObject diff = new DbObjectDiff(origin).compareWith(dirty);
 
-        final DBObject pull = (DBObject) diff.get("$pull");
-        assertThat(pull, notNullValue());
-        assertThat(pull.keySet().size(), is(1));
-    }
+		final DBObject $put = (DBObject) diff.get("$push");
+		assertThat($put.keySet().size(), is(1));
+		assertThat($put.keySet(), hasItem("sub.test"));
+	}
 
-    @Test
-    public void canAddUnset() {
-        final DbObjectDiff dbObjectDiff = new DbObjectDiff(new BasicDBObject());
-        dbObjectDiff.pushKey("key");
-        dbObjectDiff.addUnset();
+	@Test
+	public void canGeneratePull() {
+		BasicDBList originalList = new BasicDBList();
+		BasicDBList dirtyList = new BasicDBList();
+		originalList.add("original");
+		addValue("list", originalList, dirtyList);
 
-        final DBObject result = dbObjectDiff.compareWith(new BasicDBObject());
-        
-        assertThat(result.get("$unset"), notNullValue());
-        final DBObject unset = (DBObject) result.get("$unset");
-        assertThat((Integer) unset.get("key"), is(1));
-    }
+		final DBObject diff = new DbObjectDiff(origin).compareWith(dirty);
 
-    @Test
-    public void canAdPullWithNull() {
-        final DbObjectDiff dbObjectDiff = new DbObjectDiff(new BasicDBObject());
-        dbObjectDiff.pushKey("key");
-        dbObjectDiff.addPull(null);
+		final DBObject pull = (DBObject) diff.get("$pull");
+		assertThat(pull, notNullValue());
+		assertThat(pull.keySet().size(), is(1));
+	}
 
-        final DBObject result = dbObjectDiff.compareWith(new BasicDBObject());
+	@Test
+	public void canAddUnset() {
+		final DbObjectDiff dbObjectDiff = new DbObjectDiff(new BasicDBObject());
+		dbObjectDiff.pushKey("key");
+		dbObjectDiff.addUnset();
 
-        final DBObject pull = (DBObject) result.get("$pull");
-        assertThat(pull, notNullValue());
-        assertThat(pull.get("key"), nullValue());
-    }
+		final DBObject result = dbObjectDiff.compareWith(new BasicDBObject());
 
-    private void addValue(String key, Object originalValue, Object dirtyValue) {
-        origin.append(key, originalValue);
-        dirty.append(key, dirtyValue);
-    }
+		assertThat(result.get("$unset"), notNullValue());
+		final DBObject unset = (DBObject) result.get("$unset");
+		assertThat((Integer) unset.get("key"), is(1));
+	}
 
-    private BasicDBObject origin;
-    private BasicDBObject dirty;
+	@Test
+	public void canAdPullWithNull() {
+		final DbObjectDiff dbObjectDiff = new DbObjectDiff(new BasicDBObject());
+		dbObjectDiff.pushKey("key");
+		dbObjectDiff.addPull(null);
+
+		final DBObject result = dbObjectDiff.compareWith(new BasicDBObject());
+
+		final DBObject pull = (DBObject) result.get("$pull");
+		assertThat(pull, notNullValue());
+		assertThat(pull.get("key"), nullValue());
+	}
+
+	private void addValue(String key, Object originalValue, Object dirtyValue) {
+		origin.append(key, originalValue);
+		dirty.append(key, dirtyValue);
+	}
+
+	private BasicDBObject origin;
+	private BasicDBObject dirty;
 }
