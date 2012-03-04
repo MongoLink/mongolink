@@ -19,33 +19,19 @@
  *
  */
 
-package fr.bodysplash.mongolink.domain.updateStategy;
+package fr.bodysplash.mongolink.domain.updateStrategy;
 
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 
-/**
- * @author jb
- */
-public class PropertyVisitor extends Visitor {
+public abstract class UpdateStrategy {
 
-    public PropertyVisitor(final DbObjectDiff dbObjectDiff, final Object origin) {
-        super(dbObjectDiff, origin);
+    public abstract void update(DBObject initialValue, DBObject update, DBCollection collection);
+
+    protected DBObject updateQuery(DBObject update) {
+        DBObject query = new BasicDBObject();
+        query.put("_id", update.get("_id"));
+        return query;
     }
-
-    public void visit(final Object field) {
-        if (isADocument(field)) {
-            visitDocument((DBObject) getOrigin(), field);
-        } else if (hasDifference(field)) {
-            getDbObjectDiff().addSet(field);
-        }
-    }
-
-    private boolean isADocument(final Object field) {
-        return DBObject.class.isAssignableFrom(field.getClass());
-    }
-
-    private boolean hasDifference(Object field) {
-        return !getOrigin().equals(field);
-    }
-
 }
