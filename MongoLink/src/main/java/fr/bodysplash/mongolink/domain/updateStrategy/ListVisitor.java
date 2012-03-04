@@ -19,7 +19,7 @@
  *
  */
 
-package fr.bodysplash.mongolink.domain.updateStategy;
+package fr.bodysplash.mongolink.domain.updateStrategy;
 
 import com.mongodb.BasicDBList;
 
@@ -37,7 +37,7 @@ public class ListVisitor extends Visitor {
         final BasicDBList targetList = (BasicDBList) target;
         if (getOrigin().size() == targetList.size()) {
             return;
-        }else if (getOrigin().size() > targetList.size()) {
+        } else if (getOrigin().size() > targetList.size()) {
             compareDeletedElementsInList(targetList);
         } else {
             getDbObjectDiff().addPush(targetList.get(targetList.size() - 1));
@@ -45,15 +45,19 @@ public class ListVisitor extends Visitor {
     }
 
     private void compareDeletedElementsInList(final BasicDBList target) {
+        boolean unsetEmited = false;
         for (int i = 0; i < getOrigin().size(); i++) {
             final Object current = getOrigin().get(i);
-            if(!target.contains(current)) {
+            if (!target.contains(current)) {
+                unsetEmited = true;
                 getDbObjectDiff().pushKey(String.valueOf(i));
                 getDbObjectDiff().addUnset();
                 getDbObjectDiff().popKey();
             }
         }
-        getDbObjectDiff().addPull(null);
+        if (unsetEmited) {
+            getDbObjectDiff().addPull(null);
+        }
     }
 
 

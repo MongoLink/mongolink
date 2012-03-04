@@ -1,4 +1,4 @@
-package fr.bodysplash.mongolink.domain.updateStategy;
+package fr.bodysplash.mongolink.domain.updateStrategy;
 
 import com.mongodb.BasicDBList;
 import org.junit.Before;
@@ -40,14 +40,18 @@ public class TestsListVisitor {
     }
 
     @Test
-    public void doNotAddPullIdNoUnset() {
+    public void canHandleListWithSameValues() {
         BasicDBList origin = new BasicDBList();
+        origin.add("prems");
+        origin.add("prems");
         BasicDBList target = new BasicDBList();
+        target.add("prems");
         final ListVisitor visitor = new ListVisitor(dbObjectDiff, origin);
 
         visitor.visit(target);
 
-        verify(dbObjectDiff, never()).addPull(any());
+        verify(dbObjectDiff).pushKey("0");
+        verify(dbObjectDiff).addUnset();
     }
 
     private DbObjectDiff dbObjectDiff;

@@ -1,4 +1,4 @@
-package fr.bodysplash.mongolink.domain.updateStategy;
+package fr.bodysplash.mongolink.domain.updateStrategy;
 
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
