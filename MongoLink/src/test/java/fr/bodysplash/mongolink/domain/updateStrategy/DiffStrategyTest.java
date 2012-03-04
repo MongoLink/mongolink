@@ -4,6 +4,9 @@ import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
+
+import fr.bodysplash.mongolink.domain.updateStrategy.DiffStrategy;
+
 import org.junit.Test;
 import org.mockito.Mockito;
 

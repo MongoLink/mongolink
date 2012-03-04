@@ -24,6 +24,7 @@ package fr.bodysplash.mongolink.domain;
 import fr.bodysplash.mongolink.domain.updateStrategy.DiffStrategy;
 import fr.bodysplash.mongolink.domain.updateStrategy.OverwriteStrategy;
 import fr.bodysplash.mongolink.domain.updateStrategy.UpdateStrategy;
+
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;

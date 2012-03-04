@@ -1,6 +1,10 @@
 package fr.bodysplash.mongolink.domain.updateStrategy;
 
 import com.mongodb.BasicDBList;
+
+import fr.bodysplash.mongolink.domain.updateStrategy.DbObjectDiff;
+import fr.bodysplash.mongolink.domain.updateStrategy.ListVisitor;
+
 import org.junit.Before;
 import org.junit.Test;
 
