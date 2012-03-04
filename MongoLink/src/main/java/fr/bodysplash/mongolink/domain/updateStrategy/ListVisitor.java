@@ -45,19 +45,31 @@ public class ListVisitor extends Visitor {
     }
 
     private void compareDeletedElementsInList(final BasicDBList target) {
-        boolean unsetEmited = false;
-        for (int i = 0; i < getOrigin().size(); i++) {
-            final Object current = getOrigin().get(i);
-            if (!target.contains(current)) {
-                unsetEmited = true;
-                getDbObjectDiff().pushKey(String.valueOf(i));
-                getDbObjectDiff().addUnset();
-                getDbObjectDiff().popKey();
+        int targetIndex = 0;
+        int originIndex = 0;
+        while(originIndex < getOrigin().size()) {
+            final Object current = getOrigin().get(originIndex);
+            if (targetIndex < target.size()) {
+                final Object currentTarget = target.get(targetIndex);
+                if (current != currentTarget) {
+                    removeElementAt(originIndex);
+                } else {
+                    targetIndex++;
+                }
+            } else {
+                removeElementAt(originIndex);
             }
+            originIndex++;
         }
-        if (unsetEmited) {
-            getDbObjectDiff().addPull(null);
-        }
+
+        getDbObjectDiff().addPull(null);
+    }
+
+
+    private void removeElementAt(final int i) {
+        getDbObjectDiff().pushKey(String.valueOf(i));
+        getDbObjectDiff().addUnset();
+        getDbObjectDiff().popKey();
     }
 
 

@@ -1,10 +1,6 @@
 package fr.bodysplash.mongolink.domain.updateStrategy;
 
 import com.mongodb.BasicDBList;
-
-import fr.bodysplash.mongolink.domain.updateStrategy.DbObjectDiff;
-import fr.bodysplash.mongolink.domain.updateStrategy.ListVisitor;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -19,12 +15,7 @@ public class TestsListVisitor {
 
     @Test
     public void canUnset() {
-        BasicDBList origin = new BasicDBList();
-        origin.add("prems");
-        BasicDBList target = new BasicDBList();
-        final ListVisitor visitor = new ListVisitor(dbObjectDiff, origin);
-
-        visitor.visit(target);
+        diff(listWith("prems"), listWith());
 
         verify(dbObjectDiff).pushKey("0");
         verify(dbObjectDiff).addUnset();
@@ -33,29 +24,44 @@ public class TestsListVisitor {
 
     @Test
     public void addPullIfUnset() {
-        BasicDBList origin = new BasicDBList();
-        origin.add("prems");
-        BasicDBList target = new BasicDBList();
-        final ListVisitor visitor = new ListVisitor(dbObjectDiff, origin);
-
-        visitor.visit(target);
+        diff(listWith("prems"), listWith());
 
         verify(dbObjectDiff).addPull(null);
     }
 
     @Test
     public void canHandleListWithSameValues() {
-        BasicDBList origin = new BasicDBList();
-        origin.add("prems");
-        origin.add("prems");
-        BasicDBList target = new BasicDBList();
-        target.add("prems");
+        diff(listWith("prems", "prems"), listWith("prems"));
+
+        verify(dbObjectDiff).pushKey("1");
+        verify(dbObjectDiff).addUnset();
+    }
+
+    @Test
+    public void canRemoveListWithSameValuesAndDifferentOne() {
+        diff(listWith("prems", "prems", "encore"), listWith("prems", "encore"));
+        verify(dbObjectDiff).pushKey("1");
+        verify(dbObjectDiff).addUnset();
+        reset(dbObjectDiff);
+
+        diff(listWith("encore", "prems", "autre"), listWith("encore", "autre"));
+        verify(dbObjectDiff).pushKey("1");
+        verify(dbObjectDiff).addUnset();
+        reset(dbObjectDiff);
+    }
+
+    private void diff(final BasicDBList origin, final BasicDBList target) {
         final ListVisitor visitor = new ListVisitor(dbObjectDiff, origin);
 
         visitor.visit(target);
+    }
 
-        verify(dbObjectDiff).pushKey("0");
-        verify(dbObjectDiff).addUnset();
+    private BasicDBList listWith(final String... values) {
+        final BasicDBList result = new BasicDBList();
+        for (String value : values) {
+            result.add(value);
+        }
+        return result;
     }
 
     private DbObjectDiff dbObjectDiff;
