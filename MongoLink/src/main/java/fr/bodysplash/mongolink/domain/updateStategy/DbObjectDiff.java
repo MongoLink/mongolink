@@ -33,6 +33,9 @@ public class DbObjectDiff {
 
     public DbObjectDiff(final DBObject origin) {
         this.origin = origin;
+        for (Modifier modifier : Modifier.values()) {
+            modifiers.put(modifier, new BasicDBObject());
+        }
     }
 
     public DBObject compareWith(DBObject target) {
@@ -43,9 +46,6 @@ public class DbObjectDiff {
     }
 
     private void generateDiff(DBObject target) {
-        for (Modifier modifier : Modifier.values()) {
-            modifiers.put(modifier, new BasicDBObject());
-        }
         new DocumentVisitor(this, origin).visit(target);
     }
 
@@ -57,8 +57,12 @@ public class DbObjectDiff {
         addForModifier(Modifier.SET, value);
     }
 
-    public void appPull(final Object value) {
+    void addPull(final Object value) {
         addForModifier(Modifier.PULL, value);
+    }
+
+    void addUnset() {
+        addForModifier(Modifier.UNSET, 1);
     }
 
     private void addForModifier(final Modifier key, final Object value) {
@@ -96,7 +100,7 @@ public class DbObjectDiff {
     }
 
     private enum Modifier {
-        SET("$set"), PUSH("$push"), PULL("$pull");
+        SET("$set"), PUSH("$push"), PULL("$pull"), UNSET("$unset");
         Modifier(String key) {
             this.key = key;
         }

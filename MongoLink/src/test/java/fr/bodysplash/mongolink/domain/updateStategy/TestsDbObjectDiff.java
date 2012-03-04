@@ -19,13 +19,12 @@
  *
  */
 
-package fr.bodysplash.mongolink.domain;
+package fr.bodysplash.mongolink.domain.updateStategy;
 
 
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
-import fr.bodysplash.mongolink.domain.updateStategy.DbObjectDiff;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -172,18 +171,29 @@ public class TestsDbObjectDiff {
     }
 
     @Test
-    public void canGeneratePullOnFirstElement() {
-        BasicDBList originalList = new BasicDBList();
-        BasicDBList dirtyList = new BasicDBList();
-        originalList.add("original");
-        originalList.add("second value");
-        dirtyList.add("second value");
-        addValue("list", originalList, dirtyList);
+    public void canAddUnset() {
+        final DbObjectDiff dbObjectDiff = new DbObjectDiff(new BasicDBObject());
+        dbObjectDiff.pushKey("key");
+        dbObjectDiff.addUnset();
 
-        final DBObject diff = new DbObjectDiff(origin).compareWith(dirty);
+        final DBObject result = dbObjectDiff.compareWith(new BasicDBObject());
+        
+        assertThat(result.get("$unset"), notNullValue());
+        final DBObject unset = (DBObject) result.get("$unset");
+        assertThat((Integer) unset.get("key"), is(1));
+    }
 
-        final DBObject pull = (DBObject) diff.get("$pull");
-        assertThat((String) pull.get("list"), is("original"));
+    @Test
+    public void canAdPullWithNull() {
+        final DbObjectDiff dbObjectDiff = new DbObjectDiff(new BasicDBObject());
+        dbObjectDiff.pushKey("key");
+        dbObjectDiff.addPull(null);
+
+        final DBObject result = dbObjectDiff.compareWith(new BasicDBObject());
+
+        final DBObject pull = (DBObject) result.get("$pull");
+        assertThat(pull, notNullValue());
+        assertThat(pull.get("key"), nullValue());
     }
 
     private void addValue(String key, Object originalValue, Object dirtyValue) {
