@@ -10,7 +10,7 @@
 		<repository>
 			<id>mongolink-release</id>
 			<name>mongolink-release</name>
-			<url>https://repository-mongolink.forge.cloudbees.com/release/</url>
+			<url>dav:https://repository-mongolink.forge.cloudbees.com/release/</url>
 		</repository>
 	</distributionManagement>
 
