@@ -8,9 +8,9 @@
 
     <distributionManagement>
         <repository>
-            <id>nexus</id>
-            <name>nexus</name>
-            <url>http://nexus.bytedojo.com/content/repositories/mongolink-release/</url>
+            <id>mongolink-release</id>
+            <name>mongolink-release</name>
+            <url>https://repository-mongolink.forge.cloudbees.com/release/</url>
         </repository>
     </distributionManagement>
 

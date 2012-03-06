@@ -9,7 +9,7 @@
     <artifactId>mongolink-test</artifactId>
     <modelVersion>4.0.0</modelVersion>
     <scm>
-   		<developerConnection>scm:git:git@github.com:BodySplash/MongoLink.git</developerConnection>
+   		<developerConnection>scm:git:git@github.com:MongoLink/MongoLink.git</developerConnection>
     </scm>
     <dependencies>
         <dependency>
