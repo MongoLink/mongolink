@@ -19,10 +19,11 @@
  *
  */
 
-package fr.bodysplash.mongolink.domain.criteria;
+package org.mongolink.domain.criteria;
+
+import org.mongolink.domain.converter.Converter;
 
 import com.mongodb.DBObject;
-import fr.bodysplash.mongolink.domain.converter.Converter;
 
 public abstract class Restriction {
 

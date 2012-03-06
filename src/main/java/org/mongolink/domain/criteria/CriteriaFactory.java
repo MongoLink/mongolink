@@ -19,9 +19,9 @@
  *
  */
 
-package fr.bodysplash.mongolink.domain.criteria;
+package org.mongolink.domain.criteria;
 
-import fr.bodysplash.mongolink.domain.QueryExecutor;
+import org.mongolink.domain.QueryExecutor;
 
 public class CriteriaFactory {
 

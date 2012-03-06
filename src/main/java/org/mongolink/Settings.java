@@ -19,10 +19,11 @@
  *
  */
 
-package fr.bodysplash.mongolink;
+package org.mongolink;
 
-import fr.bodysplash.mongolink.domain.UpdateStrategies;
-import fr.bodysplash.mongolink.domain.criteria.CriteriaFactory;
+import org.mongolink.domain.UpdateStrategies;
+import org.mongolink.domain.criteria.CriteriaFactory;
+
 
 public class Settings {
 

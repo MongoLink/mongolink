@@ -19,7 +19,7 @@
  *
  */
 
-package fr.bodysplash.mongolink;
+package org.mongolink;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
@@ -33,20 +33,19 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mockito.InOrder;
+import org.mongolink.domain.UpdateStrategies;
+import org.mongolink.domain.criteria.Criteria;
+import org.mongolink.domain.criteria.CriteriaFactory;
+import org.mongolink.domain.mapper.ContextBuilder;
+import org.mongolink.test.entity.Comment;
+import org.mongolink.test.entity.FakeEntity;
+import org.mongolink.test.entity.FakeEntityWithNaturalId;
+import org.mongolink.test.entity.OtherEntityWithNaturalId;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.mongodb.FakeDB;
 import com.mongodb.FakeDBCollection;
-
-import fr.bodysplash.mongolink.domain.UpdateStrategies;
-import fr.bodysplash.mongolink.domain.criteria.Criteria;
-import fr.bodysplash.mongolink.domain.criteria.CriteriaFactory;
-import fr.bodysplash.mongolink.domain.mapper.ContextBuilder;
-import fr.bodysplash.mongolink.test.entity.Comment;
-import fr.bodysplash.mongolink.test.entity.FakeEntity;
-import fr.bodysplash.mongolink.test.entity.FakeEntityWithNaturalId;
-import fr.bodysplash.mongolink.test.entity.OtherEntityWithNaturalId;
 
 public class TestsMongoSession {
 
@@ -61,7 +60,7 @@ public class TestsMongoSession {
 		db.collections.put("fakeentity", entities);
 		db.collections.put("fakeentitywithnaturalid", fakeEntities);
 		db.collections.put("otherentitywithnaturalid", new FakeDBCollection(db, "otherentitywithnaturalid"));
-		ContextBuilder cb = new ContextBuilder("fr.bodysplash.mongolink.test.simpleMapping");
+		ContextBuilder cb = new ContextBuilder("org.mongolink.test.simpleMapping");
 		session = new MongoSession(db, new CriteriaFactory());
 		session.setMappingContext(cb.createContext());
 	}

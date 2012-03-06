@@ -19,20 +19,24 @@
  *
  */
 
-package fr.bodysplash.mongolink.domain.mapper;
+package org.mongolink.domain.mapper;
 
-import fr.bodysplash.mongolink.test.componentMapping.FakeEntityMappingWithComponent;
-import fr.bodysplash.mongolink.test.entity.FakeChildEntity;
-import fr.bodysplash.mongolink.test.entity.FakeEntity;
-import fr.bodysplash.mongolink.test.entity.FakeEntityWithCap;
-import fr.bodysplash.mongolink.test.entity.OtherFakeChildEntity;
-import fr.bodysplash.mongolink.test.inheritanceMapping.FakeEntityWithSubclassMapping;
-import fr.bodysplash.mongolink.test.inheritanceMapping.FakeEntityWithTwoSubclassMapping;
-import fr.bodysplash.mongolink.test.referenceMapping.FakeEntityMappingWithReference;
-import fr.bodysplash.mongolink.test.simpleMapping.FakeEntityMapping;
-import fr.bodysplash.mongolink.test.simpleMapping.FakeEntityMappingWithCap;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
+import org.mongolink.domain.mapper.ClassMapper;
+import org.mongolink.domain.mapper.EntityMapper;
+import org.mongolink.domain.mapper.MapperContext;
+import org.mongolink.domain.mapper.ReferenceMapper;
+import org.mongolink.test.componentMapping.FakeEntityMappingWithComponent;
+import org.mongolink.test.entity.FakeChildEntity;
+import org.mongolink.test.entity.FakeEntity;
+import org.mongolink.test.entity.FakeEntityWithCap;
+import org.mongolink.test.entity.OtherFakeChildEntity;
+import org.mongolink.test.inheritanceMapping.FakeEntityWithSubclassMapping;
+import org.mongolink.test.inheritanceMapping.FakeEntityWithTwoSubclassMapping;
+import org.mongolink.test.referenceMapping.FakeEntityMappingWithReference;
+import org.mongolink.test.simpleMapping.FakeEntityMapping;
+import org.mongolink.test.simpleMapping.FakeEntityMappingWithCap;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;

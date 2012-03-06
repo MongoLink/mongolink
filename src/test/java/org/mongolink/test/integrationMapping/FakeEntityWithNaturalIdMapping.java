@@ -19,10 +19,11 @@
  *
  */
 
-package fr.bodysplash.mongolink.test.integrationMapping;
+package org.mongolink.test.integrationMapping;
 
-import fr.bodysplash.mongolink.domain.mapper.EntityMap;
-import fr.bodysplash.mongolink.test.entity.FakeEntityWithNaturalId;
+import org.mongolink.domain.mapper.EntityMap;
+import org.mongolink.test.entity.FakeEntityWithNaturalId;
+
 
 public class FakeEntityWithNaturalIdMapping extends EntityMap<FakeEntityWithNaturalId> {
 

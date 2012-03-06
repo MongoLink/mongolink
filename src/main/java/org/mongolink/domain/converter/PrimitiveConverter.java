@@ -19,7 +19,7 @@
  *
  */
 
-package fr.bodysplash.mongolink.domain.converter;
+package org.mongolink.domain.converter;
 
 public class PrimitiveConverter extends Converter {
     @Override

@@ -19,12 +19,12 @@
  *
  */
 
-package fr.bodysplash.mongolink.domain.mapper;
+package org.mongolink.domain.mapper;
 
-import fr.bodysplash.mongolink.utils.MethodContainer;
 import net.sf.cglib.core.DefaultGeneratorStrategy;
 import net.sf.cglib.proxy.Enhancer;
 import org.apache.log4j.Logger;
+import org.mongolink.utils.MethodContainer;
 
 @SuppressWarnings("unchecked")
 public abstract class ClassMap<T> {

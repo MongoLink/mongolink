@@ -19,7 +19,7 @@
  *
  */
 
-package fr.bodysplash.mongolink.utils;
+package org.mongolink.utils;
 
 import com.google.common.base.Objects;
 import org.apache.commons.lang.StringUtils;

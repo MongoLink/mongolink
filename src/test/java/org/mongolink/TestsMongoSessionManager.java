@@ -19,21 +19,24 @@
  *
  */
 
-package fr.bodysplash.mongolink;
+package org.mongolink;
 
-import fr.bodysplash.mongolink.domain.UpdateStrategies;
-import fr.bodysplash.mongolink.domain.mapper.ContextBuilder;
-import fr.bodysplash.mongolink.domain.mapper.EntityMapper;
-import fr.bodysplash.mongolink.domain.mapper.MapperContext;
-import fr.bodysplash.mongolink.domain.updateStrategy.DiffStrategy;
-import fr.bodysplash.mongolink.test.entity.FakeEntity;
-import fr.bodysplash.mongolink.test.entity.FakeEntityWithCap;
-import fr.bodysplash.mongolink.test.factory.FakeDbFactory;
-import fr.bodysplash.mongolink.test.factory.TestFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.mongolink.MongoSession;
+import org.mongolink.MongoSessionManager;
+import org.mongolink.Settings;
+import org.mongolink.domain.UpdateStrategies;
+import org.mongolink.domain.mapper.ContextBuilder;
+import org.mongolink.domain.mapper.EntityMapper;
+import org.mongolink.domain.mapper.MapperContext;
+import org.mongolink.domain.updateStrategy.DiffStrategy;
+import org.mongolink.test.entity.FakeEntity;
+import org.mongolink.test.entity.FakeEntityWithCap;
+import org.mongolink.test.factory.FakeDbFactory;
+import org.mongolink.test.factory.TestFactory;
 
 import java.net.UnknownHostException;
 

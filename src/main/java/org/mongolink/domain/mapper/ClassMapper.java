@@ -19,14 +19,14 @@
  *
  */
 
-package fr.bodysplash.mongolink.domain.mapper;
+package org.mongolink.domain.mapper;
 
 import com.google.common.collect.Lists;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
-import fr.bodysplash.mongolink.domain.converter.Converter;
 import net.sf.cglib.core.ReflectUtils;
 import org.apache.log4j.Logger;
+import org.mongolink.domain.converter.Converter;
 
 import java.util.List;
 

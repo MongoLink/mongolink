@@ -19,13 +19,16 @@
  *
  */
 
-package fr.bodysplash.mongolink.domain.mapper;
+package org.mongolink.domain.mapper;
 
 import com.google.common.collect.Lists;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
-import fr.bodysplash.mongolink.utils.MethodContainer;
 import org.junit.Test;
+import org.mongolink.domain.mapper.ClassMapper;
+import org.mongolink.domain.mapper.CollectionMapper;
+import org.mongolink.domain.mapper.MapperContext;
+import org.mongolink.utils.MethodContainer;
 
 import java.util.List;
 

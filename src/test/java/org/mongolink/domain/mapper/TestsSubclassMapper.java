@@ -19,17 +19,20 @@
  *
  */
 
-package fr.bodysplash.mongolink.domain.mapper;
+package org.mongolink.domain.mapper;
 
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
-import fr.bodysplash.mongolink.test.entity.FakeChildEntity;
-import fr.bodysplash.mongolink.test.entity.FakeEntity;
-import fr.bodysplash.mongolink.test.simpleMapping.FakeEntityMapping;
 import org.bson.types.ObjectId;
 import org.junit.Before;
 import org.junit.Test;
+import org.mongolink.domain.mapper.MapperContext;
+import org.mongolink.domain.mapper.SubclassMap;
+import org.mongolink.domain.mapper.SubclassMapper;
+import org.mongolink.test.entity.FakeChildEntity;
+import org.mongolink.test.entity.FakeEntity;
+import org.mongolink.test.simpleMapping.FakeEntityMapping;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;

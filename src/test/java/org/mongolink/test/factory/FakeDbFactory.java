@@ -19,13 +19,14 @@
  *
  */
 
-package fr.bodysplash.mongolink.test.factory;
+package org.mongolink.test.factory;
 
 import com.google.common.collect.Maps;
 import com.mongodb.FakeDB;
-import fr.bodysplash.mongolink.DbFactory;
 
 import java.util.Map;
+
+import org.mongolink.DbFactory;
 
 public class FakeDbFactory extends DbFactory {
 

@@ -19,7 +19,7 @@
  *
  */
 
-package fr.bodysplash.mongolink.utils;
+package org.mongolink.utils;
 
 import java.lang.reflect.Field;
 

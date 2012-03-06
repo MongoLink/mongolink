@@ -19,16 +19,18 @@
  *
  */
 
-package fr.bodysplash.mongolink.domain.mapper;
+package org.mongolink.domain.mapper;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
-import fr.bodysplash.mongolink.test.entity.Comment;
-import fr.bodysplash.mongolink.test.simpleMapping.CommentMapping;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mongolink.domain.mapper.ComponentMapper;
+import org.mongolink.domain.mapper.MapperContext;
+import org.mongolink.test.entity.Comment;
+import org.mongolink.test.simpleMapping.CommentMapping;
 
 import java.net.UnknownHostException;
 

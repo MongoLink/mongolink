@@ -19,13 +19,14 @@
  *
  */
 
-package fr.bodysplash.mongolink.domain;
+package org.mongolink.domain;
 
-import fr.bodysplash.mongolink.domain.updateStrategy.DiffStrategy;
-import fr.bodysplash.mongolink.domain.updateStrategy.OverwriteStrategy;
-import fr.bodysplash.mongolink.domain.updateStrategy.UpdateStrategy;
 
 import org.junit.Test;
+import org.mongolink.domain.UpdateStrategies;
+import org.mongolink.domain.updateStrategy.DiffStrategy;
+import org.mongolink.domain.updateStrategy.OverwriteStrategy;
+import org.mongolink.domain.updateStrategy.UpdateStrategy;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;

@@ -19,7 +19,7 @@
  *
  */
 
-package fr.bodysplash.mongolink.domain.criteria;
+package org.mongolink.domain.criteria;
 
 public class RestrictionFactory {
 

@@ -19,15 +19,17 @@
  *
  */
 
-package fr.bodysplash.mongolink.domain.criteria;
+package org.mongolink.domain.criteria;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
-import fr.bodysplash.mongolink.domain.CursorParameter;
-import fr.bodysplash.mongolink.domain.QueryExecutor;
 import org.joda.time.DateTime;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
+import org.mongolink.domain.CursorParameter;
+import org.mongolink.domain.QueryExecutor;
+import org.mongolink.domain.criteria.Criteria;
+import org.mongolink.domain.criteria.Restrictions;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;

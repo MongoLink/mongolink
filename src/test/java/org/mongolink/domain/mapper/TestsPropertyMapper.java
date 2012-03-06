@@ -19,15 +19,19 @@
  *
  */
 
-package fr.bodysplash.mongolink.domain.mapper;
+package org.mongolink.domain.mapper;
 
 import com.mongodb.BasicDBObject;
-import fr.bodysplash.mongolink.test.entity.Comment;
-import fr.bodysplash.mongolink.test.simpleMapping.CommentMapping;
-import fr.bodysplash.mongolink.utils.MethodContainer;
 import org.hamcrest.Matchers;
 import org.joda.time.DateTime;
 import org.junit.Test;
+import org.mongolink.domain.mapper.ClassMapper;
+import org.mongolink.domain.mapper.EntityMapper;
+import org.mongolink.domain.mapper.MapperContext;
+import org.mongolink.domain.mapper.PropertyMapper;
+import org.mongolink.test.entity.Comment;
+import org.mongolink.test.simpleMapping.CommentMapping;
+import org.mongolink.utils.MethodContainer;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -159,7 +163,7 @@ public class TestsPropertyMapper {
     @Test
     public void canSerializeToDBOject() throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
         final BasicDBObject into = new BasicDBObject();
-        fr.bodysplash.mongolink.test.entity.FakeEntity entity = new fr.bodysplash.mongolink.test.entity.FakeEntity("te");
+        org.mongolink.test.entity.FakeEntity entity = new org.mongolink.test.entity.FakeEntity("te");
         final Comment comment = new Comment("tes");
         entity.setComment(comment);
 
@@ -176,7 +180,7 @@ public class TestsPropertyMapper {
         final BasicDBObject val = new BasicDBObject();
         val.put("value", "valeur");
         from.put("comment", val);
-        fr.bodysplash.mongolink.test.entity.FakeEntity instance = new fr.bodysplash.mongolink.test.entity.FakeEntity("kjklj");
+        org.mongolink.test.entity.FakeEntity instance = new org.mongolink.test.entity.FakeEntity("kjklj");
 
         propertyMapperForComponent().populate(instance, from);
 
@@ -190,8 +194,8 @@ public class TestsPropertyMapper {
         mapping.buildMapper(context);
         final ClassMapper classMapper = mock(ClassMapper.class);
         when(classMapper.getContext()).thenReturn(context);
-        when(classMapper.getPersistentType()).thenReturn(fr.bodysplash.mongolink.test.entity.FakeEntity.class);
-        final Method method = fr.bodysplash.mongolink.test.entity.FakeEntity.class.getMethod("getComment", null);
+        when(classMapper.getPersistentType()).thenReturn(org.mongolink.test.entity.FakeEntity.class);
+        final Method method = org.mongolink.test.entity.FakeEntity.class.getMethod("getComment", null);
         MethodContainer methodContainer = new MethodContainer(method);
         PropertyMapper propertyComponentMapper = new PropertyMapper(methodContainer);
         propertyComponentMapper.setMapper(classMapper);

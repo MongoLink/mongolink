@@ -19,12 +19,13 @@
  *
  */
 
-package fr.bodysplash.mongolink.domain.mapper;
+package org.mongolink.domain.mapper;
 
 import com.google.common.collect.Lists;
-import fr.bodysplash.mongolink.domain.converter.Converter;
 
 import java.util.List;
+
+import org.mongolink.domain.converter.Converter;
 
 public class MapperContext {
 

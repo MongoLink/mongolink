@@ -19,7 +19,7 @@
  *
  */
 
-package fr.bodysplash.mongolink;
+package org.mongolink;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
@@ -33,6 +33,17 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.mongolink.MongoSession;
+import org.mongolink.MongoSessionManager;
+import org.mongolink.Settings;
+import org.mongolink.domain.UpdateStrategies;
+import org.mongolink.domain.criteria.Criteria;
+import org.mongolink.domain.criteria.Restrictions;
+import org.mongolink.domain.mapper.ContextBuilder;
+import org.mongolink.test.entity.FakeChildEntity;
+import org.mongolink.test.entity.FakeEntity;
+import org.mongolink.test.entity.FakeEntityWithNaturalId;
+import org.mongolink.test.factory.TestFactory;
 
 import com.google.common.collect.Lists;
 import com.mongodb.BasicDBList;
@@ -41,14 +52,6 @@ import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 
-import fr.bodysplash.mongolink.domain.UpdateStrategies;
-import fr.bodysplash.mongolink.domain.criteria.Criteria;
-import fr.bodysplash.mongolink.domain.criteria.Restrictions;
-import fr.bodysplash.mongolink.domain.mapper.ContextBuilder;
-import fr.bodysplash.mongolink.test.entity.FakeChildEntity;
-import fr.bodysplash.mongolink.test.entity.FakeEntity;
-import fr.bodysplash.mongolink.test.entity.FakeEntityWithNaturalId;
-import fr.bodysplash.mongolink.test.factory.TestFactory;
 
 @SuppressWarnings("unchecked")
 @Ignore

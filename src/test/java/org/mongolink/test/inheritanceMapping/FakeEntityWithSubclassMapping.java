@@ -19,12 +19,13 @@
  *
  */
 
-package fr.bodysplash.mongolink.test.inheritanceMapping;
+package org.mongolink.test.inheritanceMapping;
 
-import fr.bodysplash.mongolink.domain.mapper.EntityMap;
-import fr.bodysplash.mongolink.domain.mapper.SubclassMap;
-import fr.bodysplash.mongolink.test.entity.FakeChildEntity;
-import fr.bodysplash.mongolink.test.entity.FakeEntity;
+import org.mongolink.domain.mapper.EntityMap;
+import org.mongolink.domain.mapper.SubclassMap;
+import org.mongolink.test.entity.FakeChildEntity;
+import org.mongolink.test.entity.FakeEntity;
+
 
 
 public class FakeEntityWithSubclassMapping extends EntityMap<FakeEntity> {

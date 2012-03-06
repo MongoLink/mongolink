@@ -19,10 +19,11 @@
  *
  */
 
-package fr.bodysplash.mongolink.test.simpleMapping;
+package org.mongolink.test.simpleMapping;
 
-import fr.bodysplash.mongolink.domain.mapper.ComponentMap;
-import fr.bodysplash.mongolink.test.entity.Comment;
+import org.mongolink.domain.mapper.ComponentMap;
+import org.mongolink.test.entity.Comment;
+
 
 public class CommentMapping extends ComponentMap<Comment> {
 

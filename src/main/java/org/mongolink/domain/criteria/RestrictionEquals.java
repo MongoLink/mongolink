@@ -19,7 +19,7 @@
  *
  */
 
-package fr.bodysplash.mongolink.domain.criteria;
+package org.mongolink.domain.criteria;
 
 import com.mongodb.DBObject;
 

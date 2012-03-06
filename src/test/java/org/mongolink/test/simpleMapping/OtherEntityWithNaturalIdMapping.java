@@ -19,10 +19,11 @@
  *
  */
 
-package fr.bodysplash.mongolink.test.simpleMapping;
+package org.mongolink.test.simpleMapping;
 
-import fr.bodysplash.mongolink.domain.mapper.EntityMap;
-import fr.bodysplash.mongolink.test.entity.OtherEntityWithNaturalId;
+import org.mongolink.domain.mapper.EntityMap;
+import org.mongolink.test.entity.OtherEntityWithNaturalId;
+
 
 public class OtherEntityWithNaturalIdMapping extends EntityMap<OtherEntityWithNaturalId> {
 

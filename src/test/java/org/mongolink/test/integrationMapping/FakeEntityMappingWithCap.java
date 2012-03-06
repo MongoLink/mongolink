@@ -19,10 +19,11 @@
  *
  */
 
-package fr.bodysplash.mongolink.test.integrationMapping;
+package org.mongolink.test.integrationMapping;
 
-import fr.bodysplash.mongolink.domain.mapper.EntityMap;
-import fr.bodysplash.mongolink.test.entity.FakeEntityWithCap;
+import org.mongolink.domain.mapper.EntityMap;
+import org.mongolink.test.entity.FakeEntityWithCap;
+
 
 public class FakeEntityMappingWithCap extends EntityMap<FakeEntityWithCap> {
 

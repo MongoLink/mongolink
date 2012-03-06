@@ -19,12 +19,14 @@
  *
  */
 
-package fr.bodysplash.mongolink.domain.mapper;
+package org.mongolink.domain.mapper;
 
-import fr.bodysplash.mongolink.domain.converter.Converter;
-import fr.bodysplash.mongolink.test.entity.Comment;
-import fr.bodysplash.mongolink.test.simpleMapping.CommentMapping;
 import org.junit.Test;
+import org.mongolink.domain.converter.Converter;
+import org.mongolink.domain.mapper.ComponentMapper;
+import org.mongolink.domain.mapper.MapperContext;
+import org.mongolink.test.entity.Comment;
+import org.mongolink.test.simpleMapping.CommentMapping;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;

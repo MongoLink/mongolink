@@ -19,7 +19,7 @@
  *
  */
 
-package fr.bodysplash.mongolink;
+package org.mongolink;
 
 public class MongoLinkException extends RuntimeException {
     public MongoLinkException(Exception e) {

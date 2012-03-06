@@ -19,13 +19,14 @@
  *
  */
 
-package fr.bodysplash.mongolink.domain.updateStrategy;
+package org.mongolink.domain.updateStrategy;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mongolink.domain.updateStrategy.DbObjectDiff;
 
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;

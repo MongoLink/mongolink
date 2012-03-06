@@ -19,15 +19,16 @@
  *
  */
 
-package fr.bodysplash.mongolink.domain;
+package org.mongolink.domain;
 
 import java.util.Map;
+
+import org.mongolink.MongoSession;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Maps;
 import com.mongodb.DBObject;
 
-import fr.bodysplash.mongolink.MongoSession;
 
 public class UnitOfWork {
 

@@ -19,7 +19,7 @@
  *
  */
 
-package fr.bodysplash.mongolink.domain;
+package org.mongolink.domain;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCursor;

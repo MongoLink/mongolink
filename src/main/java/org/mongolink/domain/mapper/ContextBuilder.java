@@ -19,11 +19,11 @@
  *
  */
 
-package fr.bodysplash.mongolink.domain.mapper;
+package org.mongolink.domain.mapper;
 
 import com.google.common.collect.Lists;
-import fr.bodysplash.mongolink.MongoLinkError;
 import org.apache.log4j.Logger;
+import org.mongolink.MongoLinkError;
 
 import java.io.File;
 import java.io.IOException;

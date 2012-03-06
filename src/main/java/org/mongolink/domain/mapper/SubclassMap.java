@@ -19,7 +19,7 @@
  *
  */
 
-package fr.bodysplash.mongolink.domain.mapper;
+package org.mongolink.domain.mapper;
 
 public abstract class SubclassMap<T> extends ClassMap<T> {
 

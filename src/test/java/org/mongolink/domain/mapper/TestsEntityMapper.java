@@ -19,23 +19,26 @@
  *
  */
 
-package fr.bodysplash.mongolink.domain.mapper;
+package org.mongolink.domain.mapper;
 
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
-import fr.bodysplash.mongolink.test.entity.FakeChildEntity;
-import fr.bodysplash.mongolink.test.entity.FakeEntity;
-import fr.bodysplash.mongolink.test.entity.FakeEntityWithNaturalId;
-import fr.bodysplash.mongolink.test.inheritanceMapping.FakeEntityWithSubclassMapping;
-import fr.bodysplash.mongolink.test.simpleMapping.CommentMapping;
-import fr.bodysplash.mongolink.test.simpleMapping.FakeEntityMapping;
-import fr.bodysplash.mongolink.test.simpleMapping.FakeEntityWithNaturalIdMapping;
 import org.bson.types.ObjectId;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mongolink.domain.mapper.ClassMapper;
+import org.mongolink.domain.mapper.EntityMapper;
+import org.mongolink.domain.mapper.MapperContext;
+import org.mongolink.test.entity.FakeChildEntity;
+import org.mongolink.test.entity.FakeEntity;
+import org.mongolink.test.entity.FakeEntityWithNaturalId;
+import org.mongolink.test.inheritanceMapping.FakeEntityWithSubclassMapping;
+import org.mongolink.test.simpleMapping.CommentMapping;
+import org.mongolink.test.simpleMapping.FakeEntityMapping;
+import org.mongolink.test.simpleMapping.FakeEntityWithNaturalIdMapping;
 
 import java.net.UnknownHostException;
 

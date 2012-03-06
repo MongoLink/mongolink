@@ -19,7 +19,7 @@
  *
  */
 
-package fr.bodysplash.mongolink.domain.mapper;
+package org.mongolink.domain.mapper;
 
 import com.google.common.collect.Lists;
 import org.apache.log4j.Logger;

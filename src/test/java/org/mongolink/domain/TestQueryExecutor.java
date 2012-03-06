@@ -19,14 +19,17 @@
  *
  */
 
-package fr.bodysplash.mongolink.domain;
+package org.mongolink.domain;
 
 import com.mongodb.*;
-import fr.bodysplash.mongolink.MongoSession;
-import fr.bodysplash.mongolink.domain.mapper.EntityMapper;
-import fr.bodysplash.mongolink.test.entity.FakeEntity;
 import org.junit.Test;
 import org.mockito.Matchers;
+import org.mongolink.MongoSession;
+import org.mongolink.domain.CursorParameter;
+import org.mongolink.domain.QueryExecutor;
+import org.mongolink.domain.UnitOfWork;
+import org.mongolink.domain.mapper.EntityMapper;
+import org.mongolink.test.entity.FakeEntity;
 
 import java.util.List;
 

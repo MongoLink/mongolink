@@ -19,11 +19,13 @@
  *
  */
 
-package fr.bodysplash.mongolink.domain.mapper;
+package org.mongolink.domain.mapper;
 
-import fr.bodysplash.mongolink.test.entity.FakeEntity;
-import fr.bodysplash.mongolink.utils.MethodContainer;
 import org.junit.Test;
+import org.mongolink.domain.mapper.EntityMap;
+import org.mongolink.domain.mapper.PropertyInterceptor;
+import org.mongolink.test.entity.FakeEntity;
+import org.mongolink.utils.MethodContainer;
 
 import java.lang.reflect.Method;
 

@@ -19,7 +19,7 @@
  *
  */
 
-package fr.bodysplash.mongolink.domain.updateStrategy;
+package org.mongolink.domain.updateStrategy;
 
 import com.mongodb.DBObject;
 

@@ -1,8 +1,10 @@
-package fr.bodysplash.mongolink.domain.updateStrategy;
+package org.mongolink.domain.updateStrategy;
 
 import com.mongodb.BasicDBList;
 import org.junit.Before;
 import org.junit.Test;
+import org.mongolink.domain.updateStrategy.DbObjectDiff;
+import org.mongolink.domain.updateStrategy.ListVisitor;
 
 import static org.mockito.Mockito.*;
 

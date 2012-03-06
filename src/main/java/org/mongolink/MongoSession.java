@@ -19,24 +19,25 @@
  *
  */
 
-package fr.bodysplash.mongolink;
+package org.mongolink;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
-import fr.bodysplash.mongolink.domain.QueryExecutor;
-import fr.bodysplash.mongolink.domain.UnitOfWork;
-import fr.bodysplash.mongolink.domain.UpdateStrategies;
-import fr.bodysplash.mongolink.domain.criteria.Criteria;
-import fr.bodysplash.mongolink.domain.criteria.CriteriaFactory;
-import fr.bodysplash.mongolink.domain.mapper.ClassMapper;
-import fr.bodysplash.mongolink.domain.mapper.EntityMapper;
-import fr.bodysplash.mongolink.domain.mapper.MapperContext;
-import fr.bodysplash.mongolink.domain.updateStrategy.OverwriteStrategy;
-import fr.bodysplash.mongolink.domain.updateStrategy.UpdateStrategy;
 
 import java.util.List;
+
+import org.mongolink.domain.QueryExecutor;
+import org.mongolink.domain.UnitOfWork;
+import org.mongolink.domain.UpdateStrategies;
+import org.mongolink.domain.criteria.Criteria;
+import org.mongolink.domain.criteria.CriteriaFactory;
+import org.mongolink.domain.mapper.ClassMapper;
+import org.mongolink.domain.mapper.EntityMapper;
+import org.mongolink.domain.mapper.MapperContext;
+import org.mongolink.domain.updateStrategy.OverwriteStrategy;
+import org.mongolink.domain.updateStrategy.UpdateStrategy;
 
 public class MongoSession {
 

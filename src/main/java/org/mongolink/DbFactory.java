@@ -19,7 +19,7 @@
  *
  */
 
-package fr.bodysplash.mongolink;
+package org.mongolink;
 
 import com.mongodb.DB;
 import com.mongodb.Mongo;

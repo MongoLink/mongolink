@@ -19,7 +19,7 @@
  *
  */
 
-package fr.bodysplash.mongolink.domain.mapper;
+package org.mongolink.domain.mapper;
 
 import org.junit.Ignore;
 import org.junit.Test;

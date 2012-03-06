@@ -19,12 +19,14 @@
  *
  */
 
-package fr.bodysplash.mongolink.domain.converter;
+package org.mongolink.domain.converter;
 
 
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
+import org.mongolink.domain.converter.Converter;
+import org.mongolink.domain.converter.DateTimeConverter;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;

@@ -19,14 +19,14 @@
  *
  */
 
-package fr.bodysplash.mongolink.domain.mapper;
+package org.mongolink.domain.mapper;
 
 
 import com.mongodb.DBObject;
-import fr.bodysplash.mongolink.MongoLinkError;
-import fr.bodysplash.mongolink.utils.MethodContainer;
 import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;
+import org.mongolink.MongoLinkError;
+import org.mongolink.utils.MethodContainer;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;

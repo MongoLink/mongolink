@@ -19,16 +19,17 @@
  *
  */
 
-package fr.bodysplash.mongolink.domain;
+package org.mongolink.domain;
 
 import com.google.common.collect.Lists;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
-import fr.bodysplash.mongolink.domain.mapper.EntityMapper;
 
 import java.util.List;
+
+import org.mongolink.domain.mapper.EntityMapper;
 
 public class QueryExecutor<T> {
 

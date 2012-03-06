@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>mongolink-parent</artifactId>
-        <groupId>fr.bodysplash</groupId>
+        <groupId>org.mongolink</groupId>
         <version>0.0.3-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -10,7 +10,7 @@
     <artifactId>mongolink</artifactId>
     <version>0.0.3-SNAPSHOT</version>
     <scm>
-        <developerConnection>scm:git:git@github.com:MongoLink/MongoLink.git</developerConnection>
+        <developerConnection>scm:git:git@github.com:MongoLink/mongolink.git</developerConnection>
     </scm>
 
     <dependencies>
@@ -39,7 +39,7 @@
             <version>2.2</version>
         </dependency>
         <dependency>
-            <groupId>fr.bodysplash</groupId>
+            <groupId>org.mongolink</groupId>
             <artifactId>mongolink-testtools</artifactId>
             <scope>test</scope>
         </dependency>
@@ -70,4 +70,11 @@
             </plugin>
         </plugins>
     </build>
+    <licenses>
+		<license>
+			<name>GNU Lesser General Public License (LGPL), Version 3</name>
+			<url>http://www.fsf.org/licensing/licenses/lgpl.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
 </project>

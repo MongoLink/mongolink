@@ -19,10 +19,11 @@
  *
  */
 
-package fr.bodysplash.mongolink.domain.mapper;
+package org.mongolink.domain.mapper;
+
+import org.mongolink.utils.MethodContainer;
 
 import com.mongodb.DBObject;
-import fr.bodysplash.mongolink.utils.MethodContainer;
 
 public class ReferenceMapper implements Mapper {
 

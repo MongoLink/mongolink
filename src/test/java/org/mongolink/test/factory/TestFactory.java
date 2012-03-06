@@ -19,7 +19,7 @@
  *
  */
 
-package fr.bodysplash.mongolink.test.factory;
+package org.mongolink.test.factory;
 
 public class TestFactory {
 

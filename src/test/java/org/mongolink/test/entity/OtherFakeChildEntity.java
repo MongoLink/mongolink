@@ -19,7 +19,7 @@
  *
  */
 
-package fr.bodysplash.mongolink.test.entity;
+package org.mongolink.test.entity;
 
 
 public class OtherFakeChildEntity extends FakeEntity {

@@ -19,7 +19,7 @@
  *
  */
 
-package fr.bodysplash.mongolink.test.entity;
+package org.mongolink.test.entity;
 
 
 import com.google.common.collect.Lists;
