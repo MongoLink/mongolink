@@ -5,7 +5,7 @@
         <groupId>fr.bodysplash</groupId>
         <version>0.0.2</version>
     </parent>
-
+	<version>0.0.2-SNAPSHOT</version>
     <artifactId>mongolink-test</artifactId>
     <modelVersion>4.0.0</modelVersion>
     <scm>
