@@ -25,16 +25,15 @@ import com.google.common.collect.Lists;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import org.junit.Test;
-import org.mongolink.domain.mapper.ClassMapper;
-import org.mongolink.domain.mapper.CollectionMapper;
-import org.mongolink.domain.mapper.MapperContext;
 import org.mongolink.utils.MethodContainer;
 
 import java.util.List;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class TestsCollectionMapper {
 
@@ -44,9 +43,9 @@ public class TestsCollectionMapper {
         final EntityWithCollection entity = new EntityWithCollection();
         entity.list.add("test");
         final BasicDBObject into = new BasicDBObject();
-        
+
         collectionMapper.save(entity, into);
-        
+
         assertThat(into.get("list"), notNullValue());
     }
 
@@ -55,9 +54,9 @@ public class TestsCollectionMapper {
         final CollectionMapper mapper = createMapper();
         final BasicDBObject dbObject = dbObjectContaining("test");
         final EntityWithCollection entity = new EntityWithCollection();
-        
+
         mapper.populate(entity, dbObject);
-        
+
         assertThat(entity.getList().size(), is(1));
         assertThat(entity.getList().get(0), is("test"));
     }
@@ -80,7 +79,7 @@ public class TestsCollectionMapper {
     }
 
     public class EntityWithCollection {
-        
+
         public List<String> getList() {
             return list;
         }

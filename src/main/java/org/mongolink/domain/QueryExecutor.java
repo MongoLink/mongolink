@@ -26,10 +26,9 @@ import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
+import org.mongolink.domain.mapper.EntityMapper;
 
 import java.util.List;
-
-import org.mongolink.domain.mapper.EntityMapper;
 
 public class QueryExecutor<T> {
 

@@ -21,9 +21,8 @@
 
 package org.mongolink.domain.mapper;
 
-import org.mongolink.utils.MethodContainer;
-
 import com.mongodb.DBObject;
+import org.mongolink.utils.MethodContainer;
 
 public class ReferenceMapper implements Mapper {
 

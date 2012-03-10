@@ -27,7 +27,6 @@ import org.mongolink.test.entity.FakeChildEntity;
 import org.mongolink.test.entity.FakeEntity;
 
 
-
 public class FakeEntityWithSubclassMapping extends EntityMap<FakeEntity> {
 
     public FakeEntityWithSubclassMapping() {

@@ -21,9 +21,8 @@
 
 package org.mongolink.domain.criteria;
 
-import org.mongolink.domain.converter.Converter;
-
 import com.mongodb.DBObject;
+import org.mongolink.domain.converter.Converter;
 
 public abstract class Restriction {
 

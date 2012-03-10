@@ -28,7 +28,6 @@ import com.mongodb.FakeDBCollection;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.mongolink.MongoSession;
 import org.mongolink.domain.criteria.CriteriaFactory;
 import org.mongolink.domain.mapper.MapperContext;
 import org.mongolink.test.entity.FakeChildEntity;

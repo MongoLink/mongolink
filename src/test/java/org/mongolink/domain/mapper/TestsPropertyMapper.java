@@ -25,10 +25,6 @@ import com.mongodb.BasicDBObject;
 import org.hamcrest.Matchers;
 import org.joda.time.DateTime;
 import org.junit.Test;
-import org.mongolink.domain.mapper.ClassMapper;
-import org.mongolink.domain.mapper.EntityMapper;
-import org.mongolink.domain.mapper.MapperContext;
-import org.mongolink.domain.mapper.PropertyMapper;
 import org.mongolink.test.entity.Comment;
 import org.mongolink.test.simpleMapping.CommentMapping;
 import org.mongolink.utils.MethodContainer;
@@ -36,10 +32,11 @@ import org.mongolink.utils.MethodContainer;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class TestsPropertyMapper {
 

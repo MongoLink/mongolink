@@ -22,8 +22,6 @@
 package org.mongolink.domain.converter;
 
 import org.junit.Test;
-import org.mongolink.domain.converter.Converter;
-import org.mongolink.domain.converter.EnumConverter;
 
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertThat;

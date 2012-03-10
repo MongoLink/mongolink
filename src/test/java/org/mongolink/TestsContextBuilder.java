@@ -21,9 +21,6 @@
 
 package org.mongolink;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
-
 import org.junit.Test;
 import org.mongolink.domain.mapper.ClassMapper;
 import org.mongolink.domain.mapper.ContextBuilder;
@@ -33,26 +30,30 @@ import org.mongolink.test.entity.FakeChildEntity;
 import org.mongolink.test.entity.FakeEntity;
 import org.mongolink.test.entity.FakeEntityWithNaturalId;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
+
 public class TestsContextBuilder {
 
-	@Test
-	public void canLoadMappingFromPackage() {
-		ContextBuilder builder = new ContextBuilder("org.mongolink.test.simpleMapping");
+    @Test
+    public void canLoadMappingFromPackage() {
+        ContextBuilder builder = new ContextBuilder("org.mongolink.test.simpleMapping");
 
-		MapperContext context = builder.createContext();
+        MapperContext context = builder.createContext();
 
-		assertThat(context.mapperFor(FakeEntity.class), notNullValue());
-		assertThat(context.mapperFor(FakeEntityWithNaturalId.class), notNullValue());
-		assertThat(context.mapperFor(Comment.class), notNullValue());
-	}
+        assertThat(context.mapperFor(FakeEntity.class), notNullValue());
+        assertThat(context.mapperFor(FakeEntityWithNaturalId.class), notNullValue());
+        assertThat(context.mapperFor(Comment.class), notNullValue());
+    }
 
-	@Test
-	public void dontLoadSubclassMap() {
-		ContextBuilder builder = new ContextBuilder("org.mongolink.test.inheritanceMapping");
+    @Test
+    public void dontLoadSubclassMap() {
+        ContextBuilder builder = new ContextBuilder("org.mongolink.test.inheritanceMapping");
 
-		MapperContext context = builder.createContext();
+        MapperContext context = builder.createContext();
 
-		ClassMapper mapper = context.mapperFor(FakeChildEntity.class);
-		assertThat(mapper, is((ClassMapper) context.mapperFor(FakeEntity.class)));
-	}
+        ClassMapper mapper = context.mapperFor(FakeChildEntity.class);
+        assertThat(mapper, is((ClassMapper) context.mapperFor(FakeEntity.class)));
+    }
 }

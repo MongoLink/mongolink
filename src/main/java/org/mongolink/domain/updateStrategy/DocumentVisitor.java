@@ -27,7 +27,7 @@ import com.mongodb.DBObject;
 /**
  * @author jbdusseaut
  */
-public class DocumentVisitor extends Visitor{
+public class DocumentVisitor extends Visitor {
 
     public DocumentVisitor(final DbObjectDiff dbObjectDiff, final DBObject origin) {
         super(dbObjectDiff, origin);
@@ -47,7 +47,7 @@ public class DocumentVisitor extends Visitor{
         final Object field = target.get(key);
         if (isAList(field)) {
             visitList(key, (BasicDBList) field);
-        }else {
+        } else {
             visitProperty(key, field);
         }
     }

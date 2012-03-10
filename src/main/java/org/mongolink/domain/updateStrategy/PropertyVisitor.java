@@ -28,25 +28,25 @@ import com.mongodb.DBObject;
  */
 public class PropertyVisitor extends Visitor {
 
-	public PropertyVisitor(final DbObjectDiff dbObjectDiff, final Object origin) {
-		super(dbObjectDiff, origin);
-	}
+    public PropertyVisitor(final DbObjectDiff dbObjectDiff, final Object origin) {
+        super(dbObjectDiff, origin);
+    }
 
-	@Override
-	public void visit(final Object field) {
-		if (isADocument(field)) {
-			visitDocument((DBObject) getOrigin(), field);
-		} else if (hasDifference(field)) {
-			getDbObjectDiff().addSet(field);
-		}
-	}
+    @Override
+    public void visit(final Object field) {
+        if (isADocument(field)) {
+            visitDocument((DBObject) getOrigin(), field);
+        } else if (hasDifference(field)) {
+            getDbObjectDiff().addSet(field);
+        }
+    }
 
-	private boolean isADocument(final Object field) {
-		return DBObject.class.isAssignableFrom(field.getClass());
-	}
+    private boolean isADocument(final Object field) {
+        return DBObject.class.isAssignableFrom(field.getClass());
+    }
 
-	private boolean hasDifference(Object field) {
-		return getOrigin() == null || !getOrigin().equals(field);
-	}
+    private boolean hasDifference(Object field) {
+        return getOrigin() == null || !getOrigin().equals(field);
+    }
 
 }

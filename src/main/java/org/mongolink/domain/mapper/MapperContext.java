@@ -22,10 +22,9 @@
 package org.mongolink.domain.mapper;
 
 import com.google.common.collect.Lists;
+import org.mongolink.domain.converter.Converter;
 
 import java.util.List;
-
-import org.mongolink.domain.converter.Converter;
 
 public class MapperContext {
 
@@ -49,7 +48,7 @@ public class MapperContext {
 
     public Converter converterFor(Class<?> type) {
         final ClassMapper<?> classMapper = mapperFor(type);
-        if(classMapper != null) {
+        if (classMapper != null) {
             return classMapper;
         }
         return Converter.forType(type);

@@ -4,13 +4,11 @@ import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
-
-
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.mongolink.domain.updateStrategy.DiffStrategy;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.times;
 
 public class DiffStrategyTest {
 
@@ -24,7 +22,7 @@ public class DiffStrategyTest {
         val.add("first");
         origin.put("liste", val);
         target.put("liste", new BasicDBList());
-        
+
         strategy.update(origin, target, collection);
 
         Mockito.verify(collection, times(2)).update(any(DBObject.class), any(DBObject.class));

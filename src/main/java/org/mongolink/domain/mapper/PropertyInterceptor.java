@@ -23,10 +23,9 @@ package org.mongolink.domain.mapper;
 
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
+import org.mongolink.utils.MethodContainer;
 
 import java.lang.reflect.Method;
-
-import org.mongolink.utils.MethodContainer;
 
 
 class PropertyInterceptor implements MethodInterceptor {

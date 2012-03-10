@@ -39,7 +39,7 @@ public class DiffStrategy extends UpdateStrategy {
             collection.update(q, diff);
             // ugly hack to support removing element by index
             // see https://jira.mongodb.org/browse/SERVER-1014
-            if(pull != null) {
+            if (pull != null) {
                 LOGGER.debug("Cleaning collection:" + q + " values: " + pull);
                 collection.update(q, new BasicDBObject(DbObjectDiff.Modifier.PULL.toString(), pull));
             }

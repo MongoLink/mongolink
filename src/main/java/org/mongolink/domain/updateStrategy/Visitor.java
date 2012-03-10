@@ -25,7 +25,7 @@ import com.mongodb.BasicDBList;
 import com.mongodb.DBObject;
 
 /**
-@author jbdusseaut
+ * @author jbdusseaut
  */
 public abstract class Visitor {
     public Visitor(final DbObjectDiff dbObjectDiff, final Object origin) {

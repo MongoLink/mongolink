@@ -25,9 +25,6 @@ import com.mongodb.*;
 import org.junit.Test;
 import org.mockito.Matchers;
 import org.mongolink.MongoSession;
-import org.mongolink.domain.CursorParameter;
-import org.mongolink.domain.QueryExecutor;
-import org.mongolink.domain.UnitOfWork;
 import org.mongolink.domain.mapper.EntityMapper;
 import org.mongolink.test.entity.FakeEntity;
 

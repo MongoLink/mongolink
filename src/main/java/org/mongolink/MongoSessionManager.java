@@ -21,15 +21,14 @@
 
 package org.mongolink;
 
+import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
+import com.mongodb.DBObject;
 import org.mongolink.domain.criteria.CriteriaFactory;
 import org.mongolink.domain.mapper.ClassMapper;
 import org.mongolink.domain.mapper.ContextBuilder;
 import org.mongolink.domain.mapper.EntityMapper;
 import org.mongolink.domain.mapper.MapperContext;
-
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBObject;
 
 public class MongoSessionManager {
 

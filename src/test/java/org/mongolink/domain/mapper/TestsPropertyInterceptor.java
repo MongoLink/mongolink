@@ -22,8 +22,6 @@
 package org.mongolink.domain.mapper;
 
 import org.junit.Test;
-import org.mongolink.domain.mapper.EntityMap;
-import org.mongolink.domain.mapper.PropertyInterceptor;
 import org.mongolink.test.entity.FakeEntity;
 import org.mongolink.utils.MethodContainer;
 

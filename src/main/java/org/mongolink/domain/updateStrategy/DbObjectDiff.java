@@ -53,11 +53,11 @@ public class DbObjectDiff {
         for (Modifier modifier : Modifier.values()) {
             appendIfNeeded(modifier, modifiers.get(modifier), result);
         }
-        
+
     }
 
     private void appendIfNeeded(final Modifier key, final BasicDBObject entry, final BasicDBObject result) {
-        if(!entry.isEmpty()) {
+        if (!entry.isEmpty()) {
             result.append(key.key, entry);
         }
     }
@@ -88,7 +88,7 @@ public class DbObjectDiff {
             keyBuilder.append(s);
             keyBuilder.append(".");
         }
-        keyBuilder.deleteCharAt(keyBuilder.length() -1);
+        keyBuilder.deleteCharAt(keyBuilder.length() - 1);
         return keyBuilder.toString();
     }
 
@@ -102,6 +102,7 @@ public class DbObjectDiff {
 
     enum Modifier {
         SET("$set"), PUSH("$push"), UNSET("$unset"), PULL("$pull");
+
         Modifier(String key) {
             this.key = key;
         }
@@ -113,7 +114,7 @@ public class DbObjectDiff {
 
         private String key;
     }
-    
+
     private Stack<String> keys = new Stack<String>();
     private DBObject origin;
     private Map<Modifier, BasicDBObject> modifiers = Maps.newConcurrentMap();

@@ -23,11 +23,6 @@ package org.mongolink.domain.mapper;
 
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
-import org.mongolink.domain.mapper.ClassMapper;
-import org.mongolink.domain.mapper.EntityMapper;
-import org.mongolink.domain.mapper.MapperContext;
-import org.mongolink.domain.mapper.ReferenceMapper;
-import org.mongolink.test.componentMapping.FakeEntityMappingWithComponent;
 import org.mongolink.test.entity.FakeChildEntity;
 import org.mongolink.test.entity.FakeEntity;
 import org.mongolink.test.entity.FakeEntityWithCap;
@@ -38,9 +33,11 @@ import org.mongolink.test.referenceMapping.FakeEntityMappingWithReference;
 import org.mongolink.test.simpleMapping.FakeEntityMapping;
 import org.mongolink.test.simpleMapping.FakeEntityMappingWithCap;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 public class TestsEntityMap {
 

@@ -24,12 +24,11 @@ package org.mongolink.domain.criteria;
 import com.google.common.collect.Lists;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
+import org.mongolink.domain.CursorParameter;
+import org.mongolink.domain.QueryExecutor;
 
 import java.util.Collections;
 import java.util.List;
-
-import org.mongolink.domain.CursorParameter;
-import org.mongolink.domain.QueryExecutor;
 
 @SuppressWarnings("unchecked")
 public class Criteria<T> {

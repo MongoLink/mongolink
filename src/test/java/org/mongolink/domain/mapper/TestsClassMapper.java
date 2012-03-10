@@ -25,8 +25,6 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import org.junit.Before;
 import org.junit.Test;
-import org.mongolink.domain.mapper.EntityMapper;
-import org.mongolink.domain.mapper.MapperContext;
 import org.mongolink.test.entity.Comment;
 import org.mongolink.test.entity.FakeEntity;
 import org.mongolink.test.simpleMapping.CommentMapping;
@@ -55,11 +53,11 @@ public class TestsClassMapper {
 
         assertThat(dbObject.get("comment"), notNullValue());
     }
-    
+
     @Test
     public void canConvertFromDBValue() {
         final Object value = entityMapper().toDbValue(new FakeEntity("ok"));
-        
+
         assertThat(value, instanceOf(DBObject.class));
     }
 
@@ -69,7 +67,7 @@ public class TestsClassMapper {
         value.put("value", "test");
 
         final Object instance = entityMapper().fromDbValue(value);
-        
+
         assertThat(instance, instanceOf(FakeEntity.class));
         assertThat(((FakeEntity) instance).getValue(), is("test"));
     }

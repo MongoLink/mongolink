@@ -27,8 +27,6 @@ import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mongolink.domain.mapper.ComponentMapper;
-import org.mongolink.domain.mapper.MapperContext;
 import org.mongolink.test.entity.Comment;
 import org.mongolink.test.simpleMapping.CommentMapping;
 

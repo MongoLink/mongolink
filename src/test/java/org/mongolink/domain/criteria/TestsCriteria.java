@@ -28,8 +28,6 @@ import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mongolink.domain.CursorParameter;
 import org.mongolink.domain.QueryExecutor;
-import org.mongolink.domain.criteria.Criteria;
-import org.mongolink.domain.criteria.Restrictions;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;

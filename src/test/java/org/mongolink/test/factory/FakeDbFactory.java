@@ -23,10 +23,9 @@ package org.mongolink.test.factory;
 
 import com.google.common.collect.Maps;
 import com.mongodb.FakeDB;
+import org.mongolink.DbFactory;
 
 import java.util.Map;
-
-import org.mongolink.DbFactory;
 
 public class FakeDbFactory extends DbFactory {
 

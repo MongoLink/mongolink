@@ -23,20 +23,19 @@ package org.mongolink.domain.mapper;
 
 import org.junit.Test;
 import org.mongolink.domain.converter.Converter;
-import org.mongolink.domain.mapper.ComponentMapper;
-import org.mongolink.domain.mapper.MapperContext;
 import org.mongolink.test.entity.Comment;
 import org.mongolink.test.simpleMapping.CommentMapping;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertThat;
 
 public class TestsMapperContext {
 
     @Test
     public void canGetConverterForBasicType() {
         final MapperContext context = new MapperContext();
-        
+
         Converter converter = context.converterFor(String.class);
 
         assertThat(converter, notNullValue());

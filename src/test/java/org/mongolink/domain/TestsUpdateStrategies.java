@@ -23,7 +23,6 @@ package org.mongolink.domain;
 
 
 import org.junit.Test;
-import org.mongolink.domain.UpdateStrategies;
 import org.mongolink.domain.updateStrategy.DiffStrategy;
 import org.mongolink.domain.updateStrategy.OverwriteStrategy;
 import org.mongolink.domain.updateStrategy.UpdateStrategy;
