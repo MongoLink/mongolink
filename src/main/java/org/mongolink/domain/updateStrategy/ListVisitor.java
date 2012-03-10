@@ -35,12 +35,12 @@ public class ListVisitor extends Visitor {
     @Override
     public void visit(final Object target) {
         final BasicDBList targetList = (BasicDBList) target;
-        if (getOrigin().size() == targetList.size()) {
-            return;
-        } else if (getOrigin().size() > targetList.size()) {
-            compareDeletedElementsInList(targetList);
-        } else {
-            getDbObjectDiff().addPush(targetList.get(targetList.size() - 1));
+        if (getOrigin().size() != targetList.size()) {
+            if (getOrigin().size() > targetList.size()) {
+                compareDeletedElementsInList(targetList);
+            } else {
+                getDbObjectDiff().addPush(targetList.get(targetList.size() - 1));
+            }
         }
     }
 

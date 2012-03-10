@@ -32,6 +32,6 @@ public class DateTimeConverter extends Converter {
 
     @Override
     public Object fromDbValue(final Object value) {
-        return new DateTime((Long) value);
+        return new DateTime(value);
     }
 }

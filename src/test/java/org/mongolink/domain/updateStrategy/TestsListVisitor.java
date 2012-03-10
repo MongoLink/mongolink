@@ -4,6 +4,8 @@ import com.mongodb.BasicDBList;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Collections;
+
 import static org.mockito.Mockito.*;
 
 public class TestsListVisitor {
@@ -58,9 +60,7 @@ public class TestsListVisitor {
 
     private BasicDBList listWith(final String... values) {
         final BasicDBList result = new BasicDBList();
-        for (String value : values) {
-            result.add(value);
-        }
+        Collections.addAll(result, values);
         return result;
     }
 

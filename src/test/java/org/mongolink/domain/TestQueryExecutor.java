@@ -67,7 +67,7 @@ public class TestQueryExecutor {
 
     private QueryExecutor createQueryExecutor() {
         final DB db = new FakeDB();
-        collection = (FakeDBCollection) db.getCollection("collection");
+        FakeDBCollection collection = (FakeDBCollection) db.getCollection("collection");
         for (int i = 0; i < 20; i++) {
             final BasicDBObject element = new BasicDBObject();
             element.put("value", i);
@@ -79,5 +79,4 @@ public class TestQueryExecutor {
         return new QueryExecutor<FakeEntity>(db, entityMapper, new UnitOfWork(mock(MongoSession.class)));
     }
 
-    private FakeDBCollection collection;
 }

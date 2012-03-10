@@ -52,7 +52,7 @@ public abstract class Visitor {
     }
 
     protected void visitList(final BasicDBList origin, final BasicDBList field) {
-        new ListVisitor(dbObjectDiff, origin).visit((BasicDBList) field);
+        new ListVisitor(dbObjectDiff, origin).visit(field);
     }
 
     private DbObjectDiff dbObjectDiff;

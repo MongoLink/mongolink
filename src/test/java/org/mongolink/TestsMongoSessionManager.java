@@ -46,7 +46,7 @@ public class TestsMongoSessionManager {
 
     @Before
     public void before() {
-        contextBuilder = TestFactory.contextBuilder().withFakeEntity();
+        ContextBuilder contextBuilder = TestFactory.contextBuilder().withFakeEntity();
         final Settings settings = Settings.defaultInstance().withDbFactory(FakeDbFactory.class).withDefaultUpdateStrategy(UpdateStrategies.DIFF);
         manager = MongoSessionManager.create(contextBuilder, settings);
     }
@@ -105,6 +105,5 @@ public class TestsMongoSessionManager {
         assertThat(fakeEntityWithCapMapper.getCappedMax(), is(50));
     }
 
-    private static ContextBuilder contextBuilder;
     private static MongoSessionManager manager;
 }

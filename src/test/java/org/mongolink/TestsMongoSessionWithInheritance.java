@@ -41,7 +41,7 @@ public class TestsMongoSessionWithInheritance {
 
     @Before
     public void before() {
-        db = Mockito.spy(new FakeDB());
+        FakeDB db = Mockito.spy(new FakeDB());
         entities = new FakeDBCollection(db, "fakeentity");
         db.collections.put("fakeentity", entities);
         FakeEntityWithSubclassMapping mapping = new FakeEntityWithSubclassMapping();
@@ -75,6 +75,5 @@ public class TestsMongoSessionWithInheritance {
     }
 
     private FakeDBCollection entities;
-    private FakeDB db;
     private MongoSession session;
 }
