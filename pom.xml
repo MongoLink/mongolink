@@ -77,4 +77,14 @@
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
+    <repositories>
+        <repository>
+            <id>mongolink-snapshot</id>
+            <url>http://repository-mongolink.forge.cloudbees.com/snapshot/</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+        </repository>
+    </repositories>
 </project>
