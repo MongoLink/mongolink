@@ -37,7 +37,14 @@ public class MethodContainer {
     }
 
     public String shortName() {
-        return StringUtils.uncapitalize(method.getName().substring(3, method.getName().length()));
+        return StringUtils.uncapitalize(method.getName().substring(prefixLength(), method.getName().length()));
+    }
+
+    private int prefixLength() {
+        if (method.getName().startsWith("is")) {
+            return 2;
+        }
+        return 3;
     }
 
     @Override

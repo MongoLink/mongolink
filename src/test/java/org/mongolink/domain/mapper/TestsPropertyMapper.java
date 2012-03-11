@@ -33,6 +33,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
@@ -48,6 +49,7 @@ public class TestsPropertyMapper {
         private TestEnum value;
         private int primitive;
         private DateTime creationDate;
+        private boolean ok;
 
         public DateTime getCreationDate() {
             return creationDate;
@@ -64,6 +66,11 @@ public class TestsPropertyMapper {
         public TestEnum getValue() {
             return value;
         }
+
+        public boolean isOk() {
+            return ok;
+        }
+
     }
 
     @Test
@@ -155,6 +162,29 @@ public class TestsPropertyMapper {
         final MapperContext context = new MapperContext();
         context.addMapper(mapper);
         return mapper;
+    }
+
+    @Test
+    public void canSaveBooleanType() throws NoSuchMethodException {
+        PropertyMapper mapper = propertyMapperForBoolean();
+        FakeEntity fakeEntity = new FakeEntity();
+        fakeEntity.ok = true;
+        BasicDBObject basicDBObject = new BasicDBObject();
+
+        mapper.save(fakeEntity, basicDBObject);
+
+        assertThat(basicDBObject.get("k"), nullValue());
+        assertThat(basicDBObject.get("ok"), is((Object) true));
+    }
+
+    private PropertyMapper propertyMapperForBoolean() throws NoSuchMethodException {
+        final PropertyMapper propertyMapper = new PropertyMapper(new MethodContainer(primitiveBooleanGetter()));
+        propertyMapper.setMapper(parentMapper());
+        return propertyMapper;
+    }
+
+    private Method primitiveBooleanGetter() throws NoSuchMethodException {
+        return FakeEntity.class.getDeclaredMethod("isOk");
     }
 
     @Test
