@@ -23,6 +23,7 @@ package org.mongolink.utils;
 
 import com.google.common.base.Objects;
 import org.apache.commons.lang.StringUtils;
+import org.mongolink.MongoLinkError;
 
 import java.lang.reflect.Method;
 
@@ -62,6 +63,14 @@ public class MethodContainer {
     @Override
     public int hashCode() {
         return Objects.hashCode(method);
+    }
+
+    public Object invoke(final Object instance) {
+        try {
+            return method.invoke(instance);
+        } catch (Exception e) {
+            throw new MongoLinkError("Invocation exception : " + shortName() + " " + instance.getClass(), e);
+        }
     }
 
     private Method method;

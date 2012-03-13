@@ -29,22 +29,23 @@ import org.mongolink.MongoLinkError;
 import org.mongolink.utils.MethodContainer;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 
 public class IdMapper implements Mapper {
 
     public IdMapper(MethodContainer methodContainer, IdGeneration generationStrategy) {
-        this.method = methodContainer.getMethod();
-        this.name = methodContainer.shortName();
+        this.methodContainer = methodContainer;
         this.generationStrategy = generationStrategy;
     }
 
     @Override
     public void save(Object instance, DBObject into) {
         try {
-            into.put(dbFieldName(), convertToDbValue(getIdValue(instance)));
+            final Object idValue = convertToDbValue(getIdValue(instance));
+            if(idValue != null) {
+                into.put(dbFieldName(), idValue);
+            }
         } catch (Exception e) {
-            LOGGER.error("Can't saveInto property " + name, e);
+            LOGGER.error("Can't saveInto property " + methodContainer.shortName(), e);
         }
     }
 
@@ -55,9 +56,9 @@ public class IdMapper implements Mapper {
     @Override
     public void populate(Object instance, DBObject from) {
         try {
-            Field field = mapper.getPersistentType().getDeclaredField(name);
+            Field field = mapper.getPersistentType().getDeclaredField(methodContainer.shortName());
             field.setAccessible(true);
-            field.set(instance, convertToObjectValue(getIdValue(from)));
+            field.set(instance, getIdValue(from));
             field.setAccessible(false);
         } catch (Exception e) {
             LOGGER.error(e);
@@ -77,17 +78,20 @@ public class IdMapper implements Mapper {
 
     protected Object getIdValue(Object element) {
         try {
-            return method.invoke(element);
+            return methodContainer.invoke(element);
         } catch (Exception e) {
             throw new MongoLinkError("Can't get id value", e);
         }
     }
 
-    public Object convertToDbValue(Object id) {
+    Object convertToDbValue(Object id) {
         if (generationStrategy == IdGeneration.Natural) {
             return id;
         }
-        return new ObjectId(id.toString());
+        if(id != null) {
+            return new ObjectId(id.toString());
+        }
+        return null;
     }
 
     public void setMapper(EntityMapper<?> mapper) {
@@ -102,9 +106,8 @@ public class IdMapper implements Mapper {
         generationStrategy = IdGeneration.Auto;
     }
 
-    private final String name;
     private IdGeneration generationStrategy;
+    private MethodContainer methodContainer;
     private static final Logger LOGGER = Logger.getLogger(IdMapper.class);
-    private final Method method;
     private EntityMapper<?> mapper;
 }

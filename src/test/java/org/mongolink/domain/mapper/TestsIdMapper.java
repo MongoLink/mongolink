@@ -1,5 +1,6 @@
 package org.mongolink.domain.mapper;
 
+import com.mongodb.BasicDBObject;
 import org.junit.Test;
 import org.mongolink.utils.MethodContainer;
 
@@ -15,15 +16,21 @@ public class TestsIdMapper {
     public void canSerializeUuid() {
         IdMapper mapper = new IdMapper(mock(MethodContainer.class), IdGeneration.Natural);
         final UUID id = UUID.randomUUID();
-        
+
         final Object dbValue = mapper.convertToDbValue(id);
-        
+
         assertThat((UUID) dbValue, is(id));
     }
 
     @Test
-    public void canLoadFromBinData() {
-        //75b686db-e0b9-4e71-a469-4e33ab45030a
-        // BinData(3,"cU654NuGtnUKA0WrM05ppA==")
+    public void canSaveANullId() {
+        final MethodContainer methodContainer = mock(MethodContainer.class);
+        when(methodContainer.invoke(any())).thenReturn(null);
+        IdMapper mapper = new IdMapper(methodContainer, IdGeneration.Auto);
+        final BasicDBObject dbObject = new BasicDBObject();
+        
+        mapper.save(new Object(), dbObject);
+        
+        assertThat(dbObject.containsField("_id"), is(false));
     }
 }
