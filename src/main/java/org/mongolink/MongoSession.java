@@ -58,12 +58,12 @@ public class MongoSession {
         this.context = context;
     }
 
-    public <T> T get(String id, Class<T> entityType) {
+    public <T> T get(Object id, Class<T> entityType) {
         EntityMapper<T> mapper = (EntityMapper<T>) entityMapper(entityType);
-        Object dbId = mapper.getDbId(id);
-        if (unitOfWork.contains(entityType, dbId)) {
-            return unitOfWork.getEntity(entityType, dbId);
+        if (unitOfWork.contains(entityType, id)) {
+            return unitOfWork.getEntity(entityType, id);
         }
+        Object dbId = mapper.getDbId(id);
         DBObject query = new BasicDBObject("_id", dbId);
         return (T) createExecutor(mapper).executeUnique(query);
     }

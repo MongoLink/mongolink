@@ -44,7 +44,7 @@ public class EntityMapper<T> extends ClassMapper<T> {
         this.idMapper = idMapper;
     }
 
-    public Object getDbId(String id) {
+    public Object getDbId(Object id) {
         return idMapper.convertToDbValue(id);
     }
 

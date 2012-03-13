@@ -42,7 +42,7 @@ public class IdMapper implements Mapper {
     @Override
     public void save(Object instance, DBObject into) {
         try {
-            into.put(dbFieldName(), getIdValue(instance));
+            into.put(dbFieldName(), convertToDbValue(getIdValue(instance)));
         } catch (Exception e) {
             LOGGER.error("Can't saveInto property " + name, e);
         }
@@ -57,39 +57,41 @@ public class IdMapper implements Mapper {
         try {
             Field field = mapper.getPersistentType().getDeclaredField(name);
             field.setAccessible(true);
-            Object value = getIdValue(from);
-            field.set(instance, value.toString());
+            field.set(instance, convertToObjectValue(getIdValue(from)));
             field.setAccessible(false);
         } catch (Exception e) {
             LOGGER.error(e);
         }
     }
 
+    protected Object getIdValue(DBObject from) {
+        return convertToObjectValue(from.get(dbFieldName()));
+    }
+
+    private Object convertToObjectValue(final Object id) {
+        if(generationStrategy == IdGeneration.Auto) {
+            return id.toString();
+        }
+        return id;
+    }
+
     protected Object getIdValue(Object element) {
         try {
-            Object keyValue = method.invoke(element);
-            if (generationStrategy == IdGeneration.Auto && keyValue != null) {
-                return new ObjectId(keyValue.toString());
-            }
-            return keyValue;
+            return method.invoke(element);
         } catch (Exception e) {
             throw new MongoLinkError("Can't get id value", e);
         }
     }
 
-    protected Object getIdValue(DBObject from) {
-        return from.get(dbFieldName());
+    public Object convertToDbValue(Object id) {
+        if (generationStrategy == IdGeneration.Natural) {
+            return id;
+        }
+        return new ObjectId(id.toString());
     }
 
     public void setMapper(EntityMapper<?> mapper) {
         this.mapper = mapper;
-    }
-
-    public Object convertToDbValue(String id) {
-        if (generationStrategy == IdGeneration.Natural) {
-            return id;
-        }
-        return new ObjectId(id);
     }
 
     public void natural() {

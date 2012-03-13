@@ -66,11 +66,12 @@ public class QueryExecutor<T> {
     }
 
     private T loadEntity(DBObject dbObject) {
-        if (unitOfWork.contains(mapper.getPersistentType(), mapper.getId(dbObject))) {
-            return unitOfWork.getEntity(mapper.getPersistentType(), mapper.getId(dbObject));
+        final Object unitOfWorkId = mapper.getId(dbObject);
+        if (unitOfWork.contains(mapper.getPersistentType(), unitOfWorkId)) {
+            return unitOfWork.getEntity(mapper.getPersistentType(), unitOfWorkId);
         } else {
             T entity = mapper.toInstance(dbObject);
-            unitOfWork.add(mapper.getId(entity), entity, dbObject);
+            unitOfWork.add(unitOfWorkId, entity, dbObject);
             return entity;
         }
     }
