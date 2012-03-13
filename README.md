@@ -3,6 +3,11 @@ MongoLink
 
 An objet mapper for com.mongodb, without any annotation or xml. We can then achieve true persistence ignorance, allowing us to practice domain-driven design freely.
 
+Website
+-------
+
+* http://www.mongolink.org
+
 Continuous integration
 ---------------------
 * Jenkins : https://mongolink.ci.cloudbees.com
