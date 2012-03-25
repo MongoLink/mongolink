@@ -23,7 +23,7 @@ package org.mongolink.domain.converter;
 
 public class EnumConverter extends Converter {
 
-    private Class<? extends Enum> enumType;
+    private final Class<? extends Enum> enumType;
 
     public EnumConverter(Class<?> enumType) {
         this.enumType = (Class<? extends Enum>) enumType;

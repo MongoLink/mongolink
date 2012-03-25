@@ -22,16 +22,13 @@
 package org.mongolink.utils;
 
 import org.junit.Test;
-import org.mongolink.DbFactory;
-import org.mongolink.Settings;
-import org.mongolink.domain.QueryExecutor;
-import org.mongolink.domain.UpdateStrategies;
-import org.mongolink.domain.criteria.Criteria;
-import org.mongolink.domain.criteria.CriteriaFactory;
+import org.mongolink.*;
+import org.mongolink.domain.*;
+import org.mongolink.domain.criteria.*;
 import org.mongolink.test.factory.FakeDbFactory;
 
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 
 public class TestsSettings {
 

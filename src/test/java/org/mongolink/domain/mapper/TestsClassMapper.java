@@ -21,17 +21,13 @@
 
 package org.mongolink.domain.mapper;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
-import org.junit.Before;
-import org.junit.Test;
-import org.mongolink.test.entity.Comment;
-import org.mongolink.test.entity.FakeEntity;
-import org.mongolink.test.simpleMapping.CommentMapping;
-import org.mongolink.test.simpleMapping.FakeEntityMapping;
+import com.mongodb.*;
+import org.junit.*;
+import org.mongolink.test.entity.*;
+import org.mongolink.test.simpleMapping.*;
 
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 
 public class TestsClassMapper {
 

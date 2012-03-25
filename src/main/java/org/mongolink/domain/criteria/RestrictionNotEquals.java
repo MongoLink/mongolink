@@ -21,8 +21,7 @@
 
 package org.mongolink.domain.criteria;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
+import com.mongodb.*;
 
 public class RestrictionNotEquals extends Restriction {
 
@@ -38,5 +37,5 @@ public class RestrictionNotEquals extends Restriction {
         query.put(getField(), object);
     }
 
-    private Object value;
+    private final Object value;
 }

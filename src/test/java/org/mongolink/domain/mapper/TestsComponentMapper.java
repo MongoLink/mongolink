@@ -21,12 +21,9 @@
 
 package org.mongolink.domain.mapper;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
+import com.mongodb.*;
 import org.hamcrest.Matchers;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 import org.mongolink.test.entity.Comment;
 import org.mongolink.test.simpleMapping.CommentMapping;
 

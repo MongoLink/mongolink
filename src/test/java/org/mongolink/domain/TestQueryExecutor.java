@@ -30,10 +30,9 @@ import org.mongolink.test.entity.FakeEntity;
 
 import java.util.List;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.hamcrest.MatcherAssert.*;
+import static org.hamcrest.Matchers.*;
+import static org.mockito.Mockito.*;
 
 @SuppressWarnings("unchecked")
 public class TestQueryExecutor {

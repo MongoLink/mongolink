@@ -41,7 +41,7 @@ public class IdMapper implements Mapper {
     public void save(Object instance, DBObject into) {
         try {
             final Object idValue = convertToDbValue(getIdValue(instance));
-            if(idValue != null) {
+            if (idValue != null) {
                 into.put(dbFieldName(), idValue);
             }
         } catch (Exception e) {
@@ -70,7 +70,7 @@ public class IdMapper implements Mapper {
     }
 
     private Object convertToObjectValue(final Object id) {
-        if(generationStrategy == IdGeneration.Auto) {
+        if (generationStrategy == IdGeneration.Auto) {
             return id.toString();
         }
         return id;
@@ -88,7 +88,7 @@ public class IdMapper implements Mapper {
         if (generationStrategy == IdGeneration.Natural) {
             return id;
         }
-        if(id != null) {
+        if (id != null) {
             return new ObjectId(id.toString());
         }
         return null;
@@ -107,7 +107,7 @@ public class IdMapper implements Mapper {
     }
 
     private IdGeneration generationStrategy;
-    private MethodContainer methodContainer;
+    private final MethodContainer methodContainer;
     private static final Logger LOGGER = Logger.getLogger(IdMapper.class);
     private EntityMapper<?> mapper;
 }

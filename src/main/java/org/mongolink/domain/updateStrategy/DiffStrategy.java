@@ -21,9 +21,7 @@
 
 package org.mongolink.domain.updateStrategy;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBCollection;
-import com.mongodb.DBObject;
+import com.mongodb.*;
 import org.apache.log4j.Logger;
 
 public class DiffStrategy extends UpdateStrategy {
@@ -46,5 +44,5 @@ public class DiffStrategy extends UpdateStrategy {
         }
     }
 
-    private static Logger LOGGER = Logger.getLogger(DiffStrategy.class);
+    private static final Logger LOGGER = Logger.getLogger(DiffStrategy.class);
 }

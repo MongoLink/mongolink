@@ -62,7 +62,7 @@ public abstract class EntityMap<T> extends ClassMap<T> {
         }
     }
 
-    private EntityMapper<T> mapper;
+    private final EntityMapper<T> mapper;
     private static final Logger LOGGER = Logger.getLogger(EntityMap.class);
     private final List<SubclassMap<? extends T>> subclasses = Lists.newArrayList();
 }

@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.*;
 
 public class TestsIdMapper {
@@ -28,9 +29,9 @@ public class TestsIdMapper {
         when(methodContainer.invoke(any())).thenReturn(null);
         IdMapper mapper = new IdMapper(methodContainer, IdGeneration.Auto);
         final BasicDBObject dbObject = new BasicDBObject();
-        
+
         mapper.save(new Object(), dbObject);
-        
+
         assertThat(dbObject.containsField("_id"), is(false));
     }
 }

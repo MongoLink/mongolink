@@ -33,5 +33,5 @@ public abstract class ComponentMap<T> extends ClassMap<T> {
         return mapper;
     }
 
-    private ComponentMapper<T> mapper;
+    private final ComponentMapper<T> mapper;
 }

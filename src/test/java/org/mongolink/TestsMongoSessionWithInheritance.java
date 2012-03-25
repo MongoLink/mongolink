@@ -22,20 +22,16 @@
 package org.mongolink;
 
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.FakeDB;
-import com.mongodb.FakeDBCollection;
-import org.junit.Before;
-import org.junit.Test;
+import com.mongodb.*;
+import org.junit.*;
 import org.mockito.Mockito;
 import org.mongolink.domain.criteria.CriteriaFactory;
 import org.mongolink.domain.mapper.MapperContext;
-import org.mongolink.test.entity.FakeChildEntity;
-import org.mongolink.test.entity.FakeEntity;
+import org.mongolink.test.entity.*;
 import org.mongolink.test.inheritanceMapping.FakeEntityWithSubclassMapping;
 
 import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 
 public class TestsMongoSessionWithInheritance {
 

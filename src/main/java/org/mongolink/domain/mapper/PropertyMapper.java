@@ -26,11 +26,9 @@ import com.mongodb.DBObject;
 import org.apache.log4j.Logger;
 import org.mongolink.MongoLinkException;
 import org.mongolink.domain.converter.Converter;
-import org.mongolink.utils.MethodContainer;
-import org.mongolink.utils.ReflectionUtils;
+import org.mongolink.utils.*;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
+import java.lang.reflect.*;
 
 class PropertyMapper implements Mapper {
 

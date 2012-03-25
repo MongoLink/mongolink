@@ -21,21 +21,16 @@
 
 package org.mongolink.domain.criteria;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
+import com.mongodb.*;
 import org.joda.time.DateTime;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
-import org.mongolink.domain.CursorParameter;
-import org.mongolink.domain.QueryExecutor;
+import org.mongolink.domain.*;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 public class TestsCriteria {
 
@@ -144,5 +139,17 @@ public class TestsCriteria {
         DBObject restriction = (DBObject) query.get("text");
         assertThat(restriction, notNullValue());
         assertThat(restriction.get("$ne"), is((Object) "value"));
+    }
+
+    @Test
+    public void canTestGreaterThanOrEqualTo() {
+        final Criteria criteria = new Criteria(mock(QueryExecutor.class));
+        criteria.add(Restrictions.greaterThanOrEqualTo("date", 1));
+
+        DBObject query = criteria.createQuery();
+
+        DBObject restriction = (DBObject) query.get("date");
+        assertThat(restriction, notNullValue());
+        assertThat(restriction.get("$gte"), is((Object) 1));
     }
 }

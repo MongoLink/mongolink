@@ -21,8 +21,7 @@
 
 package org.mongolink.domain;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBCursor;
+import com.mongodb.*;
 
 public class CursorParameter {
 
@@ -80,5 +79,5 @@ public class CursorParameter {
 
     private int skip;
     private int limit;
-    private BasicDBObject orderBy = new BasicDBObject();
+    private final BasicDBObject orderBy = new BasicDBObject();
 }

@@ -22,17 +22,14 @@
 package org.mongolink.domain.mapper;
 
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
+import com.mongodb.*;
 import org.bson.types.ObjectId;
-import org.junit.Before;
-import org.junit.Test;
-import org.mongolink.test.entity.FakeChildEntity;
-import org.mongolink.test.entity.FakeEntity;
+import org.junit.*;
+import org.mongolink.test.entity.*;
 import org.mongolink.test.simpleMapping.FakeEntityMapping;
 
 import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 
 public class TestsSubclassMapper {
 

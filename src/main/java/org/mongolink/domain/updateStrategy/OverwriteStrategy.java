@@ -21,9 +21,7 @@
 
 package org.mongolink.domain.updateStrategy;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBCollection;
-import com.mongodb.DBObject;
+import com.mongodb.*;
 
 public class OverwriteStrategy extends UpdateStrategy {
 

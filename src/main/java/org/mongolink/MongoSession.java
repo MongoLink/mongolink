@@ -21,20 +21,11 @@
 
 package org.mongolink;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBObject;
-import org.mongolink.domain.QueryExecutor;
-import org.mongolink.domain.UnitOfWork;
-import org.mongolink.domain.UpdateStrategies;
-import org.mongolink.domain.criteria.Criteria;
-import org.mongolink.domain.criteria.CriteriaFactory;
-import org.mongolink.domain.mapper.ClassMapper;
-import org.mongolink.domain.mapper.EntityMapper;
-import org.mongolink.domain.mapper.MapperContext;
-import org.mongolink.domain.updateStrategy.OverwriteStrategy;
-import org.mongolink.domain.updateStrategy.UpdateStrategy;
+import com.mongodb.*;
+import org.mongolink.domain.*;
+import org.mongolink.domain.criteria.*;
+import org.mongolink.domain.mapper.*;
+import org.mongolink.domain.updateStrategy.*;
 
 import java.util.List;
 
@@ -145,6 +136,6 @@ public class MongoSession {
     private final DB db;
     private MapperContext context;
     private final UnitOfWork unitOfWork = new UnitOfWork(this);
-    private CriteriaFactory criteriaFactory;
+    private final CriteriaFactory criteriaFactory;
     private UpdateStrategy updateStrategy = new OverwriteStrategy();
 }

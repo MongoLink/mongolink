@@ -21,8 +21,7 @@
 
 package org.mongolink.domain.updateStrategy;
 
-import com.mongodb.BasicDBList;
-import com.mongodb.DBObject;
+import com.mongodb.*;
 
 /**
  * @author jbdusseaut
@@ -55,6 +54,6 @@ public abstract class Visitor {
         new ListVisitor(dbObjectDiff, origin).visit(field);
     }
 
-    private DbObjectDiff dbObjectDiff;
-    private Object origin;
+    private final DbObjectDiff dbObjectDiff;
+    private final Object origin;
 }

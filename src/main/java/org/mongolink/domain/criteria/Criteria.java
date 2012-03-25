@@ -22,13 +22,10 @@
 package org.mongolink.domain.criteria;
 
 import com.google.common.collect.Lists;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
-import org.mongolink.domain.CursorParameter;
-import org.mongolink.domain.QueryExecutor;
+import com.mongodb.*;
+import org.mongolink.domain.*;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @SuppressWarnings("unchecked")
 public class Criteria<T> {
@@ -77,7 +74,7 @@ public class Criteria<T> {
         return parameter;
     }
 
-    private List<Restriction> restrictions = Lists.newArrayList();
-    private QueryExecutor executor;
+    private final List<Restriction> restrictions = Lists.newArrayList();
+    private final QueryExecutor executor;
     private CursorParameter parameter = CursorParameter.empty();
 }

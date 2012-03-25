@@ -21,9 +21,7 @@
 
 package org.mongolink.domain;
 
-import org.mongolink.domain.updateStrategy.DiffStrategy;
-import org.mongolink.domain.updateStrategy.OverwriteStrategy;
-import org.mongolink.domain.updateStrategy.UpdateStrategy;
+import org.mongolink.domain.updateStrategy.*;
 
 public enum UpdateStrategies {
     DIFF {

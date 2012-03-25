@@ -1,14 +1,10 @@
 package org.mongolink.domain.updateStrategy;
 
-import com.mongodb.BasicDBList;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBCollection;
-import com.mongodb.DBObject;
+import com.mongodb.*;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.*;
 
 public class DiffStrategyTest {
 

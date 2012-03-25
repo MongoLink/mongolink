@@ -41,5 +41,5 @@ public abstract class Restriction {
         return converter.toDbValue(value);
     }
 
-    private String field;
+    private final String field;
 }

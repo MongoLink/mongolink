@@ -21,11 +21,8 @@
 
 package org.mongolink.test.inheritanceMapping;
 
-import org.mongolink.domain.mapper.EntityMap;
-import org.mongolink.domain.mapper.SubclassMap;
-import org.mongolink.test.entity.FakeChildEntity;
-import org.mongolink.test.entity.FakeEntity;
-import org.mongolink.test.entity.OtherFakeChildEntity;
+import org.mongolink.domain.mapper.*;
+import org.mongolink.test.entity.*;
 
 
 public class FakeEntityWithTwoSubclassMapping extends EntityMap<FakeEntity> {
