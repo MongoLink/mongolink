@@ -54,5 +54,5 @@ public class MapperContext {
         return Converter.forType(type);
     }
 
-    private List<ClassMapper<?>> mappers = Lists.newArrayList();
+    private final List<ClassMapper<?>> mappers = Lists.newArrayList();
 }

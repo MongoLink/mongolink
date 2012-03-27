@@ -21,8 +21,7 @@
 
 package org.mongolink.test.referenceMapping;
 
-import org.mongolink.domain.mapper.EntityMap;
-import org.mongolink.domain.mapper.EntityMapper;
+import org.mongolink.domain.mapper.*;
 import org.mongolink.test.entity.FakeEntity;
 
 
@@ -48,5 +47,5 @@ public class FakeEntityMappingWithReference extends EntityMap<FakeEntity> {
         return innerMapper;
     }
 
-    private EntityMapper<FakeEntity> innerMapper;
+    private final EntityMapper<FakeEntity> innerMapper;
 }

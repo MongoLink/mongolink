@@ -35,6 +35,10 @@ public class Restrictions {
         return factory.getNotEquals(field, value);
     }
 
+    public static Restriction greaterThanOrEqualTo(String field, Object value) {
+        return factory.getGreaterThanOrEqualTo(field, value);
+    }
+
     public static void setFactory(RestrictionFactory factory) {
         Restrictions.factory = factory;
     }

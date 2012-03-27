@@ -45,5 +45,5 @@ public abstract class SubclassMap<T> extends ClassMap<T> {
     }
 
     private EntityMap<?> parentMap;
-    private SubclassMapper<T> mapper;
+    private final SubclassMapper<T> mapper;
 }

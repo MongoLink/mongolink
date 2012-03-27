@@ -21,14 +21,11 @@
 
 package org.mongolink.domain.updateStrategy;
 
-import com.mongodb.BasicDBList;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
-import org.junit.Before;
-import org.junit.Test;
+import com.mongodb.*;
+import org.junit.*;
 
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 
 public class TestsDbObjectDiff {
 

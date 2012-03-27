@@ -22,10 +22,7 @@
 package org.mongolink.domain;
 
 import com.google.common.collect.Lists;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
-import com.mongodb.DBObject;
+import com.mongodb.*;
 import org.mongolink.domain.mapper.EntityMapper;
 
 import java.util.List;
@@ -84,7 +81,7 @@ public class QueryExecutor<T> {
         return mapper;
     }
 
-    private DB db;
-    private EntityMapper<T> mapper;
-    private UnitOfWork unitOfWork;
+    private final DB db;
+    private final EntityMapper<T> mapper;
+    private final UnitOfWork unitOfWork;
 }

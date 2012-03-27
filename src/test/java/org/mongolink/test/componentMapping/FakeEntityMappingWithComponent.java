@@ -21,8 +21,7 @@
 
 package org.mongolink.test.componentMapping;
 
-import org.mongolink.domain.mapper.EntityMap;
-import org.mongolink.domain.mapper.EntityMapper;
+import org.mongolink.domain.mapper.*;
 import org.mongolink.test.entity.FakeEntity;
 
 
@@ -43,5 +42,5 @@ public class FakeEntityMappingWithComponent extends EntityMap<FakeEntity> {
         return innerMap;
     }
 
-    private EntityMapper<FakeEntity> innerMap;
+    private final EntityMapper<FakeEntity> innerMap;
 }

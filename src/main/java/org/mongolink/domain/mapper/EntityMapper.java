@@ -100,5 +100,5 @@ public class EntityMapper<T> extends ClassMapper<T> {
     }
 
     private IdMapper idMapper;
-    private Map<String, SubclassMapper<?>> subclasses = Maps.newHashMap();
+    private final Map<String, SubclassMapper<?>> subclasses = Maps.newHashMap();
 }

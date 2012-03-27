@@ -21,8 +21,7 @@
 
 package org.mongolink.domain.updateStrategy;
 
-import com.mongodb.BasicDBList;
-import com.mongodb.DBObject;
+import com.mongodb.*;
 
 /**
  * @author jbdusseaut

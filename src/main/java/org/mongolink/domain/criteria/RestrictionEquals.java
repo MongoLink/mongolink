@@ -35,5 +35,5 @@ public class RestrictionEquals extends Restriction {
         query.put(getField(), getDBValue(value));
     }
 
-    private Object value;
+    private final Object value;
 }

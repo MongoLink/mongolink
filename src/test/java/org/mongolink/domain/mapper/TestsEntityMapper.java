@@ -21,28 +21,20 @@
 
 package org.mongolink.domain.mapper;
 
-import com.mongodb.BasicDBList;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
+import com.mongodb.*;
 import org.bson.types.ObjectId;
 import org.hamcrest.Matchers;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.mongolink.test.entity.FakeChildEntity;
-import org.mongolink.test.entity.FakeEntity;
-import org.mongolink.test.entity.FakeEntityWithNaturalId;
+import org.junit.*;
+import org.mongolink.test.entity.*;
 import org.mongolink.test.inheritanceMapping.FakeEntityWithSubclassMapping;
-import org.mongolink.test.simpleMapping.CommentMapping;
-import org.mongolink.test.simpleMapping.FakeEntityMapping;
-import org.mongolink.test.simpleMapping.FakeEntityWithNaturalIdMapping;
+import org.mongolink.test.simpleMapping.*;
 
 import java.net.UnknownHostException;
 
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 
 public class TestsEntityMapper {
 

@@ -23,11 +23,9 @@ package org.mongolink.domain.updateStrategy;
 
 
 import com.google.common.collect.Maps;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
+import com.mongodb.*;
 
-import java.util.Map;
-import java.util.Stack;
+import java.util.*;
 
 public class DbObjectDiff {
 
@@ -112,10 +110,10 @@ public class DbObjectDiff {
             return key;
         }
 
-        private String key;
+        private final String key;
     }
 
-    private Stack<String> keys = new Stack<String>();
-    private DBObject origin;
-    private Map<Modifier, BasicDBObject> modifiers = Maps.newConcurrentMap();
+    private final Stack<String> keys = new Stack<String>();
+    private final DBObject origin;
+    private final Map<Modifier, BasicDBObject> modifiers = Maps.newConcurrentMap();
 }

@@ -1,8 +1,7 @@
 package org.mongolink.domain.updateStrategy;
 
 import com.mongodb.BasicDBList;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
 import java.util.Collections;
 

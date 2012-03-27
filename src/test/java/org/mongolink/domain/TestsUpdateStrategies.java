@@ -23,13 +23,10 @@ package org.mongolink.domain;
 
 
 import org.junit.Test;
-import org.mongolink.domain.updateStrategy.DiffStrategy;
-import org.mongolink.domain.updateStrategy.OverwriteStrategy;
-import org.mongolink.domain.updateStrategy.UpdateStrategy;
+import org.mongolink.domain.updateStrategy.*;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.MatcherAssert.*;
+import static org.hamcrest.Matchers.*;
 
 public class TestsUpdateStrategies {
 

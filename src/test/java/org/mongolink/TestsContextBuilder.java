@@ -22,17 +22,11 @@
 package org.mongolink;
 
 import org.junit.Test;
-import org.mongolink.domain.mapper.ClassMapper;
-import org.mongolink.domain.mapper.ContextBuilder;
-import org.mongolink.domain.mapper.MapperContext;
-import org.mongolink.test.entity.Comment;
-import org.mongolink.test.entity.FakeChildEntity;
-import org.mongolink.test.entity.FakeEntity;
-import org.mongolink.test.entity.FakeEntityWithNaturalId;
+import org.mongolink.domain.mapper.*;
+import org.mongolink.test.entity.*;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.*;
 
 public class TestsContextBuilder {
 

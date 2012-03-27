@@ -81,8 +81,8 @@ public class UnitOfWork {
             this.initialValue = initialValue;
         }
 
-        Object entity;
-        DBObject initialValue;
+        final Object entity;
+        final DBObject initialValue;
     }
 
     private class Key {
@@ -103,13 +103,13 @@ public class UnitOfWork {
             return Objects.hashCode(type, id);
         }
 
-        Class<?> type;
+        final Class<?> type;
 
-        Object id;
+        final Object id;
     }
 
-    private MongoSession session;
+    private final MongoSession session;
 
-    private Map<Key, Value> values = Maps.newHashMap();
+    private final Map<Key, Value> values = Maps.newHashMap();
 
 }

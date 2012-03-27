@@ -21,31 +21,21 @@
 
 package org.mongolink;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
-import com.mongodb.FakeDB;
-import com.mongodb.FakeDBCollection;
+import com.mongodb.*;
 import org.bson.types.ObjectId;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.mockito.InOrder;
 import org.mongolink.domain.UpdateStrategies;
-import org.mongolink.domain.criteria.Criteria;
-import org.mongolink.domain.criteria.CriteriaFactory;
+import org.mongolink.domain.criteria.*;
 import org.mongolink.domain.mapper.ContextBuilder;
-import org.mongolink.test.entity.Comment;
-import org.mongolink.test.entity.FakeEntity;
-import org.mongolink.test.entity.FakeEntityWithNaturalId;
-import org.mongolink.test.entity.OtherEntityWithNaturalId;
+import org.mongolink.test.entity.*;
 
 import java.util.List;
 
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.inOrder;
-import static org.mockito.Mockito.spy;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 public class TestsMongoSession {
 

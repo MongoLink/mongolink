@@ -22,16 +22,12 @@
 package org.mongolink.domain.mapper;
 
 
-import com.mongodb.BasicDBList;
-import com.mongodb.DBObject;
+import com.mongodb.*;
 import org.apache.log4j.Logger;
 import org.mongolink.domain.converter.Converter;
-import org.mongolink.utils.MethodContainer;
-import org.mongolink.utils.ReflectionUtils;
+import org.mongolink.utils.*;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.*;
 import java.util.Collection;
 
 class CollectionMapper implements Mapper {

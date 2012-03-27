@@ -22,18 +22,15 @@
 package org.mongolink.domain.mapper;
 
 import com.google.common.collect.Lists;
-import com.mongodb.BasicDBList;
-import com.mongodb.BasicDBObject;
+import com.mongodb.*;
 import org.junit.Test;
 import org.mongolink.utils.MethodContainer;
 
 import java.util.List;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 public class TestsCollectionMapper {
 
@@ -84,6 +81,6 @@ public class TestsCollectionMapper {
             return list;
         }
 
-        private List<String> list = Lists.newArrayList();
+        private final List<String> list = Lists.newArrayList();
     }
 }

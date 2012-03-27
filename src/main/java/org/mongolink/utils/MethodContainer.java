@@ -73,5 +73,5 @@ public class MethodContainer {
         }
     }
 
-    private Method method;
+    private final Method method;
 }

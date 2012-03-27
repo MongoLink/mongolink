@@ -21,8 +21,7 @@
 
 package org.mongolink.domain.criteria;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
+import com.mongodb.*;
 
 public class RestrictionBetween extends Restriction {
 
@@ -40,6 +39,6 @@ public class RestrictionBetween extends Restriction {
         query.put(getField(), object);
     }
 
-    private Object start;
-    private Object end;
+    private final Object start;
+    private final Object end;
 }

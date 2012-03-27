@@ -21,26 +21,18 @@
 
 package org.mongolink;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.*;
 import org.mongolink.domain.UpdateStrategies;
-import org.mongolink.domain.mapper.ContextBuilder;
-import org.mongolink.domain.mapper.EntityMapper;
-import org.mongolink.domain.mapper.MapperContext;
+import org.mongolink.domain.mapper.*;
 import org.mongolink.domain.updateStrategy.DiffStrategy;
-import org.mongolink.test.entity.FakeEntity;
-import org.mongolink.test.entity.FakeEntityWithCap;
-import org.mongolink.test.factory.FakeDbFactory;
-import org.mongolink.test.factory.TestFactory;
+import org.mongolink.test.entity.*;
+import org.mongolink.test.factory.*;
 
 import java.net.UnknownHostException;
 
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.IsNull.notNullValue;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 
 public class TestsMongoSessionManager {
 

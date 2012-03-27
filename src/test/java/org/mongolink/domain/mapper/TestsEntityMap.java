@@ -23,21 +23,14 @@ package org.mongolink.domain.mapper;
 
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
-import org.mongolink.test.entity.FakeChildEntity;
-import org.mongolink.test.entity.FakeEntity;
-import org.mongolink.test.entity.FakeEntityWithCap;
-import org.mongolink.test.entity.OtherFakeChildEntity;
-import org.mongolink.test.inheritanceMapping.FakeEntityWithSubclassMapping;
-import org.mongolink.test.inheritanceMapping.FakeEntityWithTwoSubclassMapping;
+import org.mongolink.test.entity.*;
+import org.mongolink.test.inheritanceMapping.*;
 import org.mongolink.test.referenceMapping.FakeEntityMappingWithReference;
-import org.mongolink.test.simpleMapping.FakeEntityMapping;
-import org.mongolink.test.simpleMapping.FakeEntityMappingWithCap;
+import org.mongolink.test.simpleMapping.*;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 public class TestsEntityMap {
 

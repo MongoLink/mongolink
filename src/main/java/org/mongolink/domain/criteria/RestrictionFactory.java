@@ -34,4 +34,8 @@ public class RestrictionFactory {
     public Restriction getNotEquals(String field, Object value) {
         return new RestrictionNotEquals(field, value);
     }
+
+    public Restriction getGreaterThanOrEqualTo(String field, Object value) {
+        return new RestrictionGreaterThanOrEqualTo(field, value);
+    }
 }
