@@ -59,7 +59,13 @@ public class UnitOfWork {
     }
 
     private Value getValue(Class<?> type, Object dbId) {
-        return values.get(new Key(type, dbId));
+        Key keyCrafted = new Key(type, dbId);
+        for (Key key : values.keySet()) {
+            if(key.equals(keyCrafted)) {
+                return values.get(key);
+            }
+        }
+        return values.get(keyCrafted);
     }
 
     public void update(Object id, Object element, DBObject update) {
@@ -95,7 +101,7 @@ public class UnitOfWork {
         @Override
         public boolean equals(Object o) {
             Key other = (Key) o;
-            return Objects.equal(type, other.type) && Objects.equal(id, other.id);
+            return other.type.isAssignableFrom(type) && Objects.equal(id, other.id);
         }
 
         @Override
