@@ -98,6 +98,21 @@ public class TestsMongoSession {
     }
 
     @Test
+    public void testDavid() {
+        DBObject dbo = new BasicDBObject();
+        dbo.put("_id", "a natural key");
+        fakeEntities.insert(dbo);
+
+        session.get("a natural key", FakeEntityWithNaturalId.class);
+        FakeEntityWithNaturalId entity = session.get("a natural key", FakeEntityWithNaturalId.class);
+
+        entity.setValue("a new hope");
+        FakeEntityWithNaturalId anotherEntity = session.get("a natural key", FakeEntityWithNaturalId.class);
+
+        assertThat(anotherEntity.getValue(), is("a new hope"));
+    }
+
+    @Test
     public void canSave() {
         FakeEntity entity = new FakeEntity("value");
 

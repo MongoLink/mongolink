@@ -45,10 +45,6 @@ public class UnitOfWork {
         }
     }
 
-    public boolean contains(Class<?> type, Object dbId) {
-        return values.containsKey(new Key(type, dbId));
-    }
-
     @SuppressWarnings("unchecked")
     public <T> T getEntity(Class<?> type, Object dbId) {
         return (T) getValue(type, dbId).entity;
@@ -58,14 +54,26 @@ public class UnitOfWork {
         return getValue(type, dbId).initialValue;
     }
 
+    public boolean contains(Class<?> type, Object dbId) {
+        if (type != null && dbId != null) {
+            final Key craftedKey = new Key(type, dbId);
+            for (Key key : values.keySet()) {
+                if (key.equals(craftedKey)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     private Value getValue(Class<?> type, Object dbId) {
-        Key keyCrafted = new Key(type, dbId);
+        Key craftedKey = new Key(type, dbId);
         for (Key key : values.keySet()) {
-            if(key.equals(keyCrafted)) {
+            if (key.equals(craftedKey)) {
                 return values.get(key);
             }
         }
-        return values.get(keyCrafted);
+        return values.get(craftedKey);
     }
 
     public void update(Object id, Object element, DBObject update) {

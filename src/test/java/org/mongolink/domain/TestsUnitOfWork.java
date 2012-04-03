@@ -21,16 +21,13 @@
 package org.mongolink.domain;
 
 
-import com.google.common.collect.Lists;
 import com.mongodb.BasicDBObject;
 import org.junit.Test;
 import org.mongolink.MongoSession;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static org.fest.assertions.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 public class TestsUnitOfWork {
 
@@ -43,6 +40,15 @@ public class TestsUnitOfWork {
         Object entityFound = unitOfWork.getEntity(Parent.class, 1);
 
         assertThat(entityFound).isNotNull();
+    }
+
+    @Test
+    public void canCheckExistenceWithSubType() {
+        final UnitOfWork unitOfWork = new UnitOfWork(mock(MongoSession.class));
+        final Child child = new Child();
+        unitOfWork.add(1, child, new BasicDBObject());
+
+        assertTrue(unitOfWork.contains(Parent.class, 1));
     }
 
     private class Parent {
