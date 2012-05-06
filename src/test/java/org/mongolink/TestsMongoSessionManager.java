@@ -39,7 +39,7 @@ public class TestsMongoSessionManager {
     @Before
     public void before() {
         ContextBuilder contextBuilder = TestFactory.contextBuilder().withFakeEntity();
-        final Settings settings = Settings.defaultInstance().withDbFactory(FakeDbFactory.class).withDefaultUpdateStrategy(UpdateStrategies.DIFF);
+        settings = Settings.defaultInstance().withDbFactory(FakeDbFactory.class).withDefaultUpdateStrategy(UpdateStrategies.DIFF);
         manager = MongoSessionManager.create(contextBuilder, settings);
     }
 
@@ -60,6 +60,16 @@ public class TestsMongoSessionManager {
         MongoSession session = manager.createSession();
 
         assertThat(session, notNullValue());
+        assertThat(session.getDb().isAuthenticated(), is(false));
+    }
+
+    @Test
+    public void canCreateSessionWithAuthentication() {
+        settings.withAuthentication("user", "password");
+
+        MongoSession session = manager.createSession();
+
+        assertThat(session.getDb().isAuthenticated(), is(true));
     }
 
     @Test
@@ -96,6 +106,6 @@ public class TestsMongoSessionManager {
         assertThat(fakeEntityWithCapMapper.getCappedSize(), is(1048076));
         assertThat(fakeEntityWithCapMapper.getCappedMax(), is(50));
     }
-
+    private static Settings settings;
     private static MongoSessionManager manager;
 }

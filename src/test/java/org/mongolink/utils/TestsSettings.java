@@ -40,6 +40,23 @@ public class TestsSettings {
 
         assertThat(dbFactory.host, is("localhost"));
         assertThat(dbFactory.port, is(1234));
+        assertThat(settings.withAuthentication(), is(false));
+    }
+
+    @Test
+    public void canCreateSettingsWithAuthentication() {
+        Settings settings = Settings.defaultInstance().withAuthentication("user", "passwd").withDbFactory(FakeDbFactory.class);
+
+        assertThat(settings.getUser(), is("user"));
+        assertThat(settings.getPassword(), is("passwd"));
+        assertThat(settings.withAuthentication(), is(true));
+    }
+
+    @Test
+    public void canCreateSettingsWithEmptyAuthentication() {
+        Settings settings = Settings.defaultInstance().withAuthentication("", "passwd").withDbFactory(FakeDbFactory.class);
+
+        assertThat(settings.withAuthentication(), is(false));
     }
 
     @Test

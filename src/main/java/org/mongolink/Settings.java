@@ -21,6 +21,7 @@
 
 package org.mongolink;
 
+import com.google.common.base.Strings;
 import org.mongolink.domain.UpdateStrategies;
 import org.mongolink.domain.criteria.CriteriaFactory;
 
@@ -49,6 +50,15 @@ public class Settings {
         this.port = port;
         return this;
     }
+    public Settings withAuthentication(String user, String password) {
+        this.user = user;
+        this.password = password;
+        return this;
+    }
+
+    public boolean withAuthentication() {
+        return !Strings.isNullOrEmpty(user);
+    }
 
     public String getDbName() {
         return dbName;
@@ -57,6 +67,14 @@ public class Settings {
     public Settings withDbName(String dbName) {
         this.dbName = dbName;
         return this;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public String getPassword() {
+        return password;
     }
 
     public DbFactory createDbFactory() {
@@ -79,7 +97,7 @@ public class Settings {
         try {
             return criteriaFactoryClass.newInstance();
         } catch (Exception e) {
-            throw new MongoLinkError("Can,t create CriteriaFactory", e);
+            throw new MongoLinkError("Can't create CriteriaFactory", e);
         }
     }
 
@@ -101,7 +119,10 @@ public class Settings {
     private Class<? extends DbFactory> factoryClass;
     private String host;
     private int port;
+    private String user;
+    private String password;
     private String dbName;
     private Class<? extends CriteriaFactory> criteriaFactoryClass;
     private UpdateStrategies updateStrategy = UpdateStrategies.OVERWRITE;
+
 }
