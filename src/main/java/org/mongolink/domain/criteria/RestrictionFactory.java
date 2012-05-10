@@ -38,4 +38,8 @@ public class RestrictionFactory {
     public Restriction getGreaterThanOrEqualTo(String field, Object value) {
         return new RestrictionGreaterThanOrEqualTo(field, value);
     }
+
+    public Restriction getEqualsToRegex(String field, Object value) {
+        return new RestrictionEqualsToRegex(field, value);
+    }
 }

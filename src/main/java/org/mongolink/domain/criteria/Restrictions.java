@@ -27,6 +27,10 @@ public class Restrictions {
         return factory.getEquals(field, value);
     }
 
+    public static Restriction equalsToRegex(String field, Object value) {
+        return factory.getEqualsToRegex(field, value);
+    }
+
     public static Restriction between(String field, Object start, Object end) {
         return factory.getBetween(field, start, end);
     }

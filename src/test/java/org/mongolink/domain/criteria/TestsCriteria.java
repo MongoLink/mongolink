@@ -152,4 +152,16 @@ public class TestsCriteria {
         assertThat(restriction, notNullValue());
         assertThat(restriction.get("$gte"), is((Object) 1));
     }
+
+    @Test
+    public void canTestEqualityWithRegex() {
+        final Criteria criteria = new Criteria(mock(QueryExecutor.class));
+        criteria.add(Restrictions.equalsToRegex("date", "regex"));
+
+        DBObject query = criteria.createQuery();
+
+        DBObject restriction = (DBObject) query.get("date");
+        assertThat(restriction, notNullValue());
+        assertThat(restriction.get("$regex"), is((Object) "regex"));
+    }
 }
