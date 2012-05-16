@@ -106,6 +106,7 @@ public class TestsMongoSessionManager {
         assertThat(fakeEntityWithCapMapper.getCappedSize(), is(1048076));
         assertThat(fakeEntityWithCapMapper.getCappedMax(), is(50));
     }
+
     private static Settings settings;
     private static MongoSessionManager manager;
 }

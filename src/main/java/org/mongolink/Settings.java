@@ -50,6 +50,7 @@ public class Settings {
         this.port = port;
         return this;
     }
+
     public Settings withAuthentication(String user, String password) {
         this.user = user;
         this.password = password;

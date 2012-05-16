@@ -21,6 +21,8 @@
 
 package org.mongolink.domain.criteria;
 
+import java.util.List;
+
 public class Restrictions {
 
     public static Restriction equals(String field, Object value) {
@@ -41,6 +43,10 @@ public class Restrictions {
 
     public static Restriction greaterThanOrEqualTo(String field, Object value) {
         return factory.getGreaterThanOrEqualTo(field, value);
+    }
+
+    public static Restriction in(String field, List<String> tokens) {
+        return factory.in(field, tokens);
     }
 
     public static void setFactory(RestrictionFactory factory) {

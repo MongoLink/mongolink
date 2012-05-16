@@ -21,11 +21,14 @@
 
 package org.mongolink.domain.criteria;
 
+import com.google.common.collect.Lists;
 import com.mongodb.*;
 import org.joda.time.DateTime;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mongolink.domain.*;
+
+import java.util.List;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
@@ -163,5 +166,20 @@ public class TestsCriteria {
         DBObject restriction = (DBObject) query.get("date");
         assertThat(restriction, notNullValue());
         assertThat(restriction.get("$regex"), is((Object) "regex"));
+    }
+
+    @Test
+    public void canUseInOperator() {
+        final Criteria criteria = new Criteria(mock(QueryExecutor.class));
+        List<String> tokens = Lists.newArrayList();
+        tokens.add("blue");
+        tokens.add("");
+        criteria.add(Restrictions.in("colors", tokens));
+
+        DBObject query = criteria.createQuery();
+
+        DBObject restriction = (DBObject) query.get("colors");
+        assertThat(restriction, notNullValue());
+        assertThat(restriction.get("$in"), is((Object) "[\"blue\",\"\"]"));
     }
 }

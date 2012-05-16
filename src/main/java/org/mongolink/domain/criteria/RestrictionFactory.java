@@ -21,6 +21,8 @@
 
 package org.mongolink.domain.criteria;
 
+import java.util.List;
+
 public class RestrictionFactory {
 
     public RestrictionBetween getBetween(String field, Object start, Object end) {
@@ -41,5 +43,9 @@ public class RestrictionFactory {
 
     public Restriction getEqualsToRegex(String field, Object value) {
         return new RestrictionEqualsToRegex(field, value);
+    }
+
+    public Restriction in(final String field, final List<String> tokens) {
+        return new RestrictionIn(field, tokens);
     }
 }
