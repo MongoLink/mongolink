@@ -2,7 +2,7 @@ package org.mongolink.domain.criteria;
 
 import com.mongodb.*;
 
-import java.util.*;
+import java.util.List;
 
 public class RestrictionIn extends Restriction {
 
@@ -14,26 +14,12 @@ public class RestrictionIn extends Restriction {
     @Override
     public void apply(final DBObject query) {
         final BasicDBObject object = new BasicDBObject();
-        final StringBuilder tokens = buildTokensList();
-        object.put("$in", tokens.toString());
-        query.put(getField(), object);
-    }
-
-    private StringBuilder buildTokensList() {
-        final StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("[");
-        final Iterator<String> iterator = tokens.iterator();
-        while (iterator.hasNext()) {
-            final String token = iterator.next();
-            stringBuilder.append("\"");
-            stringBuilder.append(token);
-            stringBuilder.append("\"");
-            if (iterator.hasNext()) {
-                stringBuilder.append(",");
-            }
+        final BasicDBList values = new BasicDBList();
+        for (String token : tokens) {
+            values.add(token);
         }
-        stringBuilder.append("]");
-        return stringBuilder;
+        object.put("$in", values);
+        query.put(getField(), object);
     }
 
     private List<String> tokens;

@@ -180,6 +180,9 @@ public class TestsCriteria {
 
         DBObject restriction = (DBObject) query.get("colors");
         assertThat(restriction, notNullValue());
-        assertThat(restriction.get("$in"), is((Object) "[\"blue\",\"\"]"));
+        final BasicDBList objects = new BasicDBList();
+        objects.add("blue");
+        objects.add("");
+        assertThat(restriction.get("$in"), is((Object) objects));
     }
 }
