@@ -21,7 +21,7 @@
 
 package org.mongolink.domain.criteria;
 
-import java.util.List;
+import java.util.*;
 
 public class RestrictionFactory {
 
@@ -47,5 +47,9 @@ public class RestrictionFactory {
 
     public Restriction in(final String field, final List<String> tokens) {
         return new RestrictionIn(field, tokens);
+    }
+
+    public Restriction inUUID(final String field, final List<UUID> uuids) {
+        return new RestrictionInUUID(field, uuids);
     }
 }

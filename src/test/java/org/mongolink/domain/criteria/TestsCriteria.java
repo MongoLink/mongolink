@@ -28,7 +28,7 @@ import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mongolink.domain.*;
 
-import java.util.List;
+import java.util.*;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
@@ -183,6 +183,23 @@ public class TestsCriteria {
         final BasicDBList objects = new BasicDBList();
         objects.add("blue");
         objects.add("");
+        assertThat(restriction.get("$in"), is((Object) objects));
+    }
+
+    @Test
+    public void canUseInOperatorWithUUID() {
+        final Criteria criteria = new Criteria(mock(QueryExecutor.class));
+        List<UUID> tokens = Lists.newArrayList();
+        final UUID uuid = UUID.randomUUID();
+        tokens.add(uuid);
+        criteria.add(Restrictions.inUUID("colors", tokens));
+
+        DBObject query = criteria.createQuery();
+
+        DBObject restriction = (DBObject) query.get("colors");
+        assertThat(restriction, notNullValue());
+        final BasicDBList objects = new BasicDBList();
+        objects.add(uuid);
         assertThat(restriction.get("$in"), is((Object) objects));
     }
 }
