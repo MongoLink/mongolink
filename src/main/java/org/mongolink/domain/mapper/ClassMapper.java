@@ -49,6 +49,11 @@ public abstract class ClassMapper<T> extends Converter implements Mapper {
         addMapper(collection);
     }
 
+    void addHashmap(HashmapMapper hashmapMapper) {
+        hashmapMapper.setMapper(this);
+        addMapper(hashmapMapper);
+    }
+
     public void addProperty(PropertyMapper property) {
         property.setMapper(this);
         addMapper(property);
