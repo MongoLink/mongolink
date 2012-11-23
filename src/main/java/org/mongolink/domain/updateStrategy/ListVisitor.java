@@ -28,54 +28,49 @@ import com.mongodb.BasicDBList;
  */
 public class ListVisitor extends Visitor {
 
-    public ListVisitor(final DbObjectDiff dbObjectDiff, final BasicDBList origin) {
-        super(dbObjectDiff, origin);
-    }
+	public ListVisitor(final DbObjectDiff dbObjectDiff, final BasicDBList origin) {
+		super(dbObjectDiff, origin);
+	}
 
-    @Override
-    public void visit(final Object target) {
-        final BasicDBList targetList = (BasicDBList) target;
-        if (getOrigin().size() != targetList.size()) {
-            if (getOrigin().size() > targetList.size()) {
-                compareDeletedElementsInList(targetList);
-            } else {
-                getDbObjectDiff().addPush(targetList.get(targetList.size() - 1));
-            }
-        }
-    }
+	@Override
+	public void visit(final Object target) {
+		final BasicDBList targetList = (BasicDBList) target;
+		if (getOrigin().size() != targetList.size()) {
+			if (getOrigin().size() > targetList.size()) {
+				compareDeletedElementsInList(targetList);
+			} else {
+				getDbObjectDiff().addPush(targetList.get(targetList.size() - 1));
+			}
+		}
+	}
 
-    private void compareDeletedElementsInList(final BasicDBList target) {
-        int targetIndex = 0;
-        int originIndex = 0;
-        while (originIndex < getOrigin().size()) {
-            final Object current = getOrigin().get(originIndex);
-            if (targetIndex < target.size()) {
-                final Object currentTarget = target.get(targetIndex);
-                if (current != currentTarget) {
-                    removeElementAt(originIndex);
-                } else {
-                    targetIndex++;
-                }
-            } else {
-                removeElementAt(originIndex);
-            }
-            originIndex++;
-        }
+	private void compareDeletedElementsInList(final BasicDBList target) {
+		int targetIndex = 0;
+		int originIndex = 0;
+		while (originIndex < getOrigin().size()) {
+			final Object current = getOrigin().get(originIndex);
+			if (targetIndex < target.size() && current.equals(target.get(targetIndex))) {
+				targetIndex++;
+			} else {
+				removeElementAt(originIndex);
+			}
+			originIndex++;
+		}
 
-        getDbObjectDiff().addPull(null);
-    }
+		getDbObjectDiff().addPull(null);
+	}
 
 
-    private void removeElementAt(final int i) {
-        getDbObjectDiff().pushKey(String.valueOf(i));
-        getDbObjectDiff().addUnset();
-        getDbObjectDiff().popKey();
-    }
+	private void removeElementAt(final int i) {
+		getDbObjectDiff().pushKey(String.valueOf(i));
+		getDbObjectDiff().addUnset();
+		getDbObjectDiff().popKey();
+	}
 
 
-    @Override
-    protected BasicDBList getOrigin() {
-        return (BasicDBList) super.getOrigin();
-    }
+	@Override
+	protected BasicDBList getOrigin() {
+		return (BasicDBList) super.getOrigin();
+	}
 
 }
