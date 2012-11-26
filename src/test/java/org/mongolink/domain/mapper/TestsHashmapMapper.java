@@ -16,33 +16,33 @@ public class TestsHashmapMapper {
 
     @Test
     public void canSaveStringHashmap() throws NoSuchMethodException {
-        final HashmapMapper hashmapMapper = createMapper();
+        final MapMapper mapMapper = createMapper();
         final EntityWithHashmap entity = new EntityWithHashmap();
         entity.values.put("testkey", "testvalue");
         final BasicDBObject into = new BasicDBObject();
 
-        hashmapMapper.save(entity, into);
+        mapMapper.save(entity, into);
 
         assertThat(into.get("values"), notNullValue());
     }
 
     @Test
     public void canPopulateStringHashmap() throws NoSuchMethodException {
-        final HashmapMapper hashmapMapper = createMapper();
+        final MapMapper mapMapper = createMapper();
         final BasicDBObject basicDBObject = new BasicDBObject();
         Map<String, String> values = Maps.newHashMap();
         values.put("testkey", "testvalue");
         basicDBObject.put("values", values);
         final EntityWithHashmap entity = new EntityWithHashmap();
 
-        hashmapMapper.populate(entity, basicDBObject);
+        mapMapper.populate(entity, basicDBObject);
 
         assertThat(entity.getValues().size(), is(1));
         assertThat(entity.getValues().get("testkey"), is("testvalue"));
     }
 
-    private HashmapMapper createMapper() throws NoSuchMethodException {
-        final HashmapMapper result = new HashmapMapper(new MethodContainer(EntityWithHashmap.class.getMethod("getValues", null)));
+    private MapMapper createMapper() throws NoSuchMethodException {
+        final MapMapper result = new MapMapper(new MethodContainer(EntityWithHashmap.class.getMethod("getValues", null)));
         final MapperContext context = new MapperContext();
         final ClassMapper classMapper = mock(ClassMapper.class);
         when(classMapper.getContext()).thenReturn(context);

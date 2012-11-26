@@ -50,10 +50,10 @@ public class MongoSession {
     }
 
     public <T> T get(Object id, Class<T> entityType) {
-        EntityMapper<T> mapper = (EntityMapper<T>) entityMapper(entityType);
         if (unitOfWork.contains(entityType, id)) {
             return unitOfWork.getEntity(entityType, id);
         }
+        EntityMapper<T> mapper = (EntityMapper<T>) entityMapper(entityType);
         Object dbId = mapper.getDbId(id);
         DBObject query = new BasicDBObject("_id", dbId);
         return (T) createExecutor(mapper).executeUnique(query);
@@ -74,9 +74,9 @@ public class MongoSession {
     public void update(Object element) {
         EntityMapper<?> mapper = entityMapper(element.getClass());
         DBObject initialValue = unitOfWork.getDBOBject(element.getClass(), mapper.getId(element));
-        DBObject update = mapper.toDBObject(element);
-        updateStrategy.update(initialValue, update, getDbCollection(mapper));
-        unitOfWork.update(mapper.getId(element), element, update);
+        DBObject updatedValue = mapper.toDBObject(element);
+        updateStrategy.update(initialValue, updatedValue, getDbCollection(mapper));
+        unitOfWork.update(mapper.getId(element), element, updatedValue);
     }
 
     public void delete(Object element) {

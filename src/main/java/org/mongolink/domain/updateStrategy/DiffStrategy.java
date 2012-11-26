@@ -27,8 +27,8 @@ import org.apache.log4j.Logger;
 public class DiffStrategy extends UpdateStrategy {
 
     @Override
-    public void update(DBObject initialValue, DBObject update, DBCollection collection) {
-        final DBObject diff = new DbObjectDiff(initialValue).compareWith(update);
+    public void update(DBObject initialValue, DBObject updatedValue, DBCollection collection) {
+        final DBObject diff = new DbObjectDiff(initialValue).compareWith(updatedValue);
         if (!diff.keySet().isEmpty()) {
             final DBObject q = updateQuery(initialValue);
             final DBObject pull = (DBObject) diff.get(DbObjectDiff.Modifier.PULL.toString());

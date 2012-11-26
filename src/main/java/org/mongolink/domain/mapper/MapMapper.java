@@ -7,9 +7,9 @@ import org.mongolink.utils.*;
 import java.lang.reflect.*;
 import java.util.Map;
 
-public class HashmapMapper implements Mapper {
+public class MapMapper implements Mapper {
 
-    public HashmapMapper(MethodContainer methodContainer) {
+    public MapMapper(MethodContainer methodContainer) {
         this.name = methodContainer.shortName();
         this.method = methodContainer.getMethod();
     }

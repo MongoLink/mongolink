@@ -23,9 +23,7 @@ package org.mongolink.domain.updateStrategy;
 
 import com.mongodb.*;
 
-/**
- * @author jbdusseaut
- */
+
 public class DocumentVisitor extends Visitor {
 
     public DocumentVisitor(final DbObjectDiff dbObjectDiff, final DBObject origin) {
