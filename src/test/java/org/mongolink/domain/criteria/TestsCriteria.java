@@ -171,7 +171,7 @@ public class TestsCriteria {
     @Test
     public void canUseInOperator() {
         final Criteria criteria = new Criteria(mock(QueryExecutor.class));
-        List<String> tokens = Lists.newArrayList();
+        List<Object> tokens = Lists.newArrayList();
         tokens.add("blue");
         tokens.add("");
         criteria.add(Restrictions.in("colors", tokens));
@@ -189,10 +189,10 @@ public class TestsCriteria {
     @Test
     public void canUseInOperatorWithUUID() {
         final Criteria criteria = new Criteria(mock(QueryExecutor.class));
-        List<UUID> tokens = Lists.newArrayList();
+        List<Object> tokens = Lists.newArrayList();
         final UUID uuid = UUID.randomUUID();
         tokens.add(uuid);
-        criteria.add(Restrictions.inUUID("colors", tokens));
+        criteria.add(Restrictions.in("colors", tokens));
 
         DBObject query = criteria.createQuery();
 

@@ -6,21 +6,21 @@ import java.util.List;
 
 public class RestrictionIn extends Restriction {
 
-    public RestrictionIn(String field, List<String> tokens) {
+    public RestrictionIn(String field, List<?> elements) {
         super(field);
-        this.tokens = tokens;
+        this.elements = elements;
     }
 
     @Override
     public void apply(final DBObject query) {
         final BasicDBObject object = new BasicDBObject();
         final BasicDBList values = new BasicDBList();
-        for (String token : tokens) {
+        for (Object token : elements) {
             values.add(token);
         }
         object.put("$in", values);
         query.put(getField(), object);
     }
 
-    private List<String> tokens;
+    private List<?> elements;
 }

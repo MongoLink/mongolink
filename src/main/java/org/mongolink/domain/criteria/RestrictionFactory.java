@@ -45,11 +45,9 @@ public class RestrictionFactory {
         return new RestrictionEqualsToRegex(field, value);
     }
 
-    public Restriction in(final String field, final List<String> tokens) {
-        return new RestrictionIn(field, tokens);
+    public Restriction in(final String field, final List<?> elements) {
+        return new RestrictionIn(field, elements);
     }
 
-    public Restriction inUUID(final String field, final List<UUID> uuids) {
-        return new RestrictionInUUID(field, uuids);
-    }
+
 }

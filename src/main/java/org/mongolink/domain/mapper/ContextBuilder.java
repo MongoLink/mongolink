@@ -25,10 +25,15 @@ import com.google.common.collect.Lists;
 import org.apache.log4j.Logger;
 import org.mongolink.MongoLinkError;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
-import java.util.jar.*;
+import java.io.File;
+import java.io.IOException;
+import java.net.JarURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 public class ContextBuilder {
 
