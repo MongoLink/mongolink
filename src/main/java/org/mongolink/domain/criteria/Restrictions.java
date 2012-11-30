@@ -50,6 +50,10 @@ public class Restrictions {
     }
 
 
+    public static NestedRestriction elementMatch(final String fieldName) {
+        return factory.elementMatch(fieldName);
+    }
+
     public static void setFactory(RestrictionFactory factory) {
         Restrictions.factory = factory;
     }
