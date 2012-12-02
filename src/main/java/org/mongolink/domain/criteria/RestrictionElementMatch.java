@@ -11,7 +11,7 @@ public class RestrictionElementMatch extends NestedRestriction {
 
     @Override
     public void apply(final DBObject query) {
-        query.put(getField(), new BasicDBObject("$elementMatch", buildSubquery()));
+        query.put(getField(), new BasicDBObject("$elemMatch", buildSubquery()));
     }
 
     private BasicDBObject buildSubquery() {
