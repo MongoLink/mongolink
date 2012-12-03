@@ -47,9 +47,7 @@ public class SubclassMapper<T> extends ClassMapper<T> {
 
     void setParentMapper(ClassMapper<?> parentMapper) {
         addMapper(parentMapper);
-        this.parentMapper = parentMapper;
     }
 
-    private ClassMapper<?> parentMapper;
     public static final String DISCRIMINATOR = "__discriminator";
 }

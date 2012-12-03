@@ -50,7 +50,7 @@ public class Restrictions {
     }
 
 
-    public static NestedRestriction elementMatch(final String fieldName) {
+    public static CompositeRestriction elementMatch(final String fieldName) {
         return factory.elementMatch(fieldName);
     }
 

@@ -3,7 +3,7 @@ package org.mongolink.domain.criteria;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 
-public class RestrictionElementMatch extends NestedRestriction {
+public class RestrictionElementMatch extends CompositeRestriction {
 
     public RestrictionElementMatch(final String field) {
         super(field);

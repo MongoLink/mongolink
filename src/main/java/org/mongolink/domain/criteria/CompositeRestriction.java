@@ -5,13 +5,13 @@ import com.google.common.collect.Lists;
 import java.util.Collections;
 import java.util.List;
 
-public abstract class NestedRestriction extends Restriction{
+public abstract class CompositeRestriction extends Restriction{
 
-    public NestedRestriction(final String field) {
+    public CompositeRestriction(final String field) {
         super(field);
     }
 
-    public NestedRestriction equals(final String field, final Object value) {
+    public CompositeRestriction equals(final String field, final Object value) {
         restrictions.add(Restrictions.equals(field, value));
         return this;
     }

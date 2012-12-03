@@ -49,7 +49,7 @@ public class RestrictionFactory {
         return new RestrictionIn(field, elements);
     }
 
-    public NestedRestriction elementMatch(final String field) {
+    public CompositeRestriction elementMatch(final String field) {
         return new RestrictionElementMatch(field);
     }
 }
