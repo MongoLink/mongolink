@@ -50,10 +50,6 @@ public abstract class EntityMap<T> extends ClassMap<T> {
         subclasses.add(subclassMap);
     }
 
-    protected void References(Object reference) {
-        getMapper().addReference(new ReferenceMapper(getLastMethod()));
-    }
-
     @Override
     public void buildMapper(MapperContext context) {
         super.buildMapper(context);
