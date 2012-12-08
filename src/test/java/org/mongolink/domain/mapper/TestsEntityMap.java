@@ -22,14 +22,9 @@
 package org.mongolink.domain.mapper;
 
 import org.junit.Test;
-import org.mongolink.test.entity.FakeChildEntity;
-import org.mongolink.test.entity.FakeEntity;
-import org.mongolink.test.entity.FakeEntityWithCap;
-import org.mongolink.test.entity.OtherFakeChildEntity;
-import org.mongolink.test.inheritanceMapping.FakeEntityWithSubclassMapping;
-import org.mongolink.test.inheritanceMapping.FakeEntityWithTwoSubclassMapping;
-import org.mongolink.test.simpleMapping.FakeEntityMapping;
-import org.mongolink.test.simpleMapping.FakeEntityMappingWithCap;
+import org.mongolink.test.entity.*;
+import org.mongolink.test.inheritanceMapping.*;
+import org.mongolink.test.simpleMapping.*;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
@@ -74,6 +69,17 @@ public class TestsEntityMap {
 
         assertThat(context.mapperFor(FakeChildEntity.class), notNullValue());
         assertThat(context.mapperFor(OtherFakeChildEntity.class), notNullValue());
+    }
+
+    @Test
+    public void canHaveHierarchies() {
+        final FakeEntityWithHierarchyMapping mapping = new FakeEntityWithHierarchyMapping();
+        final MapperContext context = new MapperContext();
+
+        mapping.buildMapper(context);
+
+        assertThat(context.mapperFor(FakeChildEntity.class), notNullValue());
+        assertThat(context.mapperFor(FakeChildChildEntity.class), notNullValue());
     }
 
     @Test
