@@ -72,17 +72,6 @@ public class TestsEntityMap {
     }
 
     @Test
-    public void canHaveHierarchies() {
-        final FakeEntityWithHierarchyMapping mapping = new FakeEntityWithHierarchyMapping();
-        final MapperContext context = new MapperContext();
-
-        mapping.buildMapper(context);
-
-        assertThat(context.mapperFor(FakeChildEntity.class), notNullValue());
-        assertThat(context.mapperFor(FakeChildChildEntity.class), notNullValue());
-    }
-
-    @Test
     public void canSetCap() {
         FakeEntityMappingWithCap mapping = new FakeEntityMappingWithCap();
         MapperContext context = new MapperContext();
