@@ -28,6 +28,7 @@ import java.util.List;
 
 public class MapperContext {
 
+    @SuppressWarnings("unchecked")
     public <T> ClassMapper<T> mapperFor(Class<T> aClass) {
         for (ClassMapper<?> current : mappers) {
             if (current.canMap(aClass)) {

@@ -22,7 +22,8 @@
 package org.mongolink.domain.mapper;
 
 import com.google.common.collect.Lists;
-import com.mongodb.*;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
 import net.sf.cglib.core.ReflectUtils;
 import org.apache.log4j.Logger;
 import org.mongolink.domain.converter.Converter;
@@ -40,23 +41,18 @@ public abstract class ClassMapper<T> extends Converter implements Mapper {
         return persistentType;
     }
 
-    void setContext(MapperContext context) {
-        this.context = context;
-    }
-
     void addCollection(CollectionMapper collection) {
         collection.setMapper(this);
         addMapper(collection);
     }
 
-    void addMap(MapMapper mapMapper) {
-        mapMapper.setMapper(this);
-        addMapper(mapMapper);
-    }
-
     public void addProperty(PropertyMapper property) {
         property.setMapper(this);
         addMapper(property);
+    }
+
+    void addMap(MapMapper mapMapper) {
+        addMapper(mapMapper);
     }
 
     protected void addMapper(Mapper property) {
@@ -107,6 +103,10 @@ public abstract class ClassMapper<T> extends Converter implements Mapper {
         return context;
     }
 
+    void setContext(MapperContext context) {
+        this.context = context;
+    }
+
     public boolean canMap(Class<?> aClass) {
         return persistentType.isAssignableFrom(aClass);
     }
@@ -129,11 +129,11 @@ public abstract class ClassMapper<T> extends Converter implements Mapper {
         return cappedMax;
     }
 
+    private static final Logger LOGGER = Logger.getLogger(EntityMapper.class);
+    protected final Class<T> persistentType;
+    private final List<Mapper> mappers = Lists.newArrayList();
     private int cappedSize;
     private int cappedMax;
     private boolean capped = false;
-    protected final Class<T> persistentType;
-    private final List<Mapper> mappers = Lists.newArrayList();
     private MapperContext context;
-    private static final Logger LOGGER = Logger.getLogger(EntityMapper.class);
 }

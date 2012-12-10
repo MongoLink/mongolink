@@ -49,6 +49,7 @@ public class MongoSession {
         this.context = context;
     }
 
+    @SuppressWarnings("unchecked")
     public <T> T get(Object id, Class<T> entityType) {
         if (unitOfWork.contains(entityType, id)) {
             return unitOfWork.getEntity(entityType, id);
@@ -59,6 +60,7 @@ public class MongoSession {
         return (T) createExecutor(mapper).executeUnique(query);
     }
 
+    @SuppressWarnings("unchecked")
     public <T> List<T> getAll(Class<T> entityType) {
         return createExecutor(entityMapper(entityType)).execute(new BasicDBObject());
     }
@@ -117,6 +119,7 @@ public class MongoSession {
         unitOfWork.clear();
     }
 
+    @SuppressWarnings("unchecked")
     private QueryExecutor createExecutor(EntityMapper<?> mapper) {
         return new QueryExecutor(db, mapper, unitOfWork);
     }

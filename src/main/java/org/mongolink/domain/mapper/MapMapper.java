@@ -30,6 +30,7 @@ public class MapMapper implements Mapper {
             Field field = ReflectionUtils.findPrivateField(instance.getClass(), name);
             field.setAccessible(true);
             Map map = (Map) field.get(instance);
+            //noinspection unchecked
             map.putAll((Map) from.get(name));
             field.setAccessible(false);
         } catch (Exception e) {
@@ -37,16 +38,8 @@ public class MapMapper implements Mapper {
         }
     }
 
-    private MapperContext context() {
-        return mapper.getContext();
-    }
-
-    public void setMapper(ClassMapper<?> mapper) {
-        this.mapper = mapper;
-    }
 
     private final Method method;
     private final String name;
-    private ClassMapper<?> mapper;
     private static final Logger LOGGER = Logger.getLogger(CollectionMapper.class);
 }

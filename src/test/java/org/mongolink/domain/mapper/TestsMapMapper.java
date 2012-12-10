@@ -12,7 +12,7 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-public class TestsHashmapMapper {
+public class TestsMapMapper {
 
     @Test
     public void canSaveStringHashmap() throws NoSuchMethodException {
@@ -46,7 +46,6 @@ public class TestsHashmapMapper {
         final MapperContext context = new MapperContext();
         final ClassMapper classMapper = mock(ClassMapper.class);
         when(classMapper.getContext()).thenReturn(context);
-        result.setMapper(classMapper);
         return result;
     }
 

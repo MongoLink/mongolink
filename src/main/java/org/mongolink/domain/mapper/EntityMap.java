@@ -28,6 +28,7 @@ import java.util.List;
 
 public abstract class EntityMap<T> extends ClassMap<T> {
 
+    @SuppressWarnings("unchecked")
     protected EntityMap(Class<T> type) {
         super(type);
         mapper = new EntityMapper(type);

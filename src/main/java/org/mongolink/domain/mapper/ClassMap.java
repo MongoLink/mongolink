@@ -66,8 +66,8 @@ public abstract class ClassMap<T> {
         getMapper().addCollection(new CollectionMapper(lastMethod));
     }
 
-    protected void hashmap(Object value) {
-        LOGGER.debug("Mapping hashmap:" + lastMethod.shortName());
+    protected void map(Object value) {
+        LOGGER.debug("Mapping map:" + lastMethod.shortName());
         getMapper().addMap(new MapMapper(lastMethod));
     }
 
