@@ -132,34 +132,17 @@ public abstract class ClassMapper<T> extends Converter implements Mapper {
         return persistentType.isAssignableFrom(aClass);
     }
 
-    public boolean isCapped() {
-        return capped;
-    }
-
-    public void setCapped(boolean capped, int cappedSize, int cappedMax) {
-        this.capped = capped;
-        this.cappedSize = cappedSize;
-        this.cappedMax = cappedMax;
-    }
-
-    public int getCappedSize() {
-        return cappedSize;
-    }
-
-    public int getCappedMax() {
-        return cappedMax;
-    }
-
     <U> void addSubclass(SubclassMapper<U> mapper) {
         mapper.setParentMapper(this);
         subclasses.put(mapper.discriminator(), mapper);
     }
 
+    public boolean isCapped() {
+        return false;
+    }
+
     protected final Class<T> persistentType;
     private final List<Mapper> mappers = Lists.newArrayList();
-    private int cappedSize;
-    private int cappedMax;
-    private boolean capped = false;
     private MapperContext context;
     private final Map<String, SubclassMapper<?>> subclasses = Maps.newHashMap();
 }

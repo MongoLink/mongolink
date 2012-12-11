@@ -93,10 +93,6 @@ public abstract class ClassMap<T> {
         return lastMethod;
     }
 
-    protected void setCapped(boolean value, int cappedSize, int cappedMax) {
-        getMapper().setCapped(value, cappedSize, cappedMax);
-    }
-
     protected abstract ClassMapper<T> getMapper();
 
     private static final Logger LOGGER = Logger.getLogger(EntityMap.class);

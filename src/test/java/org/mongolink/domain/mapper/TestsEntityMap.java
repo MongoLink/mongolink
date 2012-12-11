@@ -89,7 +89,7 @@ public class TestsEntityMap {
         mapping.buildMapper(context);
 
         EntityMapper<?> entityMapper = (EntityMapper<?>) context.mapperFor(FakeEntityWithCap.class);
-        assertThat(entityMapper.getCappedSize(), is(1048076));
+        assertThat(entityMapper.getCapped().getSize(), is(1048076));
     }
 
     @Test
@@ -100,7 +100,7 @@ public class TestsEntityMap {
         mapping.buildMapper(context);
 
         EntityMapper<?> entityMapper = (EntityMapper<?>) context.mapperFor(FakeEntityWithCap.class);
-        assertThat(entityMapper.getCappedMax(), is(50));
+        assertThat(entityMapper.getCapped().getMax(), is(50));
     }
 
 

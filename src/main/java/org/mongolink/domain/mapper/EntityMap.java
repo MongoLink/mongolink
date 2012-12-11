@@ -43,6 +43,10 @@ public abstract class EntityMap<T> extends ClassMap<T> {
         return id;
     }
 
+    protected void setCapped(int cappedSize, int cappedMax) {
+        getMapper().setCapped(cappedSize, cappedMax);
+    }
+
     private final EntityMapper<T> mapper;
     private static final Logger LOGGER = Logger.getLogger(EntityMap.class);
 }

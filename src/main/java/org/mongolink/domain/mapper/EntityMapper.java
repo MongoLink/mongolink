@@ -57,5 +57,20 @@ public class EntityMapper<T> extends ClassMapper<T> {
         return getPersistentType().getSimpleName().toLowerCase();
     }
 
+    @Override
+    public boolean isCapped() {
+        return capped.isCapped();
+    }
+
+    public void setCapped(int cappedSize, int cappedMax) {
+        this.capped = new Capped().withSize(cappedSize).withMax(cappedMax);
+    }
+
+    public Capped getCapped() {
+        return capped;
+    }
+
+    private Capped capped = new NotCapped();
+
     private IdMapper idMapper;
 }

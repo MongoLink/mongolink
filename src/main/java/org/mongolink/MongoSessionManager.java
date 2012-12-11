@@ -46,10 +46,7 @@ public class MongoSessionManager {
                 final MongoSession session = createSession();
                 if (!session.getDb().collectionExists(entityMapper.collectionName())) {
                     session.start();
-                    final DBObject options = new BasicDBObject();
-                    options.put("capped", "true");
-                    options.put("size", entityMapper.getCappedSize());
-                    options.put("max", entityMapper.getCappedMax());
+                    final DBObject options = entityMapper.getCapped().getDbValue();
                     session.getDb().createCollection(entityMapper.collectionName(), options);
                     session.stop();
                 }
