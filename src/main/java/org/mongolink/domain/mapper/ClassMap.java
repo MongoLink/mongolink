@@ -75,6 +75,7 @@ public abstract class ClassMap<T> {
     }
 
     protected <U extends T> void subclass(SubclassMap<U> subclassMap) {
+        LOGGER.debug("Mapping subclass:" + subclassMap.getType().getSimpleName());
         subclassMap.setParent(this);
         subclasses.add(subclassMap);
     }
