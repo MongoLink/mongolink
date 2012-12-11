@@ -21,10 +21,13 @@
 
 package org.mongolink.domain.mapper;
 
+import com.google.common.collect.Lists;
 import net.sf.cglib.core.DefaultGeneratorStrategy;
 import net.sf.cglib.proxy.Enhancer;
 import org.apache.log4j.Logger;
 import org.mongolink.utils.MethodContainer;
+
+import java.util.List;
 
 @SuppressWarnings("unchecked")
 public abstract class ClassMap<T> {
@@ -71,8 +74,16 @@ public abstract class ClassMap<T> {
         getMapper().addMap(new MapMapper(lastMethod));
     }
 
+    protected <U extends T> void subclass(SubclassMap<U> subclassMap) {
+        subclassMap.setParent(this);
+        subclasses.add(subclassMap);
+    }
+
     public void buildMapper(MapperContext context) {
         map();
+        for (SubclassMap<?> subclass : subclasses) {
+            subclass.buildMapper(context);
+        }
         context.addMapper(getMapper());
     }
 
@@ -92,4 +103,5 @@ public abstract class ClassMap<T> {
     private MethodContainer lastMethod;
     private final Class<T> type;
     private final T interceptor;
+    private final List<SubclassMap<? extends T>> subclasses = Lists.newArrayList();
 }

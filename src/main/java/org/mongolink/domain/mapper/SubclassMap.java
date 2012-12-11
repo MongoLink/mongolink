@@ -33,7 +33,7 @@ public abstract class SubclassMap<T> extends ClassMap<T> {
         return mapper;
     }
 
-    public <U> void setParent(EntityMap<U> parentMap) {
+    public <U> void setParent(ClassMap<U> parentMap) {
         this.parentMap = parentMap;
     }
 
@@ -44,6 +44,6 @@ public abstract class SubclassMap<T> extends ClassMap<T> {
         getMapper().setContext(context);
     }
 
-    private EntityMap<?> parentMap;
+    private ClassMap<?> parentMap;
     private final SubclassMapper<T> mapper;
 }

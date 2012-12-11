@@ -22,10 +22,7 @@
 package org.mongolink.domain.mapper;
 
 
-import com.google.common.collect.Maps;
 import com.mongodb.DBObject;
-
-import java.util.Map;
 
 @SuppressWarnings("unchecked")
 public class EntityMapper<T> extends ClassMapper<T> {
@@ -56,45 +53,9 @@ public class EntityMapper<T> extends ClassMapper<T> {
         return idMapper.getIdValue(dbo);
     }
 
-    <U> void addSubclass(SubclassMapper<U> mapper) {
-        mapper.setParentMapper(this);
-        subclasses.put(mapper.discriminator(), mapper);
-    }
-
-    @Override
-    public T toInstance(DBObject from) {
-        String discriminator = SubclassMapper.discriminatorValue(from);
-        if (subclasses.get(discriminator) != null) {
-            return (T) subclasses.get(discriminator).toInstance(from);
-        }
-        return super.toInstance(from);
-    }
-
-    @Override
-    public DBObject toDBObject(Object element) {
-        if (isSubclass(element)) {
-            return subclassMapperFor(element).toDBObject(element);
-        }
-        return super.toDBObject(element);
-    }
-
-    private boolean isSubclass(Object element) {
-        return subclassMapperFor(element) != null;
-    }
-
-    private SubclassMapper<?> subclassMapperFor(Object element) {
-        for (SubclassMapper<?> subclassMapper : subclasses.values()) {
-            if (subclassMapper.getPersistentType().isAssignableFrom(element.getClass())) {
-                return subclassMapper;
-            }
-        }
-        return null;
-    }
-
     public String collectionName() {
         return getPersistentType().getSimpleName().toLowerCase();
     }
 
     private IdMapper idMapper;
-    private final Map<String, SubclassMapper<?>> subclasses = Maps.newHashMap();
 }

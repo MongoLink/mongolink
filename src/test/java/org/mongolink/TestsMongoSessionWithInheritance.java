@@ -61,6 +61,19 @@ public class TestsMongoSessionWithInheritance {
     }
 
     @Test
+    public void canGetByChildType() {
+        BasicDBObject dbo = new BasicDBObject();
+        dbo.put("_id", "1");
+        dbo.put("__discriminator", "FakeChildEntity");
+        entities.insert(dbo);
+
+        FakeEntity entity = session.get("1", FakeChildEntity.class);
+
+        assertThat(entity, notNullValue());
+
+    }
+
+    @Test
     public void savesChildEntityInSameCollection() {
         FakeChildEntity fakeChildEntity = new FakeChildEntity();
         fakeChildEntity.setId("2");

@@ -22,13 +22,14 @@
 package org.mongolink.domain.mapper;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import net.sf.cglib.core.ReflectUtils;
-import org.apache.log4j.Logger;
 import org.mongolink.domain.converter.Converter;
 
 import java.util.List;
+import java.util.Map;
 
 @SuppressWarnings("unchecked")
 public abstract class ClassMapper<T> extends Converter implements Mapper {
@@ -46,6 +47,10 @@ public abstract class ClassMapper<T> extends Converter implements Mapper {
         addMapper(collection);
     }
 
+    protected void addMapper(Mapper property) {
+        mappers.add(property);
+    }
+
     public void addProperty(PropertyMapper property) {
         property.setMapper(this);
         addMapper(property);
@@ -55,23 +60,15 @@ public abstract class ClassMapper<T> extends Converter implements Mapper {
         addMapper(mapMapper);
     }
 
-    protected void addMapper(Mapper property) {
-        mappers.add(property);
-    }
-
     @Override
     public Object fromDbValue(Object value) {
         return toInstance((DBObject) value);
     }
 
     public T toInstance(DBObject from) {
-        T instance = makeInstance();
+        T instance = makeInstance(from);
         populate(instance, from);
         return instance;
-    }
-
-    protected T makeInstance() {
-        return (T) ReflectUtils.newInstance(persistentType);
     }
 
     @Override
@@ -81,15 +78,39 @@ public abstract class ClassMapper<T> extends Converter implements Mapper {
         }
     }
 
+    protected T makeInstance(final DBObject from) {
+        String discriminator = SubclassMapper.discriminatorValue(from);
+        if (subclasses.get(discriminator) != null) {
+            return (T) subclasses.get(discriminator).toInstance(from);
+        }
+        return (T) ReflectUtils.newInstance(persistentType);
+    }
+
     @Override
     public Object toDbValue(Object value) {
         return toDBObject(value);
     }
 
     public DBObject toDBObject(Object element) {
+        if (isSubclass(element)) {
+            return subclassMapperFor(element).toDBObject(element);
+        }
         BasicDBObject object = new BasicDBObject();
         save(element, object);
         return object;
+    }
+
+    private boolean isSubclass(Object element) {
+        return subclassMapperFor(element) != null;
+    }
+
+    private SubclassMapper<?> subclassMapperFor(Object element) {
+        for (SubclassMapper<?> subclassMapper : subclasses.values()) {
+            if (subclassMapper.getPersistentType().isAssignableFrom(element.getClass())) {
+                return subclassMapper;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -129,11 +150,16 @@ public abstract class ClassMapper<T> extends Converter implements Mapper {
         return cappedMax;
     }
 
-    private static final Logger LOGGER = Logger.getLogger(EntityMapper.class);
+    <U> void addSubclass(SubclassMapper<U> mapper) {
+        mapper.setParentMapper(this);
+        subclasses.put(mapper.discriminator(), mapper);
+    }
+
     protected final Class<T> persistentType;
     private final List<Mapper> mappers = Lists.newArrayList();
     private int cappedSize;
     private int cappedMax;
     private boolean capped = false;
     private MapperContext context;
+    private final Map<String, SubclassMapper<?>> subclasses = Maps.newHashMap();
 }

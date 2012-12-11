@@ -21,10 +21,7 @@
 
 package org.mongolink.domain.mapper;
 
-import com.google.common.collect.Lists;
 import org.apache.log4j.Logger;
-
-import java.util.List;
 
 public abstract class EntityMap<T> extends ClassMap<T> {
 
@@ -46,20 +43,6 @@ public abstract class EntityMap<T> extends ClassMap<T> {
         return id;
     }
 
-    protected <U extends T> void subclass(SubclassMap<U> subclassMap) {
-        subclassMap.setParent(this);
-        subclasses.add(subclassMap);
-    }
-
-    @Override
-    public void buildMapper(MapperContext context) {
-        super.buildMapper(context);
-        for (SubclassMap<?> subclass : subclasses) {
-            subclass.buildMapper(context);
-        }
-    }
-
     private final EntityMapper<T> mapper;
     private static final Logger LOGGER = Logger.getLogger(EntityMap.class);
-    private final List<SubclassMap<? extends T>> subclasses = Lists.newArrayList();
 }

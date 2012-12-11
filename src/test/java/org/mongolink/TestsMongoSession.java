@@ -311,10 +311,6 @@ public class TestsMongoSession {
         assertThat(entityList.size(), is(2));
     }
 
-    @Test
-    public void canExecutePageQuery() {
-
-    }
 
     @Test
     public void canDeleteEntity() {
