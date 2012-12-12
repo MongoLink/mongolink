@@ -40,7 +40,7 @@ public class TestsSubclassMapper {
 
     @Test
     public void canSaveSubclass() {
-        FakeChildEntity entity = new FakeChildEntity();
+        FakeChildAggregate entity = new FakeChildAggregate();
         entity.setValue("this is a value");
         entity.setId("5d9d9b5e36a9a4265ea9ecbe");
         entity.setChildName("this is a name");
@@ -50,7 +50,7 @@ public class TestsSubclassMapper {
         assertThat(dbObject, notNullValue());
         assertThat((String) dbObject.get("value"), is("this is a value"));
         assertThat(dbObject.get("_id"), is((Object) new ObjectId("5d9d9b5e36a9a4265ea9ecbe")));
-        assertThat((String) dbObject.get("__discriminator"), is("FakeChildEntity"));
+        assertThat((String) dbObject.get("__discriminator"), is("FakeChildAggregate"));
         assertThat((String) dbObject.get("childName"), is("this is a name"));
     }
 
@@ -61,7 +61,7 @@ public class TestsSubclassMapper {
         dbo.put("value", "this is a value");
         dbo.put("childName", "this is a name");
 
-        FakeChildEntity entity = mapper.toInstance(dbo);
+        FakeChildAggregate entity = mapper.toInstance(dbo);
 
         assertThat(entity, notNullValue());
         assertThat(entity.getId(), is("good id"));
@@ -75,25 +75,25 @@ public class TestsSubclassMapper {
         dbo.put("_id", "good id");
         dbo.put("value", "this is a value");
         dbo.put("childName", "this is a name");
-        dbo.put("__discriminator", "FakeChildEntity");
+        dbo.put("__discriminator", "FakeChildAggregate");
 
-        FakeEntity entity = context.mapperFor(FakeEntity.class).toInstance(dbo);
+        FakeAggregate entity = context.mapperFor(FakeAggregate.class).toInstance(dbo);
 
-        assertThat(entity, instanceOf(FakeChildEntity.class));
+        assertThat(entity, instanceOf(FakeChildAggregate.class));
     }
 
     @Test
     public void canSaveFromParentMapper() {
-        FakeChildEntity fakeChildEntity = new FakeChildEntity();
+        FakeChildAggregate fakeChildEntity = new FakeChildAggregate();
         fakeChildEntity.setChildName("test");
 
-        DBObject dbObject = context.mapperFor(FakeEntity.class).toDBObject(fakeChildEntity);
+        DBObject dbObject = context.mapperFor(FakeAggregate.class).toDBObject(fakeChildEntity);
 
-        assertThat((String) dbObject.get("__discriminator"), is("FakeChildEntity"));
+        assertThat((String) dbObject.get("__discriminator"), is("FakeChildAggregate"));
     }
 
     private void createContext() {
-        SubclassMap<FakeChildEntity> subclassMap = new SubclassMap<FakeChildEntity>(FakeChildEntity.class) {
+        SubclassMap<FakeChildAggregate> subclassMap = new SubclassMap<FakeChildAggregate>(FakeChildAggregate.class) {
 
             @Override
             protected void map() {
@@ -108,7 +108,7 @@ public class TestsSubclassMapper {
         mapper = subclassMap.getMapper();
     }
 
-    private SubclassMapper<FakeChildEntity> mapper;
+    private SubclassMapper<FakeChildAggregate> mapper;
 
     private MapperContext context;
 }

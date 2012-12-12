@@ -22,5 +22,16 @@
 package org.mongolink.test.entity;
 
 
-public class OtherFakeChildEntity extends FakeEntity {
+public class FakeChildAggregate extends FakeAggregate {
+
+    private String childName;
+
+
+    public String getChildName() {
+        return childName;
+    }
+
+    public void setChildName(String childName) {
+        this.childName = childName;
+    }
 }

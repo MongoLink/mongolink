@@ -25,23 +25,23 @@ import org.mongolink.domain.mapper.*;
 import org.mongolink.test.entity.*;
 
 
-public class FakeAggregateWithTwoSubclassMapping extends AggregateMap<FakeEntity> {
+public class FakeAggregateWithTwoSubclassMapping extends AggregateMap<FakeAggregate> {
 
     public FakeAggregateWithTwoSubclassMapping() {
-        super(FakeEntity.class);
+        super(FakeAggregate.class);
     }
 
     @Override
     public void map() {
         id(element().getId());
-        subclass(new SubclassMap<FakeChildEntity>(FakeChildEntity.class) {
+        subclass(new SubclassMap<FakeChildAggregate>(FakeChildAggregate.class) {
 
             @Override
             protected void map() {
 
             }
         });
-        subclass(new SubclassMap<OtherFakeChildEntity>(OtherFakeChildEntity.class) {
+        subclass(new SubclassMap<OtherFakeChildAggregate>(OtherFakeChildAggregate.class) {
             @Override
             protected void map() {
 

@@ -52,7 +52,7 @@ public class TestsMongoSessionManager {
     public void canCreateFromContextBuilder() {
         assertThat(manager, notNullValue());
         assertThat(manager.getMapperContext(), notNullValue());
-        assertThat(manager.getMapperContext().mapperFor(FakeEntity.class), notNullValue());
+        assertThat(manager.getMapperContext().mapperFor(FakeAggregate.class), notNullValue());
     }
 
     @Test
@@ -76,16 +76,16 @@ public class TestsMongoSessionManager {
     public void canGetCriteria() {
         MongoSession session = manager.createSession();
 
-        assertThat(session.createCriteria(FakeEntity.class), notNullValue());
+        assertThat(session.createCriteria(FakeAggregate.class), notNullValue());
     }
 
     @Test
     public void canSave() {
         MongoSession session = manager.createSession();
 
-        session.save(new FakeEntity("id"));
+        session.save(new FakeAggregate("id"));
 
-        assertThat(session.getDb().getCollection("fakeentity").count(), is(1L));
+        assertThat(session.getDb().getCollection("fakeaggregate").count(), is(1L));
     }
 
     @Test

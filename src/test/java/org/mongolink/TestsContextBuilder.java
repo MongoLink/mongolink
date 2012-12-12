@@ -36,8 +36,8 @@ public class TestsContextBuilder {
 
         MapperContext context = builder.createContext();
 
-        assertThat(context.mapperFor(FakeEntity.class), notNullValue());
-        assertThat(context.mapperFor(FakeEntityWithNaturalId.class), notNullValue());
+        assertThat(context.mapperFor(FakeAggregate.class), notNullValue());
+        assertThat(context.mapperFor(FakeAggregateWithNaturalId.class), notNullValue());
         assertThat(context.mapperFor(Comment.class), notNullValue());
     }
 
@@ -47,7 +47,7 @@ public class TestsContextBuilder {
 
         MapperContext context = builder.createContext();
 
-        ClassMapper mapper = context.mapperFor(FakeChildEntity.class);
-        assertThat(mapper, is((ClassMapper) context.mapperFor(FakeEntity.class)));
+        ClassMapper mapper = context.mapperFor(FakeChildAggregate.class);
+        assertThat(mapper, is((ClassMapper) context.mapperFor(FakeAggregate.class)));
     }
 }

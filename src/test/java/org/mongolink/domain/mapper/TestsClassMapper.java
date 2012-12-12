@@ -42,7 +42,7 @@ public class TestsClassMapper {
 
     @Test
     public void canSaveComponent() {
-        FakeEntity entity = new FakeEntity("ok");
+        FakeAggregate entity = new FakeAggregate("ok");
         entity.setComment(new Comment("valeur"));
 
         final DBObject dbObject = entityMapper().toDBObject(entity);
@@ -52,7 +52,7 @@ public class TestsClassMapper {
 
     @Test
     public void canConvertFromDBValue() {
-        final Object value = entityMapper().toDbValue(new FakeEntity("ok"));
+        final Object value = entityMapper().toDbValue(new FakeAggregate("ok"));
 
         assertThat(value, instanceOf(DBObject.class));
     }
@@ -64,12 +64,12 @@ public class TestsClassMapper {
 
         final Object instance = entityMapper().fromDbValue(value);
 
-        assertThat(instance, instanceOf(FakeEntity.class));
-        assertThat(((FakeEntity) instance).getValue(), is("test"));
+        assertThat(instance, instanceOf(FakeAggregate.class));
+        assertThat(((FakeAggregate) instance).getValue(), is("test"));
     }
 
-    private AggregateMapper<FakeEntity> entityMapper() {
-        return (AggregateMapper<FakeEntity>) context.mapperFor(FakeEntity.class);
+    private AggregateMapper<FakeAggregate> entityMapper() {
+        return (AggregateMapper<FakeAggregate>) context.mapperFor(FakeAggregate.class);
     }
 
     private MapperContext context;

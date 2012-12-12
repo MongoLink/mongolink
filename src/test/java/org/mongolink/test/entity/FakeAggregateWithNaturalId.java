@@ -21,12 +21,12 @@
 
 package org.mongolink.test.entity;
 
-public class FakeEntityWithNaturalId {
+public class FakeAggregateWithNaturalId {
 
-    public FakeEntityWithNaturalId() {
+    public FakeAggregateWithNaturalId() {
     }
 
-    public FakeEntityWithNaturalId(String naturalKey) {
+    public FakeAggregateWithNaturalId(String naturalKey) {
         this.naturalKey = naturalKey;
     }
 

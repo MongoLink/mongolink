@@ -26,6 +26,7 @@ import org.hamcrest.Matchers;
 import org.joda.time.DateTime;
 import org.junit.Test;
 import org.mongolink.test.entity.Comment;
+import org.mongolink.test.entity.FakeAggregate;
 import org.mongolink.test.simpleMapping.CommentMapping;
 import org.mongolink.utils.MethodContainer;
 
@@ -187,7 +188,7 @@ public class TestsPropertyMapper {
     @Test
     public void canSerializeToDBOject() throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
         final BasicDBObject into = new BasicDBObject();
-        org.mongolink.test.entity.FakeEntity entity = new org.mongolink.test.entity.FakeEntity("te");
+        FakeAggregate entity = new FakeAggregate("te");
         final Comment comment = new Comment("tes");
         entity.setComment(comment);
 
@@ -204,7 +205,7 @@ public class TestsPropertyMapper {
         final BasicDBObject val = new BasicDBObject();
         val.put("value", "valeur");
         from.put("comment", val);
-        org.mongolink.test.entity.FakeEntity instance = new org.mongolink.test.entity.FakeEntity("kjklj");
+        FakeAggregate instance = new FakeAggregate("kjklj");
 
         propertyMapperForComponent().populate(instance, from);
 
@@ -218,8 +219,8 @@ public class TestsPropertyMapper {
         mapping.buildMapper(context);
         final ClassMapper classMapper = mock(ClassMapper.class);
         when(classMapper.getContext()).thenReturn(context);
-        when(classMapper.getPersistentType()).thenReturn(org.mongolink.test.entity.FakeEntity.class);
-        final Method method = org.mongolink.test.entity.FakeEntity.class.getMethod("getComment", null);
+        when(classMapper.getPersistentType()).thenReturn(FakeAggregate.class);
+        final Method method = FakeAggregate.class.getMethod("getComment", null);
         MethodContainer methodContainer = new MethodContainer(method);
         PropertyMapper propertyComponentMapper = new PropertyMapper(methodContainer);
         propertyComponentMapper.setMapper(classMapper);

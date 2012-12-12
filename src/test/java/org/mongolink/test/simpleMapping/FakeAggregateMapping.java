@@ -22,13 +22,13 @@
 package org.mongolink.test.simpleMapping;
 
 import org.mongolink.domain.mapper.AggregateMap;
-import org.mongolink.test.entity.FakeEntity;
+import org.mongolink.test.entity.FakeAggregate;
 
 
-public class FakeAggregateMapping extends AggregateMap<FakeEntity> {
+public class FakeAggregateMapping extends AggregateMap<FakeAggregate> {
 
     public FakeAggregateMapping() {
-        super(FakeEntity.class);
+        super(FakeAggregate.class);
     }
 
     @Override

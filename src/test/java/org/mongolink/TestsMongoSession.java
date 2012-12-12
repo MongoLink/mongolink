@@ -46,10 +46,10 @@ public class TestsMongoSession {
     public void before() {
         db = spy(new FakeDB());
         entities = new FakeDBCollection(db, "entity");
-        fakeEntities = new FakeDBCollection(db, "fakeentitywithnaturalid");
-        db.collections.put("fakeentity", entities);
-        db.collections.put("fakeentitywithnaturalid", fakeEntities);
-        db.collections.put("otherentitywithnaturalid", new FakeDBCollection(db, "otherentitywithnaturalid"));
+        fakeAggregates = new FakeDBCollection(db, "fakeaggregatewithnaturalid");
+        db.collections.put("fakeaggregate", entities);
+        db.collections.put("fakeaggregatewithnaturalid", fakeAggregates);
+        db.collections.put("otheraggregatewithnaturalid", new FakeDBCollection(db, "otheraggregatewithnaturalid"));
         ContextBuilder cb = new ContextBuilder("org.mongolink.test.simpleMapping");
         session = new MongoSession(db, new CriteriaFactory());
         session.setMappingContext(cb.createContext());
@@ -72,7 +72,7 @@ public class TestsMongoSession {
         createEntity("4d53b7118653a70549fe1b78", "plop");
         createEntity("4d53b7118653a70549fe1b78", "plap");
 
-        FakeEntity entity = session.get("4d53b7118653a70549fe1b78", FakeEntity.class);
+        FakeAggregate entity = session.get("4d53b7118653a70549fe1b78", FakeAggregate.class);
 
         assertThat(entity, notNullValue());
         assertThat(entity.getValue(), is("plop"));
@@ -89,9 +89,9 @@ public class TestsMongoSession {
     public void canGetByNaturalId() {
         DBObject dbo = new BasicDBObject();
         dbo.put("_id", "a natural key");
-        fakeEntities.insert(dbo);
+        fakeAggregates.insert(dbo);
 
-        FakeEntityWithNaturalId entity = session.get("a natural key", FakeEntityWithNaturalId.class);
+        FakeAggregateWithNaturalId entity = session.get("a natural key", FakeAggregateWithNaturalId.class);
 
         assertThat(entity, notNullValue());
         assertThat(entity.getNaturalKey(), is("a natural key"));
@@ -101,20 +101,20 @@ public class TestsMongoSession {
     public void testDavid() {
         DBObject dbo = new BasicDBObject();
         dbo.put("_id", "a natural key");
-        fakeEntities.insert(dbo);
+        fakeAggregates.insert(dbo);
 
-        session.get("a natural key", FakeEntityWithNaturalId.class);
-        FakeEntityWithNaturalId entity = session.get("a natural key", FakeEntityWithNaturalId.class);
+        session.get("a natural key", FakeAggregateWithNaturalId.class);
+        FakeAggregateWithNaturalId entity = session.get("a natural key", FakeAggregateWithNaturalId.class);
 
         entity.setValue("a new hope");
-        FakeEntityWithNaturalId anotherEntity = session.get("a natural key", FakeEntityWithNaturalId.class);
+        FakeAggregateWithNaturalId anotherEntity = session.get("a natural key", FakeAggregateWithNaturalId.class);
 
         assertThat(anotherEntity.getValue(), is("a new hope"));
     }
 
     @Test
     public void canSave() {
-        FakeEntity entity = new FakeEntity("value");
+        FakeAggregate entity = new FakeAggregate("value");
 
         session.save(entity);
 
@@ -133,7 +133,7 @@ public class TestsMongoSession {
     @Test
     public void canUpdate() {
         createEntity("4d53b7118653a70549fe1b78", "url de test");
-        FakeEntity entity = session.get("4d53b7118653a70549fe1b78", FakeEntity.class);
+        FakeAggregate entity = session.get("4d53b7118653a70549fe1b78", FakeAggregate.class);
         entity.setValue("un test de plus");
 
         session.update(entity);
@@ -152,8 +152,8 @@ public class TestsMongoSession {
     public void canAutomaticalyUpdate() {
         createEntity("4d53b7118653a70549fe1b78", "url de test");
         session.start();
-        FakeEntity fakeEntity = session.get("4d53b7118653a70549fe1b78", FakeEntity.class);
-        fakeEntity.setValue("some new and strange value");
+        FakeAggregate fakeAggregate = session.get("4d53b7118653a70549fe1b78", FakeAggregate.class);
+        fakeAggregate.setValue("some new and strange value");
 
         session.stop();
 
@@ -163,25 +163,25 @@ public class TestsMongoSession {
 
     @Test
     public void returnNullIfNotFound() {
-        FakeEntityWithNaturalId entity = session.get("a natural key", FakeEntityWithNaturalId.class);
+        FakeAggregateWithNaturalId entity = session.get("a natural key", FakeAggregateWithNaturalId.class);
 
         assertThat(entity, nullValue());
     }
 
     @Test
     public void canUpdateJustSavedEntityWithNaturalId() {
-        FakeEntityWithNaturalId entity = new FakeEntityWithNaturalId("natural key");
+        FakeAggregateWithNaturalId entity = new FakeAggregateWithNaturalId("natural key");
         session.save(entity);
         entity.setValue("a value");
 
         session.stop();
 
-        assertThat(fakeEntities.getObjects().get(0).get("value"), is((Object) "a value"));
+        assertThat(fakeAggregates.getObjects().get(0).get("value"), is((Object) "a value"));
     }
 
     @Test
     public void canUpdateJustSavedEntityWithAutoId() {
-        FakeEntity entity = new FakeEntity("this is a value");
+        FakeAggregate entity = new FakeAggregate("this is a value");
         session.save(entity);
         entity.setValue("a value");
 
@@ -193,7 +193,7 @@ public class TestsMongoSession {
     @Test
     public void canUpdateWithDiffStategy() {
         session.setUpdateStrategy(UpdateStrategies.DIFF);
-        FakeEntity entity = new FakeEntity("this is a value");
+        FakeAggregate entity = new FakeAggregate("this is a value");
         session.save(entity);
         entity.setValue("a value");
 
@@ -206,7 +206,7 @@ public class TestsMongoSession {
     @Test
     public void dontMakeUpdateTwice() {
         session.setUpdateStrategy(UpdateStrategies.DIFF);
-        FakeEntity entity = new FakeEntity("this is a value");
+        FakeAggregate entity = new FakeAggregate("this is a value");
         session.save(entity);
         entity.setValue("a value");
 
@@ -220,7 +220,7 @@ public class TestsMongoSession {
     @Test
     public void dontMakeUpdateWhenNoDiffWithDiffStrategy() {
         session.setUpdateStrategy(UpdateStrategies.DIFF);
-        FakeEntity entity = new FakeEntity("this is a value");
+        FakeAggregate entity = new FakeAggregate("this is a value");
         session.save(entity);
 
         session.update(entity);
@@ -231,7 +231,7 @@ public class TestsMongoSession {
 
     @Test
     public void savingSetIdForAutoId() {
-        FakeEntity entity = new FakeEntity("a value");
+        FakeAggregate entity = new FakeAggregate("a value");
 
         session.save(entity);
 
@@ -240,18 +240,18 @@ public class TestsMongoSession {
 
     @Test
     public void canGetCriteria() {
-        final Criteria<FakeEntity> criteria = session.createCriteria(FakeEntity.class);
+        final Criteria<FakeAggregate> criteria = session.createCriteria(FakeAggregate.class);
 
         assertThat(criteria, notNullValue());
     }
 
     @Test
     public void canGetByCriteria() {
-        session.save(new FakeEntity("this is a value"));
-        session.save(new FakeEntity("this is a value"));
-        final Criteria<FakeEntity> criteria = session.createCriteria(FakeEntity.class);
+        session.save(new FakeAggregate("this is a value"));
+        session.save(new FakeAggregate("this is a value"));
+        final Criteria<FakeAggregate> criteria = session.createCriteria(FakeAggregate.class);
 
-        List<FakeEntity> list = criteria.list();
+        List<FakeAggregate> list = criteria.list();
 
         assertThat(list.size(), is(2));
     }
@@ -260,10 +260,10 @@ public class TestsMongoSession {
     public void returnSameInstanceOnGetById() {
         DBObject dbo = new BasicDBObject();
         dbo.put("_id", "a natural key");
-        fakeEntities.insert(dbo);
+        fakeAggregates.insert(dbo);
 
-        FakeEntityWithNaturalId first = session.get("a natural key", FakeEntityWithNaturalId.class);
-        FakeEntityWithNaturalId second = session.get("a natural key", FakeEntityWithNaturalId.class);
+        FakeAggregateWithNaturalId first = session.get("a natural key", FakeAggregateWithNaturalId.class);
+        FakeAggregateWithNaturalId second = session.get("a natural key", FakeAggregateWithNaturalId.class);
 
         assertThat(first, sameInstance(second));
     }
@@ -271,32 +271,32 @@ public class TestsMongoSession {
     @Test
     public void returnSameInstanceOnGetByCriteria() {
         createEntity("4d53b7118653a70549fe1b78", "plop");
-        final Criteria criteria = session.createCriteria(FakeEntity.class);
+        final Criteria criteria = session.createCriteria(FakeAggregate.class);
 
-        final FakeEntity instanceById = session.get("4d53b7118653a70549fe1b78", FakeEntity.class);
-        final FakeEntity instanceByCriteria = (FakeEntity) criteria.list().get(0);
+        final FakeAggregate instanceById = session.get("4d53b7118653a70549fe1b78", FakeAggregate.class);
+        final FakeAggregate instanceByCriteria = (FakeAggregate) criteria.list().get(0);
 
         assertThat(instanceById, sameInstance(instanceByCriteria));
     }
 
     @Test
     public void entitiesAreCachedUsingTheirTypeAndId() {
-        session.save(new FakeEntityWithNaturalId("cle unique"));
+        session.save(new FakeAggregateWithNaturalId("cle unique"));
         session.save(new OtherEntityWithNaturalId("cle unique"));
 
-        final FakeEntityWithNaturalId entity = session.get("cle unique", FakeEntityWithNaturalId.class);
+        final FakeAggregateWithNaturalId entity = session.get("cle unique", FakeAggregateWithNaturalId.class);
 
         assertThat(entity, notNullValue());
     }
 
     @Test
     public void canClear() {
-        final FakeEntityWithNaturalId element = new FakeEntityWithNaturalId("cle unique");
+        final FakeAggregateWithNaturalId element = new FakeAggregateWithNaturalId("cle unique");
         session.save(element);
 
         session.clear();
 
-        final FakeEntityWithNaturalId elementFound = session.get("cle unique", FakeEntityWithNaturalId.class);
+        final FakeAggregateWithNaturalId elementFound = session.get("cle unique", FakeAggregateWithNaturalId.class);
         assertThat(elementFound, not(element));
     }
 
@@ -305,7 +305,7 @@ public class TestsMongoSession {
         createEntity("4d53b7118653a70549fe1b78", "plop");
         createEntity("4d53b7118653a70549fe1b78", "plap");
 
-        List<FakeEntity> entityList = session.getAll(FakeEntity.class);
+        List<FakeAggregate> entityList = session.getAll(FakeAggregate.class);
 
         assertThat(entityList, notNullValue());
         assertThat(entityList.size(), is(2));
@@ -314,18 +314,18 @@ public class TestsMongoSession {
 
     @Test
     public void canDeleteEntity() {
-        final FakeEntityWithNaturalId entity = new FakeEntityWithNaturalId("cle unique");
+        final FakeAggregateWithNaturalId entity = new FakeAggregateWithNaturalId("cle unique");
         session.save(entity);
 
         session.delete(entity);
 
         assertThat(entities.getObjects().size(), is(0));
-        assertThat(session.get("cle unique", FakeEntityWithNaturalId.class), nullValue());
+        assertThat(session.get("cle unique", FakeAggregateWithNaturalId.class), nullValue());
     }
 
     @Test
     public void cantDeleteEntityNotInCache() {
-        final FakeEntityWithNaturalId entity = new FakeEntityWithNaturalId("cle unique");
+        final FakeAggregateWithNaturalId entity = new FakeAggregateWithNaturalId("cle unique");
         session.save(entity);
         session.clear();
 
@@ -351,6 +351,6 @@ public class TestsMongoSession {
     private FakeDBCollection entities;
     private FakeDB db;
     private MongoSession session;
-    private FakeDBCollection fakeEntities;
+    private FakeDBCollection fakeAggregates;
 
 }

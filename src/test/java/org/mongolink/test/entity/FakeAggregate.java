@@ -26,13 +26,13 @@ import com.google.common.collect.Lists;
 
 import java.util.List;
 
-public class FakeEntity {
+public class FakeAggregate {
 
-    FakeEntity() {
+    FakeAggregate() {
 
     }
 
-    public FakeEntity(String value) {
+    public FakeAggregate(String value) {
         this.value = value;
     }
 
@@ -68,7 +68,7 @@ public class FakeEntity {
         this.index = index;
     }
 
-    public FakeEntity getOtherEntity() {
+    public FakeAggregate getOtherEntity() {
         return otherEntity;
     }
 
@@ -84,6 +84,6 @@ public class FakeEntity {
     private String id;
     private String value;
     private final List<Comment> comments = Lists.newArrayList();
-    private FakeEntity otherEntity;
+    private FakeAggregate otherEntity;
     private Comment comment;
 }

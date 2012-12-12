@@ -26,7 +26,7 @@ import org.junit.Test;
 import org.mockito.Matchers;
 import org.mongolink.MongoSession;
 import org.mongolink.domain.mapper.AggregateMapper;
-import org.mongolink.test.entity.FakeEntity;
+import org.mongolink.test.entity.FakeAggregate;
 
 import java.util.List;
 
@@ -39,27 +39,27 @@ public class TestQueryExecutor {
 
     @Test
     public void canLimit() {
-        final QueryExecutor<FakeEntity> executor = createQueryExecutor();
+        final QueryExecutor<FakeAggregate> executor = createQueryExecutor();
 
-        final List<FakeEntity> list = executor.execute(new BasicDBObject(), CursorParameter.withLimit(10));
+        final List<FakeAggregate> list = executor.execute(new BasicDBObject(), CursorParameter.withLimit(10));
 
         assertThat(list.size(), is(10));
     }
 
     @Test
     public void canSkip() {
-        final QueryExecutor<FakeEntity> executor = createQueryExecutor();
+        final QueryExecutor<FakeAggregate> executor = createQueryExecutor();
 
-        final List<FakeEntity> list = executor.execute(new BasicDBObject(), CursorParameter.withSkip(11));
+        final List<FakeAggregate> list = executor.execute(new BasicDBObject(), CursorParameter.withSkip(11));
 
         assertThat(list.size(), is(9));
     }
 
     @Test
     public void canSort() {
-        final QueryExecutor<FakeEntity> executor = createQueryExecutor();
+        final QueryExecutor<FakeAggregate> executor = createQueryExecutor();
 
-        final List<FakeEntity> list = executor.execute(new BasicDBObject(), CursorParameter.withSort("value", 11));
+        final List<FakeAggregate> list = executor.execute(new BasicDBObject(), CursorParameter.withSort("value", 11));
 
         assertThat(list.size(), is(20));
     }
@@ -74,8 +74,8 @@ public class TestQueryExecutor {
         }
         final AggregateMapper aggregateMapper = mock(AggregateMapper.class);
         when(aggregateMapper.collectionName()).thenReturn("collection");
-        when(aggregateMapper.toInstance(Matchers.<DBObject>any())).thenReturn(new FakeEntity("gfg"));
-        return new QueryExecutor<FakeEntity>(db, aggregateMapper, new UnitOfWork(mock(MongoSession.class)));
+        when(aggregateMapper.toInstance(Matchers.<DBObject>any())).thenReturn(new FakeAggregate("gfg"));
+        return new QueryExecutor<FakeAggregate>(db, aggregateMapper, new UnitOfWork(mock(MongoSession.class)));
     }
 
 }

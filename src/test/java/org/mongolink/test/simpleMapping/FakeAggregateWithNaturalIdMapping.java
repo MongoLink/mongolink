@@ -22,13 +22,13 @@
 package org.mongolink.test.simpleMapping;
 
 import org.mongolink.domain.mapper.AggregateMap;
-import org.mongolink.test.entity.FakeEntityWithNaturalId;
+import org.mongolink.test.entity.FakeAggregateWithNaturalId;
 
 
-public class FakeAggregateWithNaturalIdMapping extends AggregateMap<FakeEntityWithNaturalId> {
+public class FakeAggregateWithNaturalIdMapping extends AggregateMap<FakeAggregateWithNaturalId> {
 
     public FakeAggregateWithNaturalIdMapping() {
-        super(FakeEntityWithNaturalId.class);
+        super(FakeAggregateWithNaturalId.class);
     }
 
     @Override

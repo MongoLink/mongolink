@@ -50,7 +50,7 @@ public class TestsAggregateMapper {
 
     @Test
     public void canSaveAutoId() {
-        FakeEntity entity = new FakeEntity("test.com");
+        FakeAggregate entity = new FakeAggregate("test.com");
         entity.setId("4d53b7118653a70549fe1b78");
 
         DBObject dbObject = entityMapper().toDBObject(entity);
@@ -61,9 +61,9 @@ public class TestsAggregateMapper {
     @Test
     public void canSaveNaturalId() {
         MapperContext mapperContext = contextWithNaturalId();
-        FakeEntityWithNaturalId entity = new FakeEntityWithNaturalId("natural key");
+        FakeAggregateWithNaturalId entity = new FakeAggregateWithNaturalId("natural key");
 
-        DBObject dbObject = mapperContext.mapperFor(FakeEntityWithNaturalId.class).toDBObject(entity);
+        DBObject dbObject = mapperContext.mapperFor(FakeAggregateWithNaturalId.class).toDBObject(entity);
 
         Assert.assertThat(dbObject.get("_id"), Matchers.is((Object) "natural key"));
     }
@@ -74,7 +74,7 @@ public class TestsAggregateMapper {
         DBObject dbo = new BasicDBObject();
         dbo.put("_id", "natural key");
 
-        FakeEntityWithNaturalId instance = mapperContext.mapperFor(FakeEntityWithNaturalId.class).toInstance(dbo);
+        FakeAggregateWithNaturalId instance = mapperContext.mapperFor(FakeAggregateWithNaturalId.class).toInstance(dbo);
 
         Assert.assertThat(instance.getNaturalKey(), Matchers.is((Object) "natural key"));
     }
@@ -89,7 +89,7 @@ public class TestsAggregateMapper {
 
     @Test
     public void canSaveProperties() {
-        FakeEntity entity = new FakeEntity("test.com");
+        FakeAggregate entity = new FakeAggregate("test.com");
 
 
         DBObject dbo = entityMapper().toDBObject(entity);
@@ -101,7 +101,7 @@ public class TestsAggregateMapper {
 
     @Test
     public void canSaveCollectionOfComponent() {
-        FakeEntity entity = new FakeEntity("test.com");
+        FakeAggregate entity = new FakeAggregate("test.com");
         entity.addComment("un commentaire");
 
         DBObject dbo = entityMapper().toDBObject(entity);
@@ -121,7 +121,7 @@ public class TestsAggregateMapper {
         dbo.put("value", "test.com");
         dbo.put("_id", "id");
 
-        FakeEntity entity = entityMapper().toInstance(dbo);
+        FakeAggregate entity = entityMapper().toInstance(dbo);
 
         Assert.assertThat(entity, Matchers.notNullValue());
         Assert.assertThat(entity.getValue(), Matchers.is("test.com"));
@@ -139,7 +139,7 @@ public class TestsAggregateMapper {
         comments.add(comment);
         dbo.put("comments", comments);
 
-        FakeEntity entity = entityMapper().toInstance(dbo);
+        FakeAggregate entity = entityMapper().toInstance(dbo);
 
         assertThat(entity.getComments().size(), is(1));
         Assert.assertThat(entity.getComments().get(0).getValue(), Matchers.is("this is a mapper!"));
@@ -149,15 +149,15 @@ public class TestsAggregateMapper {
     public void canCreateInstanceGivenDiscriminatorValue() {
         MapperContext context = new MapperContext();
         new FakeAggregateWithSubclassMapping().buildMapper(context);
-        ClassMapper<FakeEntity> entityMapper = context.mapperFor(FakeEntity.class);
+        ClassMapper<FakeAggregate> entityMapper = context.mapperFor(FakeAggregate.class);
         BasicDBObject dbo = new BasicDBObject();
         dbo.put("_id", "1");
-        dbo.put("__discriminator", "FakeChildEntity");
+        dbo.put("__discriminator", "FakeChildAggregate");
 
-        FakeEntity instance = entityMapper.toInstance(dbo);
+        FakeAggregate instance = entityMapper.toInstance(dbo);
 
         assertThat(instance, notNullValue());
-        assertThat(instance, instanceOf(FakeChildEntity.class));
+        assertThat(instance, instanceOf(FakeChildAggregate.class));
 
     }
 
@@ -165,19 +165,19 @@ public class TestsAggregateMapper {
     public void createParentEntityWhenNoDiscriminatorGiven() {
         MapperContext context = new MapperContext();
         new FakeAggregateWithSubclassMapping().buildMapper(context);
-        ClassMapper<FakeEntity> entityMapper = context.mapperFor(FakeEntity.class);
+        ClassMapper<FakeAggregate> entityMapper = context.mapperFor(FakeAggregate.class);
         BasicDBObject dbo = new BasicDBObject();
         dbo.put("_id", "1");
 
-        FakeEntity instance = entityMapper.toInstance(dbo);
+        FakeAggregate instance = entityMapper.toInstance(dbo);
 
         assertThat(instance, notNullValue());
-        assertThat(instance, instanceOf(FakeEntity.class));
+        assertThat(instance, instanceOf(FakeAggregate.class));
 
     }
 
-    private AggregateMapper<FakeEntity> entityMapper() {
-        return (AggregateMapper<FakeEntity>) context.mapperFor(FakeEntity.class);
+    private AggregateMapper<FakeAggregate> entityMapper() {
+        return (AggregateMapper<FakeAggregate>) context.mapperFor(FakeAggregate.class);
     }
 
     private MapperContext context;

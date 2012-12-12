@@ -38,8 +38,8 @@ public class TestsAggregateMap {
 
         mapping.buildMapper(context);
 
-        assertThat(context.mapperFor(FakeEntity.class), notNullValue());
-        ClassMapper<FakeEntity> mapper = context.mapperFor(FakeEntity.class);
+        assertThat(context.mapperFor(FakeAggregate.class), notNullValue());
+        ClassMapper<FakeAggregate> mapper = context.mapperFor(FakeAggregate.class);
 
     }
 
@@ -57,7 +57,7 @@ public class TestsAggregateMap {
 
         mapping.buildMapper(context);
 
-        assertThat(context.mapperFor(FakeChildEntity.class), notNullValue());
+        assertThat(context.mapperFor(FakeChildAggregate.class), notNullValue());
     }
 
     @Test
@@ -67,8 +67,8 @@ public class TestsAggregateMap {
 
         mapping.buildMapper(context);
 
-        assertThat(context.mapperFor(FakeChildEntity.class), notNullValue());
-        assertThat(context.mapperFor(OtherFakeChildEntity.class), notNullValue());
+        assertThat(context.mapperFor(FakeChildAggregate.class), notNullValue());
+        assertThat(context.mapperFor(OtherFakeChildAggregate.class), notNullValue());
     }
 
     @Test

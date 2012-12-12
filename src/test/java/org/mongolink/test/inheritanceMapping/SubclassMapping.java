@@ -22,13 +22,13 @@
 package org.mongolink.test.inheritanceMapping;
 
 import org.mongolink.domain.mapper.SubclassMap;
-import org.mongolink.test.entity.FakeChildEntity;
+import org.mongolink.test.entity.FakeChildAggregate;
 
 
-public class SubclassMapping extends SubclassMap<FakeChildEntity> {
+public class SubclassMapping extends SubclassMap<FakeChildAggregate> {
 
     public SubclassMapping() {
-        super(FakeChildEntity.class);
+        super(FakeChildAggregate.class);
     }
 
     @Override

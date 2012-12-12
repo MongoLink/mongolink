@@ -38,8 +38,8 @@ public class TestsMongoSessionWithInheritance {
     @Before
     public void before() {
         FakeDB db = Mockito.spy(new FakeDB());
-        entities = new FakeDBCollection(db, "fakeentity");
-        db.collections.put("fakeentity", entities);
+        entities = new FakeDBCollection(db, "fakeaggregate");
+        db.collections.put("fakeaggregate", entities);
         FakeAggregateWithSubclassMapping mapping = new FakeAggregateWithSubclassMapping();
         session = new MongoSession(db, new CriteriaFactory());
         MapperContext context = new MapperContext();
@@ -51,23 +51,23 @@ public class TestsMongoSessionWithInheritance {
     public void canGetChildEntitiesFromParent() {
         BasicDBObject dbo = new BasicDBObject();
         dbo.put("_id", "1");
-        dbo.put("__discriminator", "FakeChildEntity");
+        dbo.put("__discriminator", "FakeChildAggregate");
         entities.insert(dbo);
 
-        FakeEntity entity = session.get("1", FakeEntity.class);
+        FakeAggregate entity = session.get("1", FakeAggregate.class);
 
         assertThat(entity, notNullValue());
-        assertThat(entity, instanceOf(FakeChildEntity.class));
+        assertThat(entity, instanceOf(FakeChildAggregate.class));
     }
 
     @Test
     public void canGetByChildType() {
         BasicDBObject dbo = new BasicDBObject();
         dbo.put("_id", "1");
-        dbo.put("__discriminator", "FakeChildEntity");
+        dbo.put("__discriminator", "FakeChildAggregate");
         entities.insert(dbo);
 
-        FakeEntity entity = session.get("1", FakeChildEntity.class);
+        FakeAggregate entity = session.get("1", FakeChildAggregate.class);
 
         assertThat(entity, notNullValue());
 
@@ -75,7 +75,7 @@ public class TestsMongoSessionWithInheritance {
 
     @Test
     public void savesChildEntityInSameCollection() {
-        FakeChildEntity fakeChildEntity = new FakeChildEntity();
+        FakeChildAggregate fakeChildEntity = new FakeChildAggregate();
         fakeChildEntity.setId("2");
 
         session.save(fakeChildEntity);

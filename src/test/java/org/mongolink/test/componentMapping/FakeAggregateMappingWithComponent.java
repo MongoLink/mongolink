@@ -22,13 +22,13 @@
 package org.mongolink.test.componentMapping;
 
 import org.mongolink.domain.mapper.*;
-import org.mongolink.test.entity.FakeEntity;
+import org.mongolink.test.entity.FakeAggregate;
 
 
-public class FakeAggregateMappingWithComponent extends AggregateMap<FakeEntity> {
+public class FakeAggregateMappingWithComponent extends AggregateMap<FakeAggregate> {
 
-    public FakeAggregateMappingWithComponent(AggregateMapper<FakeEntity> mockMapper) {
-        super(FakeEntity.class);
+    public FakeAggregateMappingWithComponent(AggregateMapper<FakeAggregate> mockMapper) {
+        super(FakeAggregate.class);
         innerMap = mockMapper;
     }
 
@@ -38,9 +38,9 @@ public class FakeAggregateMappingWithComponent extends AggregateMap<FakeEntity> 
     }
 
     @Override
-    protected AggregateMapper<FakeEntity> getMapper() {
+    protected AggregateMapper<FakeAggregate> getMapper() {
         return innerMap;
     }
 
-    private final AggregateMapper<FakeEntity> innerMap;
+    private final AggregateMapper<FakeAggregate> innerMap;
 }
