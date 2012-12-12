@@ -19,21 +19,28 @@
  *
  */
 
-package org.mongolink.test.simpleMapping;
+package org.mongolink.test.componentMapping;
 
-import org.mongolink.domain.mapper.EntityMap;
-import org.mongolink.test.entity.FakeEntityWithNaturalId;
+import org.mongolink.domain.mapper.*;
+import org.mongolink.test.entity.FakeEntity;
 
 
-public class FakeEntityWithNaturalIdMapping extends EntityMap<FakeEntityWithNaturalId> {
+public class FakeAggregateMappingWithComponent extends AggregateMap<FakeEntity> {
 
-    public FakeEntityWithNaturalIdMapping() {
-        super(FakeEntityWithNaturalId.class);
+    public FakeAggregateMappingWithComponent(AggregateMapper<FakeEntity> mockMapper) {
+        super(FakeEntity.class);
+        innerMap = mockMapper;
     }
 
     @Override
     protected void map() {
-        id(element().getNaturalKey()).natural();
-        property(element().getValue());
+        property(element().getComment());
     }
+
+    @Override
+    protected AggregateMapper<FakeEntity> getMapper() {
+        return innerMap;
+    }
+
+    private final AggregateMapper<FakeEntity> innerMap;
 }

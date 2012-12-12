@@ -54,7 +54,7 @@ public class MongoSession {
         if (unitOfWork.contains(entityType, id)) {
             return unitOfWork.getEntity(entityType, id);
         }
-        EntityMapper<T> mapper = (EntityMapper<T>) entityMapper(entityType);
+        AggregateMapper<T> mapper = (AggregateMapper<T>) entityMapper(entityType);
         Object dbId = mapper.getDbId(id);
         DBObject query = new BasicDBObject("_id", dbId);
         return (T) createExecutor(mapper).executeUnique(query);
@@ -66,7 +66,7 @@ public class MongoSession {
     }
 
     public void save(Object element) {
-        EntityMapper<?> mapper = entityMapper(element.getClass());
+        AggregateMapper<?> mapper = entityMapper(element.getClass());
         DBObject dbObject = mapper.toDBObject(element);
         getDbCollection(mapper).insert(dbObject);
         mapper.populateId(element, dbObject);
@@ -74,7 +74,7 @@ public class MongoSession {
     }
 
     public void update(Object element) {
-        EntityMapper<?> mapper = entityMapper(element.getClass());
+        AggregateMapper<?> mapper = entityMapper(element.getClass());
         DBObject initialValue = unitOfWork.getDBOBject(element.getClass(), mapper.getId(element));
         DBObject updatedValue = mapper.toDBObject(element);
         updateStrategy.update(initialValue, updatedValue, getDbCollection(mapper));
@@ -82,20 +82,20 @@ public class MongoSession {
     }
 
     public void delete(Object element) {
-        EntityMapper<?> mapper = entityMapper(element.getClass());
+        AggregateMapper<?> mapper = entityMapper(element.getClass());
         checkEntityIsInCache(element, mapper);
         DBObject value = unitOfWork.getDBOBject(element.getClass(), mapper.getId(element));
         getDbCollection(mapper).remove(value);
         unitOfWork.delete(mapper.getId(element), element);
     }
 
-    private void checkEntityIsInCache(Object element, EntityMapper<?> mapper) {
+    private void checkEntityIsInCache(Object element, AggregateMapper<?> mapper) {
         if (!unitOfWork.contains(element.getClass(), mapper.getId(element))) {
             throw new MongoLinkError("Entity to delete not loaded");
         }
     }
 
-    private DBCollection getDbCollection(EntityMapper<?> mapper) {
+    private DBCollection getDbCollection(AggregateMapper<?> mapper) {
         return db.getCollection(mapper.collectionName());
     }
 
@@ -120,18 +120,18 @@ public class MongoSession {
     }
 
     @SuppressWarnings("unchecked")
-    private QueryExecutor createExecutor(EntityMapper<?> mapper) {
+    private QueryExecutor createExecutor(AggregateMapper<?> mapper) {
         return new QueryExecutor(db, mapper, unitOfWork);
     }
 
-    private EntityMapper<?> entityMapper(Class<?> type) {
+    private AggregateMapper<?> entityMapper(Class<?> type) {
         checkIsAnEntity(type);
-        return (EntityMapper<?>) context.mapperFor(type);
+        return (AggregateMapper<?>) context.mapperFor(type);
     }
 
     private void checkIsAnEntity(Class<?> entityType) {
         ClassMapper<?> mapper = context.mapperFor(entityType);
-        if (mapper == null || !(mapper instanceof EntityMapper)) {
+        if (mapper == null || !(mapper instanceof AggregateMapper)) {
             throw new MongoLinkError(entityType.getName() + " is not an entity");
         }
     }

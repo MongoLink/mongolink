@@ -25,7 +25,7 @@ import com.mongodb.*;
 import org.junit.Test;
 import org.mockito.Matchers;
 import org.mongolink.MongoSession;
-import org.mongolink.domain.mapper.EntityMapper;
+import org.mongolink.domain.mapper.AggregateMapper;
 import org.mongolink.test.entity.FakeEntity;
 
 import java.util.List;
@@ -72,10 +72,10 @@ public class TestQueryExecutor {
             element.put("value", i);
             collection.getObjects().add(element);
         }
-        final EntityMapper entityMapper = mock(EntityMapper.class);
-        when(entityMapper.collectionName()).thenReturn("collection");
-        when(entityMapper.toInstance(Matchers.<DBObject>any())).thenReturn(new FakeEntity("gfg"));
-        return new QueryExecutor<FakeEntity>(db, entityMapper, new UnitOfWork(mock(MongoSession.class)));
+        final AggregateMapper aggregateMapper = mock(AggregateMapper.class);
+        when(aggregateMapper.collectionName()).thenReturn("collection");
+        when(aggregateMapper.toInstance(Matchers.<DBObject>any())).thenReturn(new FakeEntity("gfg"));
+        return new QueryExecutor<FakeEntity>(db, aggregateMapper, new UnitOfWork(mock(MongoSession.class)));
     }
 
 }

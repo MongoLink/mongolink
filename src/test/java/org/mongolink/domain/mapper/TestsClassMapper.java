@@ -33,7 +33,7 @@ public class TestsClassMapper {
 
     @Before
     public void before() {
-        FakeEntityMapping fakeEntityMapping = new FakeEntityMapping();
+        FakeAggregateMapping fakeEntityMapping = new FakeAggregateMapping();
         CommentMapping commentMapping = new CommentMapping();
         context = new MapperContext();
         fakeEntityMapping.buildMapper(context);
@@ -68,8 +68,8 @@ public class TestsClassMapper {
         assertThat(((FakeEntity) instance).getValue(), is("test"));
     }
 
-    private EntityMapper<FakeEntity> entityMapper() {
-        return (EntityMapper<FakeEntity>) context.mapperFor(FakeEntity.class);
+    private AggregateMapper<FakeEntity> entityMapper() {
+        return (AggregateMapper<FakeEntity>) context.mapperFor(FakeEntity.class);
     }
 
     private MapperContext context;

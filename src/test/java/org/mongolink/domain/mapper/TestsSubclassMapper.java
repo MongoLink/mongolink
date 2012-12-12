@@ -26,7 +26,7 @@ import com.mongodb.*;
 import org.bson.types.ObjectId;
 import org.junit.*;
 import org.mongolink.test.entity.*;
-import org.mongolink.test.simpleMapping.FakeEntityMapping;
+import org.mongolink.test.simpleMapping.FakeAggregateMapping;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
@@ -101,7 +101,7 @@ public class TestsSubclassMapper {
             }
         };
 
-        FakeEntityMapping fakeEntityMapping = new FakeEntityMapping();
+        FakeAggregateMapping fakeEntityMapping = new FakeAggregateMapping();
         fakeEntityMapping.subclass(subclassMap);
         context = new MapperContext();
         fakeEntityMapping.buildMapper(context);

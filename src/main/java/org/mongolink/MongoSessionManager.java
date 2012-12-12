@@ -42,12 +42,12 @@ public class MongoSessionManager {
     private void createCappedCollections() {
         for (ClassMapper mapper : mapperContext.getMappers()) {
             if (mapper.isCapped()) {
-                EntityMapper<?> entityMapper = (EntityMapper<?>) mapper;
+                AggregateMapper<?> aggregateMapper = (AggregateMapper<?>) mapper;
                 final MongoSession session = createSession();
-                if (!session.getDb().collectionExists(entityMapper.collectionName())) {
+                if (!session.getDb().collectionExists(aggregateMapper.collectionName())) {
                     session.start();
-                    final DBObject options = entityMapper.getCapped().getDbValue();
-                    session.getDb().createCollection(entityMapper.collectionName(), options);
+                    final DBObject options = aggregateMapper.getCapped().getDbValue();
+                    session.getDb().createCollection(aggregateMapper.collectionName(), options);
                     session.stop();
                 }
             }

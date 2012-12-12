@@ -19,28 +19,34 @@
  *
  */
 
-package org.mongolink.test.componentMapping;
+package org.mongolink.test.inheritanceMapping;
 
 import org.mongolink.domain.mapper.*;
-import org.mongolink.test.entity.FakeEntity;
+import org.mongolink.test.entity.*;
 
 
-public class FakeEntityMappingWithComponent extends EntityMap<FakeEntity> {
+public class FakeAggregateWithTwoSubclassMapping extends AggregateMap<FakeEntity> {
 
-    public FakeEntityMappingWithComponent(EntityMapper<FakeEntity> mockMapper) {
+    public FakeAggregateWithTwoSubclassMapping() {
         super(FakeEntity.class);
-        innerMap = mockMapper;
     }
 
     @Override
-    protected void map() {
-        property(element().getComment());
+    public void map() {
+        id(element().getId());
+        subclass(new SubclassMap<FakeChildEntity>(FakeChildEntity.class) {
+
+            @Override
+            protected void map() {
+
+            }
+        });
+        subclass(new SubclassMap<OtherFakeChildEntity>(OtherFakeChildEntity.class) {
+            @Override
+            protected void map() {
+
+            }
+        });
     }
 
-    @Override
-    protected EntityMapper<FakeEntity> getMapper() {
-        return innerMap;
-    }
-
-    private final EntityMapper<FakeEntity> innerMap;
 }

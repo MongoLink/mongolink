@@ -19,20 +19,29 @@
  *
  */
 
-package org.mongolink.test.simpleMapping;
+package org.mongolink.test.inheritanceMapping;
 
-import org.mongolink.domain.mapper.EntityMap;
-import org.mongolink.test.entity.OtherEntityWithNaturalId;
+import org.mongolink.domain.mapper.*;
+import org.mongolink.test.entity.*;
 
 
-public class OtherEntityWithNaturalIdMapping extends EntityMap<OtherEntityWithNaturalId> {
+public class FakeAggregateWithSubclassMapping extends AggregateMap<FakeEntity> {
 
-    public OtherEntityWithNaturalIdMapping() {
-        super(OtherEntityWithNaturalId.class);
+    public FakeAggregateWithSubclassMapping() {
+        super(FakeEntity.class);
     }
 
     @Override
-    protected void map() {
-        id(element().getNaturalKey()).natural();
+    public void map() {
+        id(element().getId()).natural();
+        property(element().getValue());
+        subclass(new SubclassMap<FakeChildEntity>(FakeChildEntity.class) {
+
+            @Override
+            protected void map() {
+                property(element().getChildName());
+            }
+        });
     }
+
 }

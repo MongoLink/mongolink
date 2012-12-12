@@ -21,21 +21,18 @@
 
 package org.mongolink.test.simpleMapping;
 
-import org.mongolink.domain.mapper.EntityMap;
-import org.mongolink.test.entity.FakeEntity;
+import org.mongolink.domain.mapper.AggregateMap;
+import org.mongolink.test.entity.FakeEntityWithCap;
 
 
-public class FakeEntityMapping extends EntityMap<FakeEntity> {
+public class FakeAggregateMappingWithCap extends AggregateMap<FakeEntityWithCap> {
 
-    public FakeEntityMapping() {
-        super(FakeEntity.class);
+    public FakeAggregateMappingWithCap() {
+        super(FakeEntityWithCap.class);
     }
 
     @Override
     public void map() {
-        id(element().getId());
-        property(element().getValue());
-        collection(element().getComments());
-        property(element().getComment());
+        setCapped(1048076, 50);
     }
 }

@@ -23,13 +23,13 @@ package org.mongolink.domain;
 
 import com.google.common.collect.Lists;
 import com.mongodb.*;
-import org.mongolink.domain.mapper.EntityMapper;
+import org.mongolink.domain.mapper.AggregateMapper;
 
 import java.util.List;
 
 public class QueryExecutor<T> {
 
-    public QueryExecutor(DB db, EntityMapper<T> mapper, UnitOfWork unitOfWork) {
+    public QueryExecutor(DB db, AggregateMapper<T> mapper, UnitOfWork unitOfWork) {
         this.db = db;
         this.mapper = mapper;
         this.unitOfWork = unitOfWork;
@@ -77,11 +77,11 @@ public class QueryExecutor<T> {
         return db;
     }
 
-    public EntityMapper<?> getEntityMapper() {
+    public AggregateMapper<?> getEntityMapper() {
         return mapper;
     }
 
     private final DB db;
-    private final EntityMapper<T> mapper;
+    private final AggregateMapper<T> mapper;
     private final UnitOfWork unitOfWork;
 }

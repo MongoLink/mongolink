@@ -94,7 +94,7 @@ public class IdMapper implements Mapper {
         return null;
     }
 
-    public void setMapper(EntityMapper<?> mapper) {
+    public void setMapper(AggregateMapper<?> mapper) {
         this.mapper = mapper;
     }
 
@@ -109,5 +109,5 @@ public class IdMapper implements Mapper {
     private IdGeneration generationStrategy;
     private final MethodContainer methodContainer;
     private static final Logger LOGGER = Logger.getLogger(IdMapper.class);
-    private EntityMapper<?> mapper;
+    private AggregateMapper<?> mapper;
 }

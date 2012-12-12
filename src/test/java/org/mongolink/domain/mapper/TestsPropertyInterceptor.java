@@ -33,12 +33,12 @@ public class TestsPropertyInterceptor {
 
     @Test
     public void setLastMethodToClassMap() throws Throwable {
-        EntityMap entityMap = mock(EntityMap.class);
-        PropertyInterceptor interceptor = new PropertyInterceptor(entityMap);
+        AggregateMap aggregateMap = mock(AggregateMap.class);
+        PropertyInterceptor interceptor = new PropertyInterceptor(aggregateMap);
         Method method = FakeEntity.class.getDeclaredMethod("getId");
 
         interceptor.intercept(null, method, null, null);
 
-        verify(entityMap).setLastMethod(new MethodContainer(method));
+        verify(aggregateMap).setLastMethod(new MethodContainer(method));
     }
 }

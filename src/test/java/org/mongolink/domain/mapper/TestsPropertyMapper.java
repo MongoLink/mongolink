@@ -154,8 +154,8 @@ public class TestsPropertyMapper {
         return result;
     }
 
-    private EntityMapper<FakeEntity> parentMapper() {
-        EntityMapper<FakeEntity> mapper = new EntityMapper<FakeEntity>(FakeEntity.class);
+    private AggregateMapper<FakeEntity> parentMapper() {
+        AggregateMapper<FakeEntity> mapper = new AggregateMapper<FakeEntity>(FakeEntity.class);
         final MapperContext context = new MapperContext();
         context.addMapper(mapper);
         return mapper;

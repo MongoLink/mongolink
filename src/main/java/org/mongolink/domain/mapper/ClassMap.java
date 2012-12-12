@@ -96,7 +96,7 @@ public abstract class ClassMap<T> {
 
     protected abstract ClassMapper<T> getMapper();
 
-    private static final Logger LOGGER = Logger.getLogger(EntityMap.class);
+    private static final Logger LOGGER = Logger.getLogger(AggregateMap.class);
     private MethodContainer lastMethod;
     private final Class<T> type;
     private final T interceptor;

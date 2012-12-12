@@ -26,7 +26,7 @@ import org.bson.types.ObjectId;
 import org.hamcrest.Matchers;
 import org.junit.*;
 import org.mongolink.test.entity.*;
-import org.mongolink.test.inheritanceMapping.FakeEntityWithSubclassMapping;
+import org.mongolink.test.inheritanceMapping.FakeAggregateWithSubclassMapping;
 import org.mongolink.test.simpleMapping.*;
 
 import java.net.UnknownHostException;
@@ -36,12 +36,12 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
 
-public class TestsEntityMapper {
+public class TestsAggregateMapper {
 
 
     @Before
     public void before() throws UnknownHostException {
-        FakeEntityMapping fakeEntityMapping = new FakeEntityMapping();
+        FakeAggregateMapping fakeEntityMapping = new FakeAggregateMapping();
         CommentMapping commentMapping = new CommentMapping();
         context = new MapperContext();
         fakeEntityMapping.buildMapper(context);
@@ -80,7 +80,7 @@ public class TestsEntityMapper {
     }
 
     private MapperContext contextWithNaturalId() {
-        FakeEntityWithNaturalIdMapping mapping = new FakeEntityWithNaturalIdMapping();
+        FakeAggregateWithNaturalIdMapping mapping = new FakeAggregateWithNaturalIdMapping();
         MapperContext mapperContext = new MapperContext();
         mapping.buildMapper(mapperContext);
         return mapperContext;
@@ -148,7 +148,7 @@ public class TestsEntityMapper {
     @Test
     public void canCreateInstanceGivenDiscriminatorValue() {
         MapperContext context = new MapperContext();
-        new FakeEntityWithSubclassMapping().buildMapper(context);
+        new FakeAggregateWithSubclassMapping().buildMapper(context);
         ClassMapper<FakeEntity> entityMapper = context.mapperFor(FakeEntity.class);
         BasicDBObject dbo = new BasicDBObject();
         dbo.put("_id", "1");
@@ -164,7 +164,7 @@ public class TestsEntityMapper {
     @Test
     public void createParentEntityWhenNoDiscriminatorGiven() {
         MapperContext context = new MapperContext();
-        new FakeEntityWithSubclassMapping().buildMapper(context);
+        new FakeAggregateWithSubclassMapping().buildMapper(context);
         ClassMapper<FakeEntity> entityMapper = context.mapperFor(FakeEntity.class);
         BasicDBObject dbo = new BasicDBObject();
         dbo.put("_id", "1");
@@ -176,8 +176,8 @@ public class TestsEntityMapper {
 
     }
 
-    private EntityMapper<FakeEntity> entityMapper() {
-        return (EntityMapper<FakeEntity>) context.mapperFor(FakeEntity.class);
+    private AggregateMapper<FakeEntity> entityMapper() {
+        return (AggregateMapper<FakeEntity>) context.mapperFor(FakeEntity.class);
     }
 
     private MapperContext context;

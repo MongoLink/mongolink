@@ -25,9 +25,9 @@ package org.mongolink.domain.mapper;
 import com.mongodb.DBObject;
 
 @SuppressWarnings("unchecked")
-public class EntityMapper<T> extends ClassMapper<T> {
+public class AggregateMapper<T> extends ClassMapper<T> {
 
-    public EntityMapper(Class<T> persistentType) {
+    public AggregateMapper(Class<T> persistentType) {
         super(persistentType);
     }
 

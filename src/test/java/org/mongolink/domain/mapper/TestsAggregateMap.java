@@ -29,11 +29,11 @@ import org.mongolink.test.simpleMapping.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
-public class TestsEntityMap {
+public class TestsAggregateMap {
 
     @Test
     public void canBuildMapper() {
-        FakeEntityMapping mapping = new FakeEntityMapping();
+        FakeAggregateMapping mapping = new FakeAggregateMapping();
         MapperContext context = new MapperContext();
 
         mapping.buildMapper(context);
@@ -45,14 +45,14 @@ public class TestsEntityMap {
 
     @Test
     public void providesInterceptor() {
-        FakeEntityMapping mapping = new FakeEntityMapping();
+        FakeAggregateMapping mapping = new FakeAggregateMapping();
 
         assertThat(mapping.element(), notNullValue());
     }
 
     @Test
     public void subclassIsAddedToTheContext() {
-        FakeEntityWithSubclassMapping mapping = new FakeEntityWithSubclassMapping();
+        FakeAggregateWithSubclassMapping mapping = new FakeAggregateWithSubclassMapping();
         MapperContext context = new MapperContext();
 
         mapping.buildMapper(context);
@@ -62,7 +62,7 @@ public class TestsEntityMap {
 
     @Test
     public void canHaveSeveralSubclasses() {
-        FakeEntityWithTwoSubclassMapping mapping = new FakeEntityWithTwoSubclassMapping();
+        FakeAggregateWithTwoSubclassMapping mapping = new FakeAggregateWithTwoSubclassMapping();
         MapperContext context = new MapperContext();
 
         mapping.buildMapper(context);
@@ -73,7 +73,7 @@ public class TestsEntityMap {
 
     @Test
     public void canSetCap() {
-        FakeEntityMappingWithCap mapping = new FakeEntityMappingWithCap();
+        FakeAggregateMappingWithCap mapping = new FakeAggregateMappingWithCap();
         MapperContext context = new MapperContext();
 
         mapping.buildMapper(context);
@@ -83,24 +83,24 @@ public class TestsEntityMap {
 
     @Test
     public void canSetCapSize() {
-        FakeEntityMappingWithCap mapping = new FakeEntityMappingWithCap();
+        FakeAggregateMappingWithCap mapping = new FakeAggregateMappingWithCap();
         MapperContext context = new MapperContext();
 
         mapping.buildMapper(context);
 
-        EntityMapper<?> entityMapper = (EntityMapper<?>) context.mapperFor(FakeEntityWithCap.class);
-        assertThat(entityMapper.getCapped().getSize(), is(1048076));
+        AggregateMapper<?> aggregateMapper = (AggregateMapper<?>) context.mapperFor(FakeEntityWithCap.class);
+        assertThat(aggregateMapper.getCapped().getSize(), is(1048076));
     }
 
     @Test
     public void canSetCapMax() {
-        FakeEntityMappingWithCap mapping = new FakeEntityMappingWithCap();
+        FakeAggregateMappingWithCap mapping = new FakeAggregateMappingWithCap();
         MapperContext context = new MapperContext();
 
         mapping.buildMapper(context);
 
-        EntityMapper<?> entityMapper = (EntityMapper<?>) context.mapperFor(FakeEntityWithCap.class);
-        assertThat(entityMapper.getCapped().getMax(), is(50));
+        AggregateMapper<?> aggregateMapper = (AggregateMapper<?>) context.mapperFor(FakeEntityWithCap.class);
+        assertThat(aggregateMapper.getCapped().getMax(), is(50));
     }
 
 

@@ -28,7 +28,7 @@ import org.mockito.Mockito;
 import org.mongolink.domain.criteria.CriteriaFactory;
 import org.mongolink.domain.mapper.MapperContext;
 import org.mongolink.test.entity.*;
-import org.mongolink.test.inheritanceMapping.FakeEntityWithSubclassMapping;
+import org.mongolink.test.inheritanceMapping.FakeAggregateWithSubclassMapping;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
@@ -40,7 +40,7 @@ public class TestsMongoSessionWithInheritance {
         FakeDB db = Mockito.spy(new FakeDB());
         entities = new FakeDBCollection(db, "fakeentity");
         db.collections.put("fakeentity", entities);
-        FakeEntityWithSubclassMapping mapping = new FakeEntityWithSubclassMapping();
+        FakeAggregateWithSubclassMapping mapping = new FakeAggregateWithSubclassMapping();
         session = new MongoSession(db, new CriteriaFactory());
         MapperContext context = new MapperContext();
         mapping.buildMapper(context);

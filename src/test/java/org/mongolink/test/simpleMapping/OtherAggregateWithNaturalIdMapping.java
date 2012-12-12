@@ -19,34 +19,20 @@
  *
  */
 
-package org.mongolink.domain.mapper;
+package org.mongolink.test.simpleMapping;
 
-import org.apache.log4j.Logger;
+import org.mongolink.domain.mapper.AggregateMap;
+import org.mongolink.test.entity.OtherEntityWithNaturalId;
 
-public abstract class EntityMap<T> extends ClassMap<T> {
 
-    @SuppressWarnings("unchecked")
-    protected EntityMap(Class<T> type) {
-        super(type);
-        mapper = new EntityMapper(type);
+public class OtherAggregateWithNaturalIdMapping extends AggregateMap<OtherEntityWithNaturalId> {
+
+    public OtherAggregateWithNaturalIdMapping() {
+        super(OtherEntityWithNaturalId.class);
     }
 
     @Override
-    protected EntityMapper<T> getMapper() {
-        return mapper;
+    protected void map() {
+        id(element().getNaturalKey()).natural();
     }
-
-    protected IdMapper id(Object value) {
-        LOGGER.debug("Mapping id " + getLastMethod().shortName());
-        IdMapper id = new IdMapper(getLastMethod(), IdGeneration.Auto);
-        getMapper().setIdMapper(id);
-        return id;
-    }
-
-    protected void setCapped(int cappedSize, int cappedMax) {
-        getMapper().setCapped(cappedSize, cappedMax);
-    }
-
-    private final EntityMapper<T> mapper;
-    private static final Logger LOGGER = Logger.getLogger(EntityMap.class);
 }

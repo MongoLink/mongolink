@@ -99,7 +99,7 @@ public class TestsMongoSessionManager {
     @Ignore("make it pass quickly")
     public void canSetCappedCollections() {
         final MapperContext mapperContext = manager.getMapperContext();
-        final EntityMapper<FakeEntityWithCap> fakeEntityWithCapMapper = (EntityMapper<FakeEntityWithCap>) mapperContext.mapperFor(FakeEntityWithCap.class);
+        final AggregateMapper<FakeEntityWithCap> fakeEntityWithCapMapper = (AggregateMapper<FakeEntityWithCap>) mapperContext.mapperFor(FakeEntityWithCap.class);
         final MongoSession session = manager.createSession();
 
         assertThat(session.getDb().getCollection(fakeEntityWithCapMapper.collectionName()).isCapped(), is(true));

@@ -19,20 +19,34 @@
  *
  */
 
-package org.mongolink.test.simpleMapping;
+package org.mongolink.domain.mapper;
 
-import org.mongolink.domain.mapper.EntityMap;
-import org.mongolink.test.entity.FakeEntityWithCap;
+import org.apache.log4j.Logger;
 
+public abstract class AggregateMap<T> extends ClassMap<T> {
 
-public class FakeEntityMappingWithCap extends EntityMap<FakeEntityWithCap> {
-
-    public FakeEntityMappingWithCap() {
-        super(FakeEntityWithCap.class);
+    @SuppressWarnings("unchecked")
+    protected AggregateMap(Class<T> type) {
+        super(type);
+        mapper = new AggregateMapper(type);
     }
 
     @Override
-    public void map() {
-        setCapped(1048076, 50);
+    protected AggregateMapper<T> getMapper() {
+        return mapper;
     }
+
+    protected IdMapper id(Object value) {
+        LOGGER.debug("Mapping id " + getLastMethod().shortName());
+        IdMapper id = new IdMapper(getLastMethod(), IdGeneration.Auto);
+        getMapper().setIdMapper(id);
+        return id;
+    }
+
+    protected void setCapped(int cappedSize, int cappedMax) {
+        getMapper().setCapped(cappedSize, cappedMax);
+    }
+
+    private final AggregateMapper<T> mapper;
+    private static final Logger LOGGER = Logger.getLogger(AggregateMap.class);
 }
