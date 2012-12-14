@@ -68,6 +68,15 @@ public class TestsMongoSession {
     }
 
     @Test
+    public void ensureConnection() {
+        MongoSession session = new MongoSession(db, new CriteriaFactory());
+
+        session.start();
+
+        verify(db).requestEnsureConnection();
+    }
+
+    @Test
     public void canGetByAutoId() {
         createEntity("4d53b7118653a70549fe1b78", "plop");
         createEntity("4d53b7118653a70549fe1b78", "plap");

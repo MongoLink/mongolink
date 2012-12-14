@@ -23,9 +23,7 @@ package org.mongolink.domain.updateStrategy;
 
 import com.mongodb.BasicDBList;
 
-/**
- * @author jb
- */
+
 public class ListVisitor extends Visitor {
 
 	public ListVisitor(final DbObjectDiff dbObjectDiff, final BasicDBList origin) {

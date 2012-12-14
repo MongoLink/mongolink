@@ -38,6 +38,7 @@ public class MongoSession {
 
     public void start() {
         db.requestStart();
+        db.requestEnsureConnection();
     }
 
     public void stop() {
