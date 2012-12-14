@@ -68,6 +68,12 @@ public class TestsClassMapper {
         assertThat(((FakeAggregate) instance).getValue(), is("test"));
     }
 
+    @Test
+    public void isNotCappedByDefault() {
+        assertThat(entityMapper().isCapped(), is(false));
+
+    }
+
     private AggregateMapper<FakeAggregate> entityMapper() {
         return (AggregateMapper<FakeAggregate>) context.mapperFor(FakeAggregate.class);
     }

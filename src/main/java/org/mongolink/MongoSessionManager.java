@@ -21,11 +21,19 @@
 
 package org.mongolink;
 
-import com.mongodb.*;
+import com.mongodb.DB;
+import com.mongodb.DBObject;
 import org.mongolink.domain.criteria.CriteriaFactory;
-import org.mongolink.domain.mapper.*;
+import org.mongolink.domain.mapper.AggregateMapper;
+import org.mongolink.domain.mapper.ClassMapper;
+import org.mongolink.domain.mapper.ContextBuilder;
+import org.mongolink.domain.mapper.MapperContext;
 
 public class MongoSessionManager {
+
+    private MongoSessionManager(MapperContext mapperContext) {
+        this.mapperContext = mapperContext;
+    }
 
     public static MongoSessionManager create(ContextBuilder contextBuilder, Settings settings) {
         MongoSessionManager manager = new MongoSessionManager(contextBuilder.createContext());
@@ -33,10 +41,6 @@ public class MongoSessionManager {
         manager.dbFactory = settings.createDbFactory();
         manager.createCappedCollections();
         return manager;
-    }
-
-    private MongoSessionManager(MapperContext mapperContext) {
-        this.mapperContext = mapperContext;
     }
 
     private void createCappedCollections() {
@@ -62,18 +66,18 @@ public class MongoSessionManager {
         return mongoSession;
     }
 
-    private void authenticateIfNeeded() {
-        if (settings.withAuthentication() && !getDb().isAuthenticated()) {
-            getDb().authenticate(settings.getUser(), settings.getPassword().toCharArray());
-        }
+    private DB getDb() {
+        return dbFactory.get(settings.getDbName());
     }
 
     private CriteriaFactory getCriteriaFactory() {
         return settings.getCriteriaFactory();
     }
 
-    private DB getDb() {
-        return dbFactory.get(settings.getDbName());
+    private void authenticateIfNeeded() {
+        if (settings.withAuthentication() && !getDb().isAuthenticated()) {
+            getDb().authenticate(settings.getUser(), settings.getPassword().toCharArray());
+        }
     }
 
     public MapperContext getMapperContext() {
