@@ -1,6 +1,7 @@
 package org.mongolink;
 
 import com.mongodb.DB;
+import org.apache.log4j.Logger;
 import org.mongolink.domain.UnitOfWork;
 
 enum SessionState {
@@ -12,6 +13,7 @@ enum SessionState {
 
         @Override
         public SessionState start(final DB db) {
+            LOGGER.debug("Start a new consistent request");
             db.requestStart();
             db.requestEnsureConnection();
             return STARTED;
@@ -21,6 +23,7 @@ enum SessionState {
         public SessionState stop(final DB db, final UnitOfWork unitOfWork) {
             unitOfWork.flush();
             db.requestDone();
+            LOGGER.debug("End the current consistent request");
             return STOPPED;
         }
 
@@ -51,4 +54,5 @@ enum SessionState {
 
     public abstract SessionState start(final DB db) ;
 
+    private static final Logger LOGGER = Logger.getLogger(SessionState.class);
 }

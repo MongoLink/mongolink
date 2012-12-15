@@ -22,6 +22,7 @@
 package org.mongolink;
 
 import com.mongodb.*;
+import org.apache.log4j.Logger;
 import org.mongolink.domain.*;
 import org.mongolink.domain.criteria.*;
 import org.mongolink.domain.mapper.*;
@@ -73,6 +74,7 @@ public class MongoSession {
         getDbCollection(mapper).insert(dbObject);
         mapper.populateId(element, dbObject);
         unitOfWork.add(mapper.getId(element), element, dbObject);
+        LOGGER.debug("New entity created : " + dbObject);
     }
 
     public void update(Object element) {
@@ -146,4 +148,5 @@ public class MongoSession {
     private final CriteriaFactory criteriaFactory;
     private UpdateStrategy updateStrategy = new OverwriteStrategy();
     public SessionState state = SessionState.NOTSTARTED;
+    private static final Logger LOGGER = Logger.getLogger(MongoSession.class);
 }
