@@ -89,6 +89,6 @@ public class MongoSessionManager {
     }
 
     private final MapperContext mapperContext;
-    private DbFactory dbFactory;
-    private Settings settings;
+    private volatile DbFactory dbFactory;
+    private volatile Settings settings;
 }

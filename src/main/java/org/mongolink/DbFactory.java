@@ -70,8 +70,8 @@ public class DbFactory {
         return host;
     }
 
-    private MongoClient mongoClient;
-    private int port;
-    private String host;
+    private volatile MongoClient mongoClient;
+    private volatile int port;
+    private volatile String host;
 
 }
