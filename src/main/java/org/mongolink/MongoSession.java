@@ -93,6 +93,7 @@ public class MongoSession {
         DBObject value = unitOfWork.getDBOBject(element.getClass(), mapper.getId(element));
         getDbCollection(mapper).remove(value);
         unitOfWork.delete(mapper.getId(element), element);
+        LOGGER.debug("Entity deleted : " + value);
     }
 
     private void checkEntityIsInCache(Object element, AggregateMapper<?> mapper) {
