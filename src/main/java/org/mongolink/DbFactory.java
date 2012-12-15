@@ -29,19 +29,19 @@ public class DbFactory {
 
     public DB get(String dbName) {
         initializeMongo();
-        return mongo.getDB(dbName);
+        return mongoClient.getDB(dbName);
     }
 
     private void initializeMongo() {
-        if (mongo == null) {
+        if (mongoClient == null) {
             doInitializeMongo();
         }
     }
 
     private synchronized void doInitializeMongo() {
-        if (mongo == null) {
+        if (mongoClient == null) {
             try {
-                mongo = new Mongo(host, port);
+                mongoClient = new MongoClient(host, port);
             } catch (UnknownHostException e) {
                 throw new MongoLinkError("Can't instanciate mongo", e);
             }
@@ -49,8 +49,8 @@ public class DbFactory {
     }
 
     public void close() {
-        if (mongo != null) {
-            mongo.close();
+        if (mongoClient != null) {
+            mongoClient.close();
         }
     }
 
@@ -70,7 +70,7 @@ public class DbFactory {
         return host;
     }
 
-    private Mongo mongo;
+    private MongoClient mongoClient;
     private int port;
     private String host;
 

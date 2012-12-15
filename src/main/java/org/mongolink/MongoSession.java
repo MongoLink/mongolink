@@ -37,13 +37,11 @@ public class MongoSession {
     }
 
     public void start() {
-        db.requestStart();
-        db.requestEnsureConnection();
+        state = state.start(db);
     }
 
     public void stop() {
-        unitOfWork.flush();
-        db.requestDone();
+        state = state.stop(db, unitOfWork);
     }
 
     protected void setMappingContext(MapperContext context) {
@@ -52,6 +50,7 @@ public class MongoSession {
 
     @SuppressWarnings("unchecked")
     public <T> T get(Object id, Class<T> entityType) {
+        state.ensureStarted();
         if (unitOfWork.contains(entityType, id)) {
             return unitOfWork.getEntity(entityType, id);
         }
@@ -63,10 +62,12 @@ public class MongoSession {
 
     @SuppressWarnings("unchecked")
     public <T> List<T> getAll(Class<T> entityType) {
+        state.ensureStarted();
         return createExecutor(entityMapper(entityType)).execute(new BasicDBObject());
     }
 
     public void save(Object element) {
+        state.ensureStarted();
         AggregateMapper<?> mapper = entityMapper(element.getClass());
         DBObject dbObject = mapper.toDBObject(element);
         getDbCollection(mapper).insert(dbObject);
@@ -75,6 +76,7 @@ public class MongoSession {
     }
 
     public void update(Object element) {
+        state.ensureStarted();
         AggregateMapper<?> mapper = entityMapper(element.getClass());
         DBObject initialValue = unitOfWork.getDBOBject(element.getClass(), mapper.getId(element));
         DBObject updatedValue = mapper.toDBObject(element);
@@ -83,6 +85,7 @@ public class MongoSession {
     }
 
     public void delete(Object element) {
+        state.ensureStarted();
         AggregateMapper<?> mapper = entityMapper(element.getClass());
         checkEntityIsInCache(element, mapper);
         DBObject value = unitOfWork.getDBOBject(element.getClass(), mapper.getId(element));
@@ -142,4 +145,5 @@ public class MongoSession {
     private final UnitOfWork unitOfWork = new UnitOfWork(this);
     private final CriteriaFactory criteriaFactory;
     private UpdateStrategy updateStrategy = new OverwriteStrategy();
+    public SessionState state = SessionState.NOTSTARTED;
 }

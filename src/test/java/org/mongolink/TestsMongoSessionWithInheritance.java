@@ -45,6 +45,7 @@ public class TestsMongoSessionWithInheritance {
         MapperContext context = new MapperContext();
         mapping.buildMapper(context);
         session.setMappingContext(context);
+        session.start();
     }
 
     @Test

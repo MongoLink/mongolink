@@ -53,6 +53,7 @@ public class TestsMongoSession {
         ContextBuilder cb = new ContextBuilder("org.mongolink.test.simpleMapping");
         session = new MongoSession(db, new CriteriaFactory());
         session.setMappingContext(cb.createContext());
+        session.start();
     }
 
     @Test
@@ -69,11 +70,12 @@ public class TestsMongoSession {
 
     @Test
     public void ensureConnection() {
-        MongoSession session = new MongoSession(db, new CriteriaFactory());
+        final FakeDB fakeDb = spy(new FakeDB());
+        MongoSession session = new MongoSession(fakeDb, new CriteriaFactory());
 
         session.start();
 
-        verify(db).requestEnsureConnection();
+        verify(fakeDb).requestEnsureConnection();
     }
 
     @Test
@@ -160,7 +162,6 @@ public class TestsMongoSession {
     @Test
     public void canAutomaticalyUpdate() {
         createEntity("4d53b7118653a70549fe1b78", "url de test");
-        session.start();
         FakeAggregate fakeAggregate = session.get("4d53b7118653a70549fe1b78", FakeAggregate.class);
         fakeAggregate.setValue("some new and strange value");
 

@@ -82,6 +82,7 @@ public class TestsMongoSessionManager {
     @Test
     public void canSave() {
         MongoSession session = manager.createSession();
+        session.start();
 
         session.save(new FakeAggregate("id"));
 
