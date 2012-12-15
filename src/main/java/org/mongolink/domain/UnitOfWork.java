@@ -43,6 +43,7 @@ public class UnitOfWork {
         for (Value value : values.values()) {
             session.update(value.entity);
         }
+        clear();
     }
 
     @SuppressWarnings("unchecked")
