@@ -120,7 +120,7 @@ public class TestsCriteria {
     public void canSort() {
         final QueryExecutor executor = mock(QueryExecutor.class);
         final Criteria criteria = new Criteria(executor);
-        criteria.sort("field", 1);
+        criteria.sort("field", Order.ASCENDING);
 
         criteria.list();
 
