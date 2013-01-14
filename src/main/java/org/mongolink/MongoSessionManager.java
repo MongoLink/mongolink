@@ -59,7 +59,6 @@ public class MongoSessionManager {
     }
 
     public MongoSession createSession() {
-        authenticateIfNeeded();
         MongoSession mongoSession = new MongoSession(getDb(), getCriteriaFactory());
         mongoSession.setMappingContext(mapperContext);
         mongoSession.setUpdateStrategy(settings.getUpdateStrategy());
@@ -74,11 +73,6 @@ public class MongoSessionManager {
         return settings.getCriteriaFactory();
     }
 
-    private void authenticateIfNeeded() {
-        if (settings.withAuthentication() && !getDb().isAuthenticated()) {
-            getDb().authenticate(settings.getUser(), settings.getPassword().toCharArray());
-        }
-    }
 
     public MapperContext getMapperContext() {
         return mapperContext;

@@ -21,6 +21,7 @@
 
 package org.mongolink;
 
+import com.google.common.base.Strings;
 import com.mongodb.*;
 
 import java.net.UnknownHostException;
@@ -29,7 +30,15 @@ public class DbFactory {
 
     public DB get(String dbName) {
         initializeMongo();
-        return mongoClient.getDB(dbName);
+        DB db = mongoClient.getDB(dbName);
+        if(withAuthentication()) {
+            db.authenticate(user, password.toCharArray());
+        }
+        return db;
+    }
+
+    private boolean withAuthentication() {
+        return !Strings.isNullOrEmpty(user);
     }
 
     private void initializeMongo() {
@@ -70,8 +79,15 @@ public class DbFactory {
         return host;
     }
 
+    public void setAuthInfos(String user, String password) {
+
+        this.user = user;
+        this.password = password;
+    }
+
     private volatile MongoClient mongoClient;
     private volatile int port;
     private volatile String host;
-
+    private volatile String user;
+    private volatile String password;
 }
