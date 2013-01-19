@@ -64,15 +64,6 @@ public class TestsMongoSessionManager {
     }
 
     @Test
-    public void canCreateSessionWithAuthentication() {
-        settings.withAuthentication("user", "password");
-
-        MongoSession session = manager.createSession();
-
-        assertThat(session.getDb().isAuthenticated(), is(true));
-    }
-
-    @Test
     public void canGetCriteria() {
         MongoSession session = manager.createSession();
 

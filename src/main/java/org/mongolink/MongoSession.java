@@ -21,12 +21,21 @@
 
 package org.mongolink;
 
-import com.mongodb.*;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBObject;
 import org.apache.log4j.Logger;
-import org.mongolink.domain.*;
-import org.mongolink.domain.criteria.*;
-import org.mongolink.domain.mapper.*;
-import org.mongolink.domain.updateStrategy.*;
+import org.mongolink.domain.QueryExecutor;
+import org.mongolink.domain.UnitOfWork;
+import org.mongolink.domain.UpdateStrategies;
+import org.mongolink.domain.criteria.Criteria;
+import org.mongolink.domain.criteria.CriteriaFactory;
+import org.mongolink.domain.mapper.AggregateMapper;
+import org.mongolink.domain.mapper.ClassMapper;
+import org.mongolink.domain.mapper.MapperContext;
+import org.mongolink.domain.updateStrategy.OverwriteStrategy;
+import org.mongolink.domain.updateStrategy.UpdateStrategy;
 
 import java.util.List;
 
@@ -61,6 +70,18 @@ public class MongoSession {
         return (T) createExecutor(mapper).executeUnique(query);
     }
 
+    private AggregateMapper<?> entityMapper(Class<?> type) {
+        checkIsAnEntity(type);
+        return (AggregateMapper<?>) context.mapperFor(type);
+    }
+
+    private void checkIsAnEntity(Class<?> entityType) {
+        ClassMapper<?> mapper = context.mapperFor(entityType);
+        if (mapper == null || !(mapper instanceof AggregateMapper)) {
+            throw new MongoLinkError(entityType.getName() + " is not an entity");
+        }
+    }
+
     @SuppressWarnings("unchecked")
     public <T> List<T> getAll(Class<T> entityType) {
         state.ensureStarted();
@@ -86,6 +107,10 @@ public class MongoSession {
         unitOfWork.update(mapper.getId(element), element, updatedValue);
     }
 
+    private DBCollection getDbCollection(AggregateMapper<?> mapper) {
+        return db.getCollection(mapper.collectionName());
+    }
+
     public void delete(Object element) {
         state.ensureStarted();
         AggregateMapper<?> mapper = entityMapper(element.getClass());
@@ -102,16 +127,17 @@ public class MongoSession {
         }
     }
 
-    private DBCollection getDbCollection(AggregateMapper<?> mapper) {
-        return db.getCollection(mapper.collectionName());
-    }
-
     public DB getDb() {
         return db;
     }
 
     public <U> Criteria createCriteria(Class<U> type) {
         return criteriaFactory.create(createExecutor(entityMapper(type)));
+    }
+
+    @SuppressWarnings("unchecked")
+    private QueryExecutor createExecutor(AggregateMapper<?> mapper) {
+        return new QueryExecutor(db, mapper, unitOfWork);
     }
 
     public UpdateStrategy getUpdateStrategy() {
@@ -126,28 +152,15 @@ public class MongoSession {
         unitOfWork.clear();
     }
 
-    @SuppressWarnings("unchecked")
-    private QueryExecutor createExecutor(AggregateMapper<?> mapper) {
-        return new QueryExecutor(db, mapper, unitOfWork);
+    public void flush() {
+        unitOfWork.flush();
     }
 
-    private AggregateMapper<?> entityMapper(Class<?> type) {
-        checkIsAnEntity(type);
-        return (AggregateMapper<?>) context.mapperFor(type);
-    }
-
-    private void checkIsAnEntity(Class<?> entityType) {
-        ClassMapper<?> mapper = context.mapperFor(entityType);
-        if (mapper == null || !(mapper instanceof AggregateMapper)) {
-            throw new MongoLinkError(entityType.getName() + " is not an entity");
-        }
-    }
-
+    private static final Logger LOGGER = Logger.getLogger(MongoSession.class);
     private final DB db;
-    private MapperContext context;
     private final UnitOfWork unitOfWork = new UnitOfWork(this);
     private final CriteriaFactory criteriaFactory;
-    private UpdateStrategy updateStrategy = new OverwriteStrategy();
     public SessionState state = SessionState.NOTSTARTED;
-    private static final Logger LOGGER = Logger.getLogger(MongoSession.class);
+    private MapperContext context;
+    private UpdateStrategy updateStrategy = new OverwriteStrategy();
 }

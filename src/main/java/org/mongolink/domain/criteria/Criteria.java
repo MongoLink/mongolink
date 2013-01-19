@@ -66,8 +66,8 @@ public class Criteria<T> {
         parameter = parameter.skip(skip);
     }
 
-    public void sort(final String sortField, final int sortOrder) {
-        parameter = parameter.sort(sortField, sortOrder);
+    public void sort(final String sortField, final Order sortOrder) {
+        parameter = parameter.sort(sortField, sortOrder.mongoValue());
     }
 
     protected CursorParameter getCursorParameter() {

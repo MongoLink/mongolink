@@ -83,6 +83,9 @@ public class Settings {
             DbFactory dbFactory = factoryClass.newInstance();
             dbFactory.setHost(host);
             dbFactory.setPort(port);
+            if(withAuthentication()) {
+                dbFactory.setAuthInfos(user, password);
+            }
             return dbFactory;
         } catch (Exception e) {
             throw new MongoLinkError("Can't create DbFactory", e);
