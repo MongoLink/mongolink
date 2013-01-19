@@ -50,9 +50,11 @@ public class MapMapper implements Mapper {
         try {
             Field field = ReflectionUtils.findPrivateField(instance.getClass(), name);
             field.setAccessible(true);
-            Map map = (Map) field.get(instance);
-            //noinspection unchecked
-            map.putAll((Map) from.get(name));
+            Map dbMap = (Map) from.get(name);
+            if (dbMap != null) {
+                Map map = (Map) field.get(instance);
+                map.putAll(dbMap);
+            }
             field.setAccessible(false);
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
