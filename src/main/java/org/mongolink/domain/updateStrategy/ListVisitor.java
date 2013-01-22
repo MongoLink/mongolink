@@ -34,15 +34,31 @@ public class ListVisitor extends Visitor {
 	public void visit(final Object target) {
 		final BasicDBList targetList = (BasicDBList) target;
 		if (getOrigin().size() != targetList.size()) {
-			if (getOrigin().size() > targetList.size()) {
-				compareDeletedElementsInList(targetList);
-			} else {
-				getDbObjectDiff().addPush(targetList.get(targetList.size() - 1));
-			}
-		}
+            dealWithDeletionOrAddition(targetList);
+        } else {
+            dealWithDifferences(targetList);
+        }
 	}
 
-	private void compareDeletedElementsInList(final BasicDBList target) {
+    private void dealWithDifferences(BasicDBList targetList) {
+        for (int i = 0; i < getOrigin().size(); i++) {
+            Object origin = getOrigin().get(i);
+            if(!origin.equals(targetList.get(i))) {
+                getDbObjectDiff().pushKey(String.valueOf(i));
+                visitProperty(origin, targetList.get(i));
+            }
+        }
+    }
+
+    private void dealWithDeletionOrAddition(BasicDBList targetList) {
+        if (getOrigin().size() > targetList.size()) {
+            compareDeletedElementsInList(targetList);
+        } else {
+            getDbObjectDiff().addPush(targetList.get(targetList.size() - 1));
+        }
+    }
+
+    private void compareDeletedElementsInList(final BasicDBList target) {
 		int targetIndex = 0;
 		int originIndex = 0;
 		while (originIndex < getOrigin().size()) {

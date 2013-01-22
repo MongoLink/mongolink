@@ -1,7 +1,9 @@
 package org.mongolink.domain.updateStrategy;
 
 import com.mongodb.BasicDBList;
-import org.junit.*;
+import com.mongodb.BasicDBObject;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.Collections;
 
@@ -51,16 +53,35 @@ public class TestsListVisitor {
         reset(dbObjectDiff);
     }
 
+    @Test
+    public void canGenerateUpdateOnComponent() {
+        diff(listWith("prems"), listWith("deuz"));
+        verify(dbObjectDiff).pushKey("0");
+        verify(dbObjectDiff).addSet("deuz");
+    }
+
+    @Test
+    public void canGenerateUpdateOnSupDocument() {
+        BasicDBObject value1 = new BasicDBObject("test", "un");
+        BasicDBObject value2 = new BasicDBObject("test", "deux");
+
+        diff(listWith(value1), listWith(value2));
+
+        verify(dbObjectDiff).pushKey("0");
+        verify(dbObjectDiff).pushKey("test");
+        verify(dbObjectDiff).addSet("deux");
+    }
+
+    private BasicDBList listWith(final Object... values) {
+        final BasicDBList result = new BasicDBList();
+        Collections.addAll(result, values);
+        return result;
+    }
+
     private void diff(final BasicDBList origin, final BasicDBList target) {
         final ListVisitor visitor = new ListVisitor(dbObjectDiff, origin);
 
         visitor.visit(target);
-    }
-
-    private BasicDBList listWith(final String... values) {
-        final BasicDBList result = new BasicDBList();
-        Collections.addAll(result, values);
-        return result;
     }
 
     private DbObjectDiff dbObjectDiff;
