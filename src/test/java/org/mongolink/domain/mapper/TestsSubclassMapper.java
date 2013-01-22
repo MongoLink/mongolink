@@ -45,7 +45,7 @@ public class TestsSubclassMapper {
         entity.setId("5d9d9b5e36a9a4265ea9ecbe");
         entity.setChildName("this is a name");
 
-        DBObject dbObject = mapper.toDBObject(entity);
+        DBObject dbObject = parrentMapper.toDBObject(entity);
 
         assertThat(dbObject, notNullValue());
         assertThat((String) dbObject.get("value"), is("this is a value"));
@@ -60,8 +60,9 @@ public class TestsSubclassMapper {
         dbo.put("_id", "good id");
         dbo.put("value", "this is a value");
         dbo.put("childName", "this is a name");
+        dbo.put("__discriminator", "FakeChildAggregate");
 
-        FakeChildAggregate entity = mapper.toInstance(dbo);
+        FakeChildAggregate entity = (FakeChildAggregate) parrentMapper.toInstance(dbo);
 
         assertThat(entity, notNullValue());
         assertThat(entity.getId(), is("good id"));
@@ -105,10 +106,9 @@ public class TestsSubclassMapper {
         fakeEntityMapping.subclass(subclassMap);
         context = new MapperContext();
         fakeEntityMapping.buildMapper(context);
-        mapper = subclassMap.getMapper();
+        parrentMapper = fakeEntityMapping.getMapper();
     }
 
-    private SubclassMapper<FakeChildAggregate> mapper;
-
     private MapperContext context;
+    private AggregateMapper<FakeAggregate> parrentMapper;
 }

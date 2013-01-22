@@ -33,17 +33,12 @@ public abstract class SubclassMap<T> extends ClassMap<T> {
         return mapper;
     }
 
-    public <U> void setParent(ClassMap<U> parentMap) {
-        this.parentMap = parentMap;
-    }
 
     @Override
     public void buildMapper(MapperContext context) {
         map();
-        parentMap.getMapper().addSubclass(getMapper());
         getMapper().setContext(context);
     }
 
-    private ClassMap<?> parentMap;
     private final SubclassMapper<T> mapper;
 }

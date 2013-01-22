@@ -58,17 +58,20 @@ public abstract class ClassMap<T> {
         return type;
     }
 
+    @SuppressWarnings("UnusedParameters")
     protected void property(Object value) {
         String name = lastMethod.shortName();
         LOGGER.debug("Mapping property " + name);
         getMapper().addProperty(new PropertyMapper(lastMethod));
     }
 
+    @SuppressWarnings("UnusedParameters")
     protected void collection(Object value) {
         LOGGER.debug("Mapping collection:" + lastMethod.shortName());
         getMapper().addCollection(new CollectionMapper(lastMethod));
     }
 
+    @SuppressWarnings("UnusedParameters")
     protected void map(Object value) {
         LOGGER.debug("Mapping map:" + lastMethod.shortName());
         getMapper().addMap(new MapMapper(lastMethod));
@@ -76,7 +79,6 @@ public abstract class ClassMap<T> {
 
     protected <U extends T> void subclass(SubclassMap<U> subclassMap) {
         LOGGER.debug("Mapping subclass:" + subclassMap.getType().getSimpleName());
-        subclassMap.setParent(this);
         subclasses.add(subclassMap);
     }
 
@@ -84,6 +86,7 @@ public abstract class ClassMap<T> {
         map();
         for (SubclassMap<?> subclass : subclasses) {
             subclass.buildMapper(context);
+            getMapper().addSubclass(subclass.getMapper());
         }
         context.addMapper(getMapper());
     }

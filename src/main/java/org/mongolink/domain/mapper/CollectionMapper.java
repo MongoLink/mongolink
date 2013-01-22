@@ -62,8 +62,8 @@ class CollectionMapper implements Mapper {
             BasicDBList list = (BasicDBList) from.get(name);
             if (list != null) {
                 Collection collection = (Collection) field.get(instance);
-                collection.clear();
                 for (Object o : list) {
+                    //noinspection unchecked
                     collection.add(childMapper.fromDbValue(o));
                 }
             }

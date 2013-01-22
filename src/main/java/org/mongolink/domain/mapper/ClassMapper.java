@@ -47,10 +47,6 @@ public abstract class ClassMapper<T> extends Converter implements Mapper {
         addMapper(collection);
     }
 
-    protected void addMapper(Mapper property) {
-        mappers.add(property);
-    }
-
     public void addProperty(PropertyMapper property) {
         property.setMapper(this);
         addMapper(property);
@@ -58,6 +54,14 @@ public abstract class ClassMapper<T> extends Converter implements Mapper {
 
     void addMap(MapMapper mapMapper) {
         addMapper(mapMapper);
+    }
+
+    <U> void addSubclass(SubclassMapper<U> mapper) {
+        subclasses.put(mapper.discriminator(), mapper);
+    }
+
+    protected void addMapper(Mapper property) {
+        mappers.add(property);
     }
 
     @Override
@@ -71,13 +75,6 @@ public abstract class ClassMapper<T> extends Converter implements Mapper {
         return instance;
     }
 
-    @Override
-    public void populate(Object instance, DBObject from) {
-        for (Mapper mapper : mappers) {
-            mapper.populate(instance, from);
-        }
-    }
-
     protected T makeInstance(final DBObject from) {
         String discriminator = SubclassMapper.discriminatorValue(from);
         if (subclasses.get(discriminator) != null) {
@@ -87,17 +84,28 @@ public abstract class ClassMapper<T> extends Converter implements Mapper {
     }
 
     @Override
+    public void populate(Object instance, DBObject from) {
+        for (Mapper mapper : mappers) {
+            mapper.populate(instance, from);
+        }
+    }
+
+    @Override
     public Object toDbValue(Object value) {
         return toDBObject(value);
     }
 
     public DBObject toDBObject(Object element) {
+        DBObject object = createDbObject(element);
+        save(element, object);
+        return object;
+    }
+
+    private DBObject createDbObject(Object element) {
         if (isSubclass(element)) {
             return subclassMapperFor(element).toDBObject(element);
         }
-        BasicDBObject object = new BasicDBObject();
-        save(element, object);
-        return object;
+        return new BasicDBObject();
     }
 
     private boolean isSubclass(Object element) {
@@ -132,17 +140,12 @@ public abstract class ClassMapper<T> extends Converter implements Mapper {
         return persistentType.isAssignableFrom(aClass);
     }
 
-    <U> void addSubclass(SubclassMapper<U> mapper) {
-        mapper.setParentMapper(this);
-        subclasses.put(mapper.discriminator(), mapper);
-    }
-
     public boolean isCapped() {
         return false;
     }
 
     protected final Class<T> persistentType;
     private final List<Mapper> mappers = Lists.newArrayList();
-    private MapperContext context;
     private final Map<String, SubclassMapper<?>> subclasses = Maps.newHashMap();
+    private MapperContext context;
 }
