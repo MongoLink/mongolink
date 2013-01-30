@@ -21,6 +21,7 @@
 
 package org.mongolink.domain.converter;
 
+import org.joda.money.Money;
 import org.joda.time.DateTime;
 
 import java.lang.reflect.Method;
@@ -40,7 +41,14 @@ public abstract class Converter {
         if (isDateTime(type)) {
             return new DateTimeConverter();
         }
+        if(isMoney(type)) {
+            return new MoneyConverter();
+        }
         return PRIMITIVE_CONVERTER;
+    }
+
+    private static boolean isMoney(Class<?> type) {
+        return Money.class.isAssignableFrom(type);
     }
 
     private static boolean isDateTime(Class<?> type) {
