@@ -65,7 +65,7 @@ public class MongoSessionManager {
         return mongoSession;
     }
 
-    private DB getDb() {
+    public DB getDb() {
         return dbFactory.get(settings.getDbName());
     }
 
