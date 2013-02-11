@@ -21,7 +21,12 @@
 
 package org.mongolink.domain.updateStrategy;
 
+import com.google.common.base.Objects;
+import com.google.common.collect.Lists;
 import com.mongodb.BasicDBList;
+
+import java.util.ArrayList;
+import java.util.Iterator;
 
 
 public class ListVisitor extends Visitor {
@@ -33,56 +38,49 @@ public class ListVisitor extends Visitor {
 	@Override
 	public void visit(final Object target) {
 		final BasicDBList targetList = (BasicDBList) target;
-		if (getOrigin().size() != targetList.size()) {
-            dealWithDeletionOrAddition(targetList);
-        } else {
-            dealWithDifferences(targetList);
+        Iterator<Object> targetIterator = targetList.iterator();
+        Iterator<Object> originIterator = getOrigin().iterator();
+        int index = 0;
+        while(targetIterator.hasNext() && originIterator.hasNext()) {
+            compare(index, originIterator.next(), targetIterator.next());
+            index++;
         }
+        addNewElements(targetIterator);
+        removeDeletedElements(originIterator, index);
 	}
 
-    private void dealWithDifferences(BasicDBList targetList) {
-        for (int i = 0; i < getOrigin().size(); i++) {
-            Object origin = getOrigin().get(i);
-            if(!origin.equals(targetList.get(i))) {
-                getDbObjectDiff().pushKey(String.valueOf(i));
-                visitProperty(origin, targetList.get(i));
-            }
-        }
-    }
-
-    private void dealWithDeletionOrAddition(BasicDBList targetList) {
-        if (getOrigin().size() > targetList.size()) {
-            compareDeletedElementsInList(targetList);
-        } else {
-            getDbObjectDiff().addPush(targetList.get(targetList.size() - 1));
+    private void compare(int index, Object originElement, Object targetElement) {
+        if(!Objects.equal(originElement, targetElement)) {
+            getDbObjectDiff().pushKey(String.valueOf(index));
+            getDbObjectDiff().addSet(targetElement);
+            getDbObjectDiff().popKey();
         }
     }
 
-    private void compareDeletedElementsInList(final BasicDBList target) {
-		int targetIndex = 0;
-		int originIndex = 0;
-		while (originIndex < getOrigin().size()) {
-			final Object current = getOrigin().get(originIndex);
-			if (targetIndex < target.size() && current.equals(target.get(targetIndex))) {
-				targetIndex++;
-			} else {
-				removeElementAt(originIndex);
-			}
-			originIndex++;
-		}
+    private void addNewElements(Iterator<Object> targetIterator) {
+        ArrayList<Object> newElements = Lists.newArrayList(targetIterator);
+        if(newElements.size() == 1) {
+            getDbObjectDiff().addPush(newElements.get(0));
+        }
+        if(newElements.size() > 1) {
+            getDbObjectDiff().addPushAll(newElements);
+        }
+    }
 
-		getDbObjectDiff().addPull(null);
-	}
+    private void removeDeletedElements(Iterator<Object> originIterator, int index) {
+        if(originIterator.hasNext()) {
+            getDbObjectDiff().addPull(null);
+        }
+        while (originIterator.hasNext()) {
+            getDbObjectDiff().pushKey(String.valueOf(index));
+            getDbObjectDiff().addUnset();
+            getDbObjectDiff().popKey();
+            originIterator.next();
+            index++;
+        }
+    }
 
-
-	private void removeElementAt(final int i) {
-		getDbObjectDiff().pushKey(String.valueOf(i));
-		getDbObjectDiff().addUnset();
-		getDbObjectDiff().popKey();
-	}
-
-
-	@Override
+    @Override
 	protected BasicDBList getOrigin() {
 		return (BasicDBList) super.getOrigin();
 	}

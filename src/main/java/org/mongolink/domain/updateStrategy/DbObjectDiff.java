@@ -23,9 +23,12 @@ package org.mongolink.domain.updateStrategy;
 
 
 import com.google.common.collect.Maps;
-import com.mongodb.*;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Stack;
 
 public class DbObjectDiff {
 
@@ -76,6 +79,10 @@ public class DbObjectDiff {
         addForModifier(Modifier.UNSET, 1);
     }
 
+    public void addPushAll(List<Object> newElements) {
+        addForModifier(Modifier.PUSHALL, newElements);
+    }
+
     private void addForModifier(final Modifier key, final Object value) {
         modifiers.get(key).put(makeKey(), value);
     }
@@ -99,7 +106,7 @@ public class DbObjectDiff {
     }
 
     enum Modifier {
-        SET("$set"), PUSH("$push"), UNSET("$unset"), PULL("$pull");
+        SET("$set"), PUSH("$push"), UNSET("$unset"), PULL("$pull"), PUSHALL("$pushAll");
 
         Modifier(String key) {
             this.key = key;

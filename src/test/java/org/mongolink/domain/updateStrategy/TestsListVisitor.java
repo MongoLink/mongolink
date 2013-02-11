@@ -1,12 +1,14 @@
 package org.mongolink.domain.updateStrategy;
 
 import com.mongodb.BasicDBList;
-import com.mongodb.BasicDBObject;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 
 import java.util.Collections;
+import java.util.List;
 
+import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 public class TestsListVisitor {
@@ -60,16 +62,14 @@ public class TestsListVisitor {
         verify(dbObjectDiff).addSet("deuz");
     }
 
+    @SuppressWarnings("unchecked")
     @Test
-    public void canGenerateUpdateOnSupDocument() {
-        BasicDBObject value1 = new BasicDBObject("test", "un");
-        BasicDBObject value2 = new BasicDBObject("test", "deux");
-
-        diff(listWith(value1), listWith(value2));
-
-        verify(dbObjectDiff).pushKey("0");
-        verify(dbObjectDiff).pushKey("test");
-        verify(dbObjectDiff).addSet("deux");
+    public void canPushAllOnMultipleAdd() {
+        diff(listWith(), listWith("1", "2"));
+        ArgumentCaptor<List> captor = ArgumentCaptor.forClass(List.class);
+        verify(dbObjectDiff).addPushAll(captor.capture());
+        List<Object> value = captor.getValue();
+        assertThat(value).hasSize(2).contains("1", "2");
     }
 
     private BasicDBList listWith(final Object... values) {
