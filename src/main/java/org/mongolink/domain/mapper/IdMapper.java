@@ -23,10 +23,11 @@ package org.mongolink.domain.mapper;
 
 
 import com.mongodb.DBObject;
-import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;
 import org.mongolink.MongoLinkError;
 import org.mongolink.utils.MethodContainer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 
@@ -45,7 +46,7 @@ public class IdMapper implements Mapper {
                 into.put(dbFieldName(), idValue);
             }
         } catch (Exception e) {
-            LOGGER.error("Can't saveInto property " + methodContainer.shortName(), e);
+            LOGGER.error("Can't saveInto property {}", methodContainer.shortName(), e);
         }
     }
 
@@ -61,7 +62,7 @@ public class IdMapper implements Mapper {
             field.set(instance, getIdValue(from));
             field.setAccessible(false);
         } catch (Exception e) {
-            LOGGER.error(e);
+            LOGGER.error("Error populating id into {}", methodContainer.shortName(), e);
         }
     }
 
@@ -108,6 +109,6 @@ public class IdMapper implements Mapper {
 
     private IdGeneration generationStrategy;
     private final MethodContainer methodContainer;
-    private static final Logger LOGGER = Logger.getLogger(IdMapper.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(IdMapper.class);
     private AggregateMapper<?> mapper;
 }

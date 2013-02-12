@@ -22,12 +22,17 @@
 package org.mongolink.domain.mapper;
 
 
-import com.mongodb.*;
-import org.apache.log4j.Logger;
+import com.mongodb.BasicDBList;
+import com.mongodb.DBObject;
 import org.mongolink.domain.converter.Converter;
-import org.mongolink.utils.*;
+import org.mongolink.utils.MethodContainer;
+import org.mongolink.utils.ReflectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
 import java.util.Collection;
 
 class CollectionMapper implements Mapper {
@@ -48,7 +53,7 @@ class CollectionMapper implements Mapper {
             }
             into.put(name, list);
         } catch (Exception e) {
-            LOGGER.error("Can't saveInto collection " + name, e);
+            LOGGER.error("Can't saveInto collection {}", name, e);
         }
     }
 
@@ -84,5 +89,5 @@ class CollectionMapper implements Mapper {
     private final Method method;
     private final String name;
     private ClassMapper<?> mapper;
-    private static final Logger LOGGER = Logger.getLogger(CollectionMapper.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CollectionMapper.class);
 }

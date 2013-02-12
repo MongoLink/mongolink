@@ -1,8 +1,9 @@
 package org.mongolink;
 
 import com.mongodb.DB;
-import org.apache.log4j.Logger;
 import org.mongolink.domain.UnitOfWork;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 enum SessionState {
     NOTSTARTED {
@@ -54,5 +55,5 @@ enum SessionState {
 
     public abstract SessionState start(final DB db) ;
 
-    private static final Logger LOGGER = Logger.getLogger(SessionState.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SessionState.class);
 }

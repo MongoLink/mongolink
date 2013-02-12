@@ -2,12 +2,12 @@
  * MongoLink, Object Document Mapper for Java and MongoDB
  *
  * Copyright (c) 2012, Arpinum or third-party contributors as
- * indicated by the @author tags
+ * indicated by the contributors.txt file
  *
  * MongoLink is free software: you can redistribute it and/or modify
  * it under the terms of the Lesser GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * any later version.
  *
  * MongoLink is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -15,8 +15,7 @@
  * Lesser GNU General Public License for more details.
  *
  * You should have received a copy of the Lesser GNU General Public License
- * along with MongoLink.  If not, see <http://www.gnu.org/licenses/>. 
- *
+ * along with MongoLink.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package org.mongolink;
@@ -25,7 +24,6 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
-import org.apache.log4j.Logger;
 import org.mongolink.domain.QueryExecutor;
 import org.mongolink.domain.UnitOfWork;
 import org.mongolink.domain.UpdateStrategies;
@@ -36,6 +34,8 @@ import org.mongolink.domain.mapper.ClassMapper;
 import org.mongolink.domain.mapper.MapperContext;
 import org.mongolink.domain.updateStrategy.OverwriteStrategy;
 import org.mongolink.domain.updateStrategy.UpdateStrategy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -95,7 +95,7 @@ public class MongoSession {
         getDbCollection(mapper).insert(dbObject);
         mapper.populateId(element, dbObject);
         unitOfWork.add(mapper.getId(element), element, dbObject);
-        LOGGER.debug("New entity created : " + dbObject);
+        LOGGER.debug("New entity created : {}",  dbObject);
     }
 
     public void update(Object element) {
@@ -156,7 +156,7 @@ public class MongoSession {
         unitOfWork.flush();
     }
 
-    private static final Logger LOGGER = Logger.getLogger(MongoSession.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MongoSession.class);
     private final DB db;
     private final UnitOfWork unitOfWork = new UnitOfWork(this);
     private final CriteriaFactory criteriaFactory;

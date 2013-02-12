@@ -21,7 +21,8 @@
 
 package org.mongolink.domain.mapper;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class AggregateMap<T> extends ClassMap<T> {
 
@@ -37,7 +38,7 @@ public abstract class AggregateMap<T> extends ClassMap<T> {
     }
 
     protected IdMapper id(Object value) {
-        LOGGER.debug("Mapping id " + getLastMethod().shortName());
+        LOGGER.debug("Mapping id {}", getLastMethod().shortName());
         IdMapper id = new IdMapper(getLastMethod(), IdGeneration.Auto);
         getMapper().setIdMapper(id);
         return id;
@@ -48,5 +49,5 @@ public abstract class AggregateMap<T> extends ClassMap<T> {
     }
 
     private final AggregateMapper<T> mapper;
-    private static final Logger LOGGER = Logger.getLogger(AggregateMap.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AggregateMap.class);
 }

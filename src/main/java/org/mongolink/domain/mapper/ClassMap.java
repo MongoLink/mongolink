@@ -24,8 +24,9 @@ package org.mongolink.domain.mapper;
 import com.google.common.collect.Lists;
 import net.sf.cglib.core.DefaultGeneratorStrategy;
 import net.sf.cglib.proxy.Enhancer;
-import org.apache.log4j.Logger;
 import org.mongolink.utils.MethodContainer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -34,7 +35,7 @@ public abstract class ClassMap<T> {
 
     public ClassMap(Class<T> type) {
         this.type = type;
-        LOGGER.debug("Mapping " + getType());
+        LOGGER.debug("Mapping {}", getType());
         interceptor = createInterceptor(type);
     }
 
@@ -61,24 +62,24 @@ public abstract class ClassMap<T> {
     @SuppressWarnings("UnusedParameters")
     protected void property(Object value) {
         String name = lastMethod.shortName();
-        LOGGER.debug("Mapping property " + name);
+        LOGGER.debug("Mapping property : {}", name);
         getMapper().addProperty(new PropertyMapper(lastMethod));
     }
 
     @SuppressWarnings("UnusedParameters")
     protected void collection(Object value) {
-        LOGGER.debug("Mapping collection:" + lastMethod.shortName());
+        LOGGER.debug("Mapping collection : {}", lastMethod.shortName());
         getMapper().addCollection(new CollectionMapper(lastMethod));
     }
 
     @SuppressWarnings("UnusedParameters")
     protected void map(Object value) {
-        LOGGER.debug("Mapping map:" + lastMethod.shortName());
+        LOGGER.debug("Mapping map : {}", lastMethod.shortName());
         getMapper().addMap(new MapMapper(lastMethod));
     }
 
     protected <U extends T> void subclass(SubclassMap<U> subclassMap) {
-        LOGGER.debug("Mapping subclass:" + subclassMap.getType().getSimpleName());
+        LOGGER.debug("Mapping subclass : {}", subclassMap.getType().getSimpleName());
         subclasses.add(subclassMap);
     }
 
@@ -99,7 +100,7 @@ public abstract class ClassMap<T> {
 
     protected abstract ClassMapper<T> getMapper();
 
-    private static final Logger LOGGER = Logger.getLogger(AggregateMap.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AggregateMap.class);
     private MethodContainer lastMethod;
     private final Class<T> type;
     private final T interceptor;

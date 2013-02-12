@@ -21,8 +21,11 @@
 
 package org.mongolink.domain.updateStrategy;
 
-import com.mongodb.*;
-import org.apache.log4j.Logger;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBCollection;
+import com.mongodb.DBObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DiffStrategy extends UpdateStrategy {
 
@@ -33,16 +36,16 @@ public class DiffStrategy extends UpdateStrategy {
             final DBObject q = updateQuery(initialValue);
             final DBObject pull = (DBObject) diff.get(DbObjectDiff.Modifier.PULL.toString());
             diff.removeField(DbObjectDiff.Modifier.PULL.toString());
-            LOGGER.debug("Updating query:" + q + " values: " + diff);
+            LOGGER.debug("Updating query : {} values: {}", q, diff);
             collection.update(q, diff);
             // ugly hack to support removing element by index
             // see https://jira.mongodb.org/browse/SERVER-1014
             if (pull != null) {
-                LOGGER.debug("Cleaning collection:" + q + " values: " + pull);
+                LOGGER.debug("Cleaning collection : {}  values: {}", q, pull);
                 collection.update(q, new BasicDBObject(DbObjectDiff.Modifier.PULL.toString(), pull));
             }
         }
     }
 
-    private static final Logger LOGGER = Logger.getLogger(DiffStrategy.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DiffStrategy.class);
 }

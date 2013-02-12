@@ -23,12 +23,15 @@ package org.mongolink.domain.mapper;
 
 
 import com.mongodb.DBObject;
-import org.apache.log4j.Logger;
 import org.mongolink.MongoLinkException;
 import org.mongolink.domain.converter.Converter;
-import org.mongolink.utils.*;
+import org.mongolink.utils.MethodContainer;
+import org.mongolink.utils.ReflectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 class PropertyMapper implements Mapper {
 
@@ -66,7 +69,7 @@ class PropertyMapper implements Mapper {
             field.set(instance, valueFrom(from));
             field.setAccessible(false);
         } catch (Exception e) {
-            LOGGER.error(e);
+            LOGGER.error("Error populating property : {}", name ,e);
         }
     }
 
@@ -87,7 +90,7 @@ class PropertyMapper implements Mapper {
     }
 
     private final String name;
-    private static final Logger LOGGER = Logger.getLogger(PropertyMapper.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PropertyMapper.class);
     private final Method method;
     private ClassMapper<?> mapper;
 }
