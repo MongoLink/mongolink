@@ -92,7 +92,6 @@ public class TestsMongoSession {
     @Test
     public void cantGetSomethingWichIsNotAnEntity() {
         exception.expect(MongoLinkError.class);
-        exception.expectMessage("Comment is not an entity");
         session.get("pouet", Comment.class);
     }
 
@@ -137,7 +136,6 @@ public class TestsMongoSession {
     @Test
     public void cantSaveSomethingWichIsNotAnEntity() {
         exception.expect(MongoLinkError.class);
-        exception.expectMessage("Comment is not an entity");
         session.save(new Comment());
     }
 
@@ -155,7 +153,6 @@ public class TestsMongoSession {
     @Test
     public void cantUpdateSomethingWichIsNotAnEntity() {
         exception.expect(MongoLinkError.class);
-        exception.expectMessage("Comment is not an entity");
         session.update(new Comment());
     }
 
@@ -340,14 +337,12 @@ public class TestsMongoSession {
         session.clear();
 
         exception.expect(MongoLinkError.class);
-        exception.expectMessage("Entity to delete not loaded");
         session.delete(entity);
     }
 
     @Test
     public void cantDeleteSomethingWichIsNotAnEntity() {
         exception.expect(MongoLinkError.class);
-        exception.expectMessage("Comment is not an entity");
         session.delete(new Comment());
     }
 
