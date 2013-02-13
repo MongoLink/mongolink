@@ -43,17 +43,19 @@ public class ContextBuilder {
     }
 
     public MapperContext createContext() {
+        LOGGER.debug("Scanning : {}", packageToScan);
         MapperContext result = new MapperContext();
         try {
             Iterable<Class> classes = getCandidateClasses();
             for (Class currentClass : classes) {
                 if (isAMap(currentClass)) {
                     ClassMap<?> mapping = (ClassMap<?>) currentClass.newInstance();
+                    LOGGER.debug("Mapping : {}", currentClass);
                     mapping.buildMapper(result);
                 }
             }
 
-            LOGGER.debug("Done scanning package");
+            LOGGER.debug("Done scanning : {}", packageToScan);
         } catch (Exception e) {
             throw new MongoLinkError("Error scanning package", e);
 

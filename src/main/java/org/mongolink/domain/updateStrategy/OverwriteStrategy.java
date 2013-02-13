@@ -22,6 +22,8 @@
 package org.mongolink.domain.updateStrategy;
 
 import com.mongodb.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class OverwriteStrategy extends UpdateStrategy {
 
@@ -29,6 +31,9 @@ public class OverwriteStrategy extends UpdateStrategy {
     public void update(DBObject initialValue, DBObject update, DBCollection collection) {
         DBObject query = new BasicDBObject();
         query.put("_id", update.get("_id"));
+        LOGGER.debug("Updating : collection {} : element {}", collection.getName(), update);
         collection.update(updateQuery(initialValue), update);
     }
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(OverwriteStrategy.class);
 }

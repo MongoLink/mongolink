@@ -14,7 +14,7 @@ enum SessionState {
 
         @Override
         public SessionState start(final DB db) {
-            LOGGER.debug("Start a new consistent request");
+            LOGGER.debug("Starting");
             db.requestStart();
             db.requestEnsureConnection();
             return STARTED;
@@ -24,7 +24,7 @@ enum SessionState {
         public SessionState stop(final DB db, final UnitOfWork unitOfWork) {
             unitOfWork.flush();
             db.requestDone();
-            LOGGER.debug("End the current consistent request");
+            LOGGER.debug("Stoping");
             return STOPPED;
         }
 
@@ -55,5 +55,5 @@ enum SessionState {
 
     public abstract SessionState start(final DB db) ;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SessionState.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MongoSession.class);
 }

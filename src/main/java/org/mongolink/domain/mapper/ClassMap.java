@@ -35,7 +35,6 @@ public abstract class ClassMap<T> {
 
     public ClassMap(Class<T> type) {
         this.type = type;
-        LOGGER.debug("Mapping {}", getType());
         interceptor = createInterceptor(type);
     }
 
@@ -100,7 +99,7 @@ public abstract class ClassMap<T> {
 
     protected abstract ClassMapper<T> getMapper();
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AggregateMap.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ClassMap.class);
     private MethodContainer lastMethod;
     private final Class<T> type;
     private final T interceptor;

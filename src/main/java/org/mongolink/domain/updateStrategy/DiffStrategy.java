@@ -36,12 +36,12 @@ public class DiffStrategy extends UpdateStrategy {
             final DBObject q = updateQuery(initialValue);
             final DBObject pull = (DBObject) diff.get(DbObjectDiff.Modifier.PULL.toString());
             diff.removeField(DbObjectDiff.Modifier.PULL.toString());
-            LOGGER.debug("Updating query : {} values: {}", q, diff);
+            LOGGER.debug("Updating : collection {} : query {} : modifiers : {}", collection.getName(), q, diff);
             collection.update(q, diff);
             // ugly hack to support removing element by index
             // see https://jira.mongodb.org/browse/SERVER-1014
             if (pull != null) {
-                LOGGER.debug("Cleaning collection : {}  values: {}", q, pull);
+                LOGGER.debug("Cleaning array : {}  values: {}", q, pull);
                 collection.update(q, new BasicDBObject(DbObjectDiff.Modifier.PULL.toString(), pull));
             }
         }
