@@ -39,6 +39,8 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 public class MongoSession {
 
     public MongoSession(DB db, CriteriaFactory criteriaFactory) {
@@ -60,6 +62,8 @@ public class MongoSession {
 
     @SuppressWarnings("unchecked")
     public <T> T get(Object id, Class<T> entityType) {
+        checkNotNull(id, "Id was null");
+        checkNotNull(entityType, "Entity type was null");
         state.ensureStarted();
         if (unitOfWork.contains(entityType, id)) {
             return unitOfWork.getEntity(entityType, id);
@@ -84,11 +88,13 @@ public class MongoSession {
 
     @SuppressWarnings("unchecked")
     public <T> List<T> getAll(Class<T> entityType) {
+        checkNotNull(entityType, "Entity type was null");
         state.ensureStarted();
         return createExecutor(entityMapper(entityType)).execute(new BasicDBObject());
     }
 
     public void save(Object element) {
+        checkNotNull(element, "Element to save was null");
         state.ensureStarted();
         AggregateMapper<?> mapper = entityMapper(element.getClass());
         DBObject dbObject = mapper.toDBObject(element);
@@ -99,6 +105,7 @@ public class MongoSession {
     }
 
     public void update(Object element) {
+        checkNotNull(element, "Element was null");
         state.ensureStarted();
         AggregateMapper<?> mapper = entityMapper(element.getClass());
         DBObject initialValue = unitOfWork.getDBOBject(element.getClass(), mapper.getId(element));
@@ -112,6 +119,7 @@ public class MongoSession {
     }
 
     public void delete(Object element) {
+        checkNotNull(element, "Element was null");
         state.ensureStarted();
         AggregateMapper<?> mapper = entityMapper(element.getClass());
         checkEntityIsInCache(element, mapper);
@@ -132,6 +140,7 @@ public class MongoSession {
     }
 
     public <U> Criteria createCriteria(Class<U> type) {
+        checkNotNull(type, "Type was null");
         return criteriaFactory.create(createExecutor(entityMapper(type)));
     }
 
@@ -145,6 +154,7 @@ public class MongoSession {
     }
 
     public void setUpdateStrategy(UpdateStrategies updateStrategy) {
+        checkNotNull(updateStrategy, "Update strategy was null");
         this.updateStrategy = updateStrategy.instance();
     }
 
