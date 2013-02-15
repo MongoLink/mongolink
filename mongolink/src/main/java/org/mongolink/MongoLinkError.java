@@ -26,6 +26,10 @@ public class MongoLinkError extends RuntimeException {
         super(message, cause);
     }
 
+    public MongoLinkError(Throwable throwable) {
+        super(throwable);
+    }
+
     public MongoLinkError(String message) {
         super(message);
     }

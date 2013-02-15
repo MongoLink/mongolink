@@ -80,7 +80,6 @@ public class DbFactory {
     }
 
     public void setAuthInfos(String user, String password) {
-
         this.user = user;
         this.password = password;
     }

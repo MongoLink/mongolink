@@ -22,7 +22,7 @@
 package org.mongolink.domain.mapper;
 
 import net.sf.cglib.proxy.*;
-import org.mongolink.utils.MethodContainer;
+import org.mongolink.utils.PropertyContainer;
 
 import java.lang.reflect.Method;
 
@@ -36,7 +36,7 @@ class PropertyInterceptor implements MethodInterceptor {
 
     @Override
     public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
-        classMap.setLastMethod(new MethodContainer(method));
+        classMap.setLastMethod(new PropertyContainer(method));
         return null;
     }
 

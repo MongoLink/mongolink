@@ -24,12 +24,15 @@ package org.mongolink.utils;
 import com.google.common.base.Objects;
 import org.apache.commons.lang.StringUtils;
 import org.mongolink.MongoLinkError;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-public class MethodContainer {
+public class PropertyContainer {
 
-    public MethodContainer(Method method) {
+    public PropertyContainer(Method method) {
         this.method = method;
     }
 
@@ -53,10 +56,10 @@ public class MethodContainer {
         if (o == null) {
             return false;
         }
-        if (!(o instanceof MethodContainer)) {
+        if (!(o instanceof PropertyContainer)) {
             return false;
         }
-        MethodContainer other = (MethodContainer) o;
+        PropertyContainer other = (PropertyContainer) o;
         return Objects.equal(method, other.method);
     }
 
@@ -69,9 +72,38 @@ public class MethodContainer {
         try {
             return method.invoke(instance);
         } catch (Exception e) {
-            throw new MongoLinkError("Invocation exception : " + shortName() + " " + instance.getClass(), e);
+            throw new MongoLinkError("Invocation exception : " + toString(), e);
         }
     }
 
+    @Override
+    public String toString() {
+        return String.format("Class : %s ; Method : %s", method.getDeclaringClass(), method.getName());
+    }
+
+    public Class<?> getReturnType() {
+        return method.getReturnType();
+    }
+
+    public Field findField() {
+        try {
+            return ReflectionUtils.findPrivateField(method.getDeclaringClass(), shortName());
+        } catch (NoSuchFieldException e) {
+            throw new MongoLinkError("Error finding field : " + toString());
+        }
+    }
+
+    public void setValueIn(Object value, Object instance) {
+        Field field = findField();
+        field.setAccessible(true);
+        try {
+            field.set(instance, value);
+        } catch (Exception e) {
+            LOGGER.warn("Error setting property value : {} ; method : {}", value, this, e);
+        }
+        field.setAccessible(false);
+    }
+
     private final Method method;
+    private static final Logger LOGGER = LoggerFactory.getLogger(PropertyContainer.class);
 }

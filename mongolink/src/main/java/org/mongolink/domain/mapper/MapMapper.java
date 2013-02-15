@@ -23,7 +23,7 @@ package org.mongolink.domain.mapper;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
-import org.mongolink.utils.MethodContainer;
+import org.mongolink.utils.PropertyContainer;
 import org.mongolink.utils.ReflectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,9 +34,9 @@ import java.util.Map;
 
 public class MapMapper implements Mapper {
 
-    public MapMapper(MethodContainer methodContainer) {
-        this.name = methodContainer.shortName();
-        this.method = methodContainer.getMethod();
+    public MapMapper(PropertyContainer propertyContainer) {
+        this.name = propertyContainer.shortName();
+        this.method = propertyContainer.getMethod();
     }
 
     @Override

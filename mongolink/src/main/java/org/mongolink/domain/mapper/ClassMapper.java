@@ -76,6 +76,9 @@ public abstract class ClassMapper<T> extends Converter implements Mapper {
     }
 
     protected T makeInstance(final DBObject from) {
+        if(from == null) {
+            return null;
+        }
         String discriminator = SubclassMapper.discriminatorValue(from);
         if (subclasses.get(discriminator) != null) {
             return (T) subclasses.get(discriminator).toInstance(from);

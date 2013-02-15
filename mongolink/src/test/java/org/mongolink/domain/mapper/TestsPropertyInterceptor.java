@@ -23,7 +23,7 @@ package org.mongolink.domain.mapper;
 
 import org.junit.Test;
 import org.mongolink.test.entity.FakeAggregate;
-import org.mongolink.utils.MethodContainer;
+import org.mongolink.utils.PropertyContainer;
 
 import java.lang.reflect.Method;
 
@@ -37,8 +37,8 @@ public class TestsPropertyInterceptor {
         PropertyInterceptor interceptor = new PropertyInterceptor(aggregateMap);
         Method method = FakeAggregate.class.getDeclaredMethod("getId");
 
-        interceptor.intercept(null, method, null, null);
+        interceptor.intercept(new Object(), method, null, null);
 
-        verify(aggregateMap).setLastMethod(new MethodContainer(method));
+        verify(aggregateMap).setLastMethod(new PropertyContainer(method));
     }
 }

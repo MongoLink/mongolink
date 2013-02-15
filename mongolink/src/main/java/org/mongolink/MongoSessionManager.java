@@ -29,6 +29,8 @@ import org.mongolink.domain.mapper.ClassMapper;
 import org.mongolink.domain.mapper.ContextBuilder;
 import org.mongolink.domain.mapper.MapperContext;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 public class MongoSessionManager {
 
     private MongoSessionManager(MapperContext mapperContext) {
@@ -36,6 +38,8 @@ public class MongoSessionManager {
     }
 
     public static MongoSessionManager create(ContextBuilder contextBuilder, Settings settings) {
+        checkNotNull(contextBuilder, "Context builder was null");
+        checkNotNull(settings, "Settings was null");
         MongoSessionManager manager = new MongoSessionManager(contextBuilder.createContext());
         manager.settings = settings;
         manager.dbFactory = settings.createDbFactory();

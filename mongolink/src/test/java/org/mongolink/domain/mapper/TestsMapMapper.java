@@ -24,7 +24,7 @@ package org.mongolink.domain.mapper;
 import com.google.common.collect.Maps;
 import com.mongodb.BasicDBObject;
 import org.junit.Test;
-import org.mongolink.utils.MethodContainer;
+import org.mongolink.utils.PropertyContainer;
 
 import java.util.Map;
 
@@ -63,7 +63,7 @@ public class TestsMapMapper {
     }
 
     private MapMapper createMapper() throws NoSuchMethodException {
-        final MapMapper result = new MapMapper(new MethodContainer(EntityWithHashmap.class.getMethod("getValues", null)));
+        final MapMapper result = new MapMapper(new PropertyContainer(EntityWithHashmap.class.getMethod("getValues", null)));
         final MapperContext context = new MapperContext();
         final ClassMapper classMapper = mock(ClassMapper.class);
         when(classMapper.getContext()).thenReturn(context);

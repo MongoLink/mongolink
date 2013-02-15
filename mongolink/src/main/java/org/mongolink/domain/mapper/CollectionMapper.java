@@ -25,7 +25,7 @@ package org.mongolink.domain.mapper;
 import com.mongodb.BasicDBList;
 import com.mongodb.DBObject;
 import org.mongolink.domain.converter.Converter;
-import org.mongolink.utils.MethodContainer;
+import org.mongolink.utils.PropertyContainer;
 import org.mongolink.utils.ReflectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,9 +37,9 @@ import java.util.Collection;
 
 class CollectionMapper implements Mapper {
 
-    public CollectionMapper(MethodContainer methodContainer) {
-        this.name = methodContainer.shortName();
-        this.method = methodContainer.getMethod();
+    public CollectionMapper(PropertyContainer propertyContainer) {
+        this.name = propertyContainer.shortName();
+        this.method = propertyContainer.getMethod();
     }
 
     @Override

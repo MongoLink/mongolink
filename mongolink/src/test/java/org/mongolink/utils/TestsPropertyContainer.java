@@ -26,7 +26,7 @@ import org.junit.Test;
 import static org.hamcrest.core.Is.*;
 import static org.junit.Assert.*;
 
-public class TestsMethodContainer {
+public class TestsPropertyContainer {
 
     private class FakeEntity {
         private boolean isOk() {
@@ -40,15 +40,15 @@ public class TestsMethodContainer {
 
     @Test
     public void canGetShortnameOnStringPropertyMethod() throws Exception {
-        MethodContainer methodContainer = new MethodContainer(FakeEntity.class.getDeclaredMethod("getStuff"));
+        PropertyContainer propertyContainer = new PropertyContainer(FakeEntity.class.getDeclaredMethod("getStuff"));
 
-        assertThat(methodContainer.shortName(), is("stuff"));
+        assertThat(propertyContainer.shortName(), is("stuff"));
     }
 
     @Test
     public void canGetShortnameOnBooleanPropertyMethod() throws Exception {
-        MethodContainer methodContainer = new MethodContainer(FakeEntity.class.getDeclaredMethod("isOk"));
+        PropertyContainer propertyContainer = new PropertyContainer(FakeEntity.class.getDeclaredMethod("isOk"));
 
-        assertThat(methodContainer.shortName(), is("ok"));
+        assertThat(propertyContainer.shortName(), is("ok"));
     }
 }

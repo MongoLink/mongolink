@@ -24,7 +24,7 @@ package org.mongolink.domain.mapper;
 import com.google.common.collect.Lists;
 import net.sf.cglib.core.DefaultGeneratorStrategy;
 import net.sf.cglib.proxy.Enhancer;
-import org.mongolink.utils.MethodContainer;
+import org.mongolink.utils.PropertyContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,7 +46,7 @@ public abstract class ClassMap<T> {
         return (T) enhancer.create();
     }
 
-    void setLastMethod(MethodContainer lastMethod) {
+    void setLastMethod(PropertyContainer lastMethod) {
         this.lastMethod = lastMethod;
     }
 
@@ -67,13 +67,13 @@ public abstract class ClassMap<T> {
 
     @SuppressWarnings("UnusedParameters")
     protected void collection(Object value) {
-        LOGGER.debug("Mapping collection : {}", lastMethod.shortName());
+        LOGGER.debug("Mapping collection : {}", lastMethod);
         getMapper().addCollection(new CollectionMapper(lastMethod));
     }
 
     @SuppressWarnings("UnusedParameters")
     protected void map(Object value) {
-        LOGGER.debug("Mapping map : {}", lastMethod.shortName());
+        LOGGER.debug("Mapping map : {}", lastMethod);
         getMapper().addMap(new MapMapper(lastMethod));
     }
 
@@ -93,14 +93,14 @@ public abstract class ClassMap<T> {
 
     protected abstract void map();
 
-    MethodContainer getLastMethod() {
+    PropertyContainer getLastMethod() {
         return lastMethod;
     }
 
     protected abstract ClassMapper<T> getMapper();
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ClassMap.class);
-    private MethodContainer lastMethod;
+    private PropertyContainer lastMethod;
     private final Class<T> type;
     private final T interceptor;
     private final List<SubclassMap<? extends T>> subclasses = Lists.newArrayList();

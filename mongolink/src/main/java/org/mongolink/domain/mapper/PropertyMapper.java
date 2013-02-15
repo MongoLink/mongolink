@@ -23,21 +23,15 @@ package org.mongolink.domain.mapper;
 
 
 import com.mongodb.DBObject;
-import org.mongolink.MongoLinkException;
 import org.mongolink.domain.converter.Converter;
-import org.mongolink.utils.MethodContainer;
-import org.mongolink.utils.ReflectionUtils;
+import org.mongolink.utils.PropertyContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-
 class PropertyMapper implements Mapper {
 
-    public PropertyMapper(MethodContainer method) {
-        this.name = method.shortName();
-        this.method = method.getMethod();
+    public PropertyMapper(PropertyContainer property) {
+        this.property = property;
     }
 
     @Override
@@ -48,49 +42,41 @@ class PropertyMapper implements Mapper {
         }
     }
 
-    private Converter converter() {
-        return getMapper().getContext().converterFor(method.getReturnType());
+    String dbFieldName() {
+        return property.shortName();
     }
 
     protected Object getPropertyValue(Object element) {
-        try {
-            return method.invoke(element);
-        } catch (Exception e) {
-            LOGGER.warn("Can't get value from " + method.getName());
-            throw new MongoLinkException(e);
-        }
+        return property.invoke(element);
+
+    }
+
+    private Converter converter() {
+        return getMapper().getContext().converterFor(property.getReturnType());
     }
 
     @Override
     public void populate(Object instance, DBObject from) {
-        try {
-            Field field = ReflectionUtils.findPrivateField(mapper.getPersistentType(), name);
-            field.setAccessible(true);
-            field.set(instance, valueFrom(from));
-            field.setAccessible(false);
-        } catch (Exception e) {
-            LOGGER.error("Error populating property : {}", name ,e);
+        property.setValueIn(valueFrom(from), instance);
+    }
+
+    private Object valueFrom(DBObject from) {
+        Object value = null;
+        if (from != null) {
+            value = from.get(dbFieldName());
         }
-    }
-
-    protected Object valueFrom(DBObject from) {
-        return converter().fromDbValue(from.get(dbFieldName()));
-    }
-
-    String dbFieldName() {
-        return name;
-    }
-
-    public void setMapper(ClassMapper<?> mapper) {
-        this.mapper = mapper;
+        return converter().fromDbValue(value);
     }
 
     protected ClassMapper<?> getMapper() {
         return mapper;
     }
 
-    private final String name;
+    public void setMapper(ClassMapper<?> mapper) {
+        this.mapper = mapper;
+    }
+
     private static final Logger LOGGER = LoggerFactory.getLogger(PropertyMapper.class);
-    private final Method method;
     private ClassMapper<?> mapper;
+    private PropertyContainer property;
 }
