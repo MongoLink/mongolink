@@ -30,8 +30,9 @@ import org.mongolink.domain.mapper.MapperContext;
 import org.mongolink.test.entity.*;
 import org.mongolink.test.inheritanceMapping.FakeAggregateWithSubclassMapping;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
+import java.util.List;
+
+import static org.fest.assertions.Assertions.assertThat;
 
 public class TestsMongoSessionWithInheritance {
 
@@ -57,8 +58,8 @@ public class TestsMongoSessionWithInheritance {
 
         FakeAggregate entity = session.get("1", FakeAggregate.class);
 
-        assertThat(entity, notNullValue());
-        assertThat(entity, instanceOf(FakeChildAggregate.class));
+        assertThat(entity).isNotNull();
+        assertThat(entity).isInstanceOf(FakeChildAggregate.class);
     }
 
     @Test
@@ -70,7 +71,7 @@ public class TestsMongoSessionWithInheritance {
 
         FakeAggregate entity = session.get("1", FakeChildAggregate.class);
 
-        assertThat(entity, notNullValue());
+        assertThat(entity).isNotNull();
 
     }
 
@@ -81,7 +82,7 @@ public class TestsMongoSessionWithInheritance {
 
         session.save(fakeChildEntity);
 
-        assertThat(entities.count(), is(1L));
+        assertThat(entities.count()).isEqualTo(1L);
     }
 
     private FakeDBCollection entities;

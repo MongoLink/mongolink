@@ -318,7 +318,6 @@ public class TestsMongoSession {
         assertThat(entityList.size(), is(2));
     }
 
-
     @Test
     public void canDeleteEntity() {
         final FakeAggregateWithNaturalId entity = new FakeAggregateWithNaturalId("cle unique");
