@@ -78,7 +78,10 @@ public class PropertyContainer {
 
     @Override
     public String toString() {
-        return String.format("Class : %s ; Method : %s", method.getDeclaringClass(), method.getName());
+        return Objects.toStringHelper("Property")
+                .add("class", method.getDeclaringClass().getName())
+                .add("field", shortName())
+                .toString();
     }
 
     public Class<?> getReturnType() {
@@ -94,14 +97,19 @@ public class PropertyContainer {
     }
 
     public void setValueIn(Object value, Object instance) {
+        if(value == null) {
+            LOGGER.warn("Property value was null : {}", this);
+            return;
+        }
         Field field = findField();
         field.setAccessible(true);
         try {
             field.set(instance, value);
         } catch (Exception e) {
-            LOGGER.warn("Error setting property value : {} ; method : {}", value, this, e);
+            LOGGER.error("Error setting property value : {} ; method : {}", value, this, e);
+        }finally {
+            field.setAccessible(false);
         }
-        field.setAccessible(false);
     }
 
     private final Method method;
