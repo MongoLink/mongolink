@@ -22,6 +22,7 @@
 package org.mongolink.domain.mapper;
 
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 
 @SuppressWarnings("unchecked")
@@ -68,6 +69,16 @@ public class AggregateMapper<T> extends ClassMapper<T> {
 
     public Capped getCapped() {
         return capped;
+    }
+
+    public  DBObject allDocumentsQuery(Class<?> entityType) {
+        SubclassMapper<?> subclass = getSubclass(entityType);
+        if(subclass == null) {
+            return new BasicDBObject();
+        }
+        BasicDBObject query = new BasicDBObject();
+        query.put(SubclassMapper.DISCRIMINATOR, subclass.discriminator());
+        return query;
     }
 
     private Capped capped = new NotCapped();

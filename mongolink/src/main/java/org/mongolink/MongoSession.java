@@ -29,9 +29,7 @@ import org.mongolink.domain.UnitOfWork;
 import org.mongolink.domain.UpdateStrategies;
 import org.mongolink.domain.criteria.Criteria;
 import org.mongolink.domain.criteria.CriteriaFactory;
-import org.mongolink.domain.mapper.AggregateMapper;
-import org.mongolink.domain.mapper.ClassMapper;
-import org.mongolink.domain.mapper.MapperContext;
+import org.mongolink.domain.mapper.*;
 import org.mongolink.domain.updateStrategy.OverwriteStrategy;
 import org.mongolink.domain.updateStrategy.UpdateStrategy;
 import org.slf4j.Logger;
@@ -39,7 +37,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 public class MongoSession {
 
@@ -90,7 +88,8 @@ public class MongoSession {
     public <T> List<T> getAll(Class<T> entityType) {
         checkNotNull(entityType, "Entity type was null");
         state.ensureStarted();
-        return createExecutor(entityMapper(entityType)).execute(new BasicDBObject());
+        AggregateMapper<?> mapper = entityMapper(entityType);
+        return createExecutor(mapper).execute(mapper.allDocumentsQuery(entityType));
     }
 
     public void save(Object element) {

@@ -116,9 +116,14 @@ public abstract class ClassMapper<T> extends Converter implements Mapper {
     }
 
     private SubclassMapper<?> subclassMapperFor(Object element) {
+        Class<?> type = element.getClass();
+        return getSubclass(type);
+    }
+
+    protected  <U> SubclassMapper<U> getSubclass(Class<U> type) {
         for (SubclassMapper<?> subclassMapper : subclasses.values()) {
-            if (subclassMapper.getPersistentType().isAssignableFrom(element.getClass())) {
-                return subclassMapper;
+            if (subclassMapper.getPersistentType().isAssignableFrom(type)) {
+                return (SubclassMapper<U>) subclassMapper;
             }
         }
         return null;

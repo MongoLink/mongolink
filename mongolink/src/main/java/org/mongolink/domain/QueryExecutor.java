@@ -73,14 +73,6 @@ public class QueryExecutor<T> {
         }
     }
 
-    public DB getDb() {
-        return db;
-    }
-
-    public AggregateMapper<?> getEntityMapper() {
-        return mapper;
-    }
-
     private final DB db;
     private final AggregateMapper<T> mapper;
     private final UnitOfWork unitOfWork;
