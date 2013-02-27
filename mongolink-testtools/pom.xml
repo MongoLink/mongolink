@@ -3,7 +3,7 @@
     <parent>
         <artifactId>mongolink-parent</artifactId>
         <groupId>org.mongolink</groupId>
-        <version>0.0.11</version>
+        <version>0.0.12-SNAPSHOT</version>
     </parent>
     <packaging>jar</packaging>
     <modelVersion>4.0.0</modelVersion>
