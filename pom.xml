@@ -17,7 +17,7 @@
 		<module>mongolink-testtools</module>
 	</modules>
     <scm>
-        <developerConnection>scm:git:git@github.com:MongoLink/mongolink-parent.git</developerConnection>
+        <developerConnection>scm:git:git@github.com:MongoLink/mongolink.git</developerConnection>
     </scm>
     <build>
         <pluginManagement>
