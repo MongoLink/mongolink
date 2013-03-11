@@ -31,13 +31,13 @@ public class DbFactory {
     public DB get(String dbName) {
         initializeMongo();
         DB db = mongoClient.getDB(dbName);
-        if(withAuthentication()) {
+        if(isAuthenticationRequired()) {
             db.authenticate(user, password.toCharArray());
         }
         return db;
     }
 
-    private boolean withAuthentication() {
+    private boolean isAuthenticationRequired() {
         return !Strings.isNullOrEmpty(user);
     }
 

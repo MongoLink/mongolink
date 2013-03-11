@@ -39,6 +39,7 @@ public class QueryExecutor<T> {
         final List<T> result = Lists.newArrayList();
         DBCollection collection = db.getCollection(mapper.collectionName());
         DBCursor cursor = collection.find(query);
+        cursor.setReadPreference(ReadPreference.primaryPreferred());
         cursor = cursorParameter.apply(cursor);
         try {
             while (cursor.hasNext()) {

@@ -41,6 +41,24 @@ public class Settings {
     private Settings() {
     }
 
+    public DbFactory createDbFactory() {
+        try {
+            DbFactory dbFactory = factoryClass.newInstance();
+            dbFactory.setHost(host);
+            dbFactory.setPort(port);
+            if (authenticationRequired()) {
+                dbFactory.setAuthInfos(user, password);
+            }
+            return dbFactory;
+        } catch (Exception e) {
+            throw new MongoLinkError("Can't create DbFactory", e);
+        }
+    }
+
+    public boolean authenticationRequired() {
+        return !Strings.isNullOrEmpty(user);
+    }
+
     public Settings withHost(String host) {
         this.host = host;
         return this;
@@ -55,10 +73,6 @@ public class Settings {
         this.user = user;
         this.password = password;
         return this;
-    }
-
-    public boolean withAuthentication() {
-        return !Strings.isNullOrEmpty(user);
     }
 
     public String getDbName() {
@@ -76,20 +90,6 @@ public class Settings {
 
     public String getPassword() {
         return password;
-    }
-
-    public DbFactory createDbFactory() {
-        try {
-            DbFactory dbFactory = factoryClass.newInstance();
-            dbFactory.setHost(host);
-            dbFactory.setPort(port);
-            if(withAuthentication()) {
-                dbFactory.setAuthInfos(user, password);
-            }
-            return dbFactory;
-        } catch (Exception e) {
-            throw new MongoLinkError("Can't create DbFactory", e);
-        }
     }
 
     public Settings withDbFactory(Class<? extends DbFactory> FactoryClass) {
@@ -118,7 +118,6 @@ public class Settings {
         updateStrategy = strategy;
         return this;
     }
-
 
     private Class<? extends DbFactory> factoryClass;
     private String host;
