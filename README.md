@@ -11,7 +11,8 @@ Website
 Continuous integration
 ---------------------
 * Jenkins : https://mongolink.ci.cloudbees.com
-* Twitter : https://twitter.com/MongoLink_ci
+* Twitter : https://twitter.com/Mongolink
+* Twitter ci : https://twitter.com/MongoLink_ci
 
 Maven repositories
 ------------------
