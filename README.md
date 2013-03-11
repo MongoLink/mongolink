@@ -18,3 +18,9 @@ Maven repositories
 ------------------
 * Snapshots : http://repository-mongolink.forge.cloudbees.com/snapshot/
 * Releases : http://repository-mongolink.forge.cloudbees.com/release/
+
+Contributors
+------------------
+* Jean Baptiste Dusseaut : https://twitter.com/Bodysplash
+* Charles Couillard : https://twitter.com/charlesco
+* David Dumon : https://twitter.com/daviddumon
