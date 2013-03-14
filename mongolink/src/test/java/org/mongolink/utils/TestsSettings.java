@@ -21,6 +21,7 @@
 
 package org.mongolink.utils;
 
+import com.mongodb.ServerAddress;
 import org.junit.Test;
 import org.mongolink.*;
 import org.mongolink.domain.*;
@@ -38,8 +39,10 @@ public class TestsSettings {
 
         FakeDbFactory dbFactory = (FakeDbFactory) settings.createDbFactory();
 
-        assertThat(dbFactory.host, is("localhost"));
-        assertThat(dbFactory.port, is(1234));
+        assertThat(dbFactory.addresses.size(), is(1));
+        ServerAddress serverAddress = dbFactory.addresses.get(0);
+        assertThat(serverAddress.getHost(), is("localhost"));
+        assertThat(serverAddress.getPort(), is(1234));
         assertThat(settings.authenticationRequired(), is(false));
     }
 
@@ -67,8 +70,10 @@ public class TestsSettings {
         DbFactory dbFactory = settings.createDbFactory();
         assertThat(dbFactory, notNullValue());
         assertThat(dbFactory, not(instanceOf(FakeDbFactory.class)));
-        assertThat(dbFactory.getPort(), is(27017));
-        assertThat(dbFactory.getHost(), is("127.0.0.1"));
+        assertThat(dbFactory.getAddresses().size(), is(1));
+        ServerAddress serverAddress = dbFactory.getAddresses().get(0);
+        assertThat(serverAddress.getPort(), is(27017));
+        assertThat(serverAddress.getHost(), is("127.0.0.1"));
         assertThat(settings.getDbName(), is("test"));
         assertThat(settings.getUpdateStrategy(), is(UpdateStrategies.OVERWRITE));
     }

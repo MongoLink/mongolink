@@ -22,16 +22,20 @@
 package org.mongolink;
 
 import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
+import com.mongodb.ServerAddress;
 import org.mongolink.domain.UpdateStrategies;
 import org.mongolink.domain.criteria.CriteriaFactory;
+
+import java.net.UnknownHostException;
+import java.util.List;
 
 
 public class Settings {
 
     public static Settings defaultInstance() {
         Settings settings = new Settings();
-        settings.port = 27017;
-        settings.host = "127.0.0.1";
+        settings.addresses = Lists.newArrayList(serverAddress("127.0.0.1", 27017));
         settings.factoryClass = DbFactory.class;
         settings.criteriaFactoryClass = CriteriaFactory.class;
         settings.dbName = "test";
@@ -44,8 +48,7 @@ public class Settings {
     public DbFactory createDbFactory() {
         try {
             DbFactory dbFactory = factoryClass.newInstance();
-            dbFactory.setHost(host);
-            dbFactory.setPort(port);
+            dbFactory.setAddresses(addresses);
             if (authenticationRequired()) {
                 dbFactory.setAuthInfos(user, password);
             }
@@ -60,12 +63,12 @@ public class Settings {
     }
 
     public Settings withHost(String host) {
-        this.host = host;
+        addresses.set(0, serverAddress(host, addresses.get(0).getPort()));
         return this;
     }
 
     public Settings withPort(int port) {
-        this.port = port;
+        addresses.set(0, serverAddress(addresses.get(0).getHost(), port));
         return this;
     }
 
@@ -119,12 +122,19 @@ public class Settings {
         return this;
     }
 
+    private static ServerAddress serverAddress(String host, int port) {
+        try {
+            return new ServerAddress(host, port);
+        } catch (UnknownHostException e) {
+            throw new MongoLinkError(e);
+        }
+    }
+
     private Class<? extends DbFactory> factoryClass;
-    private String host;
-    private int port;
     private String user;
     private String password;
     private String dbName;
+    private List<ServerAddress> addresses;
     private Class<? extends CriteriaFactory> criteriaFactoryClass;
     private UpdateStrategies updateStrategy = UpdateStrategies.OVERWRITE;
 

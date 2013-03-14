@@ -23,20 +23,17 @@ package org.mongolink.test.factory;
 
 import com.google.common.collect.Maps;
 import com.mongodb.FakeDB;
+import com.mongodb.ServerAddress;
 import org.mongolink.DbFactory;
 
+import java.util.List;
 import java.util.Map;
 
 public class FakeDbFactory extends DbFactory {
 
     @Override
-    public void setHost(String host) {
-        this.host = host;
-    }
-
-    @Override
-    public void setPort(int port) {
-        this.port = port;
+    public void setAddresses(List<ServerAddress> addresses) {
+        this.addresses = addresses;
     }
 
     @Override
@@ -48,6 +45,6 @@ public class FakeDbFactory extends DbFactory {
     }
 
     private final Map<String, FakeDB> dbs = Maps.newHashMap();
-    public String host;
+    public List<ServerAddress> addresses;
     public int port;
 }

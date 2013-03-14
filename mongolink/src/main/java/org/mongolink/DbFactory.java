@@ -22,16 +22,18 @@
 package org.mongolink;
 
 import com.google.common.base.Strings;
-import com.mongodb.*;
+import com.mongodb.DB;
+import com.mongodb.MongoClient;
+import com.mongodb.ServerAddress;
 
-import java.net.UnknownHostException;
+import java.util.List;
 
 public class DbFactory {
 
     public DB get(String dbName) {
         initializeMongo();
         DB db = mongoClient.getDB(dbName);
-        if(isAuthenticationRequired()) {
+        if (isAuthenticationRequired()) {
             db.authenticate(user, password.toCharArray());
         }
         return db;
@@ -49,11 +51,7 @@ public class DbFactory {
 
     private synchronized void doInitializeMongo() {
         if (mongoClient == null) {
-            try {
-                mongoClient = new MongoClient(host, port);
-            } catch (UnknownHostException e) {
-                throw new MongoLinkError("Can't instanciate mongo", e);
-            }
+            mongoClient = new MongoClient(addresses);
         }
     }
 
@@ -63,20 +61,12 @@ public class DbFactory {
         }
     }
 
-    protected void setHost(String host) {
-        this.host = host;
+    public List<ServerAddress> getAddresses() {
+        return addresses;
     }
 
-    protected void setPort(int port) {
-        this.port = port;
-    }
-
-    public int getPort() {
-        return port;
-    }
-
-    public String getHost() {
-        return host;
+    public void setAddresses(List<ServerAddress> adresses) {
+        this.addresses = adresses;
     }
 
     public void setAuthInfos(String user, String password) {
@@ -85,8 +75,8 @@ public class DbFactory {
     }
 
     private volatile MongoClient mongoClient;
-    private volatile int port;
-    private volatile String host;
     private volatile String user;
     private volatile String password;
+    private List<ServerAddress> addresses;
+
 }
