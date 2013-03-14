@@ -21,12 +21,15 @@
 
 package org.mongolink.utils;
 
+import com.google.common.collect.Lists;
 import com.mongodb.ServerAddress;
 import org.junit.Test;
 import org.mongolink.*;
 import org.mongolink.domain.*;
 import org.mongolink.domain.criteria.*;
 import org.mongolink.test.factory.FakeDbFactory;
+
+import java.net.UnknownHostException;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
@@ -44,6 +47,15 @@ public class TestsSettings {
         assertThat(serverAddress.getHost(), is("localhost"));
         assertThat(serverAddress.getPort(), is(1234));
         assertThat(settings.authenticationRequired(), is(false));
+    }
+
+    @Test
+    public void canCreateDbFactoryWithMultipleAddresses() throws UnknownHostException {
+        Settings settings = Settings.defaultInstance().withAddresses(Lists.newArrayList(new ServerAddress("localhost:1234"), new ServerAddress("localhost:1235"))).withDbFactory(FakeDbFactory.class);
+
+        FakeDbFactory dbFactory = (FakeDbFactory) settings.createDbFactory();
+
+        assertThat(dbFactory.addresses.size(), is(2));
     }
 
     @Test

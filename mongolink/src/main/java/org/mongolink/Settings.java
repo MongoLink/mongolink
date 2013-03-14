@@ -28,6 +28,7 @@ import org.mongolink.domain.UpdateStrategies;
 import org.mongolink.domain.criteria.CriteriaFactory;
 
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -119,6 +120,11 @@ public class Settings {
 
     public Settings withDefaultUpdateStrategy(UpdateStrategies strategy) {
         updateStrategy = strategy;
+        return this;
+    }
+
+    public Settings withAddresses(ArrayList<ServerAddress> serverAddresses) {
+        addresses = serverAddresses;
         return this;
     }
 
