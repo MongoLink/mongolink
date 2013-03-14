@@ -123,7 +123,7 @@ public class Settings {
         return this;
     }
 
-    public Settings withAddresses(ArrayList<ServerAddress> serverAddresses) {
+    public Settings withAddresses(List<ServerAddress> serverAddresses) {
         addresses = serverAddresses;
         return this;
     }
