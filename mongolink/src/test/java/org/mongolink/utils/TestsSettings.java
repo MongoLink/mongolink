@@ -22,6 +22,7 @@
 package org.mongolink.utils;
 
 import com.google.common.collect.Lists;
+import com.mongodb.ReadPreference;
 import com.mongodb.ServerAddress;
 import org.junit.Test;
 import org.mongolink.*;
@@ -38,7 +39,7 @@ public class TestsSettings {
 
     @Test
     public void canCreateDbFactory() {
-        Settings settings = Settings.defaultInstance().withPort(1234).withHost("localhost").withDbFactory(FakeDbFactory.class);
+        Settings settings = Settings.defaultInstance().withPort(1234).withHost("localhost").withDbFactory(FakeDbFactory.class).withReadPreference(ReadPreference.nearest());
 
         FakeDbFactory dbFactory = (FakeDbFactory) settings.createDbFactory();
 
@@ -47,6 +48,7 @@ public class TestsSettings {
         assertThat(serverAddress.getHost(), is("localhost"));
         assertThat(serverAddress.getPort(), is(1234));
         assertThat(settings.authenticationRequired(), is(false));
+        assertThat(dbFactory.getReadPreference(), is(ReadPreference.nearest()));
     }
 
     @Test
@@ -88,6 +90,7 @@ public class TestsSettings {
         assertThat(serverAddress.getHost(), is("127.0.0.1"));
         assertThat(settings.getDbName(), is("test"));
         assertThat(settings.getUpdateStrategy(), is(UpdateStrategies.OVERWRITE));
+        assertThat(settings.getReadPreference(), is(ReadPreference.primary()));
     }
 
     @Test
@@ -112,6 +115,15 @@ public class TestsSettings {
         Settings settings = Settings.defaultInstance().withDefaultUpdateStrategy(UpdateStrategies.DIFF);
 
         assertThat(settings.getUpdateStrategy(), is(UpdateStrategies.DIFF));
+    }
+
+    @Test
+    public void canDefineReadPreference() {
+        Settings settings = Settings.defaultInstance().withReadPreference(ReadPreference.secondary()).withDbFactory(FakeDbFactory.class);
+
+        FakeDbFactory dbFactory = (FakeDbFactory) settings.createDbFactory();
+
+        assertThat(dbFactory.getReadPreference(), is(ReadPreference.secondary()));
     }
 
     public static class DummyCriteriaFactory extends CriteriaFactory {

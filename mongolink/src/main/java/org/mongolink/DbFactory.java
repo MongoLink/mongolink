@@ -22,9 +22,7 @@
 package org.mongolink;
 
 import com.google.common.base.Strings;
-import com.mongodb.DB;
-import com.mongodb.MongoClient;
-import com.mongodb.ServerAddress;
+import com.mongodb.*;
 
 import java.util.List;
 
@@ -52,6 +50,7 @@ public class DbFactory {
     private synchronized void doInitializeMongo() {
         if (mongoClient == null) {
             mongoClient = new MongoClient(addresses);
+            mongoClient.setReadPreference(readPreference);
         }
     }
 
@@ -69,6 +68,14 @@ public class DbFactory {
         this.addresses = adresses;
     }
 
+    public ReadPreference getReadPreference() {
+        return readPreference;
+    }
+
+    public void setReadPreference(ReadPreference readPreference) {
+        this.readPreference = readPreference;
+    }
+
     public void setAuthInfos(String user, String password) {
         this.user = user;
         this.password = password;
@@ -78,5 +85,6 @@ public class DbFactory {
     private volatile String user;
     private volatile String password;
     private List<ServerAddress> addresses;
+    private ReadPreference readPreference;
 
 }

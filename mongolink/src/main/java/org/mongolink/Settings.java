@@ -23,12 +23,12 @@ package org.mongolink;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
+import com.mongodb.ReadPreference;
 import com.mongodb.ServerAddress;
 import org.mongolink.domain.UpdateStrategies;
 import org.mongolink.domain.criteria.CriteriaFactory;
 
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -50,6 +50,7 @@ public class Settings {
         try {
             DbFactory dbFactory = factoryClass.newInstance();
             dbFactory.setAddresses(addresses);
+            dbFactory.setReadPreference(readPreference);
             if (authenticationRequired()) {
                 dbFactory.setAuthInfos(user, password);
             }
@@ -128,6 +129,15 @@ public class Settings {
         return this;
     }
 
+    public Settings withReadPreference(ReadPreference readPreference) {
+        this.readPreference = readPreference;
+        return this;
+    }
+
+    public ReadPreference getReadPreference() {
+        return readPreference;
+    }
+
     private static ServerAddress serverAddress(String host, int port) {
         try {
             return new ServerAddress(host, port);
@@ -143,5 +153,5 @@ public class Settings {
     private List<ServerAddress> addresses;
     private Class<? extends CriteriaFactory> criteriaFactoryClass;
     private UpdateStrategies updateStrategy = UpdateStrategies.OVERWRITE;
-
+    private ReadPreference readPreference = ReadPreference.primary();
 }
