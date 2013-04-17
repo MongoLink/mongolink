@@ -45,8 +45,7 @@ public class TestsContextBuilder {
     public void canLoadMappingFromSomePackages() {
         ContextBuilder builder = new ContextBuilder()
                 .withPackage("org.mongolink.test.simpleMapping")
-                .withPackage("org.mongolink.test.additionalMapping")
-                .withPackage("org.mongolink.test.inheritanceMapping");
+                .withPackage("org.mongolink.test.additionalMapping");
 
         MapperContext context = builder.createContext();
 
