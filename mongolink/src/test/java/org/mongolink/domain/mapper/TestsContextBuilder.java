@@ -19,7 +19,7 @@
  *
  */
 
-package org.mongolink;
+package org.mongolink.domain.mapper;
 
 import org.junit.Test;
 import org.mongolink.domain.mapper.*;
