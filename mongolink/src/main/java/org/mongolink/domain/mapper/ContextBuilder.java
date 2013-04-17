@@ -38,12 +38,19 @@ import java.util.jar.JarFile;
 
 public class ContextBuilder {
 
-    public ContextBuilder(String packageToScan) {
-        this.packageToScan = packageToScan;
+    public ContextBuilder() {}
+
+    public ContextBuilder(String... packagesToScan) {
+        this.packagesToScan.addAll(Lists.newArrayList(packagesToScan));
+    }
+
+    public ContextBuilder withPackage(String packageToScan) {
+        this.packagesToScan.add(packageToScan);
+        return this;
     }
 
     public MapperContext createContext() {
-        LOGGER.debug("Scanning : {}", packageToScan);
+        LOGGER.debug("Scanning : {}", packagesToScan);
         MapperContext result = new MapperContext();
         try {
             Iterable<Class> classes = getCandidateClasses();
@@ -55,7 +62,7 @@ public class ContextBuilder {
                 }
             }
 
-            LOGGER.debug("Done scanning : {}", packageToScan);
+            LOGGER.debug("Done scanning : {}", packagesToScan);
         } catch (Exception e) {
             throw new MongoLinkError("Error scanning package", e);
 
@@ -69,11 +76,13 @@ public class ContextBuilder {
 
     private Iterable<Class> getCandidateClasses() throws ClassNotFoundException, IOException {
         List<Class> classes = Lists.newArrayList();
-        for (URL url : getResources()) {
-            if (isAJar(url)) {
-                classes.addAll(findClassesFromJar(url));
-            } else {
-                classes.addAll(findClassesFromDirectory(new File(url.getFile()), packageToScan));
+        for(String packageToScan : packagesToScan) {
+            for (URL url : getResourcesFrom(packageToScan)) {
+                if (isAJar(url)) {
+                    classes.addAll(findClassesFromJar(url));
+                } else {
+                    classes.addAll(findClassesFromDirectory(new File(url.getFile()), packageToScan));
+                }
             }
         }
         return classes;
@@ -83,8 +92,8 @@ public class ContextBuilder {
         return "jar".equals(url.getProtocol());
     }
 
-    private List<URL> getResources() throws IOException {
-        Enumeration<URL> resources = classLoader().getResources(packageToDirectory());
+    private List<URL> getResourcesFrom(String packageToScan) throws IOException {
+        Enumeration<URL> resources = classLoader().getResources(packageToDirectory(packageToScan));
         List<URL> dirs = Lists.newArrayList();
         while (resources.hasMoreElements()) {
             URL resource = resources.nextElement();
@@ -93,7 +102,7 @@ public class ContextBuilder {
         return dirs;
     }
 
-    private String packageToDirectory() {
+    private String packageToDirectory(String packageToScan) {
         return packageToScan.replace(".", File.separator);
     }
 
@@ -139,9 +148,11 @@ public class ContextBuilder {
     private List<Class<?>> extractClass(Enumeration<JarEntry> entries) throws ClassNotFoundException {
         JarEntry entry = entries.nextElement();
         String entryPath = entry.getName();
-        if (entryPath.startsWith(packageToDirectory()) && entryPath.endsWith(CLASS_EXTENSION)) {
-            final String classPath = entryPath.substring(0, entryPath.length() - CLASS_EXTENSION.length()).replace(File.separator, ".");
-            return Lists.<Class<?>>newArrayList(Class.forName(classPath));
+        for(String packageToScan : packagesToScan) {
+            if (entryPath.startsWith(packageToDirectory(packageToScan)) && entryPath.endsWith(CLASS_EXTENSION)) {
+                final String classPath = entryPath.substring(0, entryPath.length() - CLASS_EXTENSION.length()).replace(File.separator, ".");
+                return Lists.<Class<?>>newArrayList(Class.forName(classPath));
+            }
         }
         return Lists.newArrayList();
     }
@@ -150,5 +161,5 @@ public class ContextBuilder {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ContextBuilder.class);
 
-    private final String packageToScan;
+    private final List<String> packagesToScan = Lists.newArrayList();
 }

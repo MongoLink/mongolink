@@ -42,6 +42,21 @@ public class TestsContextBuilder {
     }
 
     @Test
+    public void canLoadMappingFromSomePackages() {
+        ContextBuilder builder = new ContextBuilder()
+                .withPackage("org.mongolink.test.simpleMapping")
+                .withPackage("org.mongolink.test.additionalMapping")
+                .withPackage("org.mongolink.test.inheritanceMapping");
+
+        MapperContext context = builder.createContext();
+
+        assertThat(context.mapperFor(FakeAggregate.class), notNullValue());
+        assertThat(context.mapperFor(FakeAggregateWithNaturalId.class), notNullValue());
+        assertThat(context.mapperFor(Comment.class), notNullValue());
+        assertThat(context.mapperFor(Post.class), notNullValue());
+    }
+
+    @Test
     public void dontLoadSubclassMap() {
         ContextBuilder builder = new ContextBuilder("org.mongolink.test.inheritanceMapping");
 
