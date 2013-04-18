@@ -38,8 +38,6 @@ import java.util.jar.JarFile;
 
 public class ContextBuilder {
 
-    public ContextBuilder() {}
-
     public ContextBuilder(String... packagesToScan) {
         this.packagesToScan.addAll(Lists.newArrayList(packagesToScan));
     }
