@@ -42,11 +42,6 @@ public class ContextBuilder {
         this.packagesToScan.addAll(Lists.newArrayList(packagesToScan));
     }
 
-    public ContextBuilder withPackage(String packageToScan) {
-        this.packagesToScan.add(packageToScan);
-        return this;
-    }
-
     public MapperContext createContext() {
         LOGGER.debug("Scanning : {}", packagesToScan);
         MapperContext result = new MapperContext();
@@ -74,16 +69,19 @@ public class ContextBuilder {
 
     private Iterable<Class> getCandidateClasses() throws ClassNotFoundException, IOException {
         List<Class> classes = Lists.newArrayList();
-        for(String packageToScan : packagesToScan) {
+        for (String packageToScan : packagesToScan) {
             for (URL url : getResourcesFrom(packageToScan)) {
-                if (isAJar(url)) {
-                    classes.addAll(findClassesFromJar(url));
-                } else {
-                    classes.addAll(findClassesFromDirectory(new File(url.getFile()), packageToScan));
-                }
+                classes.addAll(getCandidateClasses(packageToScan, url));
             }
         }
         return classes;
+    }
+
+    private List<Class> getCandidateClasses(String packageToScan, URL url) throws ClassNotFoundException {
+        if (isAJar(url)) {
+            return findClassesFromJar(url, packageToScan);
+        }
+        return findClassesFromDirectory(new File(url.getFile()), packageToScan);
     }
 
     private boolean isAJar(URL url) {
@@ -114,45 +112,47 @@ public class ContextBuilder {
         for (File file : files) {
             if (file.isDirectory()) {
                 classes.addAll(findClassesFromDirectory(file, packageToScan + "." + file.getName()));
-            } else {
-                if (file.getName().endsWith(CLASS_EXTENSION)) {
-                    final String classPath = packageToScan + '.' + file.getName().substring(0, file.getName().length() - CLASS_EXTENSION.length());
-                    classes.add(Class.forName(classPath));
-                }
+            } else if (file.getName().endsWith(CLASS_EXTENSION)) {
+                classes.add(Class.forName(classPath(packageToScan, file)));
             }
         }
         return classes;
     }
 
-    private List<Class> findClassesFromJar(URL url) throws ClassNotFoundException {
+    private String classPath(String packageToScan, File file) {
+        return packageToScan + '.' + file.getName().substring(0, file.getName().length() - CLASS_EXTENSION.length());
+    }
+
+    private List<Class> findClassesFromJar(URL url, String packageToScan) throws ClassNotFoundException {
         try {
-            return doFindClassFromJar(url);
+            return doFindClassFromJar(url, packageToScan);
         } catch (IOException e) {
             LOGGER.error("Can't load mapping from Jar", e);
         }
         return Lists.newArrayList();
     }
 
-    private List<Class> doFindClassFromJar(URL url) throws IOException, ClassNotFoundException {
+    private List<Class> doFindClassFromJar(URL url, String packageToScan) throws IOException, ClassNotFoundException {
         final List<Class> result = Lists.newArrayList();
         JarURLConnection jarCon = (JarURLConnection) url.openConnection();
         final JarFile jarFile = jarCon.getJarFile();
         for (Enumeration<JarEntry> entries = jarFile.entries(); entries.hasMoreElements(); ) {
-            result.addAll(extractClass(entries));
+            result.addAll(extractClass(entries, packageToScan));
         }
         return result;
     }
 
-    private List<Class<?>> extractClass(Enumeration<JarEntry> entries) throws ClassNotFoundException {
+    private List<Class<?>> extractClass(Enumeration<JarEntry> entries, String packageToScan) throws ClassNotFoundException {
         JarEntry entry = entries.nextElement();
         String entryPath = entry.getName();
-        for(String packageToScan : packagesToScan) {
-            if (entryPath.startsWith(packageToDirectory(packageToScan)) && entryPath.endsWith(CLASS_EXTENSION)) {
-                final String classPath = entryPath.substring(0, entryPath.length() - CLASS_EXTENSION.length()).replace(File.separator, ".");
-                return Lists.<Class<?>>newArrayList(Class.forName(classPath));
-            }
+        if (entryPath.startsWith(packageToDirectory(packageToScan)) && entryPath.endsWith(CLASS_EXTENSION)) {
+            return Lists.<Class<?>>newArrayList(Class.forName(classPath(entryPath)));
         }
         return Lists.newArrayList();
+    }
+
+    private String classPath(String entryPath) {
+        return entryPath.substring(0, entryPath.length() - CLASS_EXTENSION.length()).replace(File.separator, ".");
     }
 
     public static final String CLASS_EXTENSION = ".class";
