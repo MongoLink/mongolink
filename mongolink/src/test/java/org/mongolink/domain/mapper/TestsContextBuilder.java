@@ -19,7 +19,7 @@
  *
  */
 
-package org.mongolink;
+package org.mongolink.domain.mapper;
 
 import org.junit.Test;
 import org.mongolink.domain.mapper.*;
@@ -39,6 +39,20 @@ public class TestsContextBuilder {
         assertThat(context.mapperFor(FakeAggregate.class), notNullValue());
         assertThat(context.mapperFor(FakeAggregateWithNaturalId.class), notNullValue());
         assertThat(context.mapperFor(Comment.class), notNullValue());
+    }
+
+    @Test
+    public void canLoadMappingFromSomePackages() {
+        ContextBuilder builder = new ContextBuilder()
+                .withPackage("org.mongolink.test.simpleMapping")
+                .withPackage("org.mongolink.test.additionalMapping");
+
+        MapperContext context = builder.createContext();
+
+        assertThat(context.mapperFor(FakeAggregate.class), notNullValue());
+        assertThat(context.mapperFor(FakeAggregateWithNaturalId.class), notNullValue());
+        assertThat(context.mapperFor(Comment.class), notNullValue());
+        assertThat(context.mapperFor(Post.class), notNullValue());
     }
 
     @Test
