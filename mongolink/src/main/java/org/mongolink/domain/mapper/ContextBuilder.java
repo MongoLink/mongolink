@@ -99,7 +99,7 @@ public class ContextBuilder {
     }
 
     private String packageToDirectory(String packageToScan) {
-        return packageToScan.replace(".", File.separator);
+        return packageToScan.replace(".", "/");
     }
 
     private ClassLoader classLoader() {
