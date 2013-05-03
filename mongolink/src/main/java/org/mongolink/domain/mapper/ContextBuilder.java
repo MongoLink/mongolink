@@ -113,10 +113,14 @@ public class ContextBuilder {
             if (file.isDirectory()) {
                 classes.addAll(findClassesFromDirectory(file, packageToScan + "." + file.getName()));
             } else if (file.getName().endsWith(CLASS_EXTENSION)) {
-                classes.add(Class.forName(classPath(packageToScan, file)));
+                classes.add(loadClass(classPath(packageToScan, file)));
             }
         }
         return classes;
+    }
+
+    protected Class loadClass(String className) throws ClassNotFoundException {
+        return Class.forName(className);
     }
 
     private String classPath(String packageToScan, File file) {
@@ -146,7 +150,7 @@ public class ContextBuilder {
         JarEntry entry = entries.nextElement();
         String entryPath = entry.getName();
         if (entryPath.startsWith(packageToDirectory(packageToScan)) && entryPath.endsWith(CLASS_EXTENSION)) {
-            return Lists.<Class<?>>newArrayList(Class.forName(classPath(entryPath)));
+            return Lists.<Class<?>>newArrayList(loadClass(classPath(entryPath)));
         }
         return Lists.newArrayList();
     }
