@@ -4,3 +4,4 @@ David Dumon @daviddumon
 
 Florian Guérin @florianguerin
 Emeric Gaichet @EnguerranV
+Karl Cosse @KarlCOSSE
