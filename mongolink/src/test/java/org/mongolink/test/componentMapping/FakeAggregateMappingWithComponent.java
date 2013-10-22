@@ -33,8 +33,8 @@ public class FakeAggregateMappingWithComponent extends AggregateMap<FakeAggregat
     }
 
     @Override
-    protected void map() {
-        property(element().getComment());
+    public void map() {
+        property().onProperty(element().getComment());
     }
 
     @Override

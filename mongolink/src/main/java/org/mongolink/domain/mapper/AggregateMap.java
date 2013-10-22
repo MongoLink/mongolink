@@ -21,6 +21,7 @@
 
 package org.mongolink.domain.mapper;
 
+import org.mongolink.utils.FieldContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,15 +38,36 @@ public abstract class AggregateMap<T> extends ClassMap<T> {
         return mapper;
     }
 
+    @Deprecated
     protected IdMapper id(Object value) {
-        LOGGER.debug("Mapping id : {}", getLastMethod().name());
-        IdMapper id = new IdMapper(getLastMethod(), IdGeneration.Auto);
-        getMapper().setIdMapper(id);
-        return id;
+        return id().onProperty(value);
+    }
+
+    protected IdMap id() {
+        return new IdMap();
     }
 
     protected void setCapped(int cappedSize, int cappedMax) {
         getMapper().setCapped(cappedSize, cappedMax);
+    }
+
+    public class IdMap {
+
+        @SuppressWarnings("UnusedParameters")
+        public IdMapper onProperty(Object value) {
+            return addMapper(getLastMethod());
+        }
+
+        public IdMapper onField(String fieldName) {
+            return addMapper(fieldContainer(fieldName));
+        }
+
+        private IdMapper addMapper(FieldContainer field) {
+            LOGGER.debug("Mapping id : {}", field);
+            IdMapper id = new IdMapper(field, IdGeneration.Auto);
+            getMapper().setIdMapper(id);
+            return id;
+        }
     }
 
     private final AggregateMapper<T> mapper;

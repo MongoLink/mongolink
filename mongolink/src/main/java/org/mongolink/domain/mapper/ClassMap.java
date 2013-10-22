@@ -59,26 +59,22 @@ public abstract class ClassMap<T> {
         return type;
     }
 
-    @SuppressWarnings("UnusedParameters")
+    @Deprecated
     protected void property(Object value) {
-        String name = lastMethod.name();
-        LOGGER.debug("Mapping property : {}", name);
-        getMapper().addProperty(new PropertyMapper(lastMethod));
+        property().onProperty(value);
     }
 
-    protected void field(String fieldName) {
-        LOGGER.debug("Mapping property from field : {}", fieldName);
-        getMapper().addProperty(new PropertyMapper(fieldContainer(fieldName)));
+    protected PropertyMap property() {
+        return new PropertyMap();
     }
 
-    private FieldContainer fieldContainer(String fieldName) {
-        return new FieldContainer(Fields.find(getType(), fieldName));
+    protected CollectionMap collection() {
+        return new CollectionMap();
     }
 
-    @SuppressWarnings("UnusedParameters")
+    @Deprecated
     protected void collection(Object value) {
-        LOGGER.debug("Mapping collection : {}", lastMethod);
-        getMapper().addCollection(new CollectionMapper(lastMethod));
+        collection().onProperty(value);
     }
 
     @SuppressWarnings("UnusedParameters")
@@ -101,13 +97,53 @@ public abstract class ClassMap<T> {
         context.addMapper(getMapper());
     }
 
-    protected abstract void map();
+    public abstract void map();
 
     FieldContainer getLastMethod() {
         return lastMethod;
     }
 
     protected abstract ClassMapper<T> getMapper();
+
+    protected final FieldContainer fieldContainer(String fieldName) {
+        return new FieldContainer(Fields.find(getType(), fieldName));
+    }
+
+    public class PropertyMap {
+
+        public void onField(String fieldName) {
+            addMapper(fieldContainer(fieldName));
+        }
+
+        @SuppressWarnings("UnusedParameters")
+        public void onProperty(Object value) {
+            addMapper(lastMethod);
+        }
+
+        private void addMapper(FieldContainer field) {
+            LOGGER.debug("Mapping property : {}", field);
+            getMapper().addProperty(new PropertyMapper(field));
+        }
+
+    }
+
+    public class CollectionMap {
+
+        public void onField(String fieldName) {
+            addMapper(fieldContainer(fieldName));
+        }
+
+        @SuppressWarnings("UnusedParameters")
+        public void onProperty(Object value) {
+            addMapper(lastMethod);
+        }
+
+        private void addMapper(FieldContainer field) {
+            LOGGER.debug("Mapping collection : {}", field);
+            getMapper().addCollection(new CollectionMapper(field));
+        }
+
+    }
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ClassMap.class);
     private FieldContainer lastMethod;

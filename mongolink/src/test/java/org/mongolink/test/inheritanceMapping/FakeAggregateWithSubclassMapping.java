@@ -33,13 +33,13 @@ public class FakeAggregateWithSubclassMapping extends AggregateMap<FakeAggregate
 
     @Override
     public void map() {
-        id(element().getId()).natural();
-        property(element().getValue());
+        id().onProperty(element().getId()).natural();
+        property().onProperty(element().getValue());
         subclass(new SubclassMap<FakeChildAggregate>(FakeChildAggregate.class) {
 
             @Override
-            protected void map() {
-                property(element().getChildName());
+            public void map() {
+                property().onProperty(element().getChildName());
             }
         });
     }

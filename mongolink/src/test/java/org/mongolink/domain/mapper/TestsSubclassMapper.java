@@ -97,8 +97,8 @@ public class TestsSubclassMapper {
         SubclassMap<FakeChildAggregate> subclassMap = new SubclassMap<FakeChildAggregate>(FakeChildAggregate.class) {
 
             @Override
-            protected void map() {
-                property(element().getChildName());
+            public void map() {
+                property().onProperty(element().getChildName());
             }
         };
 

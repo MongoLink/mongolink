@@ -33,6 +33,7 @@ public class FakeAggregateMappingWithCap extends AggregateMap<FakeEntityWithCap>
 
     @Override
     public void map() {
+        id().onField("id");
         setCapped(1048076, 50);
     }
 }

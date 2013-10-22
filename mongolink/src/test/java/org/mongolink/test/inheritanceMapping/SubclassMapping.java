@@ -32,7 +32,7 @@ public class SubclassMapping extends SubclassMap<FakeChildAggregate> {
     }
 
     @Override
-    protected void map() {
+    public void map() {
 
     }
 }

@@ -32,7 +32,7 @@ public class CommentMapping extends ComponentMap<Comment> {
     }
 
     @Override
-    protected void map() {
-        property(element().getValue());
+    public void map() {
+        property().onProperty(element().getValue());
     }
 }

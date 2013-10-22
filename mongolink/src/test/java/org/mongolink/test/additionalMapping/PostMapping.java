@@ -30,8 +30,8 @@ public class PostMapping extends AggregateMap<Post> {
     }
 
     @Override
-    protected void map() {
-        property(element().getTitle());
-        property(element().getContent());
+    public void map() {
+        property().onProperty(element().getTitle());
+        property().onProperty(element().getContent());
     }
 }

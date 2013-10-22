@@ -32,8 +32,8 @@ public class FakeAggregateWithNaturalIdMapping extends AggregateMap<FakeAggregat
     }
 
     @Override
-    protected void map() {
-        id(element().getNaturalKey()).natural();
-        property(element().getValue());
+    public void map() {
+        id().onProperty(element().getNaturalKey()).natural();
+        property().onProperty(element().getValue());
     }
 }

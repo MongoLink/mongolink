@@ -32,7 +32,7 @@ public class OtherAggregateWithNaturalIdMapping extends AggregateMap<OtherEntity
     }
 
     @Override
-    protected void map() {
-        id(element().getNaturalKey()).natural();
+    public void map() {
+        id().onProperty(element().getNaturalKey()).natural();
     }
 }
