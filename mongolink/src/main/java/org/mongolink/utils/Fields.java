@@ -38,6 +38,12 @@ public final class Fields {
         }
     }
 
+    private static boolean toggleVisibility(Field field, boolean visibility) {
+        boolean result = field.isAccessible();
+        field.setAccessible(visibility);
+        return result;
+    }
+
     static Object getValue(Object instance, Field field) throws IllegalAccessException {
         boolean visibility = toggleVisibility(field, true);
         try {
@@ -49,9 +55,16 @@ public final class Fields {
         }
     }
 
-    private static boolean toggleVisibility(Field field, boolean visibility) {
-        boolean result = field.isAccessible();
-        field.setAccessible(visibility);
+    public static Field find(final Class<?> clazz, final String fieldName) {
+        Field result;
+        try {
+            result = clazz.getDeclaredField(fieldName);
+        } catch (final NoSuchFieldException e) {
+            if (clazz.getSuperclass() != null) {
+                return find(clazz.getSuperclass(), fieldName);
+            }
+            throw new MongoLinkError("Unable to find field", e);
+        }
         return result;
     }
 

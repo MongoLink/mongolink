@@ -30,8 +30,8 @@ import org.slf4j.LoggerFactory;
 
 class PropertyMapper implements Mapper {
 
-    public PropertyMapper(FieldContainer property) {
-        this.property = property;
+    public PropertyMapper(FieldContainer field) {
+        this.field = field;
     }
 
     @Override
@@ -43,21 +43,21 @@ class PropertyMapper implements Mapper {
     }
 
     String dbFieldName() {
-        return property.name();
+        return field.name();
     }
 
     protected Object getPropertyValue(Object element) {
-        return property.value(element);
+        return field.value(element);
 
     }
 
     private Converter converter() {
-        return getMapper().getContext().converterFor(property.getReturnType());
+        return getMapper().getContext().converterFor(field.getReturnType());
     }
 
     @Override
     public void populate(Object instance, DBObject from) {
-        property.setValueIn(valueFrom(from), instance);
+        field.setValueIn(valueFrom(from), instance);
     }
 
     private Object valueFrom(DBObject from) {
@@ -78,5 +78,5 @@ class PropertyMapper implements Mapper {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PropertyMapper.class);
     private ClassMapper<?> mapper;
-    private FieldContainer property;
+    private FieldContainer field;
 }

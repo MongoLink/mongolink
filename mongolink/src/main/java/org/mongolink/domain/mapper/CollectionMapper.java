@@ -26,7 +26,7 @@ import com.mongodb.BasicDBList;
 import com.mongodb.DBObject;
 import org.mongolink.domain.converter.Converter;
 import org.mongolink.utils.FieldContainer;
-import org.mongolink.utils.ReflectionUtils;
+import org.mongolink.utils.Fields;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,7 +66,7 @@ class CollectionMapper implements Mapper {
     @Override
     public void populate(Object instance, DBObject from) {
         try {
-            Field field = ReflectionUtils.findPrivateField(instance.getClass(), name());
+            Field field = Fields.find(instance.getClass(), name());
             field.setAccessible(true);
             ParameterizedType elementType = (ParameterizedType) field.getGenericType();
             Converter childMapper = context().converterFor((Class<?>) elementType.getActualTypeArguments()[0]);

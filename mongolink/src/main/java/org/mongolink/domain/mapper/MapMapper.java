@@ -24,7 +24,7 @@ package org.mongolink.domain.mapper;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import org.mongolink.utils.FieldContainer;
-import org.mongolink.utils.ReflectionUtils;
+import org.mongolink.utils.Fields;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,7 +54,7 @@ public class MapMapper implements Mapper {
     @Override
     public void populate(final Object instance, final DBObject from) {
         try {
-            Field field = ReflectionUtils.findPrivateField(instance.getClass(), name());
+            Field field = Fields.find(instance.getClass(), name());
             field.setAccessible(true);
             Map dbMap = (Map) from.get(name());
             if (dbMap != null) {

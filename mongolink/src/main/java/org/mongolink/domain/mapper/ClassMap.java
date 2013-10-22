@@ -25,6 +25,7 @@ import com.google.common.collect.Lists;
 import net.sf.cglib.core.DefaultGeneratorStrategy;
 import net.sf.cglib.proxy.Enhancer;
 import org.mongolink.utils.FieldContainer;
+import org.mongolink.utils.Fields;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,6 +64,15 @@ public abstract class ClassMap<T> {
         String name = lastMethod.name();
         LOGGER.debug("Mapping property : {}", name);
         getMapper().addProperty(new PropertyMapper(lastMethod));
+    }
+
+    protected void field(String fieldName) {
+        LOGGER.debug("Mapping property from field : {}", fieldName);
+        getMapper().addProperty(new PropertyMapper(fieldContainer(fieldName)));
+    }
+
+    private FieldContainer fieldContainer(String fieldName) {
+        return new FieldContainer(Fields.find(getType(), fieldName));
     }
 
     @SuppressWarnings("UnusedParameters")

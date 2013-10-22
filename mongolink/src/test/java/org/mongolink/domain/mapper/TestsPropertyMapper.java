@@ -29,6 +29,7 @@ import org.mongolink.test.entity.Comment;
 import org.mongolink.test.entity.FakeAggregate;
 import org.mongolink.test.simpleMapping.CommentMapping;
 import org.mongolink.utils.FieldContainer;
+import org.mongolink.utils.Fields;
 
 import java.lang.reflect.*;
 
@@ -212,6 +213,23 @@ public class TestsPropertyMapper {
         assertThat(instance.getComment().getValue(), Matchers.is("valeur"));
     }
 
+
+    @Test
+    public void canCreateFromField() throws NoSuchFieldException {
+        FakeAggregate entity = new FakeAggregate("value");
+        BasicDBObject dbObject = new BasicDBObject();
+
+        propertyMapperFromField().save(entity, dbObject);
+
+        assertThat(dbObject.getString("value"), Matchers.is("value"));
+    }
+
+    private PropertyMapper propertyMapperFromField() throws  NoSuchFieldException {
+        Field field = Fields.find(FakeAggregate.class, "value");
+        final PropertyMapper result = new PropertyMapper(new FieldContainer(field));
+        result.setMapper(parentMapper());
+        return result;
+    }
 
     public PropertyMapper propertyMapperForComponent() throws NoSuchMethodException {
         MapperContext context = new MapperContext();

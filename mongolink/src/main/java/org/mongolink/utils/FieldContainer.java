@@ -36,14 +36,14 @@ public class FieldContainer {
         this.field = findField(method);
     }
 
+    public FieldContainer(Field field) {
+        this.field = field;
+    }
+
 
     private Field findField(Method method) {
-        try {
-            String fieldName = StringUtils.uncapitalize(method.getName().substring(prefixLength(method), method.getName().length()));
-            return ReflectionUtils.findPrivateField(method.getDeclaringClass(), fieldName);
-        } catch (NoSuchFieldException e) {
-            throw new MongoLinkError("Error finding field : " + toString());
-        }
+        String fieldName = StringUtils.uncapitalize(method.getName().substring(prefixLength(method), method.getName().length()));
+        return Fields.find(method.getDeclaringClass(), fieldName);
     }
 
     private int prefixLength(Method method) {
