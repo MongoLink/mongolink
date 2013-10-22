@@ -24,13 +24,13 @@ package org.mongolink.domain.mapper;
 
 import com.mongodb.DBObject;
 import org.mongolink.domain.converter.Converter;
-import org.mongolink.utils.PropertyContainer;
+import org.mongolink.utils.FieldContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 class PropertyMapper implements Mapper {
 
-    public PropertyMapper(PropertyContainer property) {
+    public PropertyMapper(FieldContainer property) {
         this.property = property;
     }
 
@@ -43,11 +43,11 @@ class PropertyMapper implements Mapper {
     }
 
     String dbFieldName() {
-        return property.shortName();
+        return property.name();
     }
 
     protected Object getPropertyValue(Object element) {
-        return property.invoke(element);
+        return property.value(element);
 
     }
 
@@ -78,5 +78,5 @@ class PropertyMapper implements Mapper {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PropertyMapper.class);
     private ClassMapper<?> mapper;
-    private PropertyContainer property;
+    private FieldContainer property;
 }

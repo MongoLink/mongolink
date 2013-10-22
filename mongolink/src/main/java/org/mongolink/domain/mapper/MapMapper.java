@@ -23,38 +23,40 @@ package org.mongolink.domain.mapper;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
-import org.mongolink.utils.PropertyContainer;
+import org.mongolink.utils.FieldContainer;
 import org.mongolink.utils.ReflectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.Map;
 
 public class MapMapper implements Mapper {
 
-    public MapMapper(PropertyContainer propertyContainer) {
-        this.name = propertyContainer.shortName();
-        this.method = propertyContainer.getMethod();
+    public MapMapper(FieldContainer fieldContainer) {
+        this.fieldContainer = fieldContainer;
     }
 
     @Override
     public void save(final Object instance, final DBObject into) {
         try {
-            Map map = (Map) method.invoke(instance);
-            into.put(name, new BasicDBObject(map));
+            Map map = value(instance);
+            into.put(name(), new BasicDBObject(map));
         } catch (Exception e) {
-            LOGGER.error("Can't save map from {}", method, e);
+            LOGGER.error("Can't save map from {}", name(), e);
         }
+    }
+
+    private Map value(Object instance) {
+        return (Map) fieldContainer.value(instance);
     }
 
     @Override
     public void populate(final Object instance, final DBObject from) {
         try {
-            Field field = ReflectionUtils.findPrivateField(instance.getClass(), name);
+            Field field = ReflectionUtils.findPrivateField(instance.getClass(), name());
             field.setAccessible(true);
-            Map dbMap = (Map) from.get(name);
+            Map dbMap = (Map) from.get(name());
             if (dbMap != null) {
                 Map map = (Map) field.get(instance);
                 map.putAll(dbMap);
@@ -65,8 +67,11 @@ public class MapMapper implements Mapper {
         }
     }
 
+    private String name() {
+        return fieldContainer.name();
+    }
 
-    private final Method method;
-    private final String name;
+
     private static final Logger LOGGER = LoggerFactory.getLogger(CollectionMapper.class);
+    private final FieldContainer fieldContainer;
 }

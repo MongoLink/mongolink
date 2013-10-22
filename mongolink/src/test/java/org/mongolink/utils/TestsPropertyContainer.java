@@ -28,27 +28,51 @@ import static org.junit.Assert.*;
 
 public class TestsPropertyContainer {
 
-    private class FakeEntity {
-        private boolean isOk() {
-            return false;
-        }
-
-        private String getStuff() {
-            return null;
-        }
-    }
-
     @Test
     public void canGetShortnameOnStringPropertyMethod() throws Exception {
-        PropertyContainer propertyContainer = new PropertyContainer(FakeEntity.class.getDeclaredMethod("getStuff"));
+        FieldContainer fieldContainer = new FieldContainer(FakeEntity.class.getDeclaredMethod("getStuff"));
 
-        assertThat(propertyContainer.shortName(), is("stuff"));
+        assertThat(fieldContainer.name(), is("stuff"));
     }
 
     @Test
     public void canGetShortnameOnBooleanPropertyMethod() throws Exception {
-        PropertyContainer propertyContainer = new PropertyContainer(FakeEntity.class.getDeclaredMethod("isOk"));
+        FieldContainer fieldContainer = new FieldContainer(FakeEntity.class.getDeclaredMethod("isOk"));
 
-        assertThat(propertyContainer.shortName(), is("ok"));
+        assertThat(fieldContainer.name(), is("ok"));
+    }
+
+    @Test
+    public void canSetValueForPrivateField() throws NoSuchMethodException {
+        FieldContainer fieldContainer = new FieldContainer(FakeEntity.class.getDeclaredMethod("isOk"));
+        FakeEntity entity = new FakeEntity();
+
+        fieldContainer.setValueIn(true, entity);
+
+        assertThat(entity.isOk(), is(true));
+    }
+
+    @Test
+    public void canGetValueFromPrivateField() throws NoSuchMethodException {
+        FieldContainer fieldContainer = new FieldContainer(FakeEntity.class.getDeclaredMethod("getStuff"));
+        FakeEntity entity = new FakeEntity();
+        entity.stuff = "stuuuf";
+
+        Object stuff = fieldContainer.value(entity);
+
+        assertThat((String) stuff, is("stuuuf"));
+    }
+
+    private class FakeEntity {
+        private boolean isOk() {
+            return ok;
+        }
+
+        private String getStuff() {
+            return stuff;
+        }
+
+        private boolean ok;
+        private String stuff;
     }
 }

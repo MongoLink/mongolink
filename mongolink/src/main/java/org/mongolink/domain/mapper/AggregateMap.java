@@ -38,7 +38,7 @@ public abstract class AggregateMap<T> extends ClassMap<T> {
     }
 
     protected IdMapper id(Object value) {
-        LOGGER.debug("Mapping id : {}", getLastMethod().shortName());
+        LOGGER.debug("Mapping id : {}", getLastMethod().name());
         IdMapper id = new IdMapper(getLastMethod(), IdGeneration.Auto);
         getMapper().setIdMapper(id);
         return id;

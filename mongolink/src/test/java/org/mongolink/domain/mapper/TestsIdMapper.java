@@ -2,7 +2,7 @@ package org.mongolink.domain.mapper;
 
 import com.mongodb.BasicDBObject;
 import org.junit.Test;
-import org.mongolink.utils.PropertyContainer;
+import org.mongolink.utils.FieldContainer;
 
 import java.util.UUID;
 
@@ -15,7 +15,7 @@ public class TestsIdMapper {
 
     @Test
     public void canSerializeUuid() {
-        IdMapper mapper = new IdMapper(mock(PropertyContainer.class), IdGeneration.Natural);
+        IdMapper mapper = new IdMapper(mock(FieldContainer.class), IdGeneration.Natural);
         final UUID id = UUID.randomUUID();
 
         final Object dbValue = mapper.convertToDbValue(id);
@@ -25,9 +25,9 @@ public class TestsIdMapper {
 
     @Test
     public void canSaveANullId() {
-        final PropertyContainer propertyContainer = mock(PropertyContainer.class);
-        when(propertyContainer.invoke(any())).thenReturn(null);
-        IdMapper mapper = new IdMapper(propertyContainer, IdGeneration.Auto);
+        final FieldContainer fieldContainer = mock(FieldContainer.class);
+        when(fieldContainer.value(any())).thenReturn(null);
+        IdMapper mapper = new IdMapper(fieldContainer, IdGeneration.Auto);
         final BasicDBObject dbObject = new BasicDBObject();
 
         mapper.save(new Object(), dbObject);

@@ -25,7 +25,7 @@ package org.mongolink.domain.mapper;
 import com.mongodb.DBObject;
 import org.bson.types.ObjectId;
 import org.mongolink.MongoLinkError;
-import org.mongolink.utils.PropertyContainer;
+import org.mongolink.utils.FieldContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,8 +33,8 @@ import java.lang.reflect.Field;
 
 public class IdMapper implements Mapper {
 
-    public IdMapper(PropertyContainer propertyContainer, IdGeneration generationStrategy) {
-        this.propertyContainer = propertyContainer;
+    public IdMapper(FieldContainer fieldContainer, IdGeneration generationStrategy) {
+        this.fieldContainer = fieldContainer;
         this.generationStrategy = generationStrategy;
     }
 
@@ -46,7 +46,7 @@ public class IdMapper implements Mapper {
                 into.put(dbFieldName(), idValue);
             }
         } catch (Exception e) {
-            LOGGER.error("Can't saveInto property {}", propertyContainer.shortName(), e);
+            LOGGER.error("Can't saveInto property {}", fieldContainer.name(), e);
         }
     }
 
@@ -57,12 +57,12 @@ public class IdMapper implements Mapper {
     @Override
     public void populate(Object instance, DBObject from) {
         try {
-            Field field = mapper.getPersistentType().getDeclaredField(propertyContainer.shortName());
+            Field field = mapper.getPersistentType().getDeclaredField(fieldContainer.name());
             field.setAccessible(true);
             field.set(instance, getIdValue(from));
             field.setAccessible(false);
         } catch (Exception e) {
-            LOGGER.error("Error populating id into {}", propertyContainer, e);
+            LOGGER.error("Error populating id into {}", fieldContainer, e);
         }
     }
 
@@ -79,7 +79,7 @@ public class IdMapper implements Mapper {
 
     protected Object getIdValue(Object element) {
         try {
-            return propertyContainer.invoke(element);
+            return fieldContainer.value(element);
         } catch (Exception e) {
             throw new MongoLinkError("Can't get id value", e);
         }
@@ -108,7 +108,7 @@ public class IdMapper implements Mapper {
     }
 
     private IdGeneration generationStrategy;
-    private final PropertyContainer propertyContainer;
+    private final FieldContainer fieldContainer;
     private static final Logger LOGGER = LoggerFactory.getLogger(IdMapper.class);
     private AggregateMapper<?> mapper;
 }

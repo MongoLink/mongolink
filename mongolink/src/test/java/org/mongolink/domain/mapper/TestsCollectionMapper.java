@@ -24,7 +24,7 @@ package org.mongolink.domain.mapper;
 import com.google.common.collect.Lists;
 import com.mongodb.*;
 import org.junit.Test;
-import org.mongolink.utils.PropertyContainer;
+import org.mongolink.utils.FieldContainer;
 
 import java.util.List;
 
@@ -67,7 +67,7 @@ public class TestsCollectionMapper {
     }
 
     private CollectionMapper createMapper() throws NoSuchMethodException {
-        final CollectionMapper result = new CollectionMapper(new PropertyContainer(EntityWithCollection.class.getMethod("getList", null)));
+        final CollectionMapper result = new CollectionMapper(new FieldContainer(EntityWithCollection.class.getMethod("getList", null)));
         final MapperContext context = new MapperContext();
         final ClassMapper classMapper = mock(ClassMapper.class);
         when(classMapper.getContext()).thenReturn(context);

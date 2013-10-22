@@ -28,7 +28,7 @@ import org.junit.Test;
 import org.mongolink.test.entity.Comment;
 import org.mongolink.test.entity.FakeAggregate;
 import org.mongolink.test.simpleMapping.CommentMapping;
-import org.mongolink.utils.PropertyContainer;
+import org.mongolink.utils.FieldContainer;
 
 import java.lang.reflect.*;
 
@@ -96,7 +96,7 @@ public class TestsPropertyMapper {
     }
 
     private PropertyMapper mapperForEnum() throws NoSuchMethodException {
-        PropertyMapper propertyMapper = new PropertyMapper(new PropertyContainer(FakeEntity.class.getDeclaredMethod("getValue")));
+        PropertyMapper propertyMapper = new PropertyMapper(new FieldContainer(FakeEntity.class.getDeclaredMethod("getValue")));
         propertyMapper.setMapper(parentMapper());
         return propertyMapper;
     }
@@ -114,7 +114,7 @@ public class TestsPropertyMapper {
     }
 
     private PropertyMapper mapperForProperty() throws NoSuchMethodException {
-        final PropertyMapper propertyMapper = new PropertyMapper(new PropertyContainer(primitiveGetter()));
+        final PropertyMapper propertyMapper = new PropertyMapper(new FieldContainer(primitiveGetter()));
         propertyMapper.setMapper(parentMapper());
         return propertyMapper;
     }
@@ -150,7 +150,7 @@ public class TestsPropertyMapper {
     }
 
     private PropertyMapper propertyMapperForDate() throws NoSuchMethodException {
-        final PropertyMapper result = new PropertyMapper(new PropertyContainer(FakeEntity.class.getDeclaredMethod("getCreationDate")));
+        final PropertyMapper result = new PropertyMapper(new FieldContainer(FakeEntity.class.getDeclaredMethod("getCreationDate")));
         result.setMapper(parentMapper());
         return result;
     }
@@ -176,7 +176,7 @@ public class TestsPropertyMapper {
     }
 
     private PropertyMapper propertyMapperForBoolean() throws NoSuchMethodException {
-        final PropertyMapper propertyMapper = new PropertyMapper(new PropertyContainer(primitiveBooleanGetter()));
+        final PropertyMapper propertyMapper = new PropertyMapper(new FieldContainer(primitiveBooleanGetter()));
         propertyMapper.setMapper(parentMapper());
         return propertyMapper;
     }
@@ -221,8 +221,8 @@ public class TestsPropertyMapper {
         when(classMapper.getContext()).thenReturn(context);
         when(classMapper.getPersistentType()).thenReturn(FakeAggregate.class);
         final Method method = FakeAggregate.class.getMethod("getComment", null);
-        PropertyContainer propertyContainer = new PropertyContainer(method);
-        PropertyMapper propertyComponentMapper = new PropertyMapper(propertyContainer);
+        FieldContainer fieldContainer = new FieldContainer(method);
+        PropertyMapper propertyComponentMapper = new PropertyMapper(fieldContainer);
         propertyComponentMapper.setMapper(classMapper);
         return propertyComponentMapper;
     }
