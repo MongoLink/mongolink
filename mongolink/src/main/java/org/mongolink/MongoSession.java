@@ -122,10 +122,9 @@ public class MongoSession {
         state.ensureStarted();
         AggregateMapper<?> mapper = entityMapper(element.getClass());
         checkEntityIsInCache(element, mapper);
-        DBObject value = unitOfWork.getDBOBject(element.getClass(), mapper.getId(element));
-        getDbCollection(mapper).remove(value);
+        getDbCollection(mapper).remove(new BasicDBObject("_id", mapper.getId(element)));
         unitOfWork.delete(mapper.getId(element), element);
-        LOGGER.debug("Entity deleted : " + value);
+        LOGGER.debug("Entity deleted : " + element);
     }
 
     private void checkEntityIsInCache(Object element, AggregateMapper<?> mapper) {
