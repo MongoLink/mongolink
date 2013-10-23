@@ -36,8 +36,16 @@ class PropertyInterceptor implements MethodInterceptor {
 
     @Override
     public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
+        if(isGroovyStrangeMethod(method)) {
+            return null;
+        }
         classMap.setLastMethod(new FieldContainer(method));
         return null;
     }
 
+    private boolean isGroovyStrangeMethod(Method method) {
+        return method.getName().startsWith("$");
+    }
+
 }
+

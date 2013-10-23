@@ -41,4 +41,23 @@ public class TestsPropertyInterceptor {
 
         verify(aggregateMap).setLastMethod(new FieldContainer(method));
     }
+
+    @Test
+    public void ignoreGroovyMethod() throws Throwable {
+        ClassMap classMap = mock(ClassMap.class);
+        PropertyInterceptor interceptor = new PropertyInterceptor(classMap);
+        Method method = EntityWithGroovyMethod.class.getDeclaredMethod("$getStuff");
+
+        interceptor.intercept(new EntityWithGroovyMethod(), method, null, null);
+
+        verifyZeroInteractions(classMap);
+    }
+
+    public static class EntityWithGroovyMethod {
+
+        public void $getStuff() {
+            throw new RuntimeException();
+        }
+    }
+
 }
