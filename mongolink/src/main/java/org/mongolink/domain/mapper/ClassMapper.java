@@ -22,14 +22,13 @@
 package org.mongolink.domain.mapper;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import net.sf.cglib.core.ReflectUtils;
 import org.mongolink.domain.converter.Converter;
 
+import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 @SuppressWarnings("unchecked")
 public abstract class ClassMapper<T> extends Converter implements Mapper {
@@ -57,7 +56,7 @@ public abstract class ClassMapper<T> extends Converter implements Mapper {
     }
 
     <U> void addSubclass(SubclassMapper<U> mapper) {
-        subclasses.put(mapper.discriminator(), mapper);
+        subclasses.add(mapper);
     }
 
     protected void addMapper(Mapper property) {
@@ -80,10 +79,24 @@ public abstract class ClassMapper<T> extends Converter implements Mapper {
             return null;
         }
         String discriminator = SubclassMapper.discriminatorValue(from);
-        if (subclasses.get(discriminator) != null) {
-            return (T) subclasses.get(discriminator).toInstance(from);
+        SubclassMapper<?> subclassmapper = getSubclassmapper(discriminator);
+        if (subclassmapper != null) {
+            return (T) subclassmapper.toInstance(from);
         }
         return (T) ReflectUtils.newInstance(persistentType);
+    }
+
+    protected SubclassMapper<?> getSubclassmapper(String discriminator) {
+        for (SubclassMapper<?> subclassMapper : getSubclasses()) {
+            if(subclassMapper.discriminator().equals(discriminator)) {
+                return subclassMapper;
+            }
+            SubclassMapper<?> subclass = subclassMapper.getSubclassmapper(discriminator);
+            if(subclass != null) {
+                return subclass;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -116,17 +129,21 @@ public abstract class ClassMapper<T> extends Converter implements Mapper {
     }
 
     private SubclassMapper<?> subclassMapperFor(Object element) {
-        Class<?> type = element.getClass();
-        return getSubclass(type);
+        return getSubclass(element.getClass());
     }
 
     protected  <U> SubclassMapper<U> getSubclass(Class<U> type) {
-        for (SubclassMapper<?> subclassMapper : subclasses.values()) {
-            if (subclassMapper.getPersistentType().isAssignableFrom(type)) {
-                return (SubclassMapper<U>) subclassMapper;
+        for (SubclassMapper<?> subclassMapper : subclasses) {
+            if(subclassMapper.canMap(type)) {
+                SubclassMapper<U> childMapper = subclassMapper.getSubclass(type);
+                return childMapper == null ? (SubclassMapper<U>) subclassMapper : childMapper;
             }
         }
         return null;
+    }
+
+    protected Collection<SubclassMapper<?>> getSubclasses() {
+        return subclasses;
     }
 
     @Override
@@ -152,8 +169,12 @@ public abstract class ClassMapper<T> extends Converter implements Mapper {
         return false;
     }
 
+    protected boolean hasSubclasses() {
+        return !subclasses.isEmpty();
+    }
+
     protected final Class<T> persistentType;
     private final List<Mapper> mappers = Lists.newArrayList();
-    private final Map<String, SubclassMapper<?>> subclasses = Maps.newHashMap();
+    private final List<SubclassMapper<?>> subclasses = Lists.newArrayList();
     private MapperContext context;
 }

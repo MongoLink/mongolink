@@ -74,6 +74,8 @@ public class TestsClassMapper {
 
     }
 
+
+
     private AggregateMapper<FakeAggregate> entityMapper() {
         return (AggregateMapper<FakeAggregate>) context.mapperFor(FakeAggregate.class);
     }

@@ -94,6 +94,10 @@ public abstract class ClassMap<T> {
             subclass.buildMapper(context);
             getMapper().addSubclass(subclass.getMapper());
         }
+        addMapperToContext(context);
+    }
+
+    protected void addMapperToContext(MapperContext context) {
         context.addMapper(getMapper());
     }
 

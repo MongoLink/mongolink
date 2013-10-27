@@ -49,7 +49,15 @@ public class RestrictionFactory {
         return new RestrictionIn(field, elements);
     }
 
-    public CompositeRestriction elementMatch(final String field) {
+    public RestrictionElementMatch elementMatch(final String field) {
         return new RestrictionElementMatch(field);
+    }
+
+    public CompositeRestriction or() {
+        return new RestrictionOr();
+    }
+
+    public Restriction exists(String field, boolean exists) {
+        return new RestricitonExists(field, exists);
     }
 }

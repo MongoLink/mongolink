@@ -22,14 +22,21 @@
 package org.mongolink.domain.mapper;
 
 
-import com.mongodb.*;
+import com.mongodb.BasicDBList;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
 import org.bson.types.ObjectId;
-import org.junit.*;
-import org.mongolink.test.entity.*;
+import org.junit.Before;
+import org.junit.Test;
+import org.mongolink.domain.QueryExecutor;
+import org.mongolink.domain.criteria.Criteria;
+import org.mongolink.test.entity.FakeAggregate;
+import org.mongolink.test.entity.FakeChildAggregate;
 import org.mongolink.test.simpleMapping.FakeAggregateMapping;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 public class TestsSubclassMapper {
 
@@ -92,6 +99,33 @@ public class TestsSubclassMapper {
 
         assertThat((String) dbObject.get("__discriminator"), is("FakeChildAggregate"));
     }
+
+    @Test
+    public void canPopulateRestrictionForAllSubtypes() {
+        AggregateMapper<FakeAggregate> mapper = (AggregateMapper<FakeAggregate>) context.mapperFor(FakeAggregate.class);
+        Criteria criteria = new Criteria(mock(QueryExecutor.class));
+
+        mapper.applyRestrictionsFor(FakeAggregate.class, criteria);
+
+        DBObject query = criteria.createQuery();
+        assertThat(query.get("$or"), notNullValue());
+        BasicDBList or = (BasicDBList) query.get("$or");
+        assertThat(or.size(), is(2));
+    }
+
+    @Test
+    public void canPopulateRestrictionForAGivenSubtype() {
+        AggregateMapper<FakeAggregate> mapper = (AggregateMapper<FakeAggregate>) context.mapperFor(FakeAggregate.class);
+        Criteria criteria = new Criteria(mock(QueryExecutor.class));
+
+        mapper.applyRestrictionsFor(FakeChildAggregate.class, criteria);
+
+        DBObject query = criteria.createQuery();
+        assertThat(query.get("$or"), notNullValue());
+        BasicDBList or = (BasicDBList) query.get("$or");
+        assertThat(or.size(), is(1));
+    }
+
 
     private void createContext() {
         SubclassMap<FakeChildAggregate> subclassMap = new SubclassMap<FakeChildAggregate>(FakeChildAggregate.class) {

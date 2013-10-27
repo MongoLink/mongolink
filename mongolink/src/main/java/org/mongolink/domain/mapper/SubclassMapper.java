@@ -23,6 +23,8 @@ package org.mongolink.domain.mapper;
 
 
 import com.mongodb.DBObject;
+import org.mongolink.domain.criteria.CompositeRestriction;
+import org.mongolink.domain.criteria.Restrictions;
 
 public class SubclassMapper<T> extends ClassMapper<T> {
 
@@ -43,6 +45,15 @@ public class SubclassMapper<T> extends ClassMapper<T> {
 
     String discriminator() {
         return getPersistentType().getSimpleName();
+    }
+
+    public void applyRestrictions(Class<?> target, CompositeRestriction restriction) {
+        if(target == getPersistentType() || target.isAssignableFrom(getPersistentType())) {
+            restriction.with(Restrictions.equals(DISCRIMINATOR, discriminator()));
+        }
+        for (SubclassMapper<?> subclassMapper : getSubclasses()) {
+            subclassMapper.applyRestrictions(target, restriction);
+        }
     }
 
     public static final String DISCRIMINATOR = "__discriminator";

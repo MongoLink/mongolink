@@ -11,13 +11,13 @@ public abstract class CompositeRestriction extends Restriction{
         super(field);
     }
 
-    public CompositeRestriction equals(final String field, final Object value) {
-        restrictions.add(Restrictions.equals(field, value));
-        return this;
-    }
-
     protected List<Restriction> getRestrictions() {
         return Collections.unmodifiableList(restrictions);
+    }
+
+    public CompositeRestriction with(Restriction restriction) {
+        restrictions.add(restriction);
+        return this;
     }
 
     private List<Restriction> restrictions = Lists.newArrayList();

@@ -173,8 +173,8 @@ public class TestsAggregateMapper {
 
         assertThat(instance, notNullValue());
         assertThat(instance, instanceOf(FakeAggregate.class));
-
     }
+
 
     private AggregateMapper<FakeAggregate> entityMapper() {
         return (AggregateMapper<FakeAggregate>) context.mapperFor(FakeAggregate.class);

@@ -49,8 +49,16 @@ public class Restrictions {
         return factory.in(field, elements);
     }
 
+    public static CompositeRestriction or() {
+        return factory.or();
+    }
 
-    public static CompositeRestriction elementMatch(final String fieldName) {
+    public static Restriction exists(String field, boolean exists) {
+        return factory.exists(field, exists);
+    }
+
+
+    public static RestrictionElementMatch elementMatch(final String fieldName) {
         return factory.elementMatch(fieldName);
     }
 

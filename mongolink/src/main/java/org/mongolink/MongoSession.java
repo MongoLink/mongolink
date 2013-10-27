@@ -29,7 +29,9 @@ import org.mongolink.domain.UnitOfWork;
 import org.mongolink.domain.UpdateStrategies;
 import org.mongolink.domain.criteria.Criteria;
 import org.mongolink.domain.criteria.CriteriaFactory;
-import org.mongolink.domain.mapper.*;
+import org.mongolink.domain.mapper.AggregateMapper;
+import org.mongolink.domain.mapper.ClassMapper;
+import org.mongolink.domain.mapper.MapperContext;
 import org.mongolink.domain.updateStrategy.OverwriteStrategy;
 import org.mongolink.domain.updateStrategy.UpdateStrategy;
 import org.slf4j.Logger;
@@ -88,8 +90,7 @@ public class MongoSession {
     public <T> List<T> getAll(Class<T> entityType) {
         checkNotNull(entityType, "Entity type was null");
         state.ensureStarted();
-        AggregateMapper<?> mapper = entityMapper(entityType);
-        return createExecutor(mapper).execute(mapper.allDocumentsQuery(entityType));
+        return createCriteria(entityType).list();
     }
 
     public void save(Object element) {
@@ -139,7 +140,10 @@ public class MongoSession {
 
     public <U> Criteria createCriteria(Class<U> type) {
         checkNotNull(type, "Type was null");
-        return criteriaFactory.create(createExecutor(entityMapper(type)));
+        AggregateMapper<?> mapper = entityMapper(type);
+        Criteria criteria = criteriaFactory.create(createExecutor(mapper));
+        mapper.applyRestrictionsFor(type, criteria);
+        return criteria;
     }
 
     @SuppressWarnings("unchecked")

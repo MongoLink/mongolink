@@ -22,8 +22,10 @@
 package org.mongolink.domain.mapper;
 
 
-import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
+import org.mongolink.domain.criteria.CompositeRestriction;
+import org.mongolink.domain.criteria.Criteria;
+import org.mongolink.domain.criteria.Restrictions;
 
 @SuppressWarnings("unchecked")
 public class AggregateMapper<T> extends ClassMapper<T> {
@@ -71,14 +73,19 @@ public class AggregateMapper<T> extends ClassMapper<T> {
         return capped;
     }
 
-    public  DBObject allDocumentsQuery(Class<?> entityType) {
-        SubclassMapper<?> subclass = getSubclass(entityType);
-        if(subclass == null) {
-            return new BasicDBObject();
+    public void applyRestrictionsFor(Class<?> target, Criteria criteria) {
+        if(!hasSubclasses()) {
+            return;
         }
-        BasicDBObject query = new BasicDBObject();
-        query.put(SubclassMapper.DISCRIMINATOR, subclass.discriminator());
-        return query;
+        CompositeRestriction or = Restrictions.or();
+        criteria.add(or);
+        if(target == getPersistentType()) {
+            or.with(Restrictions.exists(SubclassMapper.DISCRIMINATOR, false));
+        }
+        for (SubclassMapper<?> subclassMapper : getSubclasses()) {
+            subclassMapper.applyRestrictions(target, or);
+        }
+
     }
 
     private Capped capped = new NotCapped();

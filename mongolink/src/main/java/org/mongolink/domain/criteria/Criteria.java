@@ -42,7 +42,7 @@ public class Criteria<T> {
         restrictions.add(restriction);
     }
 
-    DBObject createQuery() {
+    public DBObject createQuery() {
         final BasicDBObject result = new BasicDBObject();
         for (Restriction restriction : restrictions) {
             restriction.apply(result);

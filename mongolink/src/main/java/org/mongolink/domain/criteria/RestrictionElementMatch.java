@@ -21,4 +21,11 @@ public class RestrictionElementMatch extends CompositeRestriction {
         }
         return subquery;
     }
+
+    public RestrictionElementMatch equals(final String field, final Object value) {
+        with(Restrictions.equals(field, value));
+        return this;
+    }
+
+
 }
