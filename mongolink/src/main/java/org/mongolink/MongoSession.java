@@ -128,6 +128,10 @@ public class MongoSession {
         LOGGER.debug("Entity deleted : " + element);
     }
 
+    public void clear() {
+        unitOfWork.clear();
+    }
+
     private void checkEntityIsInCache(Object element, AggregateMapper<?> mapper) {
         if (!unitOfWork.contains(element.getClass(), mapper.getId(element))) {
             throw new MongoLinkError("Entity to delete not loaded");
@@ -158,10 +162,6 @@ public class MongoSession {
     public void setUpdateStrategy(UpdateStrategies updateStrategy) {
         checkNotNull(updateStrategy, "Update strategy was null");
         this.updateStrategy = updateStrategy.instance();
-    }
-
-    public void clear() {
-        unitOfWork.clear();
     }
 
     public void flush() {

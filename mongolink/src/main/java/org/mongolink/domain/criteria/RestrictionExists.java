@@ -23,9 +23,9 @@ package org.mongolink.domain.criteria;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 
-public class RestricitonExists extends Restriction {
+public class RestrictionExists extends Restriction {
 
-    public RestricitonExists(String field, boolean exists) {
+    public RestrictionExists(String field, boolean exists) {
         super(field);
         this.exists = exists;
     }

@@ -58,6 +58,6 @@ public class RestrictionFactory {
     }
 
     public Restriction exists(String field, boolean exists) {
-        return new RestricitonExists(field, exists);
+        return new RestrictionExists(field, exists);
     }
 }
