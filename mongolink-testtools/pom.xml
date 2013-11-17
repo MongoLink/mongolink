@@ -21,7 +21,7 @@
             <artifactId>mongolink</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.github.fakemongo</groupId>
+            <groupId>com.foursquare</groupId>
             <artifactId>fongo</artifactId>
         </dependency>
     </dependencies>
