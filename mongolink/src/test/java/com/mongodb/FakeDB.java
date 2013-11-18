@@ -66,6 +66,21 @@ public class FakeDB extends DB {
 
     @Override
     public CommandResult command(final DBObject cmd, final int options) throws MongoException {
+        return okResult();
+    }
+
+    @Override
+    public boolean isAuthenticated() {
+        return credentials != null;
+    }
+
+    @Override
+    CommandResult doAuthenticate(MongoCredential credentials) {
+        this.credentials = credentials;
+        return okResult();
+    }
+
+    private CommandResult okResult() {
         CommandResult commandResult = new CommandResult(serverAddress());
         commandResult.put("ok", true);
         return commandResult;
@@ -78,6 +93,8 @@ public class FakeDB extends DB {
             return null;
         }
     }
+
+    private MongoCredential credentials;
 
     public final Map<String, FakeDBCollection> collections = Maps.newHashMap();
 }

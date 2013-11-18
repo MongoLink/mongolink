@@ -1,6 +1,6 @@
 package org.mongolink.test;
 
-import com.foursquare.fongo.Fongo;
+import com.github.fakemongo.Fongo;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import org.mongolink.DbFactory;
