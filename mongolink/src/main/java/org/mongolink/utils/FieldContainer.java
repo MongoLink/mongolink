@@ -33,20 +33,21 @@ import java.lang.reflect.Method;
 public class FieldContainer {
 
     public FieldContainer(Method method) {
-        this.field = findField(method);
+        this(findField(method));
     }
 
     public FieldContainer(Field field) {
         this.field = field;
+        this.field.setAccessible(true);
     }
 
 
-    private Field findField(Method method) {
+    private static Field findField(Method method) {
         String fieldName = StringUtils.uncapitalize(method.getName().substring(prefixLength(method), method.getName().length()));
         return Fields.find(method.getDeclaringClass(), fieldName);
     }
 
-    private int prefixLength(Method method) {
+    private static int prefixLength(Method method) {
         if (method.getName().startsWith("is")) {
             return 2;
         }

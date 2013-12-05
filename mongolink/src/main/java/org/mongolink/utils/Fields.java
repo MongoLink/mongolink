@@ -28,30 +28,18 @@ import java.lang.reflect.Field;
 
 public final class Fields {
     static void setValue(Field field, Object instance, Object value) {
-        boolean visibility = toggleVisibility(field, true);
         try {
             field.set(instance, value);
         } catch (Exception e) {
             LOGGER.error("Error setting property {} with value {} in {}", field.getName(), value, field.getDeclaringClass().getName(), e);
-        } finally {
-            toggleVisibility(field, visibility);
         }
     }
 
-    private static boolean toggleVisibility(Field field, boolean visibility) {
-        boolean result = field.isAccessible();
-        field.setAccessible(visibility);
-        return result;
-    }
-
     static Object getValue(Object instance, Field field) throws IllegalAccessException {
-        boolean visibility = toggleVisibility(field, true);
         try {
             return field.get(instance);
         } catch (Exception e) {
             throw new MongoLinkError("Can't get field value", e);
-        } finally {
-            toggleVisibility(field, visibility);
         }
     }
 
