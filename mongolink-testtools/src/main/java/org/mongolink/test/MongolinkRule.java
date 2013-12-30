@@ -8,9 +8,9 @@ import org.mongolink.domain.mapper.ContextBuilder;
 
 public class MongolinkRule extends ExternalResource {
 
-    public static MongolinkRule withPackage(String packageToScan) {
+    public static MongolinkRule withPackage(String... packagesToScan) {
         MongolinkRule result = new MongolinkRule();
-        ContextBuilder contextBuilder = new ContextBuilder(packageToScan);
+        ContextBuilder contextBuilder = new ContextBuilder(packagesToScan);
         sesionManager = MongoSessionManager.create(contextBuilder, Settings.defaultInstance().withDbFactory(FongoDbFactory.class));
         return result;
     }
