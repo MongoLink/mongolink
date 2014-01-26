@@ -23,12 +23,11 @@ package org.mongolink.domain.converter;
 
 import org.joda.money.Money;
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
 import java.lang.reflect.Method;
 
 public abstract class Converter {
-
-    private static final PrimitiveConverter PRIMITIVE_CONVERTER = new PrimitiveConverter();
 
     public static Converter forMethod(Method method) {
         return forType(method.getReturnType());
@@ -41,7 +40,10 @@ public abstract class Converter {
         if (isDateTime(type)) {
             return new DateTimeConverter();
         }
-        if(isMoney(type)) {
+        if (isLocalDate(type)) {
+            return new LocalDateConverter();
+        }
+        if (isMoney(type)) {
             return new MoneyConverter();
         }
         return PRIMITIVE_CONVERTER;
@@ -55,6 +57,10 @@ public abstract class Converter {
         return DateTime.class.isAssignableFrom(type);
     }
 
+    private static boolean isLocalDate(Class<?> type) {
+        return LocalDate.class.isAssignableFrom(type);
+    }
+
     private static boolean isEnum(Class<?> type) {
         return type.isEnum() || (type.getSuperclass() != null && type.getSuperclass().isEnum());
     }
@@ -62,4 +68,6 @@ public abstract class Converter {
     public abstract Object toDbValue(Object value);
 
     public abstract Object fromDbValue(Object value);
+
+    private static final PrimitiveConverter PRIMITIVE_CONVERTER = new PrimitiveConverter();
 }

@@ -24,6 +24,7 @@ package org.mongolink.domain.mapper;
 import com.mongodb.BasicDBObject;
 import org.hamcrest.Matchers;
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.junit.Test;
 import org.mongolink.test.entity.Comment;
 import org.mongolink.test.entity.FakeAggregate;
@@ -48,6 +49,7 @@ public class TestsPropertyMapper {
         private TestEnum value;
         private int primitive;
         private DateTime creationDate;
+        private LocalDate dateOfDay;
         private boolean ok;
 
         public DateTime getCreationDate() {
@@ -56,6 +58,14 @@ public class TestsPropertyMapper {
 
         public void setCreationDate(final DateTime creationDate) {
             this.creationDate = creationDate;
+        }
+
+        public LocalDate getDateOfDay() {
+            return dateOfDay;
+        }
+
+        public void setDateOfDay(LocalDate dateOfDay) {
+            this.dateOfDay = dateOfDay;
         }
 
         public int getPrimitive() {
@@ -126,7 +136,7 @@ public class TestsPropertyMapper {
 
     @Test
     public void canSaveDateTimeType() throws NoSuchMethodException {
-        PropertyMapper mapper = propertyMapperForDate();
+        PropertyMapper mapper = propertyMapperForDateTime();
         FakeEntity fakeEntity = new FakeEntity();
         DateTime now = new DateTime();
         fakeEntity.setCreationDate(now);
@@ -142,7 +152,7 @@ public class TestsPropertyMapper {
         BasicDBObject object = new BasicDBObject();
         DateTime dateTime = new DateTime();
         object.put("creationDate", dateTime.getMillis());
-        PropertyMapper propertyMapper = propertyMapperForDate();
+        PropertyMapper propertyMapper = propertyMapperForDateTime();
         FakeEntity instance = new FakeEntity();
 
         propertyMapper.populate(instance, object);
@@ -150,8 +160,40 @@ public class TestsPropertyMapper {
         assertThat(instance.getCreationDate(), is(dateTime));
     }
 
-    private PropertyMapper propertyMapperForDate() throws NoSuchMethodException {
+    private PropertyMapper propertyMapperForDateTime() throws NoSuchMethodException {
         final PropertyMapper result = new PropertyMapper(new FieldContainer(FakeEntity.class.getDeclaredMethod("getCreationDate")));
+        result.setMapper(parentMapper());
+        return result;
+    }
+
+    @Test
+    public void canSaveLocalDateType() throws NoSuchMethodException {
+        PropertyMapper mapper = propertyMapperForLocalDate();
+        FakeEntity fakeEntity = new FakeEntity();
+        LocalDate now = new LocalDate();
+        fakeEntity.setDateOfDay(now);
+        BasicDBObject basicDBObject = new BasicDBObject();
+
+        mapper.save(fakeEntity, basicDBObject);
+
+        assertThat(basicDBObject.get("dateOfDay"), is((Object) now.toDateTimeAtStartOfDay().getMillis()));
+    }
+
+    @Test
+    public void canPopulateLocalDateType() throws NoSuchMethodException {
+        BasicDBObject object = new BasicDBObject();
+        LocalDate localDate = new LocalDate();
+        object.put("dateOfDay", localDate.toDateTimeAtStartOfDay().getMillis());
+        PropertyMapper propertyMapper = propertyMapperForLocalDate();
+        FakeEntity instance = new FakeEntity();
+
+        propertyMapper.populate(instance, object);
+
+        assertThat(instance.getDateOfDay(), is(localDate));
+    }
+
+    private PropertyMapper propertyMapperForLocalDate() throws NoSuchMethodException {
+        final PropertyMapper result = new PropertyMapper(new FieldContainer(FakeEntity.class.getDeclaredMethod("getDateOfDay")));
         result.setMapper(parentMapper());
         return result;
     }
