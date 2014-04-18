@@ -26,7 +26,7 @@ import org.mongolink.test.entity.Post;
 
 public class PostMapping extends AggregateMap<Post> {
     public PostMapping() {
-        super(Post.class);
+        super();
     }
 
     @Override

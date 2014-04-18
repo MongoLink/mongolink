@@ -22,6 +22,7 @@
 package org.mongolink.domain.mapper;
 
 import com.google.common.collect.Lists;
+import com.google.common.reflect.TypeToken;
 import net.sf.cglib.core.DefaultGeneratorStrategy;
 import net.sf.cglib.proxy.Enhancer;
 import org.mongolink.utils.FieldContainer;
@@ -34,9 +35,8 @@ import java.util.List;
 @SuppressWarnings("unchecked")
 public abstract class ClassMap<T> {
 
-    public ClassMap(Class<T> type) {
-        this.type = type;
-        interceptor = createInterceptor(type);
+    public ClassMap() {
+        interceptor = createInterceptor(persistentType());
     }
 
     protected T createInterceptor(Class<T> type) {
@@ -55,8 +55,8 @@ public abstract class ClassMap<T> {
         return interceptor;
     }
 
-    public Class<T> getType() {
-        return type;
+    public final Class<T> persistentType() {
+        return (Class<T>) typeToken.getRawType();
     }
 
     @Deprecated
@@ -84,7 +84,7 @@ public abstract class ClassMap<T> {
     }
 
     protected <U extends T> void subclass(SubclassMap<U> subclassMap) {
-        LOGGER.debug("Mapping subclass : {}", subclassMap.getType().getSimpleName());
+        LOGGER.debug("Mapping subclass : {}", subclassMap.persistentType().getSimpleName());
         subclasses.add(subclassMap);
     }
 
@@ -110,8 +110,11 @@ public abstract class ClassMap<T> {
     protected abstract ClassMapper<T> getMapper();
 
     protected final FieldContainer fieldContainer(String fieldName) {
-        return new FieldContainer(Fields.find(getType(), fieldName));
+        return new FieldContainer(Fields.find(persistentType(), fieldName));
     }
+
+    private final TypeToken<T> typeToken = new TypeToken<T>(getClass()) {
+    };
 
     public class PropertyMap {
 
@@ -151,7 +154,6 @@ public abstract class ClassMap<T> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ClassMap.class);
     private FieldContainer lastMethod;
-    private final Class<T> type;
     private final T interceptor;
     private final List<SubclassMap<? extends T>> subclasses = Lists.newArrayList();
 }

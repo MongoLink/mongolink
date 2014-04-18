@@ -128,7 +128,7 @@ public class TestsSubclassMapper {
 
 
     private void createContext() {
-        SubclassMap<FakeChildAggregate> subclassMap = new SubclassMap<FakeChildAggregate>(FakeChildAggregate.class) {
+        SubclassMap<FakeChildAggregate> subclassMap = new SubclassMap<FakeChildAggregate>() {
 
             @Override
             public void map() {

@@ -28,14 +28,14 @@ import org.mongolink.test.entity.*;
 public class FakeAggregateWithSubclassMapping extends AggregateMap<FakeAggregate> {
 
     public FakeAggregateWithSubclassMapping() {
-        super(FakeAggregate.class);
+        super();
     }
 
     @Override
     public void map() {
         id().onProperty(element().getId()).natural();
         property().onProperty(element().getValue());
-        subclass(new SubclassMap<FakeChildAggregate>(FakeChildAggregate.class) {
+        subclass(new SubclassMap<FakeChildAggregate>() {
 
             @Override
             public void map() {

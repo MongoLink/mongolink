@@ -28,7 +28,7 @@ import org.mongolink.test.entity.FakeAggregate;
 public class FakeAggregateMappingWithComponent extends AggregateMap<FakeAggregate> {
 
     public FakeAggregateMappingWithComponent(AggregateMapper<FakeAggregate> mockMapper) {
-        super(FakeAggregate.class);
+        super();
         innerMap = mockMapper;
     }
 

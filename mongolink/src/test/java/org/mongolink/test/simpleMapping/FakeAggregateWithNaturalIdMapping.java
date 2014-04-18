@@ -28,7 +28,7 @@ import org.mongolink.test.entity.FakeAggregateWithNaturalId;
 public class FakeAggregateWithNaturalIdMapping extends AggregateMap<FakeAggregateWithNaturalId> {
 
     public FakeAggregateWithNaturalIdMapping() {
-        super(FakeAggregateWithNaturalId.class);
+        super();
     }
 
     @Override

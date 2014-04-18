@@ -28,9 +28,9 @@ import org.slf4j.LoggerFactory;
 public abstract class AggregateMap<T> extends ClassMap<T> {
 
     @SuppressWarnings("unchecked")
-    protected AggregateMap(Class<T> type) {
-        super(type);
-        mapper = new AggregateMapper(type);
+    public AggregateMap() {
+        super();
+        mapper = new AggregateMapper(persistentType());
     }
 
     @Override

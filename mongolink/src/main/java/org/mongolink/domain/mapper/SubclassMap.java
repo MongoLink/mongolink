@@ -23,9 +23,9 @@ package org.mongolink.domain.mapper;
 
 public abstract class SubclassMap<T> extends ClassMap<T> {
 
-    public SubclassMap(Class<T> type) {
-        super(type);
-        mapper = new SubclassMapper<T>(type);
+    public SubclassMap() {
+        super();
+        mapper = new SubclassMapper<T>(persistentType());
     }
 
     @Override

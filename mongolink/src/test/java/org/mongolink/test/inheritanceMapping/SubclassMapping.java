@@ -28,7 +28,7 @@ import org.mongolink.test.entity.FakeChildAggregate;
 public class SubclassMapping extends SubclassMap<FakeChildAggregate> {
 
     public SubclassMapping() {
-        super(FakeChildAggregate.class);
+        super();
     }
 
     @Override

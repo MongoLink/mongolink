@@ -28,7 +28,7 @@ import org.mongolink.test.entity.FakeAggregate;
 public class FakeAggregateMapping extends AggregateMap<FakeAggregate> {
 
     public FakeAggregateMapping() {
-        super(FakeAggregate.class);
+        super();
     }
 
     @Override
