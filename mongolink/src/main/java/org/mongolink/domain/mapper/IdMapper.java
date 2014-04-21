@@ -29,8 +29,6 @@ import org.mongolink.utils.FieldContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.Field;
-
 public class IdMapper implements Mapper {
 
     public IdMapper(FieldContainer fieldContainer, IdGeneration generationStrategy) {
@@ -57,10 +55,7 @@ public class IdMapper implements Mapper {
     @Override
     public void populate(Object instance, DBObject from) {
         try {
-            Field field = mapper.getPersistentType().getDeclaredField(fieldContainer.name());
-            field.setAccessible(true);
-            field.set(instance, getIdValue(from));
-            field.setAccessible(false);
+            fieldContainer.setValueIn(getIdValue(from), instance);
         } catch (Exception e) {
             LOGGER.error("Error populating id into {}", fieldContainer, e);
         }

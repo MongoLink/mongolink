@@ -76,7 +76,7 @@ public class TestsAggregateMapper {
 
         FakeAggregateWithNaturalId instance = mapperContext.mapperFor(FakeAggregateWithNaturalId.class).toInstance(dbo);
 
-        Assert.assertThat(instance.getNaturalKey(), Matchers.is((Object) "natural key"));
+        assertThat(instance.getNaturalKey(), is((Object) "natural key"));
     }
 
     private MapperContext contextWithNaturalId() {
