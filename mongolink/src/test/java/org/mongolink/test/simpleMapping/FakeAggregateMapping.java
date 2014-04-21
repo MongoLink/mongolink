@@ -37,6 +37,7 @@ public class FakeAggregateMapping extends AggregateMap<FakeAggregate> {
         property().onField("value");
         collection().onProperty(element().getComments());
         property().onProperty(element().getComment());
+        property().onProperty(element().getIndex());
     }
 
 }

@@ -19,15 +19,22 @@
 
 package org.mongolink;
 
+import com.github.fakemongo.Fongo;
 import com.mongodb.*;
 import org.bson.types.ObjectId;
-import org.junit.*;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mockito.InOrder;
 import org.mongolink.domain.UpdateStrategies;
-import org.mongolink.domain.criteria.*;
+import org.mongolink.domain.criteria.Criteria;
+import org.mongolink.domain.criteria.CriteriaFactory;
 import org.mongolink.domain.mapper.ContextBuilder;
-import org.mongolink.test.entity.*;
+import org.mongolink.test.entity.Comment;
+import org.mongolink.test.entity.FakeAggregate;
+import org.mongolink.test.entity.FakeAggregateWithNaturalId;
+import org.mongolink.test.entity.OtherEntityWithNaturalId;
 
 import java.util.List;
 
@@ -42,12 +49,8 @@ public class TestsMongoSession {
 
     @Before
     public void before() {
-        db = spy(new FakeDB());
-        entities = new FakeDBCollection(db, "entity");
-        fakeAggregates = new FakeDBCollection(db, "fakeaggregatewithnaturalid");
-        db.collections.put("fakeaggregate", entities);
-        db.collections.put("fakeaggregatewithnaturalid", fakeAggregates);
-        db.collections.put("otheraggregatewithnaturalid", new FakeDBCollection(db, "otheraggregatewithnaturalid"));
+        final Fongo fongo = new Fongo("test");
+        db = (FongoDB) spy(fongo.getDB("test"));
         ContextBuilder cb = new ContextBuilder("org.mongolink.test.simpleMapping");
         session = new MongoSession(db, new CriteriaFactory());
         session.setMappingContext(cb.createContext());
@@ -68,7 +71,7 @@ public class TestsMongoSession {
 
     @Test
     public void ensureConnection() {
-        final FakeDB fakeDb = spy(new FakeDB());
+        final DB fakeDb = mock(DB.class);
         MongoSession session = new MongoSession(fakeDb, new CriteriaFactory());
 
         session.start();
@@ -78,10 +81,9 @@ public class TestsMongoSession {
 
     @Test
     public void canGetByAutoId() {
-        createEntity("4d53b7118653a70549fe1b78", "plop");
-        createEntity("4d53b7118653a70549fe1b78", "plap");
+        final String id = createFakeAggregate("plop");
 
-        FakeAggregate entity = session.get("4d53b7118653a70549fe1b78", FakeAggregate.class);
+        FakeAggregate entity = session.get(id, FakeAggregate.class);
 
         assertThat(entity, notNullValue());
         assertThat(entity.getValue(), is("plop"));
@@ -97,7 +99,7 @@ public class TestsMongoSession {
     public void canGetByNaturalId() {
         DBObject dbo = new BasicDBObject();
         dbo.put("_id", "a natural key");
-        fakeAggregates.insert(dbo);
+        fakeAggregatesWithNaturalId().insert(dbo);
 
         FakeAggregateWithNaturalId entity = session.get("a natural key", FakeAggregateWithNaturalId.class);
 
@@ -109,7 +111,7 @@ public class TestsMongoSession {
     public void testDavid() {
         DBObject dbo = new BasicDBObject();
         dbo.put("_id", "a natural key");
-        fakeAggregates.insert(dbo);
+        fakeAggregatesWithNaturalId().insert(dbo);
 
         session.get("a natural key", FakeAggregateWithNaturalId.class);
         FakeAggregateWithNaturalId entity = session.get("a natural key", FakeAggregateWithNaturalId.class);
@@ -126,8 +128,9 @@ public class TestsMongoSession {
 
         session.save(entity);
 
-        assertThat(entities.getObjects().size(), is(1));
-        DBObject dbo = entities.getObjects().get(0);
+
+        assertThat(fakeAggregates().count(), is(1L));
+        DBObject dbo = fakeAggregates().findOne();
         assertThat(dbo.get("value"), is((Object) "value"));
     }
 
@@ -139,13 +142,14 @@ public class TestsMongoSession {
 
     @Test
     public void canUpdate() {
-        createEntity("4d53b7118653a70549fe1b78", "url de test");
-        FakeAggregate entity = session.get("4d53b7118653a70549fe1b78", FakeAggregate.class);
+        final String id = createFakeAggregate("url de test");
+        FakeAggregate entity = session.get(id, FakeAggregate.class);
         entity.setValue("un test de plus");
 
         session.update(entity);
 
-        assertThat(entities.getObjects().get(0).get("value"), is((Object) "un test de plus"));
+
+        assertThat(fakeAggregates().findOne().get("value"), is((Object) "un test de plus"));
     }
 
     @Test
@@ -156,13 +160,13 @@ public class TestsMongoSession {
 
     @Test
     public void canAutomaticalyUpdate() {
-        createEntity("4d53b7118653a70549fe1b78", "url de test");
-        FakeAggregate fakeAggregate = session.get("4d53b7118653a70549fe1b78", FakeAggregate.class);
+        final String id = createFakeAggregate("url de test");
+        FakeAggregate fakeAggregate = session.get(id, FakeAggregate.class);
         fakeAggregate.setValue("some new and strange value");
 
         session.stop();
 
-        DBObject dbObject = entities.getObjects().get(0);
+        DBObject dbObject = fakeAggregates().findOne();
         assertThat(dbObject.get("value"), is(((Object) "some new and strange value")));
     }
 
@@ -181,7 +185,7 @@ public class TestsMongoSession {
 
         session.stop();
 
-        assertThat(fakeAggregates.getObjects().get(0).get("value"), is((Object) "a value"));
+        assertThat(fakeAggregatesWithNaturalId().findOne().get("value"), is((Object) "a value"));
     }
 
     @Test
@@ -192,47 +196,33 @@ public class TestsMongoSession {
 
         session.stop();
 
-        assertThat(entities.getObjects().get(0).get("value"), is((Object) "a value"));
+        assertThat(fakeAggregates().findOne().get("value"), is((Object) "a value"));
     }
 
     @Test
     public void canUpdateWithDiffStategy() {
         session.setUpdateStrategy(UpdateStrategies.DIFF);
-        FakeAggregate entity = new FakeAggregate("this is a value");
-        session.save(entity);
+        FakeAggregate entity = aAggregateWithIndexAt(3);
+        setIndexInCollectionTo(entity, 4);
+
         entity.setValue("a value");
-
         session.update(entity);
 
-        final DBObject update = entities.lastUpdate();
-        assertThat(update.containsField("$set"), is(true));
+        final DBObject dbObject = fakeAggregates().findOne(new BasicDBObject("_id", new ObjectId(entity.getId())));
+        assertThat(dbObject.get("index"), is(4));
     }
 
-    @Test
-    public void dontMakeUpdateTwice() {
-        session.setUpdateStrategy(UpdateStrategies.DIFF);
+    private void setIndexInCollectionTo(FakeAggregate entity, int index) {
+        fakeAggregates().update(new BasicDBObject("_id", new ObjectId(entity.getId())), new BasicDBObject("index", index));
+    }
+
+    private FakeAggregate aAggregateWithIndexAt(int index) {
         FakeAggregate entity = new FakeAggregate("this is a value");
+        entity.setIndex(index);
         session.save(entity);
-        entity.setValue("a value");
-
-        session.update(entity);
-        final DBObject update = entities.lastUpdate();
-        session.update(entity);
-
-        assertThat(update, sameInstance(entities.lastUpdate()));
+        return entity;
     }
 
-    @Test
-    public void dontMakeUpdateWhenNoDiffWithDiffStrategy() {
-        session.setUpdateStrategy(UpdateStrategies.DIFF);
-        FakeAggregate entity = new FakeAggregate("this is a value");
-        session.save(entity);
-
-        session.update(entity);
-
-        final DBObject update = entities.lastUpdate();
-        assertThat(update, nullValue());
-    }
 
     @Test
     public void savingSetIdForAutoId() {
@@ -265,7 +255,7 @@ public class TestsMongoSession {
     public void returnSameInstanceOnGetById() {
         DBObject dbo = new BasicDBObject();
         dbo.put("_id", "a natural key");
-        fakeAggregates.insert(dbo);
+        fakeAggregatesWithNaturalId().insert(dbo);
 
         FakeAggregateWithNaturalId first = session.get("a natural key", FakeAggregateWithNaturalId.class);
         FakeAggregateWithNaturalId second = session.get("a natural key", FakeAggregateWithNaturalId.class);
@@ -275,10 +265,10 @@ public class TestsMongoSession {
 
     @Test
     public void returnSameInstanceOnGetByCriteria() {
-        createEntity("4d53b7118653a70549fe1b78", "plop");
+        final String id = createFakeAggregate("plop");
         final Criteria criteria = session.createCriteria(FakeAggregate.class);
 
-        final FakeAggregate instanceById = session.get("4d53b7118653a70549fe1b78", FakeAggregate.class);
+        final FakeAggregate instanceById = session.get(id, FakeAggregate.class);
         final FakeAggregate instanceByCriteria = (FakeAggregate) criteria.list().get(0);
 
         assertThat(instanceById, sameInstance(instanceByCriteria));
@@ -307,8 +297,8 @@ public class TestsMongoSession {
 
     @Test
     public void canGetAll() {
-        createEntity("4d53b7118653a70549fe1b78", "plop");
-        createEntity("4d53b7118653a70549fe1b78", "plap");
+        createFakeAggregate("plop");
+        createFakeAggregate("plap");
 
         List<FakeAggregate> entityList = session.getAll(FakeAggregate.class);
 
@@ -323,7 +313,7 @@ public class TestsMongoSession {
 
         session.delete(entity);
 
-        assertThat(entities.getObjects().size(), is(0));
+        assertThat(fakeAggregates().count(), is(0L));
         assertThat(session.get("cle unique", FakeAggregateWithNaturalId.class), nullValue());
     }
 
@@ -343,16 +333,24 @@ public class TestsMongoSession {
         session.delete(new Comment());
     }
 
-    private void createEntity(final String id, final String url) {
+    private String createFakeAggregate(final String value) {
+        final ObjectId id = ObjectId.get();
         DBObject dbo = new BasicDBObject();
-        dbo.put("value", url);
-        dbo.put("_id", new ObjectId(id));
-        entities.insert(dbo);
+        dbo.put("value", value);
+        dbo.put("_id", id);
+        fakeAggregates().insert(dbo);
+        return id.toString();
     }
 
-    private FakeDBCollection entities;
-    private FakeDB db;
+    private FongoDBCollection fakeAggregatesWithNaturalId() {
+        return (FongoDBCollection) db.getCollection("fakeaggregatewithnaturalid");
+    }
+
+    private FongoDBCollection fakeAggregates() {
+        return (FongoDBCollection) db.getCollection("fakeaggregate");
+    }
+
+    private FongoDB db;
     private MongoSession session;
-    private FakeDBCollection fakeAggregates;
 
 }

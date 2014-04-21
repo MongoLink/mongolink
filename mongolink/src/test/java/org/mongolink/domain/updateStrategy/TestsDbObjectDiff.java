@@ -45,7 +45,7 @@ public class TestsDbObjectDiff {
         final DBObject set = (DBObject) diff.get("$set");
         assertThat(set, notNullValue());
         assertThat(set.containsField("value"), is(true));
-        assertThat((String) set.get("value"), is("new one"));
+        assertThat(set.get("value"), is("new one"));
     }
 
     @Test
@@ -58,7 +58,7 @@ public class TestsDbObjectDiff {
         final DBObject set = (DBObject) diff.get("$set");
         assertThat(set, notNullValue());
         assertThat(set.containsField("value"), is(true));
-        assertThat((String) set.get("value"), is("new one"));
+        assertThat(set.get("value"), is("new one"));
     }
 
     @Test

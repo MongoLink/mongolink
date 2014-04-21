@@ -21,6 +21,7 @@
 
 package org.mongolink.domain;
 
+import com.github.fakemongo.Fongo;
 import com.mongodb.*;
 import org.junit.Test;
 import org.mockito.Matchers;
@@ -65,12 +66,12 @@ public class TestQueryExecutor {
     }
 
     private QueryExecutor createQueryExecutor() {
-        final DB db = new FakeDB();
-        FakeDBCollection collection = (FakeDBCollection) db.getCollection("collection");
+        final DB db = new Fongo("test").getDB("test");
+        DBCollection collection = db.getCollection("collection");
         for (int i = 0; i < 20; i++) {
             final BasicDBObject element = new BasicDBObject();
             element.put("value", i);
-            collection.getObjects().add(element);
+            collection.save(element);
         }
         final AggregateMapper aggregateMapper = mock(AggregateMapper.class);
         when(aggregateMapper.collectionName()).thenReturn("collection");

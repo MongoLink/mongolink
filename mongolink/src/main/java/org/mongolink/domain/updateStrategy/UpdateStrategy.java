@@ -25,7 +25,7 @@ import com.mongodb.*;
 
 public abstract class UpdateStrategy {
 
-    public abstract void update(DBObject initialValue, DBObject update, DBCollection collection);
+    public abstract void update(DBObject initialValue, DBObject updatedValue, DBCollection collection);
 
     protected DBObject updateQuery(DBObject update) {
         DBObject query = new BasicDBObject();

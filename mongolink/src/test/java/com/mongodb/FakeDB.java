@@ -21,12 +21,9 @@
 
 package com.mongodb;
 
-import com.google.common.collect.Maps;
-
 import java.net.UnknownHostException;
-import java.util.Map;
 
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 
 
 public class FakeDB extends DB {
@@ -53,10 +50,7 @@ public class FakeDB extends DB {
 
     @Override
     public DBCollection doGetCollection(String name) {
-        if (!collections.containsKey(name)) {
-            collections.put(name, new FakeDBCollection(this, name));
-        }
-        return collections.get(name);
+        return mock(DBCollection.class);
     }
 
     @Override
@@ -96,5 +90,4 @@ public class FakeDB extends DB {
 
     private MongoCredential credentials;
 
-    public final Map<String, FakeDBCollection> collections = Maps.newHashMap();
 }

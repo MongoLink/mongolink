@@ -71,16 +71,6 @@ public class TestsMongoSessionManager {
     }
 
     @Test
-    public void canSave() {
-        MongoSession session = manager.createSession();
-        session.start();
-
-        session.save(new FakeAggregate("id"));
-
-        assertThat(session.getDb().getCollection("fakeaggregate").count(), is(1L));
-    }
-
-    @Test
     public void canSetUpdateStrategy() {
         final MongoSession session = manager.createSession();
 

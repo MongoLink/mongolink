@@ -28,11 +28,11 @@ import org.slf4j.LoggerFactory;
 public class OverwriteStrategy extends UpdateStrategy {
 
     @Override
-    public void update(DBObject initialValue, DBObject update, DBCollection collection) {
+    public void update(DBObject initialValue, DBObject updatedValue, DBCollection collection) {
         DBObject query = new BasicDBObject();
-        query.put("_id", update.get("_id"));
-        LOGGER.debug("Updating : collection {} : element {}", collection.getName(), update);
-        collection.update(updateQuery(initialValue), update);
+        query.put("_id", updatedValue.get("_id"));
+        LOGGER.debug("Updating : collection {} : element {}", collection.getName(), updatedValue);
+        collection.update(updateQuery(initialValue), updatedValue);
     }
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OverwriteStrategy.class);
