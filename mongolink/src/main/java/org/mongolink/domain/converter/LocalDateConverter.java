@@ -10,6 +10,6 @@ public class LocalDateConverter extends Converter {
 
     @Override
     public Object fromDbValue(Object value) {
-        return new LocalDate((value));
+        return new LocalDate(value);
     }
 }

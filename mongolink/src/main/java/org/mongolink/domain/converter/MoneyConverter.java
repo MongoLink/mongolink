@@ -5,7 +5,7 @@ import org.joda.money.Money;
 public class MoneyConverter extends Converter {
     @Override
     public Object toDbValue(Object value) {
-        return ((Money) value).toString();
+        return value.toString();
     }
 
     @Override
