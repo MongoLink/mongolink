@@ -19,14 +19,17 @@
  *
  */
 
-package org.mongolink;
+package org.mongolink.domain.session;
 
 import org.junit.*;
-import org.mongolink.domain.UpdateStrategies;
+import org.mongolink.*;
+import org.mongolink.UpdateStrategies;
 import org.mongolink.domain.mapper.*;
 import org.mongolink.domain.updateStrategy.DiffStrategy;
-import org.mongolink.test.entity.*;
-import org.mongolink.test.factory.*;
+import org.mongolink.test.entity.FakeAggregate;
+import org.mongolink.test.entity.FakeEntityWithCap;
+import org.mongolink.test.factory.FakeDbFactory;
+import org.mongolink.test.factory.TestFactory;
 
 import java.net.UnknownHostException;
 
@@ -34,13 +37,13 @@ import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.*;
 
-public class TestsMongoSessionManager {
+public class TestsMongoSessionManagerImpl {
 
     @Before
     public void before() {
         ContextBuilder contextBuilder = TestFactory.contextBuilder().withFakeEntity();
         settings = Settings.defaultInstance().withDbFactory(FakeDbFactory.class).withDefaultUpdateStrategy(UpdateStrategies.DIFF);
-        manager = MongoSessionManager.create(contextBuilder, settings);
+        manager = (MongoSessionManagerImpl) MongoSessionManager.create(contextBuilder, settings);
     }
 
     @After
@@ -57,7 +60,7 @@ public class TestsMongoSessionManager {
 
     @Test
     public void canCreateSession() {
-        MongoSession session = manager.createSession();
+        MongoSessionImpl session = manager.createSession();
 
         assertThat(session, notNullValue());
         assertThat(session.getDb().isAuthenticated(), is(false));
@@ -72,7 +75,7 @@ public class TestsMongoSessionManager {
 
     @Test
     public void canSetUpdateStrategy() {
-        final MongoSession session = manager.createSession();
+        final MongoSessionImpl session = manager.createSession();
 
         assertThat(session.getUpdateStrategy(), instanceOf(DiffStrategy.class));
     }
@@ -82,11 +85,11 @@ public class TestsMongoSessionManager {
     public void canSetCappedCollections() {
         final MapperContext mapperContext = manager.getMapperContext();
         final AggregateMapper<FakeEntityWithCap> fakeEntityWithCapMapper = (AggregateMapper<FakeEntityWithCap>) mapperContext.mapperFor(FakeEntityWithCap.class);
-        final MongoSession session = manager.createSession();
+        final MongoSessionImpl session = manager.createSession();
 
         assertThat(session.getDb().getCollection(fakeEntityWithCapMapper.collectionName()).isCapped(), is(true));
     }
 
     private static Settings settings;
-    private static MongoSessionManager manager;
+    private static MongoSessionManagerImpl manager;
 }

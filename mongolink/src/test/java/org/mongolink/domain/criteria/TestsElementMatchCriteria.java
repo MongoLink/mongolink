@@ -2,7 +2,7 @@ package org.mongolink.domain.criteria;
 
 import com.mongodb.DBObject;
 import org.junit.Test;
-import org.mongolink.domain.QueryExecutor;
+import org.mongolink.domain.query.QueryExecutor;
 
 import static org.fest.assertions.Assertions.*;
 import static org.mockito.Mockito.*;

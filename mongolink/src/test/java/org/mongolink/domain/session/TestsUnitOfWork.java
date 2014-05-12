@@ -18,12 +18,13 @@
  * along with MongoLink.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.mongolink.domain;
+package org.mongolink.domain.session;
 
 
 import com.mongodb.BasicDBObject;
 import org.junit.Test;
-import org.mongolink.MongoSession;
+import org.mongolink.domain.session.MongoSessionImpl;
+import org.mongolink.domain.session.UnitOfWork;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.*;
@@ -33,7 +34,7 @@ public class TestsUnitOfWork {
 
     @Test
     public void canRetrieveSubtype() {
-        UnitOfWork unitOfWork = new UnitOfWork(mock(MongoSession.class));
+        UnitOfWork unitOfWork = new UnitOfWork(mock(MongoSessionImpl.class));
         Child entity = new Child();
         unitOfWork.add(1, entity, new BasicDBObject());
 
@@ -44,7 +45,7 @@ public class TestsUnitOfWork {
 
     @Test
     public void canCheckExistenceWithSubType() {
-        final UnitOfWork unitOfWork = new UnitOfWork(mock(MongoSession.class));
+        final UnitOfWork unitOfWork = new UnitOfWork(mock(MongoSessionImpl.class));
         final Child child = new Child();
         unitOfWork.add(1, child, new BasicDBObject());
 

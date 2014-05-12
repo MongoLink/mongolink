@@ -19,7 +19,7 @@
  *
  */
 
-package org.mongolink.domain;
+package org.mongolink.domain.query;
 
 import com.mongodb.*;
 

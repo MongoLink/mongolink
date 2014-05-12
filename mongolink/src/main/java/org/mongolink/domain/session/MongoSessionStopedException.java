@@ -1,4 +1,6 @@
-package org.mongolink;
+package org.mongolink.domain.session;
+
+import org.mongolink.MongoLinkError;
 
 public class MongoSessionStopedException extends MongoLinkError {
 

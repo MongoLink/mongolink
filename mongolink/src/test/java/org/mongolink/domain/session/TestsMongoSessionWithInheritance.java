@@ -19,7 +19,7 @@
  * along with MongoLink.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.mongolink;
+package org.mongolink.domain.session;
 
 
 import com.github.fakemongo.Fongo;
@@ -29,6 +29,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mongolink.domain.criteria.CriteriaFactory;
 import org.mongolink.domain.mapper.MapperContext;
+import org.mongolink.domain.session.MongoSessionImpl;
 import org.mongolink.test.entity.FakeAggregate;
 import org.mongolink.test.entity.FakeChildAggregate;
 import org.mongolink.test.inheritanceMapping.FakeAggregateWithSubclassMapping;
@@ -41,7 +42,7 @@ public class TestsMongoSessionWithInheritance {
     public void before() {
         db = new Fongo("test").getDB("test");
         FakeAggregateWithSubclassMapping mapping = new FakeAggregateWithSubclassMapping();
-        session = new MongoSession(db, new CriteriaFactory());
+        session = new MongoSessionImpl(db, new CriteriaFactory());
         MapperContext context = new MapperContext();
         mapping.buildMapper(context);
         session.setMappingContext(context);
@@ -88,6 +89,6 @@ public class TestsMongoSessionWithInheritance {
         return db.getCollection("fakeaggregate");
     }
 
-    private MongoSession session;
+    private MongoSessionImpl session;
     private DB db;
 }

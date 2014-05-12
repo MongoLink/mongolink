@@ -19,11 +19,12 @@
  *
  */
 
-package org.mongolink.domain;
+package org.mongolink.domain.query;
 
 import com.google.common.collect.Lists;
 import com.mongodb.*;
 import org.mongolink.domain.mapper.AggregateMapper;
+import org.mongolink.domain.session.UnitOfWork;
 
 import java.util.List;
 

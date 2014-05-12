@@ -21,7 +21,7 @@
 
 package org.mongolink.domain.criteria;
 
-import org.mongolink.domain.QueryExecutor;
+import org.mongolink.domain.query.QueryExecutor;
 
 public class CriteriaFactory {
 

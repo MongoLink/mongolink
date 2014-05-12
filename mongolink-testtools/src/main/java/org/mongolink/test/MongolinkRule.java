@@ -1,9 +1,7 @@
 package org.mongolink.test;
 
 import org.junit.rules.ExternalResource;
-import org.mongolink.MongoSession;
-import org.mongolink.MongoSessionManager;
-import org.mongolink.Settings;
+import org.mongolink.*;
 import org.mongolink.domain.mapper.ContextBuilder;
 
 public class MongolinkRule extends ExternalResource {

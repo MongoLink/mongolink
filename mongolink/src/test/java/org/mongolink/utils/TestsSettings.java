@@ -26,8 +26,8 @@ import com.mongodb.ReadPreference;
 import com.mongodb.ServerAddress;
 import org.junit.Test;
 import org.mongolink.*;
-import org.mongolink.domain.*;
 import org.mongolink.domain.criteria.*;
+import org.mongolink.domain.query.QueryExecutor;
 import org.mongolink.test.factory.FakeDbFactory;
 
 import java.net.UnknownHostException;

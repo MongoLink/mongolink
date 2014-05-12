@@ -19,31 +19,29 @@
  *
  */
 
-package org.mongolink.domain;
+package org.mongolink.domain.query;
 
+import com.mongodb.DBCursor;
 
-import org.junit.Test;
-import org.mongolink.domain.updateStrategy.*;
+public class EmptyCursorParameter extends CursorParameter {
 
-import static org.hamcrest.MatcherAssert.*;
-import static org.hamcrest.Matchers.*;
-
-public class TestsUpdateStrategies {
-
-    @Test
-    public void canGetDiffStrategyInstance() {
-        UpdateStrategy strat = UpdateStrategies.DIFF.instance();
-
-        assertThat(strat, notNullValue());
-        assertThat(strat, instanceOf(DiffStrategy.class));
+    @Override
+    DBCursor apply(DBCursor cursor) {
+        return cursor;
     }
 
-    @Test
-    public void canGetOverwriteStrategyIntance() {
-        UpdateStrategy strat = UpdateStrategies.OVERWRITE.instance();
-
-        assertThat(strat, notNullValue());
-        assertThat(strat, instanceOf(OverwriteStrategy.class));
+    @Override
+    public CursorParameter limit(int limit) {
+        return new CursorParameter().limit(limit);
     }
 
+    @Override
+    public CursorParameter skip(int skip) {
+        return new CursorParameter().skip(skip);
+    }
+
+    @Override
+    public CursorParameter sort(final String sortField, final int sortOrder) {
+        return new CursorParameter().sort(sortField, sortOrder);
+    }
 }

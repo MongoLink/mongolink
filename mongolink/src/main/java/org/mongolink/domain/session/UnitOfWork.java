@@ -19,19 +19,18 @@
  *
  */
 
-package org.mongolink.domain;
+package org.mongolink.domain.session;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Maps;
 import com.mongodb.DBObject;
-import org.mongolink.MongoSession;
 
 import java.util.Map;
 
 
 public class UnitOfWork {
 
-    public UnitOfWork(MongoSession session) {
+    public UnitOfWork(MongoSessionImpl session) {
         this.session = session;
     }
 
@@ -59,7 +58,7 @@ public class UnitOfWork {
         if (type != null && dbId != null) {
             final Key craftedKey = new Key(type, dbId);
             for (Key key : values.keySet()) {
-                if (key.equals(craftedKey)) {
+                if(key.matchs(craftedKey)) {
                     return true;
                 }
             }
@@ -70,7 +69,7 @@ public class UnitOfWork {
     private Value getValue(Class<?> type, Object dbId) {
         Key craftedKey = new Key(type, dbId);
         for (Key key : values.keySet()) {
-            if (key.equals(craftedKey)) {
+            if (key.matchs(craftedKey)) {
                 return values.get(key);
             }
         }
@@ -110,7 +109,7 @@ public class UnitOfWork {
         @Override
         public boolean equals(Object o) {
             Key other = (Key) o;
-            return other.type.isAssignableFrom(type) && Objects.equal(id, other.id);
+            return Objects.equal(type, other.type) && Objects.equal(id, other.id);
         }
 
         @Override
@@ -118,12 +117,16 @@ public class UnitOfWork {
             return Objects.hashCode(type, id);
         }
 
+        public boolean matchs(Key otherKey) {
+            return otherKey.type.isAssignableFrom(type) && Objects.equal(id, otherKey.id);
+        }
+
         final Class<?> type;
 
         final Object id;
     }
 
-    private final MongoSession session;
+    private final MongoSessionImpl session;
 
     private final Map<Key, Value> values = Maps.newHashMap();
 

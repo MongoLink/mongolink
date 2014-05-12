@@ -23,7 +23,8 @@ package org.mongolink.domain.criteria;
 
 import com.google.common.collect.Lists;
 import com.mongodb.*;
-import org.mongolink.domain.*;
+import org.mongolink.domain.query.CursorParameter;
+import org.mongolink.domain.query.QueryExecutor;
 
 import java.util.*;
 

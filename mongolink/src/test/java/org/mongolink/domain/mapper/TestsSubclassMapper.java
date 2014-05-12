@@ -28,7 +28,7 @@ import com.mongodb.DBObject;
 import org.bson.types.ObjectId;
 import org.junit.Before;
 import org.junit.Test;
-import org.mongolink.domain.QueryExecutor;
+import org.mongolink.domain.query.QueryExecutor;
 import org.mongolink.domain.criteria.Criteria;
 import org.mongolink.test.entity.FakeAggregate;
 import org.mongolink.test.entity.FakeChildAggregate;

@@ -19,22 +19,8 @@
  *
  */
 
-package org.mongolink.domain;
-
-import org.mongolink.domain.updateStrategy.*;
+package org.mongolink;
 
 public enum UpdateStrategies {
-    DIFF {
-        @Override
-        public UpdateStrategy instance() {
-            return new DiffStrategy();
-        }
-    }, OVERWRITE {
-        @Override
-        public UpdateStrategy instance() {
-            return new OverwriteStrategy();
-        }
-    };
-
-    public abstract UpdateStrategy instance();
+    DIFF, OVERWRITE
 }

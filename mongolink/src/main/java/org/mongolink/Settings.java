@@ -25,7 +25,6 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.mongodb.ReadPreference;
 import com.mongodb.ServerAddress;
-import org.mongolink.domain.UpdateStrategies;
 import org.mongolink.domain.criteria.CriteriaFactory;
 
 import java.net.UnknownHostException;

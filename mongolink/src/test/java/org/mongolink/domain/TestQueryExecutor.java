@@ -25,8 +25,11 @@ import com.github.fakemongo.Fongo;
 import com.mongodb.*;
 import org.junit.Test;
 import org.mockito.Matchers;
-import org.mongolink.MongoSession;
 import org.mongolink.domain.mapper.AggregateMapper;
+import org.mongolink.domain.query.CursorParameter;
+import org.mongolink.domain.query.QueryExecutor;
+import org.mongolink.domain.session.MongoSessionImpl;
+import org.mongolink.domain.session.UnitOfWork;
 import org.mongolink.test.entity.FakeAggregate;
 
 import java.util.List;
@@ -76,7 +79,7 @@ public class TestQueryExecutor {
         final AggregateMapper aggregateMapper = mock(AggregateMapper.class);
         when(aggregateMapper.collectionName()).thenReturn("collection");
         when(aggregateMapper.toInstance(Matchers.<DBObject>any())).thenReturn(new FakeAggregate("gfg"));
-        return new QueryExecutor<FakeAggregate>(db, aggregateMapper, new UnitOfWork(mock(MongoSession.class)));
+        return new QueryExecutor<FakeAggregate>(db, aggregateMapper, new UnitOfWork(mock(MongoSessionImpl.class)));
     }
 
 }

@@ -17,24 +17,20 @@
  * along with MongoLink.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.mongolink;
+package org.mongolink.domain.session;
 
 import com.github.fakemongo.Fongo;
 import com.mongodb.*;
 import org.bson.types.ObjectId;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.mockito.InOrder;
-import org.mongolink.domain.UpdateStrategies;
+import org.mongolink.MongoLinkError;
+import org.mongolink.UpdateStrategies;
 import org.mongolink.domain.criteria.Criteria;
 import org.mongolink.domain.criteria.CriteriaFactory;
 import org.mongolink.domain.mapper.ContextBuilder;
-import org.mongolink.test.entity.Comment;
-import org.mongolink.test.entity.FakeAggregate;
-import org.mongolink.test.entity.FakeAggregateWithNaturalId;
-import org.mongolink.test.entity.OtherEntityWithNaturalId;
+import org.mongolink.test.entity.*;
 
 import java.util.List;
 
@@ -42,7 +38,7 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-public class TestsMongoSession {
+public class TestsMongoSessionImpl {
 
     @Rule
     public ExpectedException exception = ExpectedException.none();
@@ -52,14 +48,14 @@ public class TestsMongoSession {
         final Fongo fongo = new Fongo("test");
         db = (FongoDB) spy(fongo.getDB("test"));
         ContextBuilder cb = new ContextBuilder("org.mongolink.test.simpleMapping");
-        session = new MongoSession(db, new CriteriaFactory());
+        session = new MongoSessionImpl(db, new CriteriaFactory());
         session.setMappingContext(cb.createContext());
         session.start();
     }
 
     @Test
     public void startAndStopASession() {
-        MongoSession session = new MongoSession(db, new CriteriaFactory());
+        MongoSessionImpl session = new MongoSessionImpl(db, new CriteriaFactory());
 
         session.start();
         session.stop();
@@ -72,7 +68,7 @@ public class TestsMongoSession {
     @Test
     public void ensureConnection() {
         final DB fakeDb = mock(DB.class);
-        MongoSession session = new MongoSession(fakeDb, new CriteriaFactory());
+        MongoSessionImpl session = new MongoSessionImpl(fakeDb, new CriteriaFactory());
 
         session.start();
 
@@ -351,6 +347,6 @@ public class TestsMongoSession {
     }
 
     private FongoDB db;
-    private MongoSession session;
+    private MongoSessionImpl session;
 
 }

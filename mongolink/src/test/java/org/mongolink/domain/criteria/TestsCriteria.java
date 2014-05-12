@@ -26,7 +26,8 @@ import com.mongodb.*;
 import org.joda.time.DateTime;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
-import org.mongolink.domain.*;
+import org.mongolink.domain.query.CursorParameter;
+import org.mongolink.domain.query.QueryExecutor;
 
 import java.util.*;
 
