@@ -29,7 +29,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mongolink.domain.criteria.CriteriaFactory;
 import org.mongolink.domain.mapper.MapperContext;
-import org.mongolink.domain.session.MongoSessionImpl;
 import org.mongolink.test.entity.FakeAggregate;
 import org.mongolink.test.entity.FakeChildAggregate;
 import org.mongolink.test.inheritanceMapping.FakeAggregateWithSubclassMapping;
@@ -81,6 +80,7 @@ public class TestsMongoSessionWithInheritance {
         fakeChildEntity.setId("2");
 
         session.save(fakeChildEntity);
+        session.flush();
 
         assertThat(entities().count()).isEqualTo(1L);
     }

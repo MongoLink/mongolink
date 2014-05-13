@@ -35,11 +35,11 @@ public class AggregateMapper<T> extends ClassMapper<T> {
     }
 
     public void populateId(Object element, DBObject dbObject) {
+        idMapper.generateId(dbObject);
         idMapper.populate(element, dbObject);
     }
 
     void setIdMapper(IdMapper idMapper) {
-        idMapper.setMapper(this);
         addMapper(idMapper);
         this.idMapper = idMapper;
     }

@@ -123,7 +123,7 @@ public class TestsMongoSessionImpl {
         FakeAggregate entity = new FakeAggregate("value");
 
         session.save(entity);
-
+        session.flush();
 
         assertThat(fakeAggregates().count(), is(1L));
         DBObject dbo = fakeAggregates().findOne();
@@ -142,20 +142,14 @@ public class TestsMongoSessionImpl {
         FakeAggregate entity = session.get(id, FakeAggregate.class);
         entity.setValue("un test de plus");
 
-        session.update(entity);
+        session.flush();
 
 
         assertThat(fakeAggregates().findOne().get("value"), is((Object) "un test de plus"));
     }
 
     @Test
-    public void cantUpdateSomethingWichIsNotAnEntity() {
-        exception.expect(MongoLinkError.class);
-        session.update(new Comment());
-    }
-
-    @Test
-    public void canAutomaticalyUpdate() {
+    public void canAutomaticalyUpdateOnStop() {
         final String id = createFakeAggregate("url de test");
         FakeAggregate fakeAggregate = session.get(id, FakeAggregate.class);
         fakeAggregate.setValue("some new and strange value");
@@ -179,7 +173,7 @@ public class TestsMongoSessionImpl {
         session.save(entity);
         entity.setValue("a value");
 
-        session.stop();
+        session.flush();
 
         assertThat(fakeAggregatesWithNaturalId().findOne().get("value"), is((Object) "a value"));
     }
@@ -190,7 +184,7 @@ public class TestsMongoSessionImpl {
         session.save(entity);
         entity.setValue("a value");
 
-        session.stop();
+        session.flush();
 
         assertThat(fakeAggregates().findOne().get("value"), is((Object) "a value"));
     }
@@ -202,7 +196,7 @@ public class TestsMongoSessionImpl {
         setIndexInCollectionTo(entity, 4);
 
         entity.setValue("a value");
-        session.update(entity);
+        session.flush();
 
         final DBObject dbObject = fakeAggregates().findOne(new BasicDBObject("_id", new ObjectId(entity.getId())));
         assertThat(dbObject.get("index"), is(4));
@@ -216,6 +210,7 @@ public class TestsMongoSessionImpl {
         FakeAggregate entity = new FakeAggregate("this is a value");
         entity.setIndex(index);
         session.save(entity);
+        session.flush();
         return entity;
     }
 
@@ -240,6 +235,7 @@ public class TestsMongoSessionImpl {
     public void canGetByCriteria() {
         session.save(new FakeAggregate("this is a value"));
         session.save(new FakeAggregate("this is a value"));
+        session.flush();
         final Criteria<FakeAggregate> criteria = session.createCriteria(FakeAggregate.class);
 
         List<FakeAggregate> list = criteria.list();
@@ -306,8 +302,10 @@ public class TestsMongoSessionImpl {
     public void canDeleteEntity() {
         final FakeAggregateWithNaturalId entity = new FakeAggregateWithNaturalId("cle unique");
         session.save(entity);
+        session.flush();
 
         session.delete(entity);
+        session.flush();
 
         assertThat(fakeAggregates().count(), is(0L));
         assertThat(session.get("cle unique", FakeAggregateWithNaturalId.class), nullValue());

@@ -23,9 +23,16 @@ package org.mongolink.domain.session;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Maps;
+import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
+import org.mongolink.MongoLinkError;
+import org.mongolink.MongoSession;
+import org.mongolink.domain.mapper.AggregateMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 public class UnitOfWork {
@@ -35,14 +42,42 @@ public class UnitOfWork {
     }
 
     public void registerDirty(Object id, Object entity, DBObject initialValue) {
-        values.put(new Key(entity.getClass(), id), new Value(entity, initialValue, ValueState.DIRTY));
+        register(id, entity, initialValue, ValueState.DIRTY);
+    }
+
+    public void registerNew(Object entity) {
+        AggregateMapper<?> mapper = session.entityMapper(entity.getClass());
+        DBObject initialValue = mapper.toDBObject(entity);
+        mapper.populateId(entity, initialValue);
+        register(mapper.getId(initialValue), entity, initialValue, ValueState.NEW);
+    }
+
+    public void registerDelete(Object element) {
+        AggregateMapper<?> mapper = session.entityMapper(element.getClass());
+        final Object id = mapper.getId(element);
+        checkEntityIsInCache(element, id);
+        getValue(element.getClass(), id).markForDeletion();
+    }
+
+    private void checkEntityIsInCache(Object element, Object id) {
+        if (!contains(element.getClass(), id)) {
+            throw new MongoLinkError("Entity to delete not loaded");
+        }
     }
 
     public void commit() {
-        for (Value value : values.values()) {
-            session.update(value.entity);
-        }
-        rollback();
+        LOGGER.debug("Commiting unit of work");
+        values.values().forEach(v->v.commit(session));
+        clearDeletedAggregates();
+        LOGGER.debug("Done commiting");
+    }
+
+    private void clearDeletedAggregates() {
+        values.entrySet().stream()
+                .filter(entry -> entry.getValue().isDeleted())
+                .map(e -> e.getKey())
+                .collect(Collectors.toSet())
+                .forEach(values::remove);
     }
 
     @SuppressWarnings("unchecked")
@@ -50,15 +85,11 @@ public class UnitOfWork {
         return (T) getValue(type, dbId).entity;
     }
 
-    public DBObject getDBOBject(Class<?> type, Object dbId) {
-        return getValue(type, dbId).initialValue;
-    }
-
     public boolean contains(Class<?> type, Object dbId) {
         if (type != null && dbId != null) {
             final Key craftedKey = new Key(type, dbId);
             for (Key key : values.keySet()) {
-                if(key.matchs(craftedKey)) {
+                if (key.matchs(craftedKey)) {
                     return true;
                 }
             }
@@ -76,11 +107,11 @@ public class UnitOfWork {
         return values.get(craftedKey);
     }
 
-    public void update(Object id, Object element, DBObject update) {
-        values.put(new Key(element.getClass(), id), new Value(element, update, ValueState.DIRTY));
+    private void register(Object id, Object entity, DBObject initialValue, ValueState state) {
+        values.put(new Key(entity.getClass(), id), new Value(entity, initialValue, state));
     }
 
-    public void rollback() {
+    public void clear() {
         values.clear();
     }
 
@@ -93,14 +124,58 @@ public class UnitOfWork {
         private Value(Object entity, DBObject initialValue, ValueState state) {
             this.entity = entity;
             this.initialValue = initialValue;
+            this.state = state;
+        }
+
+        public void commit(MongoSessionImpl session) {
+            state.commit(session, this);
+        }
+
+        private boolean isDeleted() {
+            return state == ValueState.DELETED;
+        }
+
+        private void markForDeletion() {
+            state = ValueState.DELETED;
         }
 
         final Object entity;
-        final DBObject initialValue;
+        DBObject initialValue;
+        private ValueState state;
     }
 
     private enum ValueState {
-        NEW, DIRTY, DELETED
+        NEW {
+            @Override
+            public void commit(MongoSessionImpl session, Value value) {
+                final AggregateMapper<?> mapper = session.entityMapper(value.entity.getClass());
+                final DBObject newValue = mapper.toDBObject(value.entity);
+                session.getDbCollection(mapper).insert(newValue);
+                UnitOfWork.LOGGER.debug("Entity added :{}", newValue);
+                value.initialValue = newValue;
+                value.state = DIRTY;
+            }
+        }, DIRTY {
+            @Override
+            public void commit(MongoSessionImpl session, Value value) {
+                AggregateMapper<?> mapper = session.entityMapper(value.entity.getClass());
+                DBObject initialValue = value.initialValue;
+                DBObject updatedValue = mapper.toDBObject(value.entity);
+                session.getUpdateStrategy().update(initialValue, updatedValue, session.getDbCollection(mapper));
+                value.initialValue = updatedValue;
+            }
+        }, DELETED {
+            @Override
+            public void commit(MongoSessionImpl mongoSession, Value value) {
+                final AggregateMapper<?> mapper = mongoSession.entityMapper(value.entity.getClass());
+                LOGGER.debug("Deleting entity : {}", value.entity);
+                mongoSession.getDbCollection(mapper).remove(new BasicDBObject("_id", mapper.getId(value.initialValue)));
+            }
+        };
+
+        public void commit(MongoSessionImpl mongoSession, Value value) {
+
+        }
     }
 
     private class Key {
@@ -133,5 +208,7 @@ public class UnitOfWork {
     private final MongoSessionImpl session;
 
     private final Map<Key, Value> values = Maps.newHashMap();
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(MongoSession.class);
 
 }

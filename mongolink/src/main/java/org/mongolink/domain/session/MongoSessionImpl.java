@@ -20,19 +20,12 @@
 
 package org.mongolink.domain.session;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBObject;
-import org.mongolink.MongoLinkError;
-import org.mongolink.MongoSession;
-import org.mongolink.domain.query.QueryExecutor;
-import org.mongolink.UpdateStrategies;
+import com.mongodb.*;
+import org.mongolink.*;
 import org.mongolink.domain.criteria.Criteria;
 import org.mongolink.domain.criteria.CriteriaFactory;
-import org.mongolink.domain.mapper.AggregateMapper;
-import org.mongolink.domain.mapper.ClassMapper;
-import org.mongolink.domain.mapper.MapperContext;
+import org.mongolink.domain.mapper.*;
+import org.mongolink.domain.query.QueryExecutor;
 import org.mongolink.domain.updateStrategy.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,7 +70,7 @@ public class MongoSessionImpl implements MongoSession {
         return (T) createExecutor(mapper).executeUnique(query);
     }
 
-    private AggregateMapper<?> entityMapper(Class<?> type) {
+    AggregateMapper<?> entityMapper(Class<?> type) {
         checkIsAnEntity(type);
         return (AggregateMapper<?>) context.mapperFor(type);
     }
@@ -101,25 +94,11 @@ public class MongoSessionImpl implements MongoSession {
     public void save(Object element) {
         checkNotNull(element, "Element to save was null");
         state.ensureStarted();
-        AggregateMapper<?> mapper = entityMapper(element.getClass());
-        DBObject dbObject = mapper.toDBObject(element);
-        getDbCollection(mapper).insert(dbObject);
-        mapper.populateId(element, dbObject);
-        unitOfWork.registerDirty(mapper.getId(element), element, dbObject);
-        LOGGER.debug("New entity created : {}",  dbObject);
+        unitOfWork.registerNew(element);
+        LOGGER.debug("New entity register for additon : {}",  element);
     }
 
-    public void update(Object element) {
-        checkNotNull(element, "Element was null");
-        state.ensureStarted();
-        AggregateMapper<?> mapper = entityMapper(element.getClass());
-        DBObject initialValue = unitOfWork.getDBOBject(element.getClass(), mapper.getId(element));
-        DBObject updatedValue = mapper.toDBObject(element);
-        updateStrategy.update(initialValue, updatedValue, getDbCollection(mapper));
-        unitOfWork.update(mapper.getId(element), element, updatedValue);
-    }
-
-    private DBCollection getDbCollection(AggregateMapper<?> mapper) {
+    DBCollection getDbCollection(AggregateMapper<?> mapper) {
         return db.getCollection(mapper.collectionName());
     }
 
@@ -127,22 +106,13 @@ public class MongoSessionImpl implements MongoSession {
     public void delete(Object element) {
         checkNotNull(element, "Element was null");
         state.ensureStarted();
-        AggregateMapper<?> mapper = entityMapper(element.getClass());
-        checkEntityIsInCache(element, mapper);
-        getDbCollection(mapper).remove(new BasicDBObject("_id", mapper.getId(element)));
-        unitOfWork.delete(mapper.getId(element), element);
-        LOGGER.debug("Entity deleted : " + element);
-    }
-
-    private void checkEntityIsInCache(Object element, AggregateMapper<?> mapper) {
-        if (!unitOfWork.contains(element.getClass(), mapper.getId(element))) {
-            throw new MongoLinkError("Entity to delete not loaded");
-        }
+        unitOfWork.registerDelete(element);
+        LOGGER.debug("Entity register for deletion : " + element);
     }
 
     @Override
     public void clear() {
-        unitOfWork.rollback();
+        unitOfWork.clear();
     }
 
     public DB getDb() {
@@ -163,7 +133,7 @@ public class MongoSessionImpl implements MongoSession {
         return new QueryExecutor(db, mapper, unitOfWork);
     }
 
-    public UpdateStrategy getUpdateStrategy() {
+    UpdateStrategy getUpdateStrategy() {
         return updateStrategy;
     }
 
@@ -181,10 +151,11 @@ public class MongoSessionImpl implements MongoSession {
 
     @Override
     public void flush() {
+        state.ensureStarted();
         unitOfWork.commit();
     }
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MongoSessionImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MongoSession.class);
     private final DB db;
     private final UnitOfWork unitOfWork = new UnitOfWork(this);
     private final CriteriaFactory criteriaFactory;

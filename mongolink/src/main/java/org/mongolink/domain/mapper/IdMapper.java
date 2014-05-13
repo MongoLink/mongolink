@@ -48,10 +48,6 @@ public class IdMapper implements Mapper {
         }
     }
 
-    String dbFieldName() {
-        return "_id";
-    }
-
     @Override
     public void populate(Object instance, DBObject from) {
         try {
@@ -63,6 +59,10 @@ public class IdMapper implements Mapper {
 
     protected Object getIdValue(DBObject from) {
         return convertToObjectValue(from.get(dbFieldName()));
+    }
+
+    String dbFieldName() {
+        return "_id";
     }
 
     private Object convertToObjectValue(final Object id) {
@@ -90,10 +90,6 @@ public class IdMapper implements Mapper {
         return null;
     }
 
-    public void setMapper(AggregateMapper<?> mapper) {
-        this.mapper = mapper;
-    }
-
     public void natural() {
         generationStrategy = IdGeneration.Natural;
     }
@@ -102,8 +98,13 @@ public class IdMapper implements Mapper {
         generationStrategy = IdGeneration.Auto;
     }
 
+    public void generateId(DBObject dbObject) {
+        if(generationStrategy == IdGeneration.Auto) {
+            dbObject.put(dbFieldName(), ObjectId.get());
+        }
+    }
+
     private IdGeneration generationStrategy;
     private final FieldContainer fieldContainer;
     private static final Logger LOGGER = LoggerFactory.getLogger(IdMapper.class);
-    private AggregateMapper<?> mapper;
 }

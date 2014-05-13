@@ -2,6 +2,7 @@ package org.mongolink.domain.session;
 
 import com.mongodb.DB;
 import org.mongolink.MongoLinkError;
+import org.mongolink.MongoSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,5 +56,5 @@ enum SessionState {
 
     public abstract SessionState start(final DB db) ;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MongoSessionImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MongoSession.class);
 }
