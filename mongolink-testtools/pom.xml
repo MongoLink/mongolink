@@ -3,14 +3,14 @@
     <parent>
         <artifactId>mongolink-parent</artifactId>
         <groupId>org.mongolink</groupId>
-        <version>1.1.1-SNAPSHOT</version>
+        <version>1.1.1</version>
     </parent>
     <packaging>jar</packaging>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>mongolink-testtools</artifactId>
     <scm>
         <developerConnection>scm:git:git@github.com:MongoLink/mongolink-testtools.git</developerConnection>
-      <tag>HEAD</tag>
+      <tag>1.1.1</tag>
   </scm>
     <dependencies>
         <dependency>
