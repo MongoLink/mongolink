@@ -36,6 +36,10 @@ public class QueryExecutor<T> {
         this.unitOfWork = unitOfWork;
     }
 
+    public List<T> execute(DBObject query) {
+        return execute(query, CursorParameter.empty());
+    }
+
     public List<T> execute(DBObject query, CursorParameter cursorParameter) {
         final List<T> result = Lists.newArrayList();
         DBCollection collection = db.getCollection(mapper.collectionName());
@@ -49,10 +53,6 @@ public class QueryExecutor<T> {
         } finally {
             cursor.close();
         }
-    }
-
-    public List<T> execute(DBObject query) {
-        return execute(query, CursorParameter.empty());
     }
 
     public T executeUnique(DBObject query) {
@@ -69,7 +69,7 @@ public class QueryExecutor<T> {
             return unitOfWork.getEntity(mapper.getPersistentType(), unitOfWorkId);
         } else {
             T entity = mapper.toInstance(dbObject);
-            unitOfWork.add(unitOfWorkId, entity, dbObject);
+            unitOfWork.registerDirty(unitOfWorkId, entity, dbObject);
             return entity;
         }
     }

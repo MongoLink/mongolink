@@ -23,8 +23,6 @@ package org.mongolink.domain.session;
 
 import com.mongodb.BasicDBObject;
 import org.junit.Test;
-import org.mongolink.domain.session.MongoSessionImpl;
-import org.mongolink.domain.session.UnitOfWork;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.*;
@@ -36,7 +34,7 @@ public class TestsUnitOfWork {
     public void canRetrieveSubtype() {
         UnitOfWork unitOfWork = new UnitOfWork(mock(MongoSessionImpl.class));
         Child entity = new Child();
-        unitOfWork.add(1, entity, new BasicDBObject());
+        unitOfWork.registerDirty(1, entity, new BasicDBObject());
 
         Object entityFound = unitOfWork.getEntity(Parent.class, 1);
 
@@ -47,7 +45,7 @@ public class TestsUnitOfWork {
     public void canCheckExistenceWithSubType() {
         final UnitOfWork unitOfWork = new UnitOfWork(mock(MongoSessionImpl.class));
         final Child child = new Child();
-        unitOfWork.add(1, child, new BasicDBObject());
+        unitOfWork.registerDirty(1, child, new BasicDBObject());
 
         assertTrue(unitOfWork.contains(Parent.class, 1));
     }

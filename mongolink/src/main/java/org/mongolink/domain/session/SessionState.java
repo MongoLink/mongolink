@@ -22,7 +22,7 @@ enum SessionState {
     }, STARTED {
         @Override
         public SessionState stop(final DB db, final UnitOfWork unitOfWork) {
-            unitOfWork.flush();
+            unitOfWork.commit();
             db.requestDone();
             LOGGER.debug("Stoping");
             return STOPPED;

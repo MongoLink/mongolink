@@ -29,7 +29,7 @@ import static org.mockito.Mockito.*;
 public class FakeDB extends DB {
 
     public FakeDB() {
-        super(mock(Mongo.class), null);
+        super(mock(Mongo.class), "test");
     }
 
 
@@ -37,6 +37,8 @@ public class FakeDB extends DB {
     public void requestStart() {
 
     }
+
+
 
     @Override
     public void requestDone() {

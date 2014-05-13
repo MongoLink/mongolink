@@ -105,7 +105,7 @@ public class MongoSessionImpl implements MongoSession {
         DBObject dbObject = mapper.toDBObject(element);
         getDbCollection(mapper).insert(dbObject);
         mapper.populateId(element, dbObject);
-        unitOfWork.add(mapper.getId(element), element, dbObject);
+        unitOfWork.registerDirty(mapper.getId(element), element, dbObject);
         LOGGER.debug("New entity created : {}",  dbObject);
     }
 
@@ -134,15 +134,15 @@ public class MongoSessionImpl implements MongoSession {
         LOGGER.debug("Entity deleted : " + element);
     }
 
-    @Override
-    public void clear() {
-        unitOfWork.clear();
-    }
-
     private void checkEntityIsInCache(Object element, AggregateMapper<?> mapper) {
         if (!unitOfWork.contains(element.getClass(), mapper.getId(element))) {
             throw new MongoLinkError("Entity to delete not loaded");
         }
+    }
+
+    @Override
+    public void clear() {
+        unitOfWork.rollback();
     }
 
     public DB getDb() {
@@ -181,7 +181,7 @@ public class MongoSessionImpl implements MongoSession {
 
     @Override
     public void flush() {
-        unitOfWork.flush();
+        unitOfWork.commit();
     }
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MongoSessionImpl.class);

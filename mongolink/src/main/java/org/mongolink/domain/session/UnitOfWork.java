@@ -34,15 +34,15 @@ public class UnitOfWork {
         this.session = session;
     }
 
-    public void add(Object id, Object entity, DBObject initialValue) {
-        values.put(new Key(entity.getClass(), id), new Value(entity, initialValue));
+    public void registerDirty(Object id, Object entity, DBObject initialValue) {
+        values.put(new Key(entity.getClass(), id), new Value(entity, initialValue, ValueState.DIRTY));
     }
 
-    public void flush() {
+    public void commit() {
         for (Value value : values.values()) {
             session.update(value.entity);
         }
-        clear();
+        rollback();
     }
 
     @SuppressWarnings("unchecked")
@@ -77,10 +77,10 @@ public class UnitOfWork {
     }
 
     public void update(Object id, Object element, DBObject update) {
-        values.put(new Key(element.getClass(), id), new Value(element, update));
+        values.put(new Key(element.getClass(), id), new Value(element, update, ValueState.DIRTY));
     }
 
-    public void clear() {
+    public void rollback() {
         values.clear();
     }
 
@@ -90,13 +90,17 @@ public class UnitOfWork {
 
     private class Value {
 
-        private Value(Object entity, DBObject initialValue) {
+        private Value(Object entity, DBObject initialValue, ValueState state) {
             this.entity = entity;
             this.initialValue = initialValue;
         }
 
         final Object entity;
         final DBObject initialValue;
+    }
+
+    private enum ValueState {
+        NEW, DIRTY, DELETED
     }
 
     private class Key {
