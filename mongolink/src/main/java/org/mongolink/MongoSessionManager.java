@@ -21,11 +21,10 @@
 package org.mongolink;
 
 
-import org.mongolink.domain.session.MongoSessionImpl;
-import org.mongolink.domain.session.MongoSessionManagerImpl;
 import org.mongolink.domain.mapper.ContextBuilder;
+import org.mongolink.domain.session.MongoSessionManagerImpl;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 public interface MongoSessionManager {
     static MongoSessionManager create(ContextBuilder contextBuilder, Settings settings) {
@@ -36,7 +35,7 @@ public interface MongoSessionManager {
         return manager;
     }
 
-    MongoSessionImpl createSession();
+    MongoSession createSession();
 
     void close();
 }
