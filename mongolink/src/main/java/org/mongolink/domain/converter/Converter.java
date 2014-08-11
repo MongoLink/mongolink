@@ -49,6 +49,9 @@ public abstract class Converter {
         if(isJava8LocalDate(type)) {
             return new Java8LocalDateConverter();
         }
+        if(isJava8LocalDateTime(type)) {
+            return new Java8LocalDateTimeConverter();
+        }
         return PRIMITIVE_CONVERTER;
     }
 
@@ -66,6 +69,10 @@ public abstract class Converter {
 
     private static boolean isJava8LocalDate(Class<?> type) {
         return java.time.LocalDate.class.isAssignableFrom(type);
+    }
+
+    private static boolean isJava8LocalDateTime(Class<?> type) {
+        return java.time.LocalDateTime.class.isAssignableFrom(type);
     }
 
     private static boolean isEnum(Class<?> type) {
