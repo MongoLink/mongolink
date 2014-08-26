@@ -9,7 +9,7 @@ public class LocalDateConverter extends Converter {
     }
 
     @Override
-    public Object fromDbValue(Object value) {
+    protected Object fromDbValueNotNull(Object value) {
         return new LocalDate(value);
     }
 }

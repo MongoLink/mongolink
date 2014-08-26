@@ -81,7 +81,18 @@ public abstract class Converter {
 
     public abstract Object toDbValue(Object value);
 
-    public abstract Object fromDbValue(Object value);
+    public Object fromDbValue(Object value) {
+        if(value == null) {
+            return nullValue();
+        }
+        return fromDbValueNotNull(value);
+    }
+
+    protected abstract Object fromDbValueNotNull(Object value);
+
+    protected Object nullValue() {
+        return null;
+    }
 
     private static final PrimitiveConverter PRIMITIVE_CONVERTER = new PrimitiveConverter();
 }

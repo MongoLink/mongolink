@@ -31,7 +31,7 @@ public class Java8LocalDateTimeConverter extends Converter {
     }
 
     @Override
-    public Object fromDbValue(Object value) {
+    protected Object fromDbValueNotNull(Object value) {
         return ((Date) value).toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
     }
 }

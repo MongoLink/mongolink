@@ -54,4 +54,11 @@ public class Java8LocalDateTimeConverterTest {
 
         assertThat(unserialized).isEqualTo(originalDate);
     }
+
+    @Test
+    public void canDealWithNull() {
+        final Object value = new Java8LocalDateConverter().fromDbValue(null);
+
+        assertThat(value).isNull();
+    }
 }

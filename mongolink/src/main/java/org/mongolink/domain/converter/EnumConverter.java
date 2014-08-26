@@ -34,8 +34,9 @@ public class EnumConverter extends Converter {
         return value.toString();
     }
 
+
     @Override
-    public Object fromDbValue(Object value) {
+    protected Object fromDbValueNotNull(Object value) {
         return Enum.valueOf(enumType, value.toString());
     }
 

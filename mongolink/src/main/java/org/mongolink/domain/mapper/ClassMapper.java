@@ -64,7 +64,7 @@ public abstract class ClassMapper<T> extends Converter implements Mapper {
     }
 
     @Override
-    public Object fromDbValue(Object value) {
+    public Object fromDbValueNotNull(Object value) {
         return toInstance((DBObject) value);
     }
 

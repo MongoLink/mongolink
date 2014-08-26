@@ -30,8 +30,9 @@ public class DateTimeConverter extends Converter {
         return ((DateTime) value).getMillis();
     }
 
+
     @Override
-    public Object fromDbValue(final Object value) {
+    protected Object fromDbValueNotNull(Object value) {
         return new DateTime(value);
     }
 }

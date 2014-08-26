@@ -65,6 +65,13 @@ public class TestsDateTimeConverter {
         assertThat((DateTime) value, is(date));
     }
 
+    @Test
+    public void canDealWithNull() {
+        final Object value = converter.fromDbValue(null);
+
+        assertThat(value, nullValue());
+    }
+
     private class EntityWithDate {
 
         private DateTime dateTime;
