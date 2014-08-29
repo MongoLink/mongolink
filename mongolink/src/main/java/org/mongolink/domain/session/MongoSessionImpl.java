@@ -115,6 +115,7 @@ public class MongoSessionImpl implements MongoSession {
         unitOfWork.clear();
     }
 
+    @Override
     public DB getDb() {
         return db;
     }
