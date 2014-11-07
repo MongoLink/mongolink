@@ -8,7 +8,7 @@ An objet mapper for com.mongodb, without any annotation or xml. We can then achi
 Website and documentation
 -------
 
-* http://www.mongolink.org
+* http://mongolink.org
 
 Continuous integration
 ---------------------
