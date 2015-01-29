@@ -25,8 +25,7 @@ import org.bson.types.ObjectId;
 import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.mockito.InOrder;
-import org.mongolink.MongoLinkError;
-import org.mongolink.UpdateStrategies;
+import org.mongolink.*;
 import org.mongolink.domain.criteria.Criteria;
 import org.mongolink.domain.criteria.CriteriaFactory;
 import org.mongolink.domain.mapper.ContextBuilder;
@@ -47,10 +46,15 @@ public class TestsMongoSessionImpl {
     public void before() {
         final Fongo fongo = new Fongo("test");
         db = (FongoDB) spy(fongo.getDB("test"));
-        ContextBuilder cb = new ContextBuilder("org.mongolink.test.simpleMapping");
-        session = new MongoSessionImpl(db, new CriteriaFactory());
-        session.setMappingContext(cb.createContext());
+        session = createSession();
         session.start();
+    }
+
+    private MongoSessionImpl createSession() {
+        ContextBuilder cb = new ContextBuilder("org.mongolink.test.simpleMapping");
+        MongoSessionImpl session = new MongoSessionImpl(db, new CriteriaFactory());
+        session.setMappingContext(cb.createContext());
+        return session;
     }
 
     @Test
@@ -241,6 +245,14 @@ public class TestsMongoSessionImpl {
         List<FakeAggregate> list = criteria.list();
 
         assertThat(list.size(), is(2));
+    }
+
+    @Test
+    public void cantGetByCriteriaWhenSessionNotStarted() {
+        final MongoSessionImpl sessionNotStarted = createSession();
+
+        exception.expect(MongoLinkError.class);
+        sessionNotStarted.createCriteria(FakeAggregate.class);
     }
 
     @Test

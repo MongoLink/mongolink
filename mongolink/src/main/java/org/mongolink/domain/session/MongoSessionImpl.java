@@ -123,6 +123,7 @@ public class MongoSessionImpl implements MongoSession {
     @Override
     public <U> Criteria createCriteria(Class<U> type) {
         checkNotNull(type, "Type was null");
+        state.ensureStarted();
         AggregateMapper<?> mapper = entityMapper(type);
         Criteria criteria = criteriaFactory.create(createExecutor(mapper));
         mapper.applyRestrictionsFor(type, criteria);

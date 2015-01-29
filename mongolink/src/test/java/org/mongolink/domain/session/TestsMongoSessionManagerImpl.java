@@ -69,6 +69,7 @@ public class TestsMongoSessionManagerImpl {
     @Test
     public void canGetCriteria() {
         MongoSession session = manager.createSession();
+        session.start();
 
         assertThat(session.createCriteria(FakeAggregate.class), notNullValue());
     }
