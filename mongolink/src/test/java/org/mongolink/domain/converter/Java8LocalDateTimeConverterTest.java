@@ -42,7 +42,7 @@ public class Java8LocalDateTimeConverterTest {
     public void canDeserialize() {
         final Object result = new Java8LocalDateTimeConverter().fromDbValue(new Date(0));
 
-        assertThat(result).isEqualTo(LocalDateTime.of(1970, 1, 1, 1, 0));
+        assertThat(result).isEqualTo(LocalDateTime.of(1970, 1, 1, 1, 0, 0, 0));
     }
 
     @Test
