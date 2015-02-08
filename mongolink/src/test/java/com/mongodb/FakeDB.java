@@ -21,7 +21,10 @@
 
 package com.mongodb;
 
+import com.google.common.collect.Sets;
+
 import java.net.UnknownHostException;
+import java.util.Set;
 
 import static org.mockito.Mockito.*;
 
@@ -63,6 +66,11 @@ public class FakeDB extends DB {
     @Override
     public CommandResult command(final DBObject cmd, final int options) throws MongoException {
         return okResult();
+    }
+
+    @Override
+    public Set<String> getCollectionNames() {
+        return Sets.newConcurrentHashSet();
     }
 
     @Override
