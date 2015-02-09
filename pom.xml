@@ -13,11 +13,8 @@
             <url>dav:https://repository-mongolink.forge.cloudbees.com/release/</url>
         </repository>
         <snapshotRepository>
-            <!--<id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>-->
-            <id>arpinum</id>
-            <name>arpinum</name>
-            <url>http://archiva.arpinum.fr/repository/snapshots</url>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
     <modules>
@@ -177,17 +174,9 @@
         </dependencies>
     </dependencyManagement>
     <repositories>
-        <!--<repository>
+        <repository>
             <id>ossrh</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
-            </snapshots>
-        </repository>-->
-        <repository>
-            <id>arpinum</id>
-            <url>http://archiva.arpinum.fr/repository/snapshots</url>
             <snapshots>
                 <enabled>true</enabled>
                 <updatePolicy>always</updatePolicy>
