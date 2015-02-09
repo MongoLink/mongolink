@@ -22,7 +22,7 @@ package org.mongolink.domain.converter;
 
 import org.junit.Test;
 
-import java.time.LocalDateTime;
+import java.time.*;
 import java.util.Date;
 
 import static org.fest.assertions.Assertions.*;
@@ -42,7 +42,7 @@ public class Java8LocalDateTimeConverterTest {
     public void canDeserialize() {
         final Object result = new Java8LocalDateTimeConverter().fromDbValue(new Date(0));
 
-        assertThat(result).isEqualTo(LocalDateTime.of(1970, 1, 1, 0, 0, 0, 0));
+        assertThat(result).isEqualTo(LocalDateTime.ofInstant(Instant.EPOCH, ZoneId.systemDefault()));
     }
 
     @Test
