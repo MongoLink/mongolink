@@ -18,8 +18,7 @@ Continuous integration
 
 Maven repositories
 ------------------
-* Snapshots : http://repository-mongolink.forge.cloudbees.com/snapshot/
-* Releases : http://repository-mongolink.forge.cloudbees.com/release/
+It's on central \o/ 
 
 Contributors
 ------------------
