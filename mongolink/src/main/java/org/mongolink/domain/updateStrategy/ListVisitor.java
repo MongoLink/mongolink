@@ -80,8 +80,8 @@ public class ListVisitor extends Visitor {
     }
 
     @Override
-	protected BasicDBList getOrigin() {
-		return (BasicDBList) super.getOrigin();
+	protected List getOrigin() {
+		return (List) super.getOrigin();
 	}
 
 }
