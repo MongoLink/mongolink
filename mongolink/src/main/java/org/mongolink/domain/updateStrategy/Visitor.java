@@ -23,6 +23,8 @@ package org.mongolink.domain.updateStrategy;
 
 import com.mongodb.*;
 
+import java.util.*;
+
 
 public abstract class Visitor {
     public Visitor(final DbObjectDiff dbObjectDiff, final Object origin) {
@@ -48,7 +50,7 @@ public abstract class Visitor {
         new PropertyVisitor(dbObjectDiff, origin).visit(target);
     }
 
-    protected void visitList(final BasicDBList origin, final BasicDBList field) {
+    protected void visitList(final List origin, final BasicDBList field) {
         new ListVisitor(dbObjectDiff, origin).visit(field);
     }
 

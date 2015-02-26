@@ -22,16 +22,15 @@
 package org.mongolink.domain.updateStrategy;
 
 import com.google.common.base.Objects;
-import com.google.common.collect.Lists;
-import com.mongodb.BasicDBList;
+import com.google.common.collect.*;
+import com.mongodb.*;
 
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.*;
 
 
 public class ListVisitor extends Visitor {
 
-	public ListVisitor(final DbObjectDiff dbObjectDiff, final BasicDBList origin) {
+	public ListVisitor(final DbObjectDiff dbObjectDiff, final List origin) {
 		super(dbObjectDiff, origin);
 	}
 

@@ -23,6 +23,8 @@ package org.mongolink.domain.updateStrategy;
 
 import com.mongodb.*;
 
+import java.util.*;
+
 
 public class DocumentVisitor extends Visitor {
 
@@ -54,7 +56,7 @@ public class DocumentVisitor extends Visitor {
     }
 
     private void visitList(final String key, final BasicDBList field) {
-        visitList((BasicDBList) getOrigin().get(key), field);
+        visitList((List) getOrigin().get(key), field);
     }
 
     private void visitProperty(final String key, final Object field) {
