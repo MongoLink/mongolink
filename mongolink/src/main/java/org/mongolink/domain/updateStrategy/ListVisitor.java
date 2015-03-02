@@ -26,30 +26,34 @@ import com.google.common.collect.*;
 import com.mongodb.*;
 
 import java.util.*;
+import java.util.stream.*;
 
 
 public class ListVisitor extends Visitor {
 
-	public ListVisitor(final DbObjectDiff dbObjectDiff, final List origin) {
-		super(dbObjectDiff, origin);
-	}
+    public ListVisitor(final DbObjectDiff dbObjectDiff, final List origin) {
+        super(dbObjectDiff, origin);
+    }
 
-	@Override
-	public void visit(final Object target) {
-		final BasicDBList targetList = (BasicDBList) target;
+    @Override
+    public void visit(final Object target) {
+        final BasicDBList targetList = (BasicDBList) target;
+        final Set<Object> toDelete = (Set<Object>) getOrigin().stream().filter(e -> !targetList.contains(e)).collect(Collectors.toSet());
+        toDelete.forEach(getDbObjectDiff()::addPull);
+        final List workingList = Lists.newArrayList(getOrigin());
+        workingList.removeAll(toDelete);
         Iterator<Object> targetIterator = targetList.iterator();
-        Iterator<Object> originIterator = getOrigin().iterator();
+        Iterator<Object> originIterator = workingList.iterator();
         int index = 0;
-        while(targetIterator.hasNext() && originIterator.hasNext()) {
+        while (targetIterator.hasNext() && originIterator.hasNext()) {
             compare(index, originIterator.next(), targetIterator.next());
             index++;
         }
         addNewElements(targetIterator);
-        removeDeletedElements(originIterator, index);
-	}
+    }
 
     private void compare(int index, Object originElement, Object targetElement) {
-        if(!Objects.equal(originElement, targetElement)) {
+        if (!Objects.equal(originElement, targetElement)) {
             getDbObjectDiff().pushKey(String.valueOf(index));
             getDbObjectDiff().addSet(targetElement);
             getDbObjectDiff().popKey();
@@ -58,30 +62,17 @@ public class ListVisitor extends Visitor {
 
     private void addNewElements(Iterator<Object> targetIterator) {
         ArrayList<Object> newElements = Lists.newArrayList(targetIterator);
-        if(newElements.size() == 1) {
+        if (newElements.size() == 1) {
             getDbObjectDiff().addPush(newElements.get(0));
         }
-        if(newElements.size() > 1) {
+        if (newElements.size() > 1) {
             getDbObjectDiff().addPushAll(newElements);
         }
     }
 
-    private void removeDeletedElements(Iterator<Object> originIterator, int index) {
-        if(originIterator.hasNext()) {
-            getDbObjectDiff().addPull(null);
-        }
-        while (originIterator.hasNext()) {
-            getDbObjectDiff().pushKey(String.valueOf(index));
-            getDbObjectDiff().addUnset();
-            getDbObjectDiff().popKey();
-            originIterator.next();
-            index++;
-        }
-    }
-
     @Override
-	protected List getOrigin() {
-		return (List) super.getOrigin();
-	}
+    protected List getOrigin() {
+        return (List) super.getOrigin();
+    }
 
 }

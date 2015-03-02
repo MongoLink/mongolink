@@ -32,18 +32,30 @@ public class DiffStrategy extends UpdateStrategy {
     @Override
     public void update(DBObject initialValue, DBObject updatedValue, DBCollection collection) {
         final DBObject diff = new DbObjectDiff(initialValue).compareWith(updatedValue);
+        final DBObject q = updateQuery(initialValue);
+        executePushAndPull(collection, diff, q);
         if (!diff.keySet().isEmpty()) {
-            final DBObject q = updateQuery(initialValue);
-            final DBObject pull = (DBObject) diff.get(DbObjectDiff.Modifier.PULL.toString());
-            diff.removeField(DbObjectDiff.Modifier.PULL.toString());
             LOGGER.debug("Updating : collection {} : query {} : modifiers : {}", collection.getName(), q, diff);
             collection.update(q, diff);
-            // ugly hack to support removing element by index
-            // see https://jira.mongodb.org/browse/SERVER-1014
-            if (pull != null) {
-                LOGGER.debug("Cleaning array : {}  values: {}", q, pull);
-                collection.update(q, new BasicDBObject(DbObjectDiff.Modifier.PULL.toString(), pull));
-            }
+        }
+    }
+
+    private void executePushAndPull(DBCollection collection, DBObject diff, DBObject q) {
+        // concurrent modififications on the same array is quite tricky
+        // we can't $set, $push or $pull at the same time, mainly because $set uses index to do the job
+        // so we have to split operations in three distinct update operations
+        // see https://jira.mongodb.org/browse/SERVER-1014
+        execute(DbObjectDiff.Modifier.PULL, collection, diff, q);
+        execute(DbObjectDiff.Modifier.PUSH, collection, diff, q);
+        execute(DbObjectDiff.Modifier.PUSHALL, collection, diff, q);
+    }
+
+    private void execute(DbObjectDiff.Modifier modifier, DBCollection collection, DBObject diff, DBObject q) {
+        final DBObject modifications = (DBObject) diff.get(modifier.toString());
+        diff.removeField(modifier.toString());
+        if (modifications != null) {
+            LOGGER.debug("Updating array : {} modifier: {}  values: {}", q, modifier, modifications);
+            collection.update(q, new BasicDBObject(modifier.toString(), modifications));
         }
     }
 

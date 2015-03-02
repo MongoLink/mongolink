@@ -17,7 +17,30 @@ public class DiffStrategyTest {
         final BasicDBList val = new BasicDBList();
         val.add("first");
         origin.put("liste", val);
-        target.put("liste", new BasicDBList());
+        final BasicDBList targetList = new BasicDBList();
+        targetList.add("other");
+        target.put("liste", targetList);
+
+        strategy.update(origin, target, collection);
+
+        Mockito.verify(collection, times(2)).update(any(DBObject.class), any(DBObject.class));
+    }
+
+    @Test
+    public void pushRequestsAreMadeInAnotherQuery() {
+        final DiffStrategy strategy = new DiffStrategy();
+        final DBCollection collection = mock(DBCollection.class);
+        final BasicDBObject origin = new BasicDBObject();
+        final BasicDBObject target = new BasicDBObject();
+        final BasicDBList val = new BasicDBList();
+        val.add("first");
+        val.add("second");
+        origin.put("liste", val);
+        final BasicDBList targetList = new BasicDBList();
+        targetList.add("second");
+        targetList.add("first");
+        targetList.add("third");
+        target.put("liste", targetList);
 
         strategy.update(origin, target, collection);
 

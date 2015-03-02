@@ -79,8 +79,8 @@ public class TestsDbObjectDiff {
 
         final DBObject $set = (DBObject) diff.get("$set");
         assertThat($set.keySet().size(), is(2));
-        assertThat((String) $set.get("value"), is("new value"));
-        assertThat((String) $set.get("other value"), is("new other value"));
+        assertThat($set.get("value"), is("new value"));
+        assertThat($set.get("other value"), is("new other value"));
     }
 
     @Test
@@ -114,7 +114,7 @@ public class TestsDbObjectDiff {
         final DBObject diff = new DbObjectDiff(origin).compareWith(dirty);
 
         final DBObject push = (DBObject) diff.get("$push");
-        assertThat((String) push.get("list"), is("new value"));
+        assertThat(push.get("list"), is("new value"));
     }
 
     @Test
@@ -189,7 +189,7 @@ public class TestsDbObjectDiff {
 
         assertThat(result.get("$unset"), notNullValue());
         final DBObject unset = (DBObject) result.get("$unset");
-        assertThat((Integer) unset.get("key"), is(1));
+        assertThat(unset.get("key"), is(1));
     }
 
     @Test

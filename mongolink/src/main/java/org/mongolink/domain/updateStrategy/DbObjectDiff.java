@@ -22,13 +22,12 @@
 package org.mongolink.domain.updateStrategy;
 
 
+import com.google.common.base.*;
 import com.google.common.collect.Maps;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Stack;
+import java.util.*;
 
 public class DbObjectDiff {
 
@@ -88,13 +87,7 @@ public class DbObjectDiff {
     }
 
     private String makeKey() {
-        StringBuilder keyBuilder = new StringBuilder();
-        for (String s : keys) {
-            keyBuilder.append(s);
-            keyBuilder.append(".");
-        }
-        keyBuilder.deleteCharAt(keyBuilder.length() - 1);
-        return keyBuilder.toString();
+        return Joiner.on(".").join(keys);
     }
 
     public void pushKey(final String key) {
