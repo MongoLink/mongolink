@@ -38,10 +38,8 @@ public class ListVisitor extends Visitor {
     @Override
     public void visit(final Object target) {
         final BasicDBList targetList = (BasicDBList) target;
-        final Set<Object> toDelete = (Set<Object>) getOrigin().stream().filter(e -> !targetList.contains(e)).collect(Collectors.toSet());
-        toDelete.forEach(getDbObjectDiff()::addPull);
         final List workingList = Lists.newArrayList(getOrigin());
-        workingList.removeAll(toDelete);
+        removeIfNeeded(targetList, workingList);
         Iterator<Object> targetIterator = targetList.iterator();
         Iterator<Object> originIterator = workingList.iterator();
         int index = 0;
@@ -50,6 +48,14 @@ public class ListVisitor extends Visitor {
             index++;
         }
         addNewElements(targetIterator);
+    }
+
+    private void removeIfNeeded(BasicDBList targetList, List workingList) {
+        if(targetList.size() != workingList.size()) {
+            final Set<Object> toDelete = (Set<Object>) getOrigin().stream().filter(e -> !targetList.contains(e)).collect(Collectors.toSet());
+            toDelete.forEach(getDbObjectDiff()::addPull);
+            workingList.removeAll(toDelete);
+        }
     }
 
     private void compare(int index, Object originElement, Object targetElement) {

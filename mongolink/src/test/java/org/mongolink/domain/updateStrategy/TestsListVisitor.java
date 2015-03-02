@@ -52,8 +52,9 @@ public class TestsListVisitor {
     @Test
     public void canGenerateUpdateOnComponent() {
         diff(listWith("prems"), listWith("deuz"));
-        verify(dbObjectDiff).addPull("prems");
-        verify(dbObjectDiff).addPush("deuz");
+        verify(dbObjectDiff).pushKey("0");
+        verify(dbObjectDiff).addSet("deuz");
+        verify(dbObjectDiff).popKey();
     }
 
     @Test

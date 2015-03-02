@@ -16,8 +16,11 @@ public class DiffStrategyTest {
         final BasicDBObject target = new BasicDBObject();
         final BasicDBList val = new BasicDBList();
         val.add("first");
+        val.add("second");
         origin.put("liste", val);
         final BasicDBList targetList = new BasicDBList();
+        targetList.add("second");
+        targetList.add("third");
         targetList.add("other");
         target.put("liste", targetList);
 
