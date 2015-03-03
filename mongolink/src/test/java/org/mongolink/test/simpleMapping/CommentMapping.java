@@ -27,12 +27,8 @@ import org.mongolink.test.entity.Comment;
 
 public class CommentMapping extends ComponentMap<Comment> {
 
-    public CommentMapping() {
-        super();
-    }
-
     @Override
     public void map() {
-        property().onProperty(element().getValue());
+        property().onProperty(e -> e.getValue());
     }
 }

@@ -31,6 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.function.*;
 
 @SuppressWarnings("unchecked")
 public abstract class ClassMap<T> {
@@ -123,7 +124,13 @@ public abstract class ClassMap<T> {
         }
 
         @SuppressWarnings("UnusedParameters")
+        @Deprecated
         public void onProperty(Object value) {
+            addMapper(lastMethod);
+        }
+
+        public void onProperty(Consumer<T> consumer) {
+            consumer.accept(element());
             addMapper(lastMethod);
         }
 
@@ -136,12 +143,19 @@ public abstract class ClassMap<T> {
 
     public class CollectionMap {
 
+        @SuppressWarnings("UnusedDeclaration")
         public void onField(String fieldName) {
             addMapper(fieldContainer(fieldName));
         }
 
         @SuppressWarnings("UnusedParameters")
+        @Deprecated
         public void onProperty(Object value) {
+            addMapper(lastMethod);
+        }
+
+        public void onProperty(Consumer<T> consumer) {
+            consumer.accept(element());
             addMapper(lastMethod);
         }
 

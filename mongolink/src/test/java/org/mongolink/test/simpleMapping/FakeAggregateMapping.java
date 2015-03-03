@@ -33,11 +33,11 @@ public class FakeAggregateMapping extends AggregateMap<FakeAggregate> {
 
     @Override
     public void map() {
-        id().onProperty(element().getId());
+        id().onProperty(e -> e.getId());
         property().onField("value");
-        collection().onProperty(element().getComments());
-        property().onProperty(element().getComment());
-        property().onProperty(element().getIndex());
+        collection().onProperty(e -> e.getComments());
+        property().onProperty(e -> e.getComment());
+        property().onProperty(e -> e.getIndex());
     }
 
 }

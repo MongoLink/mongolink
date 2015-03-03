@@ -25,6 +25,8 @@ import org.mongolink.utils.FieldContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.function.*;
+
 public abstract class AggregateMap<T> extends ClassMap<T> {
 
     @SuppressWarnings("unchecked")
@@ -54,7 +56,13 @@ public abstract class AggregateMap<T> extends ClassMap<T> {
     public class IdMap {
 
         @SuppressWarnings("UnusedParameters")
+        @Deprecated
         public IdMapper onProperty(Object value) {
+            return addMapper(getLastMethod());
+        }
+
+        public IdMapper onProperty(Consumer<T> consumer) {
+            consumer.accept(element());
             return addMapper(getLastMethod());
         }
 

@@ -25,7 +25,7 @@ public abstract class SubclassMap<T> extends ClassMap<T> {
 
     public SubclassMap() {
         super();
-        mapper = new SubclassMapper<T>(persistentType());
+        mapper = new SubclassMapper<>(persistentType());
     }
 
     @Override
