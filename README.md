@@ -4,6 +4,7 @@ MongoLink
 An objet mapper for com.mongodb, without any annotation or xml. We can then achieve true persistence ignorance, allowing us to practice domain-driven design freely.
 
 [![Build Status](https://travis-ci.org/MongoLink/mongolink.svg)](https://travis-ci.org/MongoLink/mongolink)
+[![Documentation Status](https://readthedocs.org/projects/mongolink/badge/?version=latest)](https://readthedocs.org/projects/mongolink/?badge=latest)
 
 Website and documentation
 -------
