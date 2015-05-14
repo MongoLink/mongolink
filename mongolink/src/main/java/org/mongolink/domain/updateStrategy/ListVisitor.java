@@ -22,13 +22,10 @@
 package org.mongolink.domain.updateStrategy;
 
 import com.google.common.base.Objects;
-import com.google.common.collect.Lists;
+import com.google.common.collect.*;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.*;
+import java.util.stream.*;
 
 
 public class ListVisitor extends Visitor {
@@ -40,7 +37,7 @@ public class ListVisitor extends Visitor {
     @Override
     public void visit(final Object target) {
         final List targetList = (List) target;
-        final List workingList = getOrigin();
+        final List workingList = copy(getOrigin());
         removeIfNeeded(targetList, workingList);
         Iterator targetIterator = targetList.iterator();
         Iterator originIterator = workingList.iterator();
@@ -50,6 +47,13 @@ public class ListVisitor extends Visitor {
             index++;
         }
         addNewElements(targetIterator);
+    }
+
+    // for some fancy reasons, some times the drivers
+    // returns a LazyBsonList that doesn't support toArray
+    // hance the use of this function instead of Lists.newArrayList
+    private List copy(List origin) {
+        return (List) origin.stream().collect(Collectors.toList());
     }
 
     private void removeIfNeeded(List targetList, List workingList) {
