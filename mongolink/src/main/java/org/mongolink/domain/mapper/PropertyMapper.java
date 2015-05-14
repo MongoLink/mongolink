@@ -25,8 +25,6 @@ package org.mongolink.domain.mapper;
 import com.mongodb.DBObject;
 import org.mongolink.domain.converter.Converter;
 import org.mongolink.utils.FieldContainer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 class PropertyMapper implements Mapper {
 
@@ -76,7 +74,6 @@ class PropertyMapper implements Mapper {
         this.mapper = mapper;
     }
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(PropertyMapper.class);
     private ClassMapper<?> mapper;
     private FieldContainer field;
 }

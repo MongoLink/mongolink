@@ -33,6 +33,7 @@ import org.slf4j.LoggerFactory;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.util.Collection;
+import java.util.List;
 
 class CollectionMapper implements Mapper {
 
@@ -70,7 +71,7 @@ class CollectionMapper implements Mapper {
             field.setAccessible(true);
             ParameterizedType elementType = (ParameterizedType) field.getGenericType();
             Converter childMapper = context().converterFor((Class<?>) elementType.getActualTypeArguments()[0]);
-            BasicDBList list = (BasicDBList) from.get(name());
+            List list = (List) from.get(name());
             if (list != null) {
                 Collection collection = (Collection) field.get(instance);
                 for (Object o : list) {

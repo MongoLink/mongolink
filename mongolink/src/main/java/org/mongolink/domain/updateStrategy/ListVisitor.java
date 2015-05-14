@@ -22,11 +22,13 @@
 package org.mongolink.domain.updateStrategy;
 
 import com.google.common.base.Objects;
-import com.google.common.collect.*;
-import com.mongodb.*;
+import com.google.common.collect.Lists;
 
-import java.util.*;
-import java.util.stream.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
 public class ListVisitor extends Visitor {
@@ -37,11 +39,11 @@ public class ListVisitor extends Visitor {
 
     @Override
     public void visit(final Object target) {
-        final BasicDBList targetList = (BasicDBList) target;
-        final List workingList = Lists.newArrayList(getOrigin());
+        final List targetList = (List) target;
+        final List workingList = getOrigin();
         removeIfNeeded(targetList, workingList);
-        Iterator<Object> targetIterator = targetList.iterator();
-        Iterator<Object> originIterator = workingList.iterator();
+        Iterator targetIterator = targetList.iterator();
+        Iterator originIterator = workingList.iterator();
         int index = 0;
         while (targetIterator.hasNext() && originIterator.hasNext()) {
             compare(index, originIterator.next(), targetIterator.next());
@@ -50,7 +52,7 @@ public class ListVisitor extends Visitor {
         addNewElements(targetIterator);
     }
 
-    private void removeIfNeeded(BasicDBList targetList, List workingList) {
+    private void removeIfNeeded(List targetList, List workingList) {
         if(targetList.size() != workingList.size()) {
             final Set<Object> toDelete = (Set<Object>) getOrigin().stream().filter(e -> !targetList.contains(e)).collect(Collectors.toSet());
             toDelete.forEach(getDbObjectDiff()::addPull);

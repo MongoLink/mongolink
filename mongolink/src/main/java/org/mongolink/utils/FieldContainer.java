@@ -21,6 +21,7 @@
 
 package org.mongolink.utils;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import org.apache.commons.lang.StringUtils;
 import org.mongolink.MongoLinkError;
@@ -97,7 +98,7 @@ public class FieldContainer {
 
     @Override
     public String toString() {
-        return Objects.toStringHelper("Property")
+        return MoreObjects.toStringHelper("Property")
                 .add("class", field.getDeclaringClass().getName())
                 .add("field", name())
                 .toString();
