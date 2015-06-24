@@ -51,6 +51,7 @@ public class DbFactory {
         if (mongoClient == null) {
             mongoClient = new MongoClient(addresses);
             mongoClient.setReadPreference(readPreference);
+            mongoClient.setWriteConcern(writeConcern);
         }
     }
 
@@ -81,10 +82,18 @@ public class DbFactory {
         this.password = password;
     }
 
+    public WriteConcern getWriteConcern() {
+        return writeConcern;
+    }
+
+    public void setWriteConcern(WriteConcern writeConcern) {
+        this.writeConcern = writeConcern;
+    }
+
     private volatile MongoClient mongoClient;
     private volatile String user;
     private volatile String password;
     private List<ServerAddress> addresses;
     private ReadPreference readPreference;
-
+    private WriteConcern writeConcern;
 }

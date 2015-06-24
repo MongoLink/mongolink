@@ -22,8 +22,7 @@
 package org.mongolink.utils;
 
 import com.google.common.collect.Lists;
-import com.mongodb.ReadPreference;
-import com.mongodb.ServerAddress;
+import com.mongodb.*;
 import org.junit.Test;
 import org.mongolink.*;
 import org.mongolink.domain.criteria.*;
@@ -124,6 +123,15 @@ public class TestsSettings {
         FakeDbFactory dbFactory = (FakeDbFactory) settings.createDbFactory();
 
         assertThat(dbFactory.getReadPreference(), is(ReadPreference.secondary()));
+    }
+
+    @Test
+    public void canDefineWriteConcern() {
+        Settings settings = Settings.defaultInstance().withWriteConcern(WriteConcern.ACKNOWLEDGED).withDbFactory(FakeDbFactory.class);
+
+        FakeDbFactory dbFactory = (FakeDbFactory) settings.createDbFactory();
+
+        assertThat(dbFactory.getWriteConcern(), is(WriteConcern.ACKNOWLEDGED));
     }
 
     public static class DummyCriteriaFactory extends CriteriaFactory {

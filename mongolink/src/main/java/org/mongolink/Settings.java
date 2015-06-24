@@ -23,8 +23,7 @@ package org.mongolink;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
-import com.mongodb.ReadPreference;
-import com.mongodb.ServerAddress;
+import com.mongodb.*;
 import org.mongolink.domain.criteria.CriteriaFactory;
 
 import java.net.UnknownHostException;
@@ -50,6 +49,7 @@ public class Settings {
             DbFactory dbFactory = factoryClass.newInstance();
             dbFactory.setAddresses(addresses);
             dbFactory.setReadPreference(readPreference);
+            dbFactory.setWriteConcern(writeConcern);
             if (authenticationRequired()) {
                 dbFactory.setAuthInfos(user, password);
             }
@@ -145,6 +145,11 @@ public class Settings {
         }
     }
 
+    public Settings withWriteConcern(WriteConcern writeConcern) {
+        this.writeConcern = writeConcern;
+        return this;
+    }
+
     private Class<? extends DbFactory> factoryClass;
     private String user;
     private String password;
@@ -153,4 +158,5 @@ public class Settings {
     private Class<? extends CriteriaFactory> criteriaFactoryClass;
     private UpdateStrategies updateStrategy = UpdateStrategies.OVERWRITE;
     private ReadPreference readPreference = ReadPreference.primary();
+    private WriteConcern writeConcern = WriteConcern.NORMAL;
 }
