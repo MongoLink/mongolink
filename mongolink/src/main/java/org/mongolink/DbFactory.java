@@ -56,7 +56,7 @@ public class DbFactory {
     private List<MongoCredential> buildMongoCredentials(String dbName) {
         List<MongoCredential> result = Lists.newArrayList();
         if (isAuthenticationRequired()) {
-          MongoCredential.createCredential(user, dbName, password.toCharArray());
+          result.add(MongoCredential.createCredential(user, dbName, password.toCharArray()));
         }
         return result;
     }
