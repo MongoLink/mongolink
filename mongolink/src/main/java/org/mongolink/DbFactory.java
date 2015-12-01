@@ -22,6 +22,7 @@
 package org.mongolink;
 
 import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 import com.mongodb.*;
 
 import java.util.List;
@@ -29,11 +30,8 @@ import java.util.List;
 public class DbFactory {
 
     public DB get(String dbName) {
-        initializeMongo();
+        initializeMongo(dbName);
         DB db = mongoClient.getDB(dbName);
-        if (isAuthenticationRequired()) {
-            db.authenticate(user, password.toCharArray());
-        }
         return db;
     }
 
@@ -41,18 +39,26 @@ public class DbFactory {
         return !Strings.isNullOrEmpty(user);
     }
 
-    private void initializeMongo() {
+    private void initializeMongo(String dbName) {
         if (mongoClient == null) {
-            doInitializeMongo();
+            doInitializeMongo(dbName);
         }
     }
 
-    private synchronized void doInitializeMongo() {
+    private synchronized void doInitializeMongo(String dbName) {
         if (mongoClient == null) {
-            mongoClient = new MongoClient(addresses);
+            mongoClient = new MongoClient(addresses, buildMongoCredentials(dbName));
             mongoClient.setReadPreference(readPreference);
             mongoClient.setWriteConcern(writeConcern);
         }
+    }
+
+    private List<MongoCredential> buildMongoCredentials(String dbName) {
+        List<MongoCredential> result = Lists.newArrayList();
+        if (isAuthenticationRequired()) {
+          MongoCredential.createCredential(user, dbName, password.toCharArray());
+        }
+        return result;
     }
 
     public void close() {
