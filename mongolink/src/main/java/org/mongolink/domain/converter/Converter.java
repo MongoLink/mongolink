@@ -23,6 +23,7 @@ package org.mongolink.domain.converter;
 
 import org.joda.money.Money;
 import org.joda.time.DateTime;
+import org.joda.time.Interval;
 import org.joda.time.LocalDate;
 
 import java.lang.reflect.Method;
@@ -50,6 +51,9 @@ public abstract class Converter {
         if (isPeriod(type)) {
             return new PeriodConverter();
         }
+        if (isInterval(type)) {
+            return new IntervalConverter();
+        }
         if(isJava8LocalDate(type)) {
             return new Java8LocalDateConverter();
         }
@@ -62,8 +66,13 @@ public abstract class Converter {
     private static boolean isMoney(Class<?> type) {
         return Money.class.isAssignableFrom(type);
     }
+
     private static boolean isPeriod(Class<?> type) {
         return Period.class.isAssignableFrom(type);
+    }
+
+    private static boolean isInterval(Class<?> type) {
+        return Interval.class.isAssignableFrom(type);
     }
 
     private static boolean isDateTime(Class<?> type) {
