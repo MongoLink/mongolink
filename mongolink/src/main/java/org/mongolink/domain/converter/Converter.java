@@ -26,6 +26,7 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
 import java.lang.reflect.Method;
+import java.time.Period;
 
 public abstract class Converter {
 
@@ -46,6 +47,9 @@ public abstract class Converter {
         if (isMoney(type)) {
             return new MoneyConverter();
         }
+        if (isPeriod(type)) {
+            return new PeriodConverter();
+        }
         if(isJava8LocalDate(type)) {
             return new Java8LocalDateConverter();
         }
@@ -57,6 +61,9 @@ public abstract class Converter {
 
     private static boolean isMoney(Class<?> type) {
         return Money.class.isAssignableFrom(type);
+    }
+    private static boolean isPeriod(Class<?> type) {
+        return Period.class.isAssignableFrom(type);
     }
 
     private static boolean isDateTime(Class<?> type) {
