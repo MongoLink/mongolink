@@ -27,6 +27,7 @@ import org.joda.time.Interval;
 import org.joda.time.LocalDate;
 
 import java.lang.reflect.Method;
+import java.time.Instant;
 import java.time.Period;
 
 public abstract class Converter {
@@ -54,6 +55,9 @@ public abstract class Converter {
         if (isInterval(type)) {
             return new IntervalConverter();
         }
+        if (isInstant(type)) {
+            return new InstantConverter();
+        }
         if(isJava8LocalDate(type)) {
             return new Java8LocalDateConverter();
         }
@@ -73,6 +77,10 @@ public abstract class Converter {
 
     private static boolean isInterval(Class<?> type) {
         return Interval.class.isAssignableFrom(type);
+    }
+
+    private static boolean isInstant(Class<?> type) {
+        return Instant.class.isAssignableFrom(type);
     }
 
     private static boolean isDateTime(Class<?> type) {
