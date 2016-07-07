@@ -50,6 +50,7 @@ public class Settings {
             dbFactory.setAddresses(addresses);
             dbFactory.setReadPreference(readPreference);
             dbFactory.setWriteConcern(writeConcern);
+            dbFactory.setSslEnabled(sslEnabled);
             if (authenticationRequired()) {
                 dbFactory.setAuthInfos(user, password);
             }
@@ -150,11 +151,21 @@ public class Settings {
         return this;
     }
 
+    public boolean sslEnabled() {
+        return sslEnabled;
+    }
+
+    public Settings withSslEnabled(boolean sslEnabled) {
+        this.sslEnabled = sslEnabled;
+        return this;
+    }
+
     private Class<? extends DbFactory> factoryClass;
     private String user;
     private String password;
     private String dbName;
     private List<ServerAddress> addresses;
+    private boolean sslEnabled;
     private Class<? extends CriteriaFactory> criteriaFactoryClass;
     private UpdateStrategies updateStrategy = UpdateStrategies.OVERWRITE;
     private ReadPreference readPreference = ReadPreference.primary();

@@ -47,6 +47,7 @@ public class TestsSettings {
         assertThat(serverAddress.getHost(), is("localhost"));
         assertThat(serverAddress.getPort(), is(1234));
         assertThat(settings.authenticationRequired(), is(false));
+        assertThat(settings.sslEnabled(), is(false));
         assertThat(dbFactory.getReadPreference(), is(ReadPreference.nearest()));
     }
 
@@ -84,12 +85,23 @@ public class TestsSettings {
         assertThat(dbFactory, notNullValue());
         assertThat(dbFactory, not(instanceOf(FakeDbFactory.class)));
         assertThat(dbFactory.getAddresses().size(), is(1));
+        assertThat(dbFactory.getSslEnabled(), is(false));
         ServerAddress serverAddress = dbFactory.getAddresses().get(0);
         assertThat(serverAddress.getPort(), is(27017));
         assertThat(serverAddress.getHost(), is("127.0.0.1"));
         assertThat(settings.getDbName(), is("test"));
         assertThat(settings.getUpdateStrategy(), is(UpdateStrategies.OVERWRITE));
         assertThat(settings.getReadPreference(), is(ReadPreference.primary()));
+    }
+
+    @Test
+    public void canCreateSettingsWithSslEnabled() {
+        Settings settings = Settings.defaultInstance().withSslEnabled(true);
+
+        assertThat(settings.sslEnabled(), is(true));
+        DbFactory dbFactory = settings.createDbFactory();
+        assertThat(dbFactory, notNullValue());
+        assertThat(dbFactory.getSslEnabled(), is(true));
     }
 
     @Test

@@ -25,6 +25,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.mongodb.*;
 
+import javax.net.ssl.SSLSocketFactory;
 import java.util.List;
 
 public class DbFactory {
@@ -47,7 +48,7 @@ public class DbFactory {
 
     private synchronized void doInitializeMongo(String dbName) {
         if (mongoClient == null) {
-            mongoClient = new MongoClient(addresses, buildMongoCredentials(dbName));
+            mongoClient = new MongoClient(addresses, buildMongoCredentials(dbName), buildMongoClientOptions());
             mongoClient.setReadPreference(readPreference);
             mongoClient.setWriteConcern(writeConcern);
         }
@@ -59,6 +60,15 @@ public class DbFactory {
           result.add(MongoCredential.createCredential(user, dbName, password.toCharArray()));
         }
         return result;
+    }
+
+    private MongoClientOptions buildMongoClientOptions() {
+        MongoClientOptions.Builder builder = new MongoClientOptions.Builder();
+        if(this.sslEnabled) {
+            builder.socketFactory(SSLSocketFactory.getDefault());
+        }
+
+        return builder.build();
     }
 
     public void close() {
@@ -96,9 +106,18 @@ public class DbFactory {
         this.writeConcern = writeConcern;
     }
 
+    public boolean getSslEnabled() {
+        return sslEnabled;
+    }
+
+    public void setSslEnabled(boolean sslEnabled) {
+        this.sslEnabled = sslEnabled;
+    }
+
     private volatile MongoClient mongoClient;
     private volatile String user;
     private volatile String password;
+    private boolean sslEnabled;
     private List<ServerAddress> addresses;
     private ReadPreference readPreference;
     private WriteConcern writeConcern;
