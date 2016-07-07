@@ -64,10 +64,9 @@ public class DbFactory {
 
     private MongoClientOptions buildMongoClientOptions() {
         MongoClientOptions.Builder builder = new MongoClientOptions.Builder();
-        if(this.sslEnabled) {
-            builder.socketFactory(SSLSocketFactory.getDefault());
+        if(sslSocketFactory != null) {
+            builder.socketFactory(sslSocketFactory);
         }
-
         return builder.build();
     }
 
@@ -106,18 +105,18 @@ public class DbFactory {
         this.writeConcern = writeConcern;
     }
 
-    public boolean getSslEnabled() {
-        return sslEnabled;
+    public SSLSocketFactory getSSLSocketFactory() {
+        return sslSocketFactory;
     }
 
-    public void setSslEnabled(boolean sslEnabled) {
-        this.sslEnabled = sslEnabled;
+    public void setSSLSocketFactory(SSLSocketFactory sslSocketFactory) {
+        this.sslSocketFactory = sslSocketFactory;
     }
 
     private volatile MongoClient mongoClient;
     private volatile String user;
     private volatile String password;
-    private boolean sslEnabled;
+    private SSLSocketFactory sslSocketFactory;
     private List<ServerAddress> addresses;
     private ReadPreference readPreference;
     private WriteConcern writeConcern;

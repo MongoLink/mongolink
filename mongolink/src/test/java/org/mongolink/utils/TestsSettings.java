@@ -22,17 +22,25 @@
 package org.mongolink.utils;
 
 import com.google.common.collect.Lists;
-import com.mongodb.*;
+import com.mongodb.ReadPreference;
+import com.mongodb.ServerAddress;
+import com.mongodb.WriteConcern;
 import org.junit.Test;
-import org.mongolink.*;
-import org.mongolink.domain.criteria.*;
+import org.mongolink.DbFactory;
+import org.mongolink.Settings;
+import org.mongolink.UpdateStrategies;
+import org.mongolink.domain.criteria.Criteria;
+import org.mongolink.domain.criteria.CriteriaFactory;
 import org.mongolink.domain.query.QueryExecutor;
 import org.mongolink.test.factory.FakeDbFactory;
 
+import javax.net.ssl.SSLContext;
 import java.net.UnknownHostException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 public class TestsSettings {
 
@@ -47,7 +55,7 @@ public class TestsSettings {
         assertThat(serverAddress.getHost(), is("localhost"));
         assertThat(serverAddress.getPort(), is(1234));
         assertThat(settings.authenticationRequired(), is(false));
-        assertThat(settings.sslEnabled(), is(false));
+        assertThat(settings.getSSLSocketFactory(), nullValue());
         assertThat(dbFactory.getReadPreference(), is(ReadPreference.nearest()));
     }
 
@@ -85,7 +93,7 @@ public class TestsSettings {
         assertThat(dbFactory, notNullValue());
         assertThat(dbFactory, not(instanceOf(FakeDbFactory.class)));
         assertThat(dbFactory.getAddresses().size(), is(1));
-        assertThat(dbFactory.getSslEnabled(), is(false));
+        assertThat(dbFactory.getSSLSocketFactory(), nullValue());
         ServerAddress serverAddress = dbFactory.getAddresses().get(0);
         assertThat(serverAddress.getPort(), is(27017));
         assertThat(serverAddress.getHost(), is("127.0.0.1"));
@@ -95,13 +103,15 @@ public class TestsSettings {
     }
 
     @Test
-    public void canCreateSettingsWithSslEnabled() {
-        Settings settings = Settings.defaultInstance().withSslEnabled(true);
+    public void canCreateSettingsWithSslEnabled() throws NoSuchAlgorithmException, KeyManagementException {
+        SSLContext sslContext = SSLContext.getInstance("TLS");
+        sslContext.init(null, null, null);
+        Settings settings = Settings.defaultInstance().withSSLSocketFactory(sslContext.getSocketFactory());
 
-        assertThat(settings.sslEnabled(), is(true));
+        assertThat(settings.getSSLSocketFactory(), notNullValue());
         DbFactory dbFactory = settings.createDbFactory();
         assertThat(dbFactory, notNullValue());
-        assertThat(dbFactory.getSslEnabled(), is(true));
+        assertThat(dbFactory.getSSLSocketFactory(), notNullValue());
     }
 
     @Test

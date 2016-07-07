@@ -23,9 +23,12 @@ package org.mongolink;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
-import com.mongodb.*;
+import com.mongodb.ReadPreference;
+import com.mongodb.ServerAddress;
+import com.mongodb.WriteConcern;
 import org.mongolink.domain.criteria.CriteriaFactory;
 
+import javax.net.ssl.SSLSocketFactory;
 import java.net.UnknownHostException;
 import java.util.List;
 
@@ -50,7 +53,7 @@ public class Settings {
             dbFactory.setAddresses(addresses);
             dbFactory.setReadPreference(readPreference);
             dbFactory.setWriteConcern(writeConcern);
-            dbFactory.setSslEnabled(sslEnabled);
+            dbFactory.setSSLSocketFactory(sslSocketFactory);
             if (authenticationRequired()) {
                 dbFactory.setAuthInfos(user, password);
             }
@@ -151,12 +154,12 @@ public class Settings {
         return this;
     }
 
-    public boolean sslEnabled() {
-        return sslEnabled;
+    public SSLSocketFactory getSSLSocketFactory() {
+        return sslSocketFactory;
     }
 
-    public Settings withSslEnabled(boolean sslEnabled) {
-        this.sslEnabled = sslEnabled;
+    public Settings withSSLSocketFactory(SSLSocketFactory sslSocketFactory) {
+        this.sslSocketFactory = sslSocketFactory;
         return this;
     }
 
@@ -165,7 +168,7 @@ public class Settings {
     private String password;
     private String dbName;
     private List<ServerAddress> addresses;
-    private boolean sslEnabled;
+    private SSLSocketFactory sslSocketFactory;
     private Class<? extends CriteriaFactory> criteriaFactoryClass;
     private UpdateStrategies updateStrategy = UpdateStrategies.OVERWRITE;
     private ReadPreference readPreference = ReadPreference.primary();
