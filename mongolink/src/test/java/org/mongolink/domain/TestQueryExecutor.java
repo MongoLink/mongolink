@@ -23,6 +23,8 @@ package org.mongolink.domain;
 
 import com.github.fakemongo.Fongo;
 import com.mongodb.*;
+import com.mongodb.client.*;
+import org.bson.Document;
 import org.junit.Test;
 import org.mockito.Matchers;
 import org.mongolink.domain.mapper.AggregateMapper;
@@ -69,17 +71,17 @@ public class TestQueryExecutor {
     }
 
     private QueryExecutor createQueryExecutor() {
-        final DB db = new Fongo("test").getDB("test");
-        DBCollection collection = db.getCollection("collection");
+        final MongoDatabase db = new Fongo("test").getDatabase("test");
+        MongoCollection<Document> collection = db.getCollection("collection");
         for (int i = 0; i < 20; i++) {
-            final BasicDBObject element = new BasicDBObject();
+            final Document element = new Document();
             element.put("value", i);
-            collection.save(element);
+            collection.insertOne(element);
         }
         final AggregateMapper aggregateMapper = mock(AggregateMapper.class);
         when(aggregateMapper.collectionName()).thenReturn("collection");
-        when(aggregateMapper.toInstance(Matchers.<DBObject>any())).thenReturn(new FakeAggregate("gfg"));
-        return new QueryExecutor<FakeAggregate>(db, aggregateMapper, new UnitOfWork(mock(MongoSessionImpl.class)));
+        when(aggregateMapper.toInstance(Matchers.any())).thenReturn(new FakeAggregate("gfg"));
+        return new QueryExecutor<>(db, aggregateMapper, new UnitOfWork(mock(MongoSessionImpl.class)));
     }
 
 }

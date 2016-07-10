@@ -21,7 +21,7 @@
 
 package org.mongolink.domain.mapper;
 
-import com.mongodb.*;
+import org.bson.Document;
 import org.hamcrest.Matchers;
 import org.junit.*;
 import org.mongolink.test.entity.Comment;
@@ -43,16 +43,16 @@ public class TestsComponentMapper {
     public void canSaveProperties() {
         Comment comment = new Comment("the value");
 
-        DBObject dbo = mapper.toDBObject(comment);
+        Document dbo = mapper.toDBObject(comment);
 
         Assert.assertThat(dbo, Matchers.notNullValue());
-        Assert.assertThat(dbo.get("value"), Matchers.is((Object) "the value"));
+        Assert.assertThat(dbo.get("value"), Matchers.is("the value"));
 
     }
 
     @Test
     public void canPopulateProperties() {
-        DBObject dbo = new BasicDBObject();
+        Document dbo = new Document();
         dbo.put("value", "this is mongolink!");
 
         Comment entity = mapper.toInstance(dbo);

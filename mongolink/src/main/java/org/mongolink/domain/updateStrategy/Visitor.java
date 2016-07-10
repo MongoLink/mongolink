@@ -21,9 +21,9 @@
 
 package org.mongolink.domain.updateStrategy;
 
-import com.mongodb.*;
+import org.bson.Document;
 
-import java.util.*;
+import java.util.List;
 
 
 public abstract class Visitor {
@@ -42,7 +42,7 @@ public abstract class Visitor {
         return origin;
     }
 
-    protected void visitDocument(final DBObject origin, final Object target) {
+    protected void visitDocument(final Document origin, final Object target) {
         new DocumentVisitor(dbObjectDiff, origin).visit(target);
     }
 
@@ -50,7 +50,7 @@ public abstract class Visitor {
         new PropertyVisitor(dbObjectDiff, origin).visit(target);
     }
 
-    protected void visitList(final List origin, final BasicDBList field) {
+    protected void visitList(final List origin, final List<Object> field) {
         new ListVisitor(dbObjectDiff, origin).visit(field);
     }
 

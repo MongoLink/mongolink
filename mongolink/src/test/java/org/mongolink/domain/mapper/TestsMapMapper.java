@@ -22,7 +22,7 @@
 package org.mongolink.domain.mapper;
 
 import com.google.common.collect.Maps;
-import com.mongodb.BasicDBObject;
+import org.bson.Document;
 import org.junit.Test;
 import org.mongolink.utils.FieldContainer;
 
@@ -40,7 +40,7 @@ public class TestsMapMapper {
         final MapMapper mapMapper = createMapper();
         final EntityWithHashmap entity = new EntityWithHashmap();
         entity.values.put("testkey", "testvalue");
-        final BasicDBObject into = new BasicDBObject();
+        final Document into = new Document();
 
         mapMapper.save(entity, into);
 
@@ -50,7 +50,7 @@ public class TestsMapMapper {
     @Test
     public void canPopulateStringHashmap() throws NoSuchMethodException {
         final MapMapper mapMapper = createMapper();
-        final BasicDBObject basicDBObject = new BasicDBObject();
+        final Document basicDBObject = new Document();
         Map<String, String> values = Maps.newHashMap();
         values.put("testkey", "testvalue");
         basicDBObject.put("values", values);

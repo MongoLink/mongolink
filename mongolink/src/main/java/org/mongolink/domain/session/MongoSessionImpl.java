@@ -20,15 +20,15 @@
 
 package org.mongolink.domain.session;
 
-import com.mongodb.*;
+import com.mongodb.client.*;
+import com.mongodb.client.model.Filters;
+import org.bson.Document;
 import org.mongolink.*;
-import org.mongolink.domain.criteria.Criteria;
-import org.mongolink.domain.criteria.CriteriaFactory;
+import org.mongolink.domain.criteria.*;
 import org.mongolink.domain.mapper.*;
 import org.mongolink.domain.query.QueryExecutor;
 import org.mongolink.domain.updateStrategy.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.*;
 
 import java.util.List;
 
@@ -36,7 +36,7 @@ import static com.google.common.base.Preconditions.*;
 
 public class MongoSessionImpl implements MongoSession {
 
-    public MongoSessionImpl(DB db, CriteriaFactory criteriaFactory) {
+    public MongoSessionImpl(MongoDatabase db, CriteriaFactory criteriaFactory) {
         this.db = db;
         this.criteriaFactory = criteriaFactory;
     }
@@ -66,8 +66,7 @@ public class MongoSessionImpl implements MongoSession {
         }
         AggregateMapper<T> mapper = (AggregateMapper<T>) entityMapper(entityType);
         Object dbId = mapper.getDbId(id);
-        DBObject query = new BasicDBObject("_id", dbId);
-        return (T) createExecutor(mapper).executeUnique(query);
+        return (T) createExecutor(mapper).executeUnique(Filters.eq("_id", dbId));
     }
 
     AggregateMapper<?> entityMapper(Class<?> type) {
@@ -98,7 +97,7 @@ public class MongoSessionImpl implements MongoSession {
         LOGGER.debug("New entity register for additon : {}",  element);
     }
 
-    DBCollection getDbCollection(AggregateMapper<?> mapper) {
+    MongoCollection<Document> getDbCollection(AggregateMapper<?> mapper) {
         return db.getCollection(mapper.collectionName());
     }
 
@@ -116,7 +115,7 @@ public class MongoSessionImpl implements MongoSession {
     }
 
     @Override
-    public DB getDb() {
+    public MongoDatabase getDb() {
         return db;
     }
 
@@ -158,7 +157,7 @@ public class MongoSessionImpl implements MongoSession {
     }
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MongoSession.class);
-    private final DB db;
+    private final MongoDatabase db;
     private final UnitOfWork unitOfWork = new UnitOfWork(this);
     private final CriteriaFactory criteriaFactory;
     public SessionState state = SessionState.NOTSTARTED;

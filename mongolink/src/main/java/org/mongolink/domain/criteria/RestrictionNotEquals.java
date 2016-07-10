@@ -22,6 +22,7 @@
 package org.mongolink.domain.criteria;
 
 import com.mongodb.*;
+import org.bson.Document;
 
 public class RestrictionNotEquals extends Restriction {
 
@@ -31,7 +32,7 @@ public class RestrictionNotEquals extends Restriction {
     }
 
     @Override
-    public void apply(final DBObject query) {
+    public void apply(final Document query) {
         final BasicDBObject object = new BasicDBObject();
         object.put("$ne", getDBValue(value));
         query.put(getField(), object);

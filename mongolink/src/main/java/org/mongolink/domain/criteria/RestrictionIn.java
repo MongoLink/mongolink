@@ -1,6 +1,6 @@
 package org.mongolink.domain.criteria;
 
-import com.mongodb.*;
+import org.bson.Document;
 
 import java.util.List;
 
@@ -12,13 +12,9 @@ public class RestrictionIn extends Restriction {
     }
 
     @Override
-    public void apply(final DBObject query) {
-        final BasicDBObject object = new BasicDBObject();
-        final BasicDBList values = new BasicDBList();
-        for (Object token : elements) {
-            values.add(token);
-        }
-        object.put("$in", values);
+    public void apply(final Document query) {
+        final Document object = new Document();
+        object.put("$in", elements);
         query.put(getField(), object);
     }
 

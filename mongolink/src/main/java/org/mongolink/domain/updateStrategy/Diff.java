@@ -1,20 +1,12 @@
 package org.mongolink.domain.updateStrategy;
 
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-import com.mongodb.BasicDBList;
+import com.google.common.collect.*;
 
-import java.util.Comparator;
+import java.util.*;
 
 public class Diff {
 
-    public static Iterable<Object> diff(BasicDBList origin, BasicDBList newVersion) {
-        return Iterables.mergeSorted(Lists.newArrayList(origin, newVersion), new Comparator<Object>() {
-            @Override
-            public int compare(Object o, Object o2) {
-                return ((Integer) o.hashCode()).compareTo(o2.hashCode());
-            }
-        });
-
+    public static Iterable<Object> diff(Collection<?> origin, Collection<?> newVersion) {
+        return Iterables.mergeSorted(Lists.newArrayList(origin, newVersion), (o, o2) -> ((Integer) o.hashCode()).compareTo(o2.hashCode()));
     }
 }

@@ -22,41 +22,40 @@
 package org.mongolink.domain.updateStrategy;
 
 
-import com.google.common.base.*;
+import com.google.common.base.Joiner;
 import com.google.common.collect.Maps;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
+import org.bson.Document;
 
 import java.util.*;
 
 public class DbObjectDiff {
 
-    public DbObjectDiff(final DBObject origin) {
+    public DbObjectDiff(final Document origin) {
         this.origin = origin;
         for (Modifier modifier : Modifier.values()) {
-            modifiers.put(modifier, new BasicDBObject());
+            modifiers.put(modifier, new Document());
         }
     }
 
-    public DBObject compareWith(DBObject target) {
-        final BasicDBObject result = new BasicDBObject();
+    public Document compareWith(Document target) {
+        final Document result = new Document();
         generateDiff(target);
         appendChanges(result);
         return result;
     }
 
-    private void generateDiff(DBObject target) {
+    private void generateDiff(Document target) {
         new DocumentVisitor(this, origin).visit(target);
     }
 
-    private void appendChanges(BasicDBObject result) {
+    private void appendChanges(Document result) {
         for (Modifier modifier : Modifier.values()) {
             appendIfNeeded(modifier, modifiers.get(modifier), result);
         }
 
     }
 
-    private void appendIfNeeded(final Modifier key, final BasicDBObject entry, final BasicDBObject result) {
+    private void appendIfNeeded(final Modifier key, final Document entry, final Document result) {
         if (!entry.isEmpty()) {
             result.append(key.key, entry);
         }
@@ -114,6 +113,6 @@ public class DbObjectDiff {
     }
 
     private final Stack<String> keys = new Stack<String>();
-    private final DBObject origin;
-    private final Map<Modifier, BasicDBObject> modifiers = Maps.newConcurrentMap();
+    private final Document origin;
+    private final Map<Modifier, Document> modifiers = Maps.newConcurrentMap();
 }

@@ -21,15 +21,16 @@
 
 package org.mongolink.domain.updateStrategy;
 
-import com.mongodb.*;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Filters;
+import org.bson.Document;
+import org.bson.conversions.Bson;
 
 public abstract class UpdateStrategy {
 
-    public abstract void update(DBObject initialValue, DBObject updatedValue, DBCollection collection);
+    public abstract void update(Document initialValue, Document updatedValue, MongoCollection<Document> collection);
 
-    protected DBObject updateQuery(DBObject update) {
-        DBObject query = new BasicDBObject();
-        query.put("_id", update.get("_id"));
-        return query;
+    protected Bson updateQuery(Document update) {
+        return Filters.eq("_id", update.get("_id"));
     }
 }

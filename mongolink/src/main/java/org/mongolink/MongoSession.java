@@ -20,7 +20,7 @@
 
 package org.mongolink;
 
-import com.mongodb.DB;
+import com.mongodb.client.MongoDatabase;
 import org.mongolink.domain.criteria.Criteria;
 
 import java.util.List;
@@ -41,7 +41,7 @@ public interface MongoSession {
 
     void clear();
 
-    DB getDb();
+    MongoDatabase getDb();
 
     <U> Criteria createCriteria(Class<U> type);
 

@@ -23,13 +23,10 @@ package org.mongolink.domain.session;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Maps;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
-import org.mongolink.MongoLinkError;
-import org.mongolink.MongoSession;
+import org.bson.Document;
+import org.mongolink.*;
 import org.mongolink.domain.mapper.AggregateMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.*;
 
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -41,13 +38,13 @@ public class UnitOfWork {
         this.session = session;
     }
 
-    public void registerDirty(Object id, Object entity, DBObject initialValue) {
+    public void registerDirty(Object id, Object entity, Document initialValue) {
         register(id, entity, initialValue, ValueState.DIRTY);
     }
 
     public void registerNew(Object entity) {
         AggregateMapper<?> mapper = session.entityMapper(entity.getClass());
-        DBObject initialValue = mapper.toDBObject(entity);
+        Document initialValue = mapper.toDBObject(entity);
         mapper.populateId(entity, initialValue);
         register(mapper.getId(initialValue), entity, initialValue, ValueState.NEW);
     }
@@ -107,7 +104,7 @@ public class UnitOfWork {
         return values.get(craftedKey);
     }
 
-    private void register(Object id, Object entity, DBObject initialValue, ValueState state) {
+    private void register(Object id, Object entity, Document initialValue, ValueState state) {
         values.put(new Key(entity.getClass(), id), new Value(entity, initialValue, state));
     }
 
@@ -121,7 +118,7 @@ public class UnitOfWork {
 
     private class Value {
 
-        private Value(Object entity, DBObject initialValue, ValueState state) {
+        private Value(Object entity, Document initialValue, ValueState state) {
             this.entity = entity;
             this.initialValue = initialValue;
             this.state = state;
@@ -140,7 +137,7 @@ public class UnitOfWork {
         }
 
         final Object entity;
-        DBObject initialValue;
+        Document initialValue;
         private ValueState state;
     }
 
@@ -149,8 +146,8 @@ public class UnitOfWork {
             @Override
             public void commit(MongoSessionImpl session, Value value) {
                 final AggregateMapper<?> mapper = session.entityMapper(value.entity.getClass());
-                final DBObject newValue = mapper.toDBObject(value.entity);
-                session.getDbCollection(mapper).insert(newValue);
+                final Document newValue = mapper.toDBObject(value.entity);
+                session.getDbCollection(mapper).insertOne(newValue);
                 UnitOfWork.LOGGER.debug("Entity added :{}", newValue);
                 value.initialValue = newValue;
                 value.state = DIRTY;
@@ -159,8 +156,8 @@ public class UnitOfWork {
             @Override
             public void commit(MongoSessionImpl session, Value value) {
                 AggregateMapper<?> mapper = session.entityMapper(value.entity.getClass());
-                DBObject initialValue = value.initialValue;
-                DBObject updatedValue = mapper.toDBObject(value.entity);
+                Document initialValue = value.initialValue;
+                Document updatedValue = mapper.toDBObject(value.entity);
                 session.getUpdateStrategy().update(initialValue, updatedValue, session.getDbCollection(mapper));
                 value.initialValue = updatedValue;
             }
@@ -169,7 +166,7 @@ public class UnitOfWork {
             public void commit(MongoSessionImpl mongoSession, Value value) {
                 final AggregateMapper<?> mapper = mongoSession.entityMapper(value.entity.getClass());
                 LOGGER.debug("Deleting entity : {}", value.entity);
-                mongoSession.getDbCollection(mapper).remove(new BasicDBObject("_id", mapper.getId(value.initialValue)));
+                mongoSession.getDbCollection(mapper).deleteOne(new Document("_id", mapper.getId(value.initialValue)));
             }
         };
 

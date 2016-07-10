@@ -20,9 +20,10 @@
 
 package org.mongolink.domain.criteria;
 
-import com.mongodb.BasicDBList;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
+import com.google.common.collect.Lists;
+import org.bson.Document;
+
+import java.util.List;
 
 public class RestrictionOr extends CompositeRestriction {
     public RestrictionOr() {
@@ -30,10 +31,10 @@ public class RestrictionOr extends CompositeRestriction {
     }
 
     @Override
-    public void apply(DBObject query) {
-        BasicDBList list = new BasicDBList();
+    public void apply(Document query) {
+        List<Object> list = Lists.newArrayList();
         for (Restriction restriction : getRestrictions()) {
-            BasicDBObject subquery = new BasicDBObject();
+            Document subquery = new Document();
             restriction.apply(subquery);
             list.add(subquery);
         }

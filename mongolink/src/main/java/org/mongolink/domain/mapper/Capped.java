@@ -1,7 +1,6 @@
 package org.mongolink.domain.mapper;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
+import com.mongodb.client.model.CreateCollectionOptions;
 
 public class Capped {
 
@@ -19,12 +18,11 @@ public class Capped {
         return this;
     }
 
-    public DBObject getDbValue() {
-        final BasicDBObject result = new BasicDBObject();
-        result.put("capped", "true");
-        result.put("size", size);
-        result.put("max", max);
-        return result;
+    public CreateCollectionOptions getDbValue() {
+        return new CreateCollectionOptions()
+                .capped(true)
+                .maxDocuments(max)
+                .sizeInBytes(size);
     }
 
     public int getMax() {

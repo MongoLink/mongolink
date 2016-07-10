@@ -22,7 +22,7 @@
 package org.mongolink.domain.mapper;
 
 import com.google.common.collect.Lists;
-import com.mongodb.*;
+import org.bson.Document;
 import org.junit.Test;
 import org.mongolink.utils.FieldContainer;
 
@@ -39,7 +39,7 @@ public class TestsCollectionMapper {
         final CollectionMapper collectionMapper = createMapper();
         final EntityWithCollection entity = new EntityWithCollection();
         entity.list.add("test");
-        final BasicDBObject into = new BasicDBObject();
+        final Document into = new Document();
 
         collectionMapper.save(entity, into);
 
@@ -49,7 +49,7 @@ public class TestsCollectionMapper {
     @Test
     public void canPopulateStringCollection() throws NoSuchMethodException {
         final CollectionMapper mapper = createMapper();
-        final BasicDBObject dbObject = dbObjectContaining("test");
+        final Document dbObject = dbObjectContaining("test");
         final EntityWithCollection entity = new EntityWithCollection();
 
         mapper.populate(entity, dbObject);
@@ -58,11 +58,9 @@ public class TestsCollectionMapper {
         assertThat(entity.getList().get(0), is("test"));
     }
 
-    private BasicDBObject dbObjectContaining(String value) {
-        final BasicDBObject dbObject = new BasicDBObject();
-        final BasicDBList objects = new BasicDBList();
-        objects.add(value);
-        dbObject.put("list", objects);
+    private Document dbObjectContaining(String value) {
+        final Document dbObject = new Document();
+        dbObject.put("list", Lists.newArrayList(value));
         return dbObject;
     }
 

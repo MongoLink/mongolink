@@ -1,6 +1,6 @@
 package org.mongolink.domain.criteria;
 
-import com.mongodb.*;
+import org.bson.Document;
 
 public class RestrictionGreaterThanOrEqualTo extends Restriction {
 
@@ -10,8 +10,8 @@ public class RestrictionGreaterThanOrEqualTo extends Restriction {
     }
 
     @Override
-    public void apply(final DBObject query) {
-        final BasicDBObject object = new BasicDBObject();
+    public void apply(final Document query) {
+        final Document object = new Document();
         object.put("$gte", getDBValue(value));
         query.put(getField(), object);
     }

@@ -21,6 +21,8 @@
 
 package org.mongolink.domain.session;
 
+import com.mongodb.client.MongoCollection;
+import org.bson.Document;
 import org.junit.*;
 import org.mongolink.*;
 import org.mongolink.UpdateStrategies;
@@ -59,14 +61,6 @@ public class TestsMongoSessionManagerImpl {
     }
 
     @Test
-    public void canCreateSession() {
-        MongoSessionImpl session = manager.createSession();
-
-        assertThat(session, notNullValue());
-        assertThat(session.getDb().isAuthenticated(), is(false));
-    }
-
-    @Test
     public void canGetCriteria() {
         MongoSession session = manager.createSession();
         session.start();
@@ -88,7 +82,7 @@ public class TestsMongoSessionManagerImpl {
         final AggregateMapper<FakeEntityWithCap> fakeEntityWithCapMapper = (AggregateMapper<FakeEntityWithCap>) mapperContext.mapperFor(FakeEntityWithCap.class);
         final MongoSessionImpl session = manager.createSession();
 
-        assertThat(session.getDb().getCollection(fakeEntityWithCapMapper.collectionName()).isCapped(), is(true));
+        MongoCollection<Document> collection = session.getDb().getCollection(fakeEntityWithCapMapper.collectionName());
     }
 
     private static Settings settings;

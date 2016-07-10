@@ -22,9 +22,8 @@
 package org.mongolink.domain.criteria;
 
 import com.google.common.collect.Lists;
-import com.mongodb.*;
-import org.mongolink.domain.query.CursorParameter;
-import org.mongolink.domain.query.QueryExecutor;
+import org.bson.Document;
+import org.mongolink.domain.query.*;
 
 import java.util.*;
 
@@ -43,8 +42,8 @@ public class Criteria<T> {
         restrictions.add(restriction);
     }
 
-    public DBObject createQuery() {
-        final BasicDBObject result = new BasicDBObject();
+    public Document createQuery() {
+        final Document result = new Document();
         for (Restriction restriction : restrictions) {
             restriction.apply(result);
         }

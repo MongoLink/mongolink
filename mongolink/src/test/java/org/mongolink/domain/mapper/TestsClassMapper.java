@@ -21,7 +21,7 @@
 
 package org.mongolink.domain.mapper;
 
-import com.mongodb.*;
+import org.bson.Document;
 import org.junit.*;
 import org.mongolink.test.entity.*;
 import org.mongolink.test.simpleMapping.*;
@@ -45,7 +45,7 @@ public class TestsClassMapper {
         FakeAggregate entity = new FakeAggregate("ok");
         entity.setComment(new Comment("valeur"));
 
-        final DBObject dbObject = entityMapper().toDBObject(entity);
+        final Document dbObject = entityMapper().toDBObject(entity);
 
         assertThat(dbObject.get("comment"), notNullValue());
     }
@@ -54,12 +54,12 @@ public class TestsClassMapper {
     public void canConvertFromDBValue() {
         final Object value = entityMapper().toDbValue(new FakeAggregate("ok"));
 
-        assertThat(value, instanceOf(DBObject.class));
+        assertThat(value, instanceOf(Document.class));
     }
 
     @Test
     public void canCreateInstanceFromDBValue() {
-        final BasicDBObject value = new BasicDBObject();
+        final Document value = new Document();
         value.put("value", "test");
 
         final Object instance = entityMapper().fromDbValue(value);

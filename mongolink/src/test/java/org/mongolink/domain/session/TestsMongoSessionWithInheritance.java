@@ -23,14 +23,12 @@ package org.mongolink.domain.session;
 
 
 import com.github.fakemongo.Fongo;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import org.junit.Before;
-import org.junit.Test;
+import com.mongodb.client.*;
+import org.bson.Document;
+import org.junit.*;
 import org.mongolink.domain.criteria.CriteriaFactory;
 import org.mongolink.domain.mapper.MapperContext;
-import org.mongolink.test.entity.FakeAggregate;
-import org.mongolink.test.entity.FakeChildAggregate;
+import org.mongolink.test.entity.*;
 import org.mongolink.test.inheritanceMapping.FakeAggregateWithSubclassMapping;
 
 import static org.fest.assertions.Assertions.*;
@@ -39,7 +37,7 @@ public class TestsMongoSessionWithInheritance {
 
     @Before
     public void before() {
-        db = new Fongo("test").getDB("test");
+        db = new Fongo("test").getDatabase("test");
         FakeAggregateWithSubclassMapping mapping = new FakeAggregateWithSubclassMapping();
         session = new MongoSessionImpl(db, new CriteriaFactory());
         MapperContext context = new MapperContext();
@@ -50,10 +48,10 @@ public class TestsMongoSessionWithInheritance {
 
     @Test
     public void canGetChildEntitiesFromParent() {
-        BasicDBObject dbo = new BasicDBObject();
+        Document dbo = new Document();
         dbo.put("_id", "1");
         dbo.put("__discriminator", "FakeChildAggregate");
-        entities().insert(dbo);
+        entities().insertOne(dbo);
 
         FakeAggregate entity = session.get("1", FakeAggregate.class);
 
@@ -63,10 +61,10 @@ public class TestsMongoSessionWithInheritance {
 
     @Test
     public void canGetByChildType() {
-        BasicDBObject dbo = new BasicDBObject();
+        Document dbo = new Document();
         dbo.put("_id", "1");
         dbo.put("__discriminator", "FakeChildAggregate");
-        entities().insert(dbo);
+        entities().insertOne(dbo);
 
         FakeAggregate entity = session.get("1", FakeChildAggregate.class);
 
@@ -85,10 +83,10 @@ public class TestsMongoSessionWithInheritance {
         assertThat(entities().count()).isEqualTo(1L);
     }
 
-    private com.mongodb.DBCollection entities() {
+    private MongoCollection<Document> entities() {
         return db.getCollection("fakeaggregate");
     }
 
     private MongoSessionImpl session;
-    private DB db;
+    private MongoDatabase db;
 }

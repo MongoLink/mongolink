@@ -1,47 +1,43 @@
 package org.mongolink.domain.session;
 
-import com.mongodb.DB;
-import org.mongolink.MongoLinkError;
-import org.mongolink.MongoSession;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.mongodb.client.MongoDatabase;
+import org.mongolink.*;
+import org.slf4j.*;
 
 enum SessionState {
     NOTSTARTED {
         @Override
-        public SessionState stop(final DB db, final UnitOfWork unitOfWork) {
+        public SessionState stop(final MongoDatabase db, final UnitOfWork unitOfWork) {
             throw new MongoLinkError("Session not started");
         }
 
         @Override
-        public SessionState start(final DB db) {
+        public SessionState start(final MongoDatabase db) {
             LOGGER.debug("Starting");
-            db.requestStart();
-            db.requestEnsureConnection();
+
             return STARTED;
         }
     }, STARTED {
         @Override
-        public SessionState stop(final DB db, final UnitOfWork unitOfWork) {
+        public SessionState stop(final MongoDatabase db, final UnitOfWork unitOfWork) {
             unitOfWork.commit();
-            db.requestDone();
             LOGGER.debug("Stoping");
             return STOPPED;
         }
 
         @Override
-        public SessionState start(final DB db) {
+        public SessionState start(final MongoDatabase db) {
             throw new MongoLinkError("Session already started");
         }
     },
     STOPPED {
         @Override
-        public SessionState stop(final DB db, final UnitOfWork unitOfWork) {
+        public SessionState stop(final MongoDatabase db, final UnitOfWork unitOfWork) {
             throw new MongoLinkError("Session already stopped");
         }
 
         @Override
-        public SessionState start(final DB db) {
+        public SessionState start(final MongoDatabase db) {
             throw new MongoLinkError("Session stopped");
         }
     };
@@ -52,9 +48,9 @@ enum SessionState {
         }
     }
 
-    public abstract SessionState stop(final DB db, final UnitOfWork unitOfWork);
+    public abstract SessionState stop(final MongoDatabase db, final UnitOfWork unitOfWork);
 
-    public abstract SessionState start(final DB db) ;
+    public abstract SessionState start(final MongoDatabase db) ;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MongoSession.class);
 }

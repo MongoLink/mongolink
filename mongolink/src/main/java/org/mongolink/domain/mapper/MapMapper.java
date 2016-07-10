@@ -22,11 +22,9 @@
 package org.mongolink.domain.mapper;
 
 import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
-import org.mongolink.utils.FieldContainer;
-import org.mongolink.utils.Fields;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.bson.Document;
+import org.mongolink.utils.*;
+import org.slf4j.*;
 
 import java.lang.reflect.Field;
 import java.util.Map;
@@ -38,7 +36,7 @@ public class MapMapper implements Mapper {
     }
 
     @Override
-    public void save(final Object instance, final DBObject into) {
+    public void save(final Object instance, final Document into) {
         try {
             Map map = value(instance);
             into.put(name(), new BasicDBObject(map));
@@ -52,7 +50,7 @@ public class MapMapper implements Mapper {
     }
 
     @Override
-    public void populate(final Object instance, final DBObject from) {
+    public void populate(final Object instance, final Document from) {
         try {
             Field field = Fields.find(instance.getClass(), name());
             field.setAccessible(true);

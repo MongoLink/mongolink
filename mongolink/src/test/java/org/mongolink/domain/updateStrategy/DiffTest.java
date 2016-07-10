@@ -20,15 +20,17 @@
 
 package org.mongolink.domain.updateStrategy;
 
-import com.mongodb.BasicDBList;
+import com.google.common.collect.Lists;
 import org.junit.Test;
+
+import java.util.List;
 
 public class DiffTest {
 
     @Test
     public void name() {
-        BasicDBList premier = new BasicDBList();
-        BasicDBList autre = new BasicDBList();
+        List<Object> premier = Lists.newArrayList();
+        List<Object> autre = Lists.newArrayList();
         premier.add(1);
         premier.add(2);
         autre.add(3);

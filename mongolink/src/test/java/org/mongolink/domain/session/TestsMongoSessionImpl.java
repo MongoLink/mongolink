@@ -20,14 +20,15 @@
 package org.mongolink.domain.session;
 
 import com.github.fakemongo.Fongo;
-import com.mongodb.*;
+import com.mongodb.client.*;
+import com.mongodb.client.model.Filters;
+import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.mockito.InOrder;
 import org.mongolink.*;
-import org.mongolink.domain.criteria.Criteria;
-import org.mongolink.domain.criteria.CriteriaFactory;
+import org.mongolink.domain.criteria.*;
 import org.mongolink.domain.mapper.ContextBuilder;
 import org.mongolink.test.entity.*;
 
@@ -45,7 +46,7 @@ public class TestsMongoSessionImpl {
     @Before
     public void before() {
         final Fongo fongo = new Fongo("test");
-        db = (FongoDB) spy(fongo.getDB("test"));
+        db =  spy(fongo.getDatabase("test"));
         session = createSession();
         session.start();
     }
@@ -58,6 +59,7 @@ public class TestsMongoSessionImpl {
     }
 
     @Test
+    @Ignore("voir si on peut remplacer le start and stop par autre choses")
     public void startAndStopASession() {
         MongoSessionImpl session = new MongoSessionImpl(db, new CriteriaFactory());
 
@@ -65,18 +67,8 @@ public class TestsMongoSessionImpl {
         session.stop();
 
         InOrder inorder = inOrder(db);
-        inorder.verify(db).requestStart();
-        inorder.verify(db).requestDone();
-    }
-
-    @Test
-    public void ensureConnection() {
-        final DB fakeDb = mock(DB.class);
-        MongoSessionImpl session = new MongoSessionImpl(fakeDb, new CriteriaFactory());
-
-        session.start();
-
-        verify(fakeDb).requestEnsureConnection();
+        //inorder.verify(db).requestStart();
+        //inorder.verify(db).requestDone();
     }
 
     @Test
@@ -97,9 +89,9 @@ public class TestsMongoSessionImpl {
 
     @Test
     public void canGetByNaturalId() {
-        DBObject dbo = new BasicDBObject();
+        Document dbo = new Document();
         dbo.put("_id", "a natural key");
-        fakeAggregatesWithNaturalId().insert(dbo);
+        fakeAggregatesWithNaturalId().insertOne(dbo);
 
         FakeAggregateWithNaturalId entity = session.get("a natural key", FakeAggregateWithNaturalId.class);
 
@@ -109,9 +101,9 @@ public class TestsMongoSessionImpl {
 
     @Test
     public void testDavid() {
-        DBObject dbo = new BasicDBObject();
+        Document dbo = new Document();
         dbo.put("_id", "a natural key");
-        fakeAggregatesWithNaturalId().insert(dbo);
+        fakeAggregatesWithNaturalId().insertOne(dbo);
 
         session.get("a natural key", FakeAggregateWithNaturalId.class);
         FakeAggregateWithNaturalId entity = session.get("a natural key", FakeAggregateWithNaturalId.class);
@@ -130,8 +122,8 @@ public class TestsMongoSessionImpl {
         session.flush();
 
         assertThat(fakeAggregates().count(), is(1L));
-        DBObject dbo = fakeAggregates().findOne();
-        assertThat(dbo.get("value"), is((Object) "value"));
+        Document dbo = first();
+        assertThat(dbo.get("value"), is("value"));
     }
 
     @Test
@@ -149,7 +141,8 @@ public class TestsMongoSessionImpl {
         session.flush();
 
 
-        assertThat(fakeAggregates().findOne().get("value"), is((Object) "un test de plus"));
+        Document dbo = first();
+        assertThat(dbo.get("value"), is("un test de plus"));
     }
 
     @Test
@@ -160,8 +153,8 @@ public class TestsMongoSessionImpl {
 
         session.stop();
 
-        DBObject dbObject = fakeAggregates().findOne();
-        assertThat(dbObject.get("value"), is(((Object) "some new and strange value")));
+        Document dbObject = first();
+        assertThat(dbObject.get("value"), is("some new and strange value"));
     }
 
     @Test
@@ -179,7 +172,8 @@ public class TestsMongoSessionImpl {
 
         session.flush();
 
-        assertThat(fakeAggregatesWithNaturalId().findOne().get("value"), is((Object) "a value"));
+        Document document = fakeAggregatesWithNaturalId().find(Filters.eq("_id", "natural key")).first();
+        assertThat(document.get("value"), is("a value"));
     }
 
     @Test
@@ -190,7 +184,8 @@ public class TestsMongoSessionImpl {
 
         session.flush();
 
-        assertThat(fakeAggregates().findOne().get("value"), is((Object) "a value"));
+
+        assertThat(first().get("value"), is("a value"));
     }
 
     @Test
@@ -202,12 +197,16 @@ public class TestsMongoSessionImpl {
         entity.setValue("a value");
         session.flush();
 
-        final DBObject dbObject = fakeAggregates().findOne(new BasicDBObject("_id", new ObjectId(entity.getId())));
-        assertThat(dbObject.get("index"), is(4));
+        Document doc = (Document) fakeAggregates().find(Filters.eq("_id", new ObjectId(entity.getId()))).first();
+        assertThat(doc.get("index"), is(4));
+    }
+
+    private Document first() {
+        return fakeAggregates().find().first();
     }
 
     private void setIndexInCollectionTo(FakeAggregate entity, int index) {
-        fakeAggregates().update(new BasicDBObject("_id", new ObjectId(entity.getId())), new BasicDBObject("index", index));
+        fakeAggregates().replaceOne(Filters.eq("_id", new ObjectId(entity.getId())), new Document("index", index));
     }
 
     private FakeAggregate aAggregateWithIndexAt(int index) {
@@ -257,9 +256,9 @@ public class TestsMongoSessionImpl {
 
     @Test
     public void returnSameInstanceOnGetById() {
-        DBObject dbo = new BasicDBObject();
+        Document dbo = new Document();
         dbo.put("_id", "a natural key");
-        fakeAggregatesWithNaturalId().insert(dbo);
+        fakeAggregatesWithNaturalId().insertOne(dbo);
 
         FakeAggregateWithNaturalId first = session.get("a natural key", FakeAggregateWithNaturalId.class);
         FakeAggregateWithNaturalId second = session.get("a natural key", FakeAggregateWithNaturalId.class);
@@ -341,22 +340,22 @@ public class TestsMongoSessionImpl {
 
     private String createFakeAggregate(final String value) {
         final ObjectId id = ObjectId.get();
-        DBObject dbo = new BasicDBObject();
+        Document dbo = new Document();
         dbo.put("value", value);
         dbo.put("_id", id);
-        fakeAggregates().insert(dbo);
+        fakeAggregates().insertOne(dbo);
         return id.toString();
     }
 
-    private FongoDBCollection fakeAggregatesWithNaturalId() {
-        return (FongoDBCollection) db.getCollection("fakeaggregatewithnaturalid");
+    private MongoCollection<Document> fakeAggregatesWithNaturalId() {
+        return  db.getCollection("fakeaggregatewithnaturalid");
     }
 
-    private FongoDBCollection fakeAggregates() {
-        return (FongoDBCollection) db.getCollection("fakeaggregate");
+    private MongoCollection<Document> fakeAggregates() {
+        return  db.getCollection("fakeaggregate");
     }
 
-    private FongoDB db;
+    private MongoDatabase db;
     private MongoSessionImpl session;
 
 }

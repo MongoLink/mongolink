@@ -22,12 +22,11 @@
 package org.mongolink.domain.mapper;
 
 
-import com.mongodb.DBObject;
+import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.mongolink.MongoLinkError;
 import org.mongolink.utils.FieldContainer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.*;
 
 public class IdMapper implements Mapper {
 
@@ -37,7 +36,7 @@ public class IdMapper implements Mapper {
     }
 
     @Override
-    public void save(Object instance, DBObject into) {
+    public void save(Object instance, Document into) {
         try {
             final Object idValue = convertToDbValue(getIdValue(instance));
             if (idValue != null) {
@@ -49,7 +48,7 @@ public class IdMapper implements Mapper {
     }
 
     @Override
-    public void populate(Object instance, DBObject from) {
+    public void populate(Object instance, Document from) {
         try {
             fieldContainer.setValueIn(getIdValue(from), instance);
         } catch (Exception e) {
@@ -57,7 +56,7 @@ public class IdMapper implements Mapper {
         }
     }
 
-    protected Object getIdValue(DBObject from) {
+    protected Object getIdValue(Document from) {
         return convertToObjectValue(from.get(dbFieldName()));
     }
 
@@ -98,7 +97,7 @@ public class IdMapper implements Mapper {
         generationStrategy = IdGeneration.Auto;
     }
 
-    public void generateId(DBObject dbObject) {
+    public void generateId(Document dbObject) {
         if(generationStrategy == IdGeneration.Auto) {
             dbObject.put(dbFieldName(), ObjectId.get());
         }

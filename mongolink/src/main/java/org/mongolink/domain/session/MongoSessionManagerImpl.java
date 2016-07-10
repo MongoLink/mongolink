@@ -21,8 +21,8 @@
 
 package org.mongolink.domain.session;
 
-import com.mongodb.DB;
-import com.mongodb.DBObject;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.CreateCollectionOptions;
 import org.mongolink.*;
 import org.mongolink.domain.criteria.CriteriaFactory;
 import org.mongolink.domain.mapper.*;
@@ -40,9 +40,9 @@ public class MongoSessionManagerImpl implements MongoSessionManager {
             if (mapper.isCapped()) {
                 AggregateMapper<?> aggregateMapper = (AggregateMapper<?>) mapper;
                 final MongoSessionImpl session = createSession();
-                if (!session.getDb().collectionExists(aggregateMapper.collectionName())) {
+                if (session.getDb().getCollection(aggregateMapper.collectionName()).count() == 0) {
                     session.start();
-                    final DBObject options = aggregateMapper.getCapped().getDbValue();
+                    final CreateCollectionOptions options = aggregateMapper.getCapped().getDbValue();
                     session.getDb().createCollection(aggregateMapper.collectionName(), options);
                     session.stop();
                 }
@@ -58,7 +58,7 @@ public class MongoSessionManagerImpl implements MongoSessionManager {
         return mongoSession;
     }
 
-    private DB getDb() {
+    private MongoDatabase getDb() {
         return dbFactory.get(settings.getDbName());
     }
 

@@ -21,7 +21,7 @@
 package org.mongolink.domain.criteria;
 
 import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
+import org.bson.Document;
 
 public class RestrictionExists extends Restriction {
 
@@ -31,7 +31,7 @@ public class RestrictionExists extends Restriction {
     }
 
     @Override
-    public void apply(DBObject query) {
+    public void apply(Document query) {
         query.put(getField(), new BasicDBObject("$exists", exists));
     }
 

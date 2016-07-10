@@ -1,6 +1,7 @@
 package org.mongolink.domain.criteria;
 
 import com.mongodb.*;
+import org.bson.Document;
 
 public class RestrictionEqualsToRegex extends Restriction {
 
@@ -10,7 +11,7 @@ public class RestrictionEqualsToRegex extends Restriction {
     }
 
     @Override
-    public void apply(final DBObject query) {
+    public void apply(final Document query) {
         final BasicDBObject object = new BasicDBObject();
         object.put("$regex", getDBValue(value));
         query.put(getField(), object);

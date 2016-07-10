@@ -23,12 +23,13 @@ package org.mongolink.domain.mapper;
 
 
 import com.mongodb.DBObject;
+import org.bson.Document;
 import org.mongolink.domain.criteria.CompositeRestriction;
 import org.mongolink.domain.criteria.Restrictions;
 
 public class SubclassMapper<T> extends ClassMapper<T> {
 
-    public static String discriminatorValue(DBObject from) {
+    public static String discriminatorValue(Document from) {
         Object discriminator = from.get(DISCRIMINATOR);
         return discriminator == null ? "" : discriminator.toString();
     }
@@ -38,7 +39,7 @@ public class SubclassMapper<T> extends ClassMapper<T> {
     }
 
     @Override
-    public void save(Object instance, DBObject into) {
+    public void save(Object instance, Document into) {
         super.save(instance, into);
         into.put(DISCRIMINATOR, discriminator());
     }

@@ -22,17 +22,15 @@
 package org.mongolink.domain.mapper;
 
 
-import com.mongodb.BasicDBList;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
+import org.bson.Document;
 import org.bson.types.ObjectId;
-import org.junit.Before;
-import org.junit.Test;
-import org.mongolink.domain.query.QueryExecutor;
+import org.junit.*;
 import org.mongolink.domain.criteria.Criteria;
-import org.mongolink.test.entity.FakeAggregate;
-import org.mongolink.test.entity.FakeChildAggregate;
+import org.mongolink.domain.query.QueryExecutor;
+import org.mongolink.test.entity.*;
 import org.mongolink.test.simpleMapping.FakeAggregateMapping;
+
+import java.util.List;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
@@ -52,7 +50,7 @@ public class TestsSubclassMapper {
         entity.setId("5d9d9b5e36a9a4265ea9ecbe");
         entity.setChildName("this is a name");
 
-        DBObject dbObject = parrentMapper.toDBObject(entity);
+        Document dbObject = parrentMapper.toDBObject(entity);
 
         assertThat(dbObject, notNullValue());
         assertThat((String) dbObject.get("value"), is("this is a value"));
@@ -63,7 +61,7 @@ public class TestsSubclassMapper {
 
     @Test
     public void canPopulateFromDb() {
-        BasicDBObject dbo = new BasicDBObject();
+        Document dbo = new Document();
         dbo.put("_id", "good id");
         dbo.put("value", "this is a value");
         dbo.put("childName", "this is a name");
@@ -79,7 +77,7 @@ public class TestsSubclassMapper {
 
     @Test
     public void canPopulateFromParentMapper() {
-        BasicDBObject dbo = new BasicDBObject();
+        Document dbo = new Document();
         dbo.put("_id", "good id");
         dbo.put("value", "this is a value");
         dbo.put("childName", "this is a name");
@@ -95,7 +93,7 @@ public class TestsSubclassMapper {
         FakeChildAggregate fakeChildEntity = new FakeChildAggregate();
         fakeChildEntity.setChildName("test");
 
-        DBObject dbObject = context.mapperFor(FakeAggregate.class).toDBObject(fakeChildEntity);
+        Document dbObject = context.mapperFor(FakeAggregate.class).toDBObject(fakeChildEntity);
 
         assertThat((String) dbObject.get("__discriminator"), is("FakeChildAggregate"));
     }
@@ -107,9 +105,9 @@ public class TestsSubclassMapper {
 
         mapper.applyRestrictionsFor(FakeAggregate.class, criteria);
 
-        DBObject query = criteria.createQuery();
+        Document query = criteria.createQuery();
         assertThat(query.get("$or"), notNullValue());
-        BasicDBList or = (BasicDBList) query.get("$or");
+        List or = (List) query.get("$or");
         assertThat(or.size(), is(2));
     }
 
@@ -120,9 +118,9 @@ public class TestsSubclassMapper {
 
         mapper.applyRestrictionsFor(FakeChildAggregate.class, criteria);
 
-        DBObject query = criteria.createQuery();
+        Document query = criteria.createQuery();
         assertThat(query.get("$or"), notNullValue());
-        BasicDBList or = (BasicDBList) query.get("$or");
+        List or = (List) query.get("$or");
         assertThat(or.size(), is(1));
     }
 

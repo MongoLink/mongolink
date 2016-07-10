@@ -1,6 +1,6 @@
 package org.mongolink.domain.mapper;
 
-import com.mongodb.BasicDBObject;
+import org.bson.Document;
 import org.junit.Test;
 import org.mongolink.utils.FieldContainer;
 
@@ -20,7 +20,7 @@ public class TestsIdMapper {
 
         final Object dbValue = mapper.convertToDbValue(id);
 
-        assertThat((UUID) dbValue, is(id));
+        assertThat(dbValue, is(id));
     }
 
     @Test
@@ -28,10 +28,10 @@ public class TestsIdMapper {
         final FieldContainer fieldContainer = mock(FieldContainer.class);
         when(fieldContainer.value(any())).thenReturn(null);
         IdMapper mapper = new IdMapper(fieldContainer, IdGeneration.Auto);
-        final BasicDBObject dbObject = new BasicDBObject();
+        final Document dbObject = new Document();
 
         mapper.save(new Object(), dbObject);
 
-        assertThat(dbObject.containsField("_id"), is(false));
+        assertThat(dbObject.containsKey("_id"), is(false));
     }
 }

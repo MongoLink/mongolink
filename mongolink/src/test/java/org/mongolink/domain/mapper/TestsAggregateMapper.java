@@ -21,7 +21,8 @@
 
 package org.mongolink.domain.mapper;
 
-import com.mongodb.*;
+import com.google.common.collect.Lists;
+import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.hamcrest.Matchers;
 import org.junit.*;
@@ -30,6 +31,7 @@ import org.mongolink.test.inheritanceMapping.FakeAggregateWithSubclassMapping;
 import org.mongolink.test.simpleMapping.*;
 
 import java.net.UnknownHostException;
+import java.util.List;
 
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.instanceOf;
@@ -53,7 +55,7 @@ public class TestsAggregateMapper {
         FakeAggregate entity = new FakeAggregate("test.com");
         entity.setId("4d53b7118653a70549fe1b78");
 
-        DBObject dbObject = entityMapper().toDBObject(entity);
+        Document dbObject = entityMapper().toDBObject(entity);
 
         Assert.assertThat(dbObject.get("_id"), Matchers.is((Object) new ObjectId("4d53b7118653a70549fe1b78")));
     }
@@ -63,7 +65,7 @@ public class TestsAggregateMapper {
         MapperContext mapperContext = contextWithNaturalId();
         FakeAggregateWithNaturalId entity = new FakeAggregateWithNaturalId("natural key");
 
-        DBObject dbObject = mapperContext.mapperFor(FakeAggregateWithNaturalId.class).toDBObject(entity);
+        Document dbObject = mapperContext.mapperFor(FakeAggregateWithNaturalId.class).toDBObject(entity);
 
         Assert.assertThat(dbObject.get("_id"), Matchers.is((Object) "natural key"));
     }
@@ -71,7 +73,7 @@ public class TestsAggregateMapper {
     @Test
     public void canPopulateNaturalId() {
         MapperContext mapperContext = contextWithNaturalId();
-        DBObject dbo = new BasicDBObject();
+        Document dbo = new Document();
         dbo.put("_id", "natural key");
 
         FakeAggregateWithNaturalId instance = mapperContext.mapperFor(FakeAggregateWithNaturalId.class).toInstance(dbo);
@@ -92,7 +94,7 @@ public class TestsAggregateMapper {
         FakeAggregate entity = new FakeAggregate("test.com");
 
 
-        DBObject dbo = entityMapper().toDBObject(entity);
+        Document dbo = entityMapper().toDBObject(entity);
 
         Assert.assertThat(dbo, Matchers.notNullValue());
         Assert.assertThat(dbo.get("value"), Matchers.is((Object) "test.com"));
@@ -104,20 +106,20 @@ public class TestsAggregateMapper {
         FakeAggregate entity = new FakeAggregate("test.com");
         entity.addComment("un commentaire");
 
-        DBObject dbo = entityMapper().toDBObject(entity);
+        Document dbo = entityMapper().toDBObject(entity);
 
         Assert.assertThat(dbo, Matchers.notNullValue());
         Assert.assertThat(dbo.get("comments"), Matchers.notNullValue());
-        BasicDBList comments = (BasicDBList) dbo.get("comments");
+        List comments = (List) dbo.get("comments");
         Assert.assertThat(comments.size(), Matchers.is(1));
-        DBObject comment = (DBObject) comments.get(0);
-        Assert.assertThat(comment.get("value"), Matchers.is((Object) "un commentaire"));
+        Document comment = (Document) comments.get(0);
+        Assert.assertThat(comment.get("value"), Matchers.is("un commentaire"));
 
     }
 
     @Test
     public void canPopulateProperties() {
-        DBObject dbo = new BasicDBObject();
+        Document dbo = new Document();
         dbo.put("value", "test.com");
         dbo.put("_id", "id");
 
@@ -130,11 +132,11 @@ public class TestsAggregateMapper {
 
     @Test
     public void canPopulateCollection() {
-        DBObject dbo = new BasicDBObject();
+        Document dbo = new Document();
         dbo.put("url", "test.com");
         dbo.put("_id", "id");
-        BasicDBList comments = new BasicDBList();
-        DBObject comment = new BasicDBObject();
+        List comments = Lists.newArrayList();
+        Document comment = new Document();
         comment.put("value", "this is a mapper!");
         comments.add(comment);
         dbo.put("comments", comments);
@@ -150,7 +152,7 @@ public class TestsAggregateMapper {
         MapperContext context = new MapperContext();
         new FakeAggregateWithSubclassMapping().buildMapper(context);
         ClassMapper<FakeAggregate> entityMapper = context.mapperFor(FakeAggregate.class);
-        BasicDBObject dbo = new BasicDBObject();
+        Document dbo = new Document();
         dbo.put("_id", "1");
         dbo.put("__discriminator", "FakeChildAggregate");
 
@@ -166,7 +168,7 @@ public class TestsAggregateMapper {
         MapperContext context = new MapperContext();
         new FakeAggregateWithSubclassMapping().buildMapper(context);
         ClassMapper<FakeAggregate> entityMapper = context.mapperFor(FakeAggregate.class);
-        BasicDBObject dbo = new BasicDBObject();
+        Document dbo = new Document();
         dbo.put("_id", "1");
 
         FakeAggregate instance = entityMapper.toInstance(dbo);

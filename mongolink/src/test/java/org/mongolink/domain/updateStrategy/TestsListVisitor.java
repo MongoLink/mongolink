@@ -1,13 +1,12 @@
 package org.mongolink.domain.updateStrategy;
 
-import com.mongodb.BasicDBList;
+import com.google.common.collect.Lists;
 import org.junit.*;
 import org.mockito.*;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
-import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Assertions.*;
 import static org.mockito.Mockito.*;
 
 public class TestsListVisitor {
@@ -75,13 +74,11 @@ public class TestsListVisitor {
         assertThat(value).hasSize(2).contains("1", "2");
     }
 
-    private BasicDBList listWith(final Object... values) {
-        final BasicDBList result = new BasicDBList();
-        Collections.addAll(result, values);
-        return result;
+    private List<Object> listWith(final Object... values) {
+        return Lists.newArrayList(values);
     }
 
-    private void diff(final BasicDBList origin, final BasicDBList target) {
+    private void diff(final List<?> origin, final List<?> target) {
         final ListVisitor visitor = new ListVisitor(dbObjectDiff, origin);
 
         visitor.visit(target);

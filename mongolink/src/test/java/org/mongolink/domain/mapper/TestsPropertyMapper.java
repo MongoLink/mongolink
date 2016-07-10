@@ -21,16 +21,13 @@
 
 package org.mongolink.domain.mapper;
 
-import com.mongodb.BasicDBObject;
+import org.bson.Document;
 import org.hamcrest.Matchers;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
+import org.joda.time.*;
 import org.junit.Test;
-import org.mongolink.test.entity.Comment;
-import org.mongolink.test.entity.FakeAggregate;
+import org.mongolink.test.entity.*;
 import org.mongolink.test.simpleMapping.CommentMapping;
-import org.mongolink.utils.FieldContainer;
-import org.mongolink.utils.Fields;
+import org.mongolink.utils.*;
 
 import java.lang.reflect.*;
 
@@ -87,7 +84,7 @@ public class TestsPropertyMapper {
         PropertyMapper mapper = mapperForEnum();
         FakeEntity entity = new FakeEntity();
         entity.value = TestsPropertyMapper.TestEnum.good;
-        BasicDBObject object = new BasicDBObject();
+        Document object = new Document();
 
         mapper.save(entity, object);
 
@@ -96,7 +93,7 @@ public class TestsPropertyMapper {
 
     @Test
     public void canPopulateAnEnum() throws NoSuchMethodException {
-        BasicDBObject object = new BasicDBObject();
+        Document object = new Document();
         object.put("value", "bad");
         PropertyMapper mapper = mapperForEnum();
         FakeEntity instance = new FakeEntity();
@@ -117,7 +114,7 @@ public class TestsPropertyMapper {
         PropertyMapper mapper = mapperForProperty();
         FakeEntity entity = new FakeEntity();
         entity.primitive = 10;
-        BasicDBObject object = new BasicDBObject();
+        Document object = new Document();
 
         mapper.save(entity, object);
 
@@ -140,7 +137,7 @@ public class TestsPropertyMapper {
         FakeEntity fakeEntity = new FakeEntity();
         DateTime now = new DateTime();
         fakeEntity.setCreationDate(now);
-        BasicDBObject basicDBObject = new BasicDBObject();
+        Document basicDBObject = new Document();
 
         mapper.save(fakeEntity, basicDBObject);
 
@@ -149,7 +146,7 @@ public class TestsPropertyMapper {
 
     @Test
     public void canPopulateDateTimeType() throws NoSuchMethodException {
-        BasicDBObject object = new BasicDBObject();
+        Document object = new Document();
         DateTime dateTime = new DateTime();
         object.put("creationDate", dateTime.getMillis());
         PropertyMapper propertyMapper = propertyMapperForDateTime();
@@ -172,7 +169,7 @@ public class TestsPropertyMapper {
         FakeEntity fakeEntity = new FakeEntity();
         LocalDate now = new LocalDate();
         fakeEntity.setDateOfDay(now);
-        BasicDBObject basicDBObject = new BasicDBObject();
+        Document basicDBObject = new Document();
 
         mapper.save(fakeEntity, basicDBObject);
 
@@ -181,7 +178,7 @@ public class TestsPropertyMapper {
 
     @Test
     public void canPopulateLocalDateType() throws NoSuchMethodException {
-        BasicDBObject object = new BasicDBObject();
+        Document object = new Document();
         LocalDate localDate = new LocalDate();
         object.put("dateOfDay", localDate.toDateTimeAtStartOfDay().getMillis());
         PropertyMapper propertyMapper = propertyMapperForLocalDate();
@@ -210,7 +207,7 @@ public class TestsPropertyMapper {
         PropertyMapper mapper = propertyMapperForBoolean();
         FakeEntity fakeEntity = new FakeEntity();
         fakeEntity.ok = true;
-        BasicDBObject basicDBObject = new BasicDBObject();
+        Document basicDBObject = new Document();
 
         mapper.save(fakeEntity, basicDBObject);
 
@@ -230,22 +227,22 @@ public class TestsPropertyMapper {
 
     @Test
     public void canSerializeToDBOject() throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
-        final BasicDBObject into = new BasicDBObject();
+        final Document into = new Document();
         FakeAggregate entity = new FakeAggregate("te");
         final Comment comment = new Comment("tes");
         entity.setComment(comment);
 
         propertyMapperForComponent().save(entity, into);
 
-        final BasicDBObject commentDB = (BasicDBObject) into.get("comment");
+        final Document commentDB = (Document) into.get("comment");
         assertThat(commentDB, notNullValue());
         assertThat(commentDB.get("value").toString(), Matchers.is("tes"));
     }
 
     @Test
     public void canPopulate() throws NoSuchMethodException {
-        final BasicDBObject from = new BasicDBObject();
-        final BasicDBObject val = new BasicDBObject();
+        final Document from = new Document();
+        final Document val = new Document();
         val.put("value", "valeur");
         from.put("comment", val);
         FakeAggregate instance = new FakeAggregate("kjklj");
@@ -259,7 +256,7 @@ public class TestsPropertyMapper {
     @Test
     public void canCreateFromField() throws NoSuchFieldException {
         FakeAggregate entity = new FakeAggregate("value");
-        BasicDBObject dbObject = new BasicDBObject();
+        Document dbObject = new Document();
 
         propertyMapperFromField().save(entity, dbObject);
 
@@ -280,7 +277,7 @@ public class TestsPropertyMapper {
         final ClassMapper classMapper = mock(ClassMapper.class);
         when(classMapper.getContext()).thenReturn(context);
         when(classMapper.getPersistentType()).thenReturn(FakeAggregate.class);
-        final Method method = FakeAggregate.class.getMethod("getComment", null);
+        final Method method = FakeAggregate.class.getMethod("getComment");
         FieldContainer fieldContainer = new FieldContainer(method);
         PropertyMapper propertyComponentMapper = new PropertyMapper(fieldContainer);
         propertyComponentMapper.setMapper(classMapper);

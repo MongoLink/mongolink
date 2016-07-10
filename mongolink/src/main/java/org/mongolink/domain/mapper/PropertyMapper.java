@@ -22,7 +22,7 @@
 package org.mongolink.domain.mapper;
 
 
-import com.mongodb.DBObject;
+import org.bson.Document;
 import org.mongolink.domain.converter.Converter;
 import org.mongolink.utils.FieldContainer;
 
@@ -33,7 +33,7 @@ class PropertyMapper implements Mapper {
     }
 
     @Override
-    public void save(Object instance, DBObject into) {
+    public void save(Object instance, Document into) {
         final Object propertyValue = getPropertyValue(instance);
         if (propertyValue != null) {
             into.put(dbFieldName(), converter().toDbValue(propertyValue));
@@ -54,11 +54,11 @@ class PropertyMapper implements Mapper {
     }
 
     @Override
-    public void populate(Object instance, DBObject from) {
+    public void populate(Object instance, Document from) {
         field.setValueIn(valueFrom(from), instance);
     }
 
-    private Object valueFrom(DBObject from) {
+    private Object valueFrom(Document from) {
         Object value = null;
         if (from != null) {
             value = from.get(dbFieldName());

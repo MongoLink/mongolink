@@ -21,7 +21,7 @@
 
 package org.mongolink.domain.updateStrategy;
 
-import com.mongodb.DBObject;
+import org.bson.Document;
 
 
 public class PropertyVisitor extends Visitor {
@@ -33,14 +33,14 @@ public class PropertyVisitor extends Visitor {
     @Override
     public void visit(final Object field) {
         if (isADocument(field)) {
-            visitDocument((DBObject) getOrigin(), field);
+            visitDocument((Document) getOrigin(), field);
         } else if (hasDifference(field)) {
             getDbObjectDiff().addSet(field);
         }
     }
 
     private boolean isADocument(final Object field) {
-        return DBObject.class.isAssignableFrom(field.getClass());
+        return Document.class.isAssignableFrom(field.getClass());
     }
 
     private boolean hasDifference(Object field) {

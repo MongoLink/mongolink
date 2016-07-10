@@ -21,26 +21,26 @@
 
 package org.mongolink.domain.updateStrategy;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBCollection;
-import com.mongodb.DBObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.mongodb.*;
+import com.mongodb.client.MongoCollection;
+import org.bson.Document;
+import org.bson.conversions.Bson;
+import org.slf4j.*;
 
 public class DiffStrategy extends UpdateStrategy {
 
     @Override
-    public void update(DBObject initialValue, DBObject updatedValue, DBCollection collection) {
-        final DBObject diff = new DbObjectDiff(initialValue).compareWith(updatedValue);
-        final DBObject q = updateQuery(initialValue);
+    public void update(Document initialValue, Document updatedValue, MongoCollection<Document> collection) {
+        final Document diff = new DbObjectDiff(initialValue).compareWith(updatedValue);
+        final Bson q = updateQuery(initialValue);
         executePushAndPull(collection, diff, q);
         if (!diff.keySet().isEmpty()) {
-            LOGGER.debug("Updating : collection {} : query {} : modifiers : {}", collection.getName(), q, diff);
-            collection.update(q, diff);
+            LOGGER.debug("Updating : collection {} : query {} : modifiers : {}", collection.getNamespace().getCollectionName(), q, diff);
+            collection.updateOne(q, diff);
         }
     }
 
-    private void executePushAndPull(DBCollection collection, DBObject diff, DBObject q) {
+    private void executePushAndPull(MongoCollection<Document> collection, Document diff, Bson q) {
         // concurrent modififications on the same array is quite tricky
         // we can't $set, $push or $pull at the same time, mainly because $set uses index to do the job
         // so we have to split operations in three distinct update operations
@@ -50,12 +50,12 @@ public class DiffStrategy extends UpdateStrategy {
         execute(DbObjectDiff.Modifier.PUSHALL, collection, diff, q);
     }
 
-    private void execute(DbObjectDiff.Modifier modifier, DBCollection collection, DBObject diff, DBObject q) {
-        final DBObject modifications = (DBObject) diff.get(modifier.toString());
-        diff.removeField(modifier.toString());
+    private void execute(DbObjectDiff.Modifier modifier, MongoCollection<Document> collection, Document diff, Bson q) {
+        final Document modifications = (Document) diff.get(modifier.toString());
+        diff.remove(modifier.toString());
         if (modifications != null) {
             LOGGER.debug("Updating array : {} modifier: {}  values: {}", q, modifier, modifications);
-            collection.update(q, new BasicDBObject(modifier.toString(), modifications));
+            collection.updateOne(q, new BasicDBObject(modifier.toString(), modifications));
         }
     }
 

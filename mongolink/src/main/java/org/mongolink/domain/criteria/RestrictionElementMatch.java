@@ -1,7 +1,6 @@
 package org.mongolink.domain.criteria;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
+import org.bson.Document;
 
 public class RestrictionElementMatch extends CompositeRestriction {
 
@@ -10,12 +9,12 @@ public class RestrictionElementMatch extends CompositeRestriction {
     }
 
     @Override
-    public void apply(final DBObject query) {
-        query.put(getField(), new BasicDBObject("$elemMatch", buildSubquery()));
+    public void apply(final Document query) {
+        query.put(getField(), new Document("$elemMatch", buildSubquery()));
     }
 
-    private BasicDBObject buildSubquery() {
-        final BasicDBObject subquery = new BasicDBObject();
+    private Document buildSubquery() {
+        final Document subquery = new Document();
         for (Restriction restriction : getRestrictions()) {
             restriction.apply(subquery);
         }

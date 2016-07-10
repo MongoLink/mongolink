@@ -22,13 +22,11 @@
 package org.mongolink.domain.mapper;
 
 import com.google.common.collect.Lists;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
 import net.sf.cglib.core.ReflectUtils;
+import org.bson.Document;
 import org.mongolink.domain.converter.Converter;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @SuppressWarnings("unchecked")
 public abstract class ClassMapper<T> extends Converter implements Mapper {
@@ -65,16 +63,16 @@ public abstract class ClassMapper<T> extends Converter implements Mapper {
 
     @Override
     public Object fromDbValueNotNull(Object value) {
-        return toInstance((DBObject) value);
+        return toInstance((Document) value);
     }
 
-    public T toInstance(DBObject from) {
+    public T toInstance(Document from) {
         T instance = makeInstance(from);
         populate(instance, from);
         return instance;
     }
 
-    protected T makeInstance(final DBObject from) {
+    protected T makeInstance(final Document from) {
         if(from == null) {
             return null;
         }
@@ -100,7 +98,7 @@ public abstract class ClassMapper<T> extends Converter implements Mapper {
     }
 
     @Override
-    public void populate(Object instance, DBObject from) {
+    public void populate(Object instance, Document from) {
         for (Mapper mapper : mappers) {
             mapper.populate(instance, from);
         }
@@ -111,17 +109,17 @@ public abstract class ClassMapper<T> extends Converter implements Mapper {
         return toDBObject(value);
     }
 
-    public DBObject toDBObject(Object element) {
-        DBObject object = createDbObject(element);
+    public Document toDBObject(Object element) {
+        Document object = createDbObject(element);
         save(element, object);
         return object;
     }
 
-    private DBObject createDbObject(Object element) {
+    private Document createDbObject(Object element) {
         if (isSubclass(element)) {
             return subclassMapperFor(element).toDBObject(element);
         }
-        return new BasicDBObject();
+        return new Document();
     }
 
     private boolean isSubclass(Object element) {
@@ -147,7 +145,7 @@ public abstract class ClassMapper<T> extends Converter implements Mapper {
     }
 
     @Override
-    public void save(Object instance, DBObject into) {
+    public void save(Object instance, Document into) {
         for (Mapper mapper : mappers) {
             mapper.save(instance, into);
         }

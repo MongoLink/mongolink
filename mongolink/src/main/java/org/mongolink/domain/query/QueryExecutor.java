@@ -22,7 +22,9 @@
 package org.mongolink.domain.query;
 
 import com.google.common.collect.Lists;
-import com.mongodb.*;
+import com.mongodb.client.*;
+import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.mongolink.domain.mapper.AggregateMapper;
 import org.mongolink.domain.session.UnitOfWork;
 
@@ -30,32 +32,24 @@ import java.util.List;
 
 public class QueryExecutor<T> {
 
-    public QueryExecutor(DB db, AggregateMapper<T> mapper, UnitOfWork unitOfWork) {
+    public QueryExecutor(MongoDatabase db, AggregateMapper<T> mapper, UnitOfWork unitOfWork) {
         this.db = db;
         this.mapper = mapper;
         this.unitOfWork = unitOfWork;
     }
 
-    public List<T> execute(DBObject query) {
+    public List<T> execute(Bson query) {
         return execute(query, CursorParameter.empty());
     }
 
-    public List<T> execute(DBObject query, CursorParameter cursorParameter) {
-        final List<T> result = Lists.newArrayList();
-        DBCollection collection = db.getCollection(mapper.collectionName());
-        DBCursor cursor = collection.find(query);
+    public List<T> execute(Bson query, CursorParameter cursorParameter) {
+        MongoCollection<Document> collection = db.getCollection(mapper.collectionName());
+        FindIterable<Document> cursor = collection.find(query);
         cursor = cursorParameter.apply(cursor);
-        try {
-            while (cursor.hasNext()) {
-                result.add(loadEntity(cursor.next()));
-            }
-            return result;
-        } finally {
-            cursor.close();
-        }
+        return Lists.newArrayList(cursor.map(this::loadEntity));
     }
 
-    public T executeUnique(DBObject query) {
+    public T executeUnique(Bson query) {
         final List<T> list = execute(query);
         if (list.size() > 0) {
             return list.get(0);
@@ -63,7 +57,7 @@ public class QueryExecutor<T> {
         return null;
     }
 
-    private T loadEntity(DBObject dbObject) {
+    private T loadEntity(Document dbObject) {
         final Object unitOfWorkId = mapper.getId(dbObject);
         if (unitOfWork.contains(mapper.getPersistentType(), unitOfWorkId)) {
             return unitOfWork.getEntity(mapper.getPersistentType(), unitOfWorkId);
@@ -74,7 +68,7 @@ public class QueryExecutor<T> {
         }
     }
 
-    private final DB db;
+    private final MongoDatabase db;
     private final AggregateMapper<T> mapper;
     private final UnitOfWork unitOfWork;
 }

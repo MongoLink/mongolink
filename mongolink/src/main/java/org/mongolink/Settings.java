@@ -21,27 +21,24 @@
 
 package org.mongolink;
 
-import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
-import com.mongodb.ReadPreference;
-import com.mongodb.ServerAddress;
-import com.mongodb.WriteConcern;
+import com.mongodb.MongoClient;
 import org.mongolink.domain.criteria.CriteriaFactory;
 
-import javax.net.ssl.SSLSocketFactory;
-import java.net.UnknownHostException;
-import java.util.List;
+import java.util.function.Supplier;
 
 
 public class Settings {
 
     public static Settings defaultInstance() {
         Settings settings = new Settings();
-        settings.addresses = Lists.newArrayList(serverAddress("127.0.0.1", 27017));
         settings.factoryClass = DbFactory.class;
         settings.criteriaFactoryClass = CriteriaFactory.class;
-        settings.dbName = "test";
+        settings.client = Settings::defaultDatabase;
         return settings;
+    }
+
+    private static MongoClient defaultDatabase() {
+        return new MongoClient();
     }
 
     private Settings() {
@@ -50,41 +47,16 @@ public class Settings {
     public DbFactory createDbFactory() {
         try {
             DbFactory dbFactory = factoryClass.newInstance();
-            dbFactory.setAddresses(addresses);
-            dbFactory.setReadPreference(readPreference);
-            dbFactory.setWriteConcern(writeConcern);
-            dbFactory.setSSLSocketFactory(sslSocketFactory);
-            if (authenticationRequired()) {
-                dbFactory.setAuthInfos(user, password);
-            }
+            dbFactory.initialize(client.get());
             return dbFactory;
         } catch (Exception e) {
             throw new MongoLinkError("Can't create DbFactory", e);
         }
     }
 
-    public boolean authenticationRequired() {
-        return !Strings.isNullOrEmpty(user);
-    }
-
-    public Settings withHost(String host) {
-        addresses.set(0, serverAddress(host, addresses.get(0).getPort()));
+    public Settings withDbFactory(Class<? extends DbFactory> FactoryClass) {
+        factoryClass = FactoryClass;
         return this;
-    }
-
-    public Settings withPort(int port) {
-        addresses.set(0, serverAddress(addresses.get(0).getHost(), port));
-        return this;
-    }
-
-    public Settings withAuthentication(String user, String password) {
-        this.user = user;
-        this.password = password;
-        return this;
-    }
-
-    public String getDbName() {
-        return dbName;
     }
 
     public Settings withDbName(String dbName) {
@@ -92,16 +64,8 @@ public class Settings {
         return this;
     }
 
-    public String getUser() {
-        return user;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public Settings withDbFactory(Class<? extends DbFactory> FactoryClass) {
-        factoryClass = FactoryClass;
+    public Settings withClient(MongoClient client) {
+        this.client = () -> client;
         return this;
     }
 
@@ -127,50 +91,13 @@ public class Settings {
         return this;
     }
 
-    public Settings withAddresses(List<ServerAddress> serverAddresses) {
-        addresses = serverAddresses;
-        return this;
-    }
-
-    public Settings withReadPreference(ReadPreference readPreference) {
-        this.readPreference = readPreference;
-        return this;
-    }
-
-    public ReadPreference getReadPreference() {
-        return readPreference;
-    }
-
-    private static ServerAddress serverAddress(String host, int port) {
-        try {
-            return new ServerAddress(host, port);
-        } catch (UnknownHostException e) {
-            throw new MongoLinkError(e);
-        }
-    }
-
-    public Settings withWriteConcern(WriteConcern writeConcern) {
-        this.writeConcern = writeConcern;
-        return this;
-    }
-
-    public SSLSocketFactory getSSLSocketFactory() {
-        return sslSocketFactory;
-    }
-
-    public Settings withSSLSocketFactory(SSLSocketFactory sslSocketFactory) {
-        this.sslSocketFactory = sslSocketFactory;
-        return this;
+    public String getDbName() {
+        return dbName;
     }
 
     private Class<? extends DbFactory> factoryClass;
-    private String user;
-    private String password;
-    private String dbName;
-    private List<ServerAddress> addresses;
-    private SSLSocketFactory sslSocketFactory;
     private Class<? extends CriteriaFactory> criteriaFactoryClass;
     private UpdateStrategies updateStrategy = UpdateStrategies.OVERWRITE;
-    private ReadPreference readPreference = ReadPreference.primary();
-    private WriteConcern writeConcern = WriteConcern.NORMAL;
+    private Supplier<MongoClient> client;
+    private String dbName;
 }

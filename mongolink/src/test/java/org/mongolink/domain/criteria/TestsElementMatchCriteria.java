@@ -1,6 +1,6 @@
 package org.mongolink.domain.criteria;
 
-import com.mongodb.DBObject;
+import org.bson.Document;
 import org.junit.Test;
 import org.mongolink.domain.query.QueryExecutor;
 
@@ -14,14 +14,14 @@ public class TestsElementMatchCriteria {
         final Criteria criteria = new Criteria(mock(QueryExecutor.class));
         criteria.add(Restrictions.elementMatch("fieldName").equals("test", "test").equals("test2", "test2"));
 
-        final DBObject query = criteria.createQuery();
+        final Document query = criteria.createQuery();
 
-        assertThat(query.containsField("fieldName")).isTrue();
-        final DBObject doted = (DBObject) query.get("fieldName");
-        assertThat(doted.containsField("$elemMatch")).isTrue();
-        final DBObject elementMatch = (DBObject) doted.get("$elemMatch");
-        assertThat(elementMatch.containsField("test")).isTrue();
-        assertThat(elementMatch.containsField("test2")).isTrue();
+        assertThat(query.containsKey("fieldName")).isTrue();
+        final Document doted = (Document) query.get("fieldName");
+        assertThat(doted.containsKey("$elemMatch")).isTrue();
+        final Document elementMatch = (Document) doted.get("$elemMatch");
+        assertThat(elementMatch.containsKey("test")).isTrue();
+        assertThat(elementMatch.containsKey("test2")).isTrue();
 
     }
 }

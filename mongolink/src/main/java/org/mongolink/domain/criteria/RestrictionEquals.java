@@ -21,7 +21,7 @@
 
 package org.mongolink.domain.criteria;
 
-import com.mongodb.DBObject;
+import org.bson.Document;
 
 public class RestrictionEquals extends Restriction {
 
@@ -31,7 +31,7 @@ public class RestrictionEquals extends Restriction {
     }
 
     @Override
-    public void apply(DBObject query) {
+    public void apply(Document query) {
         query.put(getField(), getDBValue(value));
     }
 

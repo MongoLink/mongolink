@@ -21,7 +21,8 @@
 
 package org.mongolink.domain.query;
 
-import com.mongodb.*;
+import com.mongodb.client.FindIterable;
+import org.bson.Document;
 
 public class CursorParameter {
 
@@ -45,7 +46,8 @@ public class CursorParameter {
 
     }
 
-    DBCursor apply(DBCursor cursor) {
+    FindIterable<Document> apply(FindIterable<Document> cursor
+    ) {
         cursor = cursor.limit(limit).skip(skip).sort(orderBy);
         return cursor;
     }
@@ -73,11 +75,11 @@ public class CursorParameter {
         return skip;
     }
 
-    public BasicDBObject getSort() {
+    public Document getSort() {
         return orderBy;
     }
 
     private int skip;
     private int limit;
-    private final BasicDBObject orderBy = new BasicDBObject();
+    private final Document orderBy = new Document();
 }

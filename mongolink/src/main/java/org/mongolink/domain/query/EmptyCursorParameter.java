@@ -21,12 +21,13 @@
 
 package org.mongolink.domain.query;
 
-import com.mongodb.DBCursor;
+import com.mongodb.client.FindIterable;
+import org.bson.Document;
 
 public class EmptyCursorParameter extends CursorParameter {
 
     @Override
-    DBCursor apply(DBCursor cursor) {
+    FindIterable<Document> apply(FindIterable<Document> cursor) {
         return cursor;
     }
 

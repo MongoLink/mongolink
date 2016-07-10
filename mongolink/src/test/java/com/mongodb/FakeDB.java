@@ -21,83 +21,23 @@
 
 package com.mongodb;
 
-import com.google.common.collect.Sets;
-
-import java.net.UnknownHostException;
-import java.util.Set;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.operation.OperationExecutor;
+import org.bson.codecs.configuration.*;
 
 import static org.mockito.Mockito.*;
 
 
-public class FakeDB extends DB {
+public class FakeDB extends MongoDatabaseImpl {
 
     public FakeDB() {
-        super(mock(Mongo.class), "test");
-    }
-
-
-    @Override
-    public void requestStart() {
-
-    }
-
-
-
-    @Override
-    public void requestDone() {
-
+        super("test", mock(CodecRegistry.class), ReadPreference.nearest(), WriteConcern.ACKNOWLEDGED, ReadConcern.DEFAULT, mock(OperationExecutor.class));
     }
 
     @Override
-    public void requestEnsureConnection() {
-
+    public <TDocument> MongoCollection<TDocument> getCollection(String collectionName, Class<TDocument> tDocumentClass) {
+        return mock(MongoCollection.class);
     }
 
-    @Override
-    public DBCollection doGetCollection(String name) {
-        return mock(DBCollection.class);
-    }
-
-    @Override
-    public void cleanCursors(boolean b) throws MongoException {
-
-    }
-
-    @Override
-    public CommandResult command(final DBObject cmd, final int options) throws MongoException {
-        return okResult();
-    }
-
-    @Override
-    public Set<String> getCollectionNames() {
-        return Sets.newConcurrentHashSet();
-    }
-
-    @Override
-    public boolean isAuthenticated() {
-        return credentials != null;
-    }
-
-    @Override
-    CommandResult doAuthenticate(MongoCredential credentials) {
-        this.credentials = credentials;
-        return okResult();
-    }
-
-    private CommandResult okResult() {
-        CommandResult commandResult = new CommandResult(serverAddress());
-        commandResult.put("ok", true);
-        return commandResult;
-    }
-
-    private ServerAddress serverAddress() {
-        try {
-            return new ServerAddress();
-        } catch (UnknownHostException e) {
-            return null;
-        }
-    }
-
-    private MongoCredential credentials;
 
 }

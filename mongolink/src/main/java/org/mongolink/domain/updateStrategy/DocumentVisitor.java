@@ -21,41 +21,41 @@
 
 package org.mongolink.domain.updateStrategy;
 
-import com.mongodb.*;
+import org.bson.Document;
 
 import java.util.*;
 
 
 public class DocumentVisitor extends Visitor {
 
-    public DocumentVisitor(final DbObjectDiff dbObjectDiff, final DBObject origin) {
+    public DocumentVisitor(final DbObjectDiff dbObjectDiff, final Document origin) {
         super(dbObjectDiff, origin);
     }
 
     @Override
     public void visit(final Object target) {
-        final DBObject dbObject = (DBObject) target;
+        final Document dbObject = (Document) target;
         for (String key : dbObject.keySet()) {
             getDbObjectDiff().pushKey(key);
-            visit(key, (DBObject) target);
+            visit(key, (Document) target);
             getDbObjectDiff().popKey();
         }
     }
 
-    private void visit(String key, DBObject target) {
+    private void visit(String key, Document target) {
         final Object field = target.get(key);
         if (isAList(field)) {
-            visitList(key, (BasicDBList) field);
+            visitList(key, (List) field);
         } else {
             visitProperty(key, field);
         }
     }
 
     private boolean isAList(Object field) {
-        return field instanceof BasicDBList;
+        return Collection.class.isAssignableFrom(field.getClass());
     }
 
-    private void visitList(final String key, final BasicDBList field) {
+    private void visitList(final String key, final List<Object> field) {
         visitList((List) getOrigin().get(key), field);
     }
 
@@ -64,8 +64,8 @@ public class DocumentVisitor extends Visitor {
     }
 
     @Override
-    protected DBObject getOrigin() {
-        return (DBObject) super.getOrigin();
+    protected Document getOrigin() {
+        return (Document) super.getOrigin();
     }
 
 }

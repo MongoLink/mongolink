@@ -23,11 +23,11 @@ package org.mongolink.domain.criteria;
 
 import com.google.common.collect.Lists;
 import com.mongodb.*;
+import org.bson.Document;
 import org.joda.time.DateTime;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
-import org.mongolink.domain.query.CursorParameter;
-import org.mongolink.domain.query.QueryExecutor;
+import org.mongolink.domain.query.*;
 
 import java.util.*;
 
@@ -43,7 +43,7 @@ public class TestsCriteria {
         final Criteria criteria = new Criteria(mock(QueryExecutor.class));
         criteria.add(Restrictions.equals("id", "test"));
 
-        DBObject query = criteria.createQuery();
+        Document query = criteria.createQuery();
 
         assertThat(query, notNullValue());
         assertThat(query.get("id"), is((Object) "test"));
@@ -55,11 +55,11 @@ public class TestsCriteria {
         criteria.add(Restrictions.equals("id", "test"));
         criteria.add(Restrictions.equals("toto", "tata"));
 
-        DBObject query = criteria.createQuery();
+        Document query = criteria.createQuery();
 
         assertThat(query, notNullValue());
-        assertThat(query.get("id"), is((Object) "test"));
-        assertThat(query.get("toto"), is((Object) "tata"));
+        assertThat(query.get("id"), is("test"));
+        assertThat(query.get("toto"), is("tata"));
     }
 
     @Test
@@ -67,12 +67,12 @@ public class TestsCriteria {
         final Criteria criteria = new Criteria(mock(QueryExecutor.class));
         criteria.add(Restrictions.between("date", 1, 2));
 
-        DBObject query = criteria.createQuery();
+        Document query = criteria.createQuery();
 
-        DBObject restriction = (DBObject) query.get("date");
+        Document restriction = (Document) query.get("date");
         assertThat(restriction, notNullValue());
-        assertThat(restriction.get("$gte"), is((Object) 1));
-        assertThat(restriction.get("$lt"), is((Object) 2));
+        assertThat(restriction.get("$gte"), is(1));
+        assertThat(restriction.get("$lt"), is(2));
     }
 
     @Test
@@ -81,10 +81,10 @@ public class TestsCriteria {
         final DateTime date = new DateTime();
         criteria.add(Restrictions.equals("date", date));
 
-        DBObject query = criteria.createQuery();
+        Document query = criteria.createQuery();
 
         assertThat(query, notNullValue());
-        assertThat(query.get("date"), is((Object) date.getMillis()));
+        assertThat(query.get("date"), is(date.getMillis()));
     }
 
     @Test
@@ -93,12 +93,12 @@ public class TestsCriteria {
         final DateTime date = new DateTime();
         criteria.add(Restrictions.between("date", date, date));
 
-        DBObject query = criteria.createQuery();
+        Document query = criteria.createQuery();
 
-        DBObject restriction = (DBObject) query.get("date");
+        Document restriction = (Document) query.get("date");
         assertThat(restriction, notNullValue());
-        assertThat(restriction.get("$gte"), is((Object) date.getMillis()));
-        assertThat(restriction.get("$lt"), is((Object) date.getMillis()));
+        assertThat(restriction.get("$gte"), is(date.getMillis()));
+        assertThat(restriction.get("$lt"), is(date.getMillis()));
     }
 
     @Test
@@ -111,7 +111,7 @@ public class TestsCriteria {
         criteria.list();
 
         final ArgumentCaptor<CursorParameter> captor = ArgumentCaptor.forClass(CursorParameter.class);
-        verify(executor).execute(any(DBObject.class), captor.capture());
+        verify(executor).execute(any(Document.class), captor.capture());
         final CursorParameter cursorParameter = captor.getValue();
         assertThat(cursorParameter.getLimit(), is(10));
         assertThat(cursorParameter.getSkip(), is(3));
@@ -126,10 +126,10 @@ public class TestsCriteria {
         criteria.list();
 
         final ArgumentCaptor<CursorParameter> captor = ArgumentCaptor.forClass(CursorParameter.class);
-        verify(executor).execute(any(DBObject.class), captor.capture());
+        verify(executor).execute(any(Document.class), captor.capture());
         final CursorParameter cursorParameter = captor.getValue();
-        final BasicDBObject sortQuery = cursorParameter.getSort();
-        assertTrue(sortQuery.containsKey((Object) "field"));
+        final Document sortQuery = cursorParameter.getSort();
+        assertTrue(sortQuery.containsKey("field"));
         assertTrue(sortQuery.get("field").equals(1));
     }
 
@@ -138,11 +138,11 @@ public class TestsCriteria {
         final Criteria criteria = new Criteria(mock(QueryExecutor.class));
         criteria.add(Restrictions.notEquals("text", "value"));
 
-        DBObject query = criteria.createQuery();
+        Document query = criteria.createQuery();
 
         DBObject restriction = (DBObject) query.get("text");
         assertThat(restriction, notNullValue());
-        assertThat(restriction.get("$ne"), is((Object) "value"));
+        assertThat(restriction.get("$ne"), is("value"));
     }
 
     @Test
@@ -150,11 +150,11 @@ public class TestsCriteria {
         final Criteria criteria = new Criteria(mock(QueryExecutor.class));
         criteria.add(Restrictions.greaterThanOrEqualTo("date", 1));
 
-        DBObject query = criteria.createQuery();
+        Document query = criteria.createQuery();
 
-        DBObject restriction = (DBObject) query.get("date");
+        Document restriction = (Document) query.get("date");
         assertThat(restriction, notNullValue());
-        assertThat(restriction.get("$gte"), is((Object) 1));
+        assertThat(restriction.get("$gte"), is(1));
     }
 
     @Test
@@ -162,7 +162,7 @@ public class TestsCriteria {
         final Criteria criteria = new Criteria(mock(QueryExecutor.class));
         criteria.add(Restrictions.equalsToRegex("date", "regex"));
 
-        DBObject query = criteria.createQuery();
+        Document query = criteria.createQuery();
 
         DBObject restriction = (DBObject) query.get("date");
         assertThat(restriction, notNullValue());
@@ -177,14 +177,14 @@ public class TestsCriteria {
         tokens.add("");
         criteria.add(Restrictions.in("colors", tokens));
 
-        DBObject query = criteria.createQuery();
+        Document query = criteria.createQuery();
 
-        DBObject restriction = (DBObject) query.get("colors");
+        Document restriction = (Document) query.get("colors");
         assertThat(restriction, notNullValue());
-        final BasicDBList objects = new BasicDBList();
+        final List objects = Lists.newArrayList();
         objects.add("blue");
         objects.add("");
-        assertThat(restriction.get("$in"), is((Object) objects));
+        assertThat(restriction.get("$in"), is(objects));
     }
 
     @Test
@@ -195,12 +195,12 @@ public class TestsCriteria {
         tokens.add(uuid);
         criteria.add(Restrictions.in("colors", tokens));
 
-        DBObject query = criteria.createQuery();
+        Document query = criteria.createQuery();
 
-        DBObject restriction = (DBObject) query.get("colors");
+        Document restriction = (Document) query.get("colors");
         assertThat(restriction, notNullValue());
-        final BasicDBList objects = new BasicDBList();
+        final List objects = Lists.newArrayList();
         objects.add(uuid);
-        assertThat(restriction.get("$in"), is((Object) objects));
+        assertThat(restriction.get("$in"), is(objects));
     }
 }

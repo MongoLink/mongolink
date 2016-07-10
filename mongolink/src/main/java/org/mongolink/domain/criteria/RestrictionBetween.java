@@ -21,7 +21,7 @@
 
 package org.mongolink.domain.criteria;
 
-import com.mongodb.*;
+import org.bson.Document;
 
 public class RestrictionBetween extends Restriction {
 
@@ -32,8 +32,8 @@ public class RestrictionBetween extends Restriction {
     }
 
     @Override
-    public void apply(DBObject query) {
-        final BasicDBObject object = new BasicDBObject();
+    public void apply(Document query) {
+        final Document object = new Document();
         object.put("$gte", getDBValue(start));
         object.put("$lt", getDBValue(end));
         query.put(getField(), object);

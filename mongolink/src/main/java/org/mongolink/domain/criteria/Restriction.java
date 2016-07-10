@@ -21,7 +21,7 @@
 
 package org.mongolink.domain.criteria;
 
-import com.mongodb.DBObject;
+import org.bson.Document;
 import org.mongolink.domain.converter.Converter;
 
 public abstract class Restriction {
@@ -30,7 +30,7 @@ public abstract class Restriction {
         this.field = field;
     }
 
-    public abstract void apply(DBObject query);
+    public abstract void apply(Document query);
 
     protected String getField() {
         return field;

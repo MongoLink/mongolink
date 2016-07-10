@@ -21,11 +21,11 @@
 
 package org.mongolink.domain.mapper;
 
-import com.mongodb.DBObject;
+import org.bson.Document;
 
 public interface Mapper {
 
-    void save(Object instance, DBObject into);
+    void save(Object instance, Document into);
 
-    void populate(Object instance, DBObject from);
+    void populate(Object instance, Document from);
 }

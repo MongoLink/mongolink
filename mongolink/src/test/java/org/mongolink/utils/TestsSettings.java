@@ -21,67 +21,40 @@
 
 package org.mongolink.utils;
 
-import com.google.common.collect.Lists;
-import com.mongodb.ReadPreference;
-import com.mongodb.ServerAddress;
-import com.mongodb.WriteConcern;
+import com.mongodb.MongoClient;
+import com.mongodb.client.MongoDatabase;
 import org.junit.Test;
-import org.mongolink.DbFactory;
-import org.mongolink.Settings;
-import org.mongolink.UpdateStrategies;
-import org.mongolink.domain.criteria.Criteria;
-import org.mongolink.domain.criteria.CriteriaFactory;
+import org.mongolink.*;
+import org.mongolink.domain.criteria.*;
 import org.mongolink.domain.query.QueryExecutor;
 import org.mongolink.test.factory.FakeDbFactory;
 
-import javax.net.ssl.SSLContext;
-import java.net.UnknownHostException;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 public class TestsSettings {
 
     @Test
     public void canCreateDbFactory() {
-        Settings settings = Settings.defaultInstance().withPort(1234).withHost("localhost").withDbFactory(FakeDbFactory.class).withReadPreference(ReadPreference.nearest());
+        Settings settings = Settings.defaultInstance().withDbFactory(FakeDbFactory.class);
 
-        FakeDbFactory dbFactory = (FakeDbFactory) settings.createDbFactory();
+        DbFactory dbFactory = settings.createDbFactory();
 
-        assertThat(dbFactory.addresses.size(), is(1));
-        ServerAddress serverAddress = dbFactory.addresses.get(0);
-        assertThat(serverAddress.getHost(), is("localhost"));
-        assertThat(serverAddress.getPort(), is(1234));
-        assertThat(settings.authenticationRequired(), is(false));
-        assertThat(settings.getSSLSocketFactory(), nullValue());
-        assertThat(dbFactory.getReadPreference(), is(ReadPreference.nearest()));
+        assertThat(dbFactory, instanceOf(FakeDbFactory.class));
     }
 
-    @Test
-    public void canCreateDbFactoryWithMultipleAddresses() throws UnknownHostException {
-        Settings settings = Settings.defaultInstance().withAddresses(Lists.newArrayList(new ServerAddress("localhost:1234"), new ServerAddress("localhost:1235"))).withDbFactory(FakeDbFactory.class);
-
-        FakeDbFactory dbFactory = (FakeDbFactory) settings.createDbFactory();
-
-        assertThat(dbFactory.addresses.size(), is(2));
-    }
 
     @Test
-    public void canCreateSettingsWithAuthentication() {
-        Settings settings = Settings.defaultInstance().withAuthentication("user", "passwd").withDbFactory(FakeDbFactory.class);
+    public void canUseGivenMongoDatabase() throws Exception {
+        MongoDatabase database = mock(MongoDatabase.class);
+        MongoClient client = mock(MongoClient.class);
+        when(client.getDatabase("test")).thenReturn(database);
+        Settings settings = Settings.defaultInstance().withClient(client);
 
-        assertThat(settings.getUser(), is("user"));
-        assertThat(settings.getPassword(), is("passwd"));
-        assertThat(settings.authenticationRequired(), is(true));
-    }
+        DbFactory dbFactory = settings.createDbFactory();
 
-    @Test
-    public void canCreateSettingsWithEmptyAuthentication() {
-        Settings settings = Settings.defaultInstance().withAuthentication("", "passwd").withDbFactory(FakeDbFactory.class);
-
-        assertThat(settings.authenticationRequired(), is(false));
+        assertThat(dbFactory.get("test"), is(database));
     }
 
     @Test
@@ -92,34 +65,8 @@ public class TestsSettings {
         DbFactory dbFactory = settings.createDbFactory();
         assertThat(dbFactory, notNullValue());
         assertThat(dbFactory, not(instanceOf(FakeDbFactory.class)));
-        assertThat(dbFactory.getAddresses().size(), is(1));
-        assertThat(dbFactory.getSSLSocketFactory(), nullValue());
-        ServerAddress serverAddress = dbFactory.getAddresses().get(0);
-        assertThat(serverAddress.getPort(), is(27017));
-        assertThat(serverAddress.getHost(), is("127.0.0.1"));
-        assertThat(settings.getDbName(), is("test"));
-        assertThat(settings.getUpdateStrategy(), is(UpdateStrategies.OVERWRITE));
-        assertThat(settings.getReadPreference(), is(ReadPreference.primary()));
     }
 
-    @Test
-    public void canCreateSettingsWithSslEnabled() throws NoSuchAlgorithmException, KeyManagementException {
-        SSLContext sslContext = SSLContext.getInstance("TLS");
-        sslContext.init(null, null, null);
-        Settings settings = Settings.defaultInstance().withSSLSocketFactory(sslContext.getSocketFactory());
-
-        assertThat(settings.getSSLSocketFactory(), notNullValue());
-        DbFactory dbFactory = settings.createDbFactory();
-        assertThat(dbFactory, notNullValue());
-        assertThat(dbFactory.getSSLSocketFactory(), notNullValue());
-    }
-
-    @Test
-    public void canDefineDbName() {
-        Settings settings = Settings.defaultInstance().withDbName("pouette");
-
-        assertThat(settings.getDbName(), is("pouette"));
-    }
 
     @Test
     public void canDefineCriteriaFactory() {
@@ -138,23 +85,6 @@ public class TestsSettings {
         assertThat(settings.getUpdateStrategy(), is(UpdateStrategies.DIFF));
     }
 
-    @Test
-    public void canDefineReadPreference() {
-        Settings settings = Settings.defaultInstance().withReadPreference(ReadPreference.secondary()).withDbFactory(FakeDbFactory.class);
-
-        FakeDbFactory dbFactory = (FakeDbFactory) settings.createDbFactory();
-
-        assertThat(dbFactory.getReadPreference(), is(ReadPreference.secondary()));
-    }
-
-    @Test
-    public void canDefineWriteConcern() {
-        Settings settings = Settings.defaultInstance().withWriteConcern(WriteConcern.ACKNOWLEDGED).withDbFactory(FakeDbFactory.class);
-
-        FakeDbFactory dbFactory = (FakeDbFactory) settings.createDbFactory();
-
-        assertThat(dbFactory.getWriteConcern(), is(WriteConcern.ACKNOWLEDGED));
-    }
 
     public static class DummyCriteriaFactory extends CriteriaFactory {
 

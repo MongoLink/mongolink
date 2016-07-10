@@ -22,10 +22,8 @@
 package org.mongolink.domain.mapper;
 
 
-import com.mongodb.DBObject;
-import org.mongolink.domain.criteria.CompositeRestriction;
-import org.mongolink.domain.criteria.Criteria;
-import org.mongolink.domain.criteria.Restrictions;
+import org.bson.Document;
+import org.mongolink.domain.criteria.*;
 
 @SuppressWarnings("unchecked")
 public class AggregateMapper<T> extends ClassMapper<T> {
@@ -34,7 +32,7 @@ public class AggregateMapper<T> extends ClassMapper<T> {
         super(persistentType);
     }
 
-    public void populateId(Object element, DBObject dbObject) {
+    public void populateId(Object element, Document dbObject) {
         idMapper.generateId(dbObject);
         idMapper.populate(element, dbObject);
     }
@@ -52,7 +50,7 @@ public class AggregateMapper<T> extends ClassMapper<T> {
         return idMapper.getIdValue(entity);
     }
 
-    public Object getId(DBObject dbo) {
+    public Object getId(Document dbo) {
         return idMapper.getIdValue(dbo);
     }
 

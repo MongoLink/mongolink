@@ -22,18 +22,14 @@
 package org.mongolink.domain.mapper;
 
 
-import com.mongodb.BasicDBList;
-import com.mongodb.DBObject;
+import org.bson.Document;
 import org.mongolink.domain.converter.Converter;
-import org.mongolink.utils.FieldContainer;
-import org.mongolink.utils.Fields;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.mongolink.utils.*;
+import org.slf4j.*;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
-import java.util.Collection;
-import java.util.List;
+import java.lang.reflect.*;
+import java.util.*;
+import java.util.stream.Collectors;
 
 class CollectionMapper implements Mapper {
 
@@ -42,15 +38,12 @@ class CollectionMapper implements Mapper {
     }
 
     @Override
-    public void save(Object instance, DBObject into) {
+    public void save(Object instance, Document into) {
         try {
             Collection collection = value(instance);
-            BasicDBList list = new BasicDBList();
-            for (Object child : collection) {
-                Object childObject = context().converterFor(child.getClass()).toDbValue(child);
-                list.add(childObject);
-            }
-            into.put(name(), list);
+            Object children = collection.stream().map(v -> context().converterFor(v.getClass()).toDbValue(v))
+                    .collect(Collectors.toList());
+            into.put(name(), children);
         } catch (Exception e) {
             LOGGER.error("Can't saveInto collection {}", name(), e);
         }
@@ -65,7 +58,7 @@ class CollectionMapper implements Mapper {
     }
 
     @Override
-    public void populate(Object instance, DBObject from) {
+    public void populate(Object instance, Document from) {
         try {
             Field field = Fields.find(instance.getClass(), name());
             field.setAccessible(true);

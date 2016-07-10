@@ -21,18 +21,16 @@
 
 package org.mongolink.domain.updateStrategy;
 
-import com.mongodb.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.mongodb.client.MongoCollection;
+import org.bson.Document;
+import org.slf4j.*;
 
 public class OverwriteStrategy extends UpdateStrategy {
 
     @Override
-    public void update(DBObject initialValue, DBObject updatedValue, DBCollection collection) {
-        DBObject query = new BasicDBObject();
-        query.put("_id", updatedValue.get("_id"));
-        LOGGER.debug("Updating : collection {} : element {}", collection.getName(), updatedValue);
-        collection.update(updateQuery(initialValue), updatedValue);
+    public void update(Document initialValue, Document updatedValue, MongoCollection<Document> collection) {
+        LOGGER.debug("Updating : collection {} : element {}", collection.getNamespace().getCollectionName(), updatedValue);
+        collection.replaceOne(updateQuery(initialValue), updatedValue);
     }
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OverwriteStrategy.class);
