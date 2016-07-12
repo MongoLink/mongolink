@@ -21,16 +21,14 @@
 
 package org.mongolink.domain.session;
 
+import com.mongodb.FakeDB;
 import com.mongodb.client.MongoCollection;
 import org.bson.Document;
 import org.junit.*;
 import org.mongolink.*;
-import org.mongolink.UpdateStrategies;
 import org.mongolink.domain.mapper.*;
 import org.mongolink.domain.updateStrategy.DiffStrategy;
-import org.mongolink.test.entity.FakeAggregate;
-import org.mongolink.test.entity.FakeEntityWithCap;
-import org.mongolink.test.factory.FakeDbFactory;
+import org.mongolink.test.entity.*;
 import org.mongolink.test.factory.TestFactory;
 
 import java.net.UnknownHostException;
@@ -44,7 +42,7 @@ public class TestsMongoSessionManagerImpl {
     @Before
     public void before() {
         ContextBuilder contextBuilder = TestFactory.contextBuilder().withFakeEntity();
-        settings = Settings.defaultInstance().withDbFactory(FakeDbFactory.class).withDefaultUpdateStrategy(UpdateStrategies.DIFF);
+        settings = Settings.defaultInstance().withDatabase(new FakeDB()).withDefaultUpdateStrategy(UpdateStrategies.DIFF);
         manager = (MongoSessionManagerImpl) MongoSessionManager.create(contextBuilder, settings);
     }
 

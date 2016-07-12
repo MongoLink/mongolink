@@ -22,6 +22,7 @@
 package org.mongolink;
 
 import com.mongodb.MongoClient;
+import com.mongodb.client.MongoDatabase;
 import org.mongolink.domain.criteria.CriteriaFactory;
 
 import java.util.function.Supplier;
@@ -31,41 +32,20 @@ public class Settings {
 
     public static Settings defaultInstance() {
         Settings settings = new Settings();
-        settings.factoryClass = DbFactory.class;
         settings.criteriaFactoryClass = CriteriaFactory.class;
-        settings.client = Settings::defaultDatabase;
+        settings.databaseBuilder = Settings::defaultDatabase;
         return settings;
     }
 
-    private static MongoClient defaultDatabase() {
-        return new MongoClient();
+    private static MongoDatabase defaultDatabase() {
+        return new MongoClient().getDatabase("test");
     }
 
     private Settings() {
     }
 
-    public DbFactory createDbFactory() {
-        try {
-            DbFactory dbFactory = factoryClass.newInstance();
-            dbFactory.initialize(client.get());
-            return dbFactory;
-        } catch (Exception e) {
-            throw new MongoLinkError("Can't create DbFactory", e);
-        }
-    }
-
-    public Settings withDbFactory(Class<? extends DbFactory> FactoryClass) {
-        factoryClass = FactoryClass;
-        return this;
-    }
-
-    public Settings withDbName(String dbName) {
-        this.dbName = dbName;
-        return this;
-    }
-
-    public Settings withClient(MongoClient client) {
-        this.client = () -> client;
+    public Settings withDatabase(MongoDatabase database) {
+        this.databaseBuilder = () -> database;
         return this;
     }
 
@@ -91,13 +71,12 @@ public class Settings {
         return this;
     }
 
-    public String getDbName() {
-        return dbName;
+    public MongoDatabase buildDatabase() {
+        return databaseBuilder.get();
     }
 
-    private Class<? extends DbFactory> factoryClass;
     private Class<? extends CriteriaFactory> criteriaFactoryClass;
     private UpdateStrategies updateStrategy = UpdateStrategies.OVERWRITE;
-    private Supplier<MongoClient> client;
-    private String dbName;
+    private Supplier<MongoDatabase> databaseBuilder;
+
 }

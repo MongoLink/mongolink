@@ -30,7 +30,7 @@ public interface MongoSessionManager {
     static MongoSessionManager create(ContextBuilder contextBuilder, Settings settings) {
         checkNotNull(contextBuilder, "Context builder was null");
         checkNotNull(settings, "Settings was null");
-        MongoSessionManagerImpl manager = new MongoSessionManagerImpl(contextBuilder.createContext(), settings.createDbFactory(), settings);
+        MongoSessionManagerImpl manager = new MongoSessionManagerImpl(contextBuilder.createContext(), settings.buildDatabase(), settings);
         manager.createCappedCollections();
         return manager;
     }

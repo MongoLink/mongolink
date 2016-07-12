@@ -27,7 +27,6 @@ import org.junit.Test;
 import org.mongolink.*;
 import org.mongolink.domain.criteria.*;
 import org.mongolink.domain.query.QueryExecutor;
-import org.mongolink.test.factory.FakeDbFactory;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
@@ -36,25 +35,15 @@ import static org.mockito.Mockito.*;
 public class TestsSettings {
 
     @Test
-    public void canCreateDbFactory() {
-        Settings settings = Settings.defaultInstance().withDbFactory(FakeDbFactory.class);
-
-        DbFactory dbFactory = settings.createDbFactory();
-
-        assertThat(dbFactory, instanceOf(FakeDbFactory.class));
-    }
-
-
-    @Test
     public void canUseGivenMongoDatabase() throws Exception {
         MongoDatabase database = mock(MongoDatabase.class);
         MongoClient client = mock(MongoClient.class);
         when(client.getDatabase("test")).thenReturn(database);
-        Settings settings = Settings.defaultInstance().withClient(client);
+        Settings settings = Settings.defaultInstance().withDatabase(database);
 
-        DbFactory dbFactory = settings.createDbFactory();
+        MongoDatabase databaseGiven = settings.buildDatabase();
 
-        assertThat(dbFactory.get("test"), is(database));
+        assertThat(databaseGiven, is(database));
     }
 
     @Test
@@ -62,9 +51,8 @@ public class TestsSettings {
         Settings settings = Settings.defaultInstance();
 
         assertThat(settings, notNullValue());
-        DbFactory dbFactory = settings.createDbFactory();
-        assertThat(dbFactory, notNullValue());
-        assertThat(dbFactory, not(instanceOf(FakeDbFactory.class)));
+        MongoDatabase database = settings.buildDatabase();
+        assertThat(database, notNullValue());
     }
 
 

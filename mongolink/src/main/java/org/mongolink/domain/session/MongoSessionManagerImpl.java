@@ -29,9 +29,9 @@ import org.mongolink.domain.mapper.*;
 
 public class MongoSessionManagerImpl implements MongoSessionManager {
 
-    public MongoSessionManagerImpl(MapperContext mapperContext, DbFactory dbFactory, Settings settings) {
+    public MongoSessionManagerImpl(MapperContext mapperContext, MongoDatabase database, Settings settings) {
         this.mapperContext = mapperContext;
-        this.dbFactory = dbFactory;
+        this.database = database;
         this.settings = settings;
     }
 
@@ -59,7 +59,7 @@ public class MongoSessionManagerImpl implements MongoSessionManager {
     }
 
     private MongoDatabase getDb() {
-        return dbFactory.get(settings.getDbName());
+        return database;
     }
 
     private CriteriaFactory getCriteriaFactory() {
@@ -73,10 +73,10 @@ public class MongoSessionManagerImpl implements MongoSessionManager {
 
     @Override
     public void close() {
-        dbFactory.close();
+
     }
 
     private final MapperContext mapperContext;
-    private volatile DbFactory dbFactory;
+    private MongoDatabase database;
     private volatile Settings settings;
 }
